@@ -1,0 +1,44 @@
+:root {
+  --m-enter: 300ms;
+  --m-leave: 200ms;
+  --m-flash: 400ms;
+  --m-decay: 15s;
+  --m-pulse: 2400ms;
+  --m-step: 18ms;
+  --m-ease-out: cubic-bezier(0.2, 0, 0.13, 1);
+  --m-ease-in: cubic-bezier(0.7, 0, 1, 0.6);
+  --m-ease-loop: cubic-bezier(0.37, 0, 0.63, 1);
+}
+
+/* Operator response. These are the only transitions written in CSS rather
+   than driven from the runtime, because they have to survive the runtime
+   never loading -- an interface that stops responding to a hover when a
+   script fails to parse feels broken in a way a missing flourish does
+   not. */
+[data-motion="intent"] {
+  transition: opacity var(--m-enter) var(--m-ease-out),
+              color var(--m-enter) var(--m-ease-out),
+              border-color var(--m-enter) var(--m-ease-out),
+              background-color var(--m-leave) var(--m-ease-in);
+}
+
+/* The contact age, one shape on every deck. */
+.hv-contact { color:var(--muted); font-size:9px; letter-spacing:.14em; }
+.hv-contact[data-measured="0"] { color:var(--unknown); }
+
+/* A declared stillness is not a styling hook -- it exists so the tests and
+   the review scripts can see it -- but it does one useful thing: it wins
+   over anything that tries to animate it later. */
+[data-motion="still"] { animation: none !important; transition: none !important; }
+
+/* The operator asked for no motion, so there is none, and nothing is
+   half-faded waiting for a script to finish it. Every kind above rests at
+   the geometry Python already rendered, so switching motion off is not a
+   second design -- it is this page with the runtime never having run. */
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    --m-enter: 0ms; --m-leave: 0ms; --m-flash: 0ms;
+    --m-decay: 0ms; --m-pulse: 0ms; --m-step: 0ms;
+  }
+  [data-motion] { animation: none !important; transition: none !important; }
+}

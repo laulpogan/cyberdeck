@@ -1,0 +1,175 @@
+<!doctype html>
+<meta charset="utf-8">
+<title>Cyberdeck — motion is a measurement</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="../src/tokens.css">
+<link rel="stylesheet" href="../src/motion.css">
+<style>
+  body {
+    margin: 0; padding: 2rem 1.5rem 4rem;
+    background: var(--cd-void-base); color: var(--cd-steel-ink);
+    font: 13px/1.55 ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+  }
+  main { max-width: 60rem; margin: 0 auto; }
+  h1 { font-size: 1.1rem; letter-spacing: .14em; margin: 0 0 .4rem; }
+  h1 b { color: var(--cd-signal-amber); font-weight: 600; }
+  .lede { color: var(--cd-steel-muted); max-width: 46rem; margin: 0 0 2rem; }
+  .bar {
+    display: flex; gap: 1rem; align-items: center; flex-wrap: wrap;
+    border: 1px solid var(--cd-steel-line); padding: .6rem .8rem;
+    margin-bottom: 2rem;
+  }
+  .bar b { color: var(--cd-signal-data); font-variant-numeric: tabular-nums; }
+  button {
+    font: inherit; letter-spacing: .1em; cursor: pointer;
+    background: transparent; color: var(--cd-signal-amber);
+    border: 1px solid var(--cd-signal-amber-dim); padding: .35rem .8rem;
+  }
+  button:hover { background: var(--cd-signal-amber-fill); }
+  .grid { display: grid; gap: 1.5rem; grid-template-columns: repeat(auto-fit, minmax(17rem, 1fr)); }
+  section { border: 1px solid var(--cd-steel-line); padding: .9rem 1rem 1.1rem; }
+  h2 { font-size: .78rem; letter-spacing: .16em; margin: 0 0 .15rem;
+       color: var(--cd-signal-amber); }
+  .q { color: var(--cd-steel-muted); font-size: .74rem; margin: 0 0 .9rem; }
+  .pair { display: grid; grid-template-columns: 1fr 1fr; gap: .8rem; }
+  figure { margin: 0; }
+  figcaption { font-size: .62rem; letter-spacing: .1em;
+               color: var(--cd-steel-muted); margin-bottom: .5rem; }
+  .stage { min-height: 3.4rem; display: flex; align-items: center;
+           flex-wrap: wrap; gap: .35rem; }
+  .chip { border: 1px solid var(--cd-steel-line); padding: .16rem .45rem;
+          font-size: .7rem; }
+  .chip.on { border-color: var(--cd-signal-data-dim); color: var(--cd-signal-data); }
+  [data-motion="still"] { opacity: .45; }
+  .why { display: block; color: var(--cd-signal-amber-dim); font-size: .62rem;
+         margin-top: .5rem; font-style: normal; }
+  svg { overflow: visible; }
+  .geo { stroke: var(--cd-signal-data); fill: none; stroke-width: 1.6; }
+  .geo.dim { stroke: var(--cd-steel-muted); }
+  .meter { display: block; height: 6px; background: var(--cd-steel-faint); margin-bottom: .4rem; }
+  .meter i { display: block; height: 100%; background: var(--cd-signal-data);
+             transform-origin: left center; }
+  .clock b { color: var(--cd-signal-data); font-variant-numeric: tabular-nums; }
+  footer { color: var(--cd-steel-muted); margin-top: 2.5rem; font-size: .72rem;
+           border-top: 1px solid var(--cd-steel-line); padding-top: 1rem; }
+  code { color: var(--cd-signal-amber-dim); }
+</style>
+
+<main>
+  <h1>CYBERDECK · <b>MOTION IS A MEASUREMENT</b></h1>
+  <p class="lede">Every panel below is the same component twice. On the left it was
+    given evidence, so it moves. On the right the evidence is missing — and it does
+    not fall back to a default, a spinner, or a house tempo. It refuses, and says why.
+    That refusal is the library.</p>
+
+  <div class="bar">
+    <span>MARKS <b id="marks">0</b></span>
+    <span>ANIMATIONS <b id="count">0</b></span>
+    <button id="kill" aria-pressed="false">Motion off</button>
+    <button id="replay">Replay</button>
+  </div>
+
+  <div class="grid" id="grid"></div>
+
+  <footer>
+    Runtime <code>src/runtime.js</code> · marks <code>src/marks.js</code> ·
+    palette <code>src/tokens.css</code>, both themes ·
+    engine Motion <code>mini</code>, MIT, 3.1&nbsp;kb gzipped.
+    Turning motion off lands on the markup the page already declared —
+    cancelling is settling, not a second design.
+  </footer>
+</main>
+
+<script src="../vendor/motion.min.js"></script>
+<script src="../src/runtime.js"></script>
+<script type="module">
+import { arrive, decay, count, level, elapsed, trace, traffic, cycle, intent, still, attrs, durationWords }
+  from '../src/marks.js';
+
+// A demo that hard-codes its own markup would prove nothing about the
+// library, so every panel below is built by calling the real mark
+// functions and printing whatever they return -- refusals included.
+const NOW = 1000;
+
+const bays = [
+  ['ARRIVE', 'Did this change, and does anyone know when?',
+   () => [2, 5, 9].map(n => `<span class="chip on"${attrs(arrive(NOW - n, NOW, {window: 30}))}>t-${n}</span>`).join(''),
+   () => ['cred', 'sweep'].map(k => `<span class="chip"${attrs(arrive(null, NOW, {window: 30}))}>${k}</span>`).join('')],
+
+  ['DECAY', 'How stale is this, without reading the number?',
+   () => [1, 5, 9].map(a => `<span class="chip on"${attrs(decay(a, {window: 12}))}>${a}s old</span>`).join(''),
+   () => `<span class="chip"${attrs(decay(null, {window: 12}))}>age unknown</span>`],
+
+  ['COUNT', 'How many, and in what order were they counted?',
+   () => Array.from({length: 12}, (_, i) => `<span class="chip on"${attrs(count(i, 12))}>${i}</span>`).join(''),
+   () => Array.from({length: 4}, () => `<span class="chip"${attrs(count(null, null))}>?</span>`).join('')],
+
+  ['LEVEL', 'How full, drawn rather than merely printed?',
+   () => [12, 47, 82].map(v => `<span class="meter"${attrs(level(v, 100, {measured: true, cite: 'telemetry.pct'}))}><i style="transform:scaleX(${v/100})"></i></span>`).join(''),
+   () => `<span class="meter"${attrs(level(null, 100, {measured: false, cite: 'telemetry.pct'}))}><i style="transform:scaleX(0)"></i></span><span class="chip">UNMEASURED</span>`],
+
+  ['ELAPSED', 'How long, still counting because it is still true?',
+   () => [[3, 'tenths'], [47, 'upper'], [18300, 'upper']].map(([s, st]) =>
+     `<span class="chip on clock"${attrs(elapsed(s, 'live', {cite: 'source.freshness_ms', style: st}))}><b data-elapsed-text>${durationWords(s, st)}</b></span>`).join(''),
+   () => `<span class="chip clock"${attrs(elapsed(18300, 'stale', {cite: 's.wait'}))}><b>5H 05M</b></span>`],
+
+  ['TRACE', 'Did anything actually travel this path?',
+   () => `<svg viewBox="0 0 200 60" width="200" height="60">${
+     [0,1,2].map(i => `<g${attrs(trace(true, {cite: 'routes[].delivered', order: i, total: 3}))}><path class="geo" d="M 8 ${14+i*16} C 70 ${14+i*16} 120 ${30+i*4} 192 ${30+i*4}"/></g>`).join('')}</svg>`,
+   () => `<svg viewBox="0 0 200 60" width="200" height="60"><g${attrs(trace(false, {cite: 'routes[].delivered'}))}><path class="geo dim" stroke-dasharray="4 3" d="M 8 30 C 70 30 120 30 192 30"/></g></svg>`],
+
+  ['TRAFFIC', 'Is the feed live, at the interval it actually reports?',
+   () => [0.8, 1.6, 3.2].map(p => `<span class="chip on"${attrs(traffic(p, 'live', {cite: 'oldest_wait_seconds'}))}>TICK ${p}S</span>`).join(''),
+   () => `<span class="chip"${attrs(traffic(1.6, 'stale', {cite: 'oldest_wait_seconds'}))}>NO CADENCE</span>`],
+
+  ['CYCLE', 'Is this being polled, and is the next poll due?',
+   () => `<svg viewBox="0 0 120 70" width="120" height="70"><g${attrs(cycle(3, 10, 'live', {cite: 'poll.interval'}))}><circle class="geo" cx="60" cy="60" r="46"/><line class="geo" x1="60" y1="60" x2="60" y2="14"/></g></svg>`,
+   () => `<svg viewBox="0 0 120 70" width="120" height="70"><g${attrs(cycle(140, 10, 'live', {cite: 'poll.interval'}))}><circle class="geo dim" cx="60" cy="60" r="46" stroke-dasharray="4 4"/></g></svg>`],
+
+  ['INTENT', 'Did the operator cause this? Then it need prove nothing.',
+   () => ['RETRY', 'HOLD'].map(l => `<button${attrs(intent('hover'))}>${l}</button>`).join(''),
+   () => `<span class="chip"${attrs(still('the operator has no authority here'))}>NO GRANT</span>`],
+];
+
+document.getElementById('grid').innerHTML = bays.map(([name, q, live, dead]) => `
+  <section>
+    <h2>${name}</h2><p class="q">${q}</p>
+    <div class="pair">
+      <figure><figcaption>EVIDENCE PRESENT</figcaption><div class="stage">${live()}</div></figure>
+      <figure><figcaption>ABSENT</figcaption><div class="stage">${dead()}</div><i class="why"></i></figure>
+    </div>
+  </section>`).join('');
+
+// The reasons are already in the markup. Read them out rather than
+// restating them, so this page cannot disagree with the marks.
+document.querySelectorAll('section').forEach(s => {
+  const why = s.querySelector('.why');
+  const el = s.querySelector('figure:last-child [data-still-reason]');
+  if (why && el) why.textContent = '— ' + el.dataset.stillReason;
+});
+
+const marksEl = document.getElementById('marks');
+const countEl = document.getElementById('count');
+const report = () => {
+  marksEl.textContent = document.querySelectorAll('[data-motion]').length;
+  countEl.textContent = document.getAnimations().length;
+};
+window.CyberdeckMotion.start();
+setInterval(report, 400); report();
+
+let off = false;
+document.getElementById('kill').addEventListener('click', e => {
+  off = !off;
+  e.target.textContent = off ? 'Motion on' : 'Motion off';
+  e.target.setAttribute('aria-pressed', String(off));
+  if (off) window.CyberdeckMotion.settle();
+  else { document.documentElement.removeAttribute('data-motion-off'); window.CyberdeckMotion.start(); }
+  report();
+});
+document.getElementById('replay').addEventListener('click', () => {
+  window.CyberdeckMotion.settle();
+  document.documentElement.removeAttribute('data-motion-off');
+  window.CyberdeckMotion.start();
+  report();
+});
+</script>

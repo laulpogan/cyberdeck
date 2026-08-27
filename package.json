@@ -1,0 +1,26 @@
+{
+  "name": "cyberdeck-ui",
+  "version": "0.1.0",
+  "description": "Cyberpunk HUD components that refuse to lie. Motion is a measurement or it does not happen.",
+  "type": "module",
+  "main": "src/index.js",
+  "exports": {
+    ".": "./src/index.js",
+    "./react": "./react/index.js",
+    "./runtime.js": "./src/runtime.js",
+    "./motion.css": "./src/motion.css",
+    "./tokens.css": "./src/tokens.css",
+    "./vendor/motion.min.js": "./vendor/motion.min.js"
+  },
+  "files": ["src", "react", "vendor", "docs", "README.md", "LICENSE"],
+  "scripts": {
+    "test": "node --test \"test/*.test.mjs\"",
+    "demo": "python3 -m http.server 8199"
+  },
+  "keywords": ["cyberpunk", "hud", "fui", "sci-fi", "dashboard", "motion",
+               "animation", "design-system", "svg", "observability"],
+  "license": "MIT",
+  "peerDependencies": { "react": ">=17" },
+  "peerDependenciesMeta": { "react": { "optional": true } },
+  "sideEffects": ["./src/runtime.js", "./src/*.css", "./vendor/*.js"]
+}

@@ -1,0 +1,682 @@
+{
+  "schema": "hive.motion/1",
+  "source": "hive_motion.py",
+  "cases": [
+    {
+      "kind": "still",
+      "args": [
+        "nothing travelled this path"
+      ],
+      "attrs": " data-motion=\"still\" data-still-reason=\"nothing travelled this path\""
+    },
+    {
+      "kind": "arrive",
+      "args": [
+        90.0,
+        100.0,
+        30
+      ],
+      "attrs": " data-motion=\"arrive\" data-age=\"10\""
+    },
+    {
+      "kind": "arrive",
+      "args": [
+        null,
+        100.0,
+        30
+      ],
+      "attrs": " data-motion=\"still\" data-still-reason=\"no change was timestamped\""
+    },
+    {
+      "kind": "arrive",
+      "args": [
+        140.0,
+        100.0,
+        30
+      ],
+      "attrs": " data-motion=\"still\" data-still-reason=\"change is stamped in the future\""
+    },
+    {
+      "kind": "arrive",
+      "args": [
+        10.0,
+        100.0,
+        30
+      ],
+      "attrs": " data-motion=\"still\" data-still-reason=\"older than the arrival window\""
+    },
+    {
+      "kind": "arrive",
+      "args": [
+        99.5,
+        100.0,
+        null
+      ],
+      "attrs": " data-motion=\"arrive\" data-age=\"0.5\""
+    },
+    {
+      "kind": "decay",
+      "args": [
+        3.0,
+        12
+      ],
+      "attrs": " data-motion=\"decay\" data-decay=\"0.25\""
+    },
+    {
+      "kind": "decay",
+      "args": [
+        null,
+        12
+      ],
+      "attrs": " data-motion=\"still\" data-still-reason=\"age was not measured\""
+    },
+    {
+      "kind": "decay",
+      "args": [
+        12.0,
+        12
+      ],
+      "attrs": " data-motion=\"still\" data-still-reason=\"settled past the window\""
+    },
+    {
+      "kind": "decay",
+      "args": [
+        18.0,
+        12
+      ],
+      "attrs": " data-motion=\"still\" data-still-reason=\"settled past the window\""
+    },
+    {
+      "kind": "decay",
+      "args": [
+        0.0,
+        12
+      ],
+      "attrs": " data-motion=\"decay\" data-decay=\"0\""
+    },
+    {
+      "kind": "decay",
+      "args": [
+        5.0,
+        0
+      ],
+      "attrs": " data-motion=\"still\" data-still-reason=\"age was not measured\""
+    },
+    {
+      "kind": "count",
+      "args": [
+        0,
+        5
+      ],
+      "attrs": " data-motion=\"count\" data-index=\"0\" data-total=\"5\""
+    },
+    {
+      "kind": "count",
+      "args": [
+        4,
+        5
+      ],
+      "attrs": " data-motion=\"count\" data-index=\"4\" data-total=\"5\""
+    },
+    {
+      "kind": "count",
+      "args": [
+        5,
+        5
+      ],
+      "attrs": " data-motion=\"still\" data-still-reason=\"index falls outside the count\""
+    },
+    {
+      "kind": "count",
+      "args": [
+        -1,
+        5
+      ],
+      "attrs": " data-motion=\"still\" data-still-reason=\"index falls outside the count\""
+    },
+    {
+      "kind": "count",
+      "args": [
+        null,
+        5
+      ],
+      "attrs": " data-motion=\"still\" data-still-reason=\"population was not counted\""
+    },
+    {
+      "kind": "count",
+      "args": [
+        0,
+        0
+      ],
+      "attrs": " data-motion=\"still\" data-still-reason=\"population was not counted\""
+    },
+    {
+      "kind": "count",
+      "args": [
+        2,
+        null
+      ],
+      "attrs": " data-motion=\"still\" data-still-reason=\"population was not counted\""
+    },
+    {
+      "kind": "level",
+      "args": [
+        47,
+        100,
+        true
+      ],
+      "attrs": " data-motion=\"level\" data-level=\"0.47\" data-cite=\"telemetry.pct\""
+    },
+    {
+      "kind": "level",
+      "args": [
+        null,
+        100,
+        true
+      ],
+      "attrs": " data-motion=\"still\" data-still-reason=\"quantity was not measured\""
+    },
+    {
+      "kind": "level",
+      "args": [
+        47,
+        100,
+        false
+      ],
+      "attrs": " data-motion=\"still\" data-still-reason=\"quantity was not measured\""
+    },
+    {
+      "kind": "level",
+      "args": [
+        150,
+        100,
+        true
+      ],
+      "attrs": " data-motion=\"level\" data-level=\"1\" data-cite=\"telemetry.pct\""
+    },
+    {
+      "kind": "level",
+      "args": [
+        -5,
+        100,
+        true
+      ],
+      "attrs": " data-motion=\"level\" data-level=\"0\" data-cite=\"telemetry.pct\""
+    },
+    {
+      "kind": "level",
+      "args": [
+        47,
+        0,
+        true
+      ],
+      "attrs": " data-motion=\"still\" data-still-reason=\"quantity was not measured\""
+    },
+    {
+      "kind": "elapsed",
+      "args": [
+        18300,
+        "live",
+        "upper"
+      ],
+      "attrs": " data-motion=\"elapsed\" data-elapsed-seconds=\"18300\" data-style=\"upper\" data-cite=\"s.wait\""
+    },
+    {
+      "kind": "elapsed",
+      "args": [
+        18300,
+        "live",
+        "lower"
+      ],
+      "attrs": " data-motion=\"elapsed\" data-elapsed-seconds=\"18300\" data-style=\"lower\" data-cite=\"s.wait\""
+    },
+    {
+      "kind": "elapsed",
+      "args": [
+        3.0,
+        "live",
+        "tenths"
+      ],
+      "attrs": " data-motion=\"elapsed\" data-elapsed-seconds=\"3\" data-style=\"tenths\" data-cite=\"s.wait\""
+    },
+    {
+      "kind": "elapsed",
+      "args": [
+        18300,
+        "stale",
+        "upper"
+      ],
+      "attrs": " data-motion=\"still\" data-still-reason=\"source is stale; the clock stopped when the feed did\""
+    },
+    {
+      "kind": "elapsed",
+      "args": [
+        null,
+        "live",
+        "upper"
+      ],
+      "attrs": " data-motion=\"still\" data-still-reason=\"no duration was measured\""
+    },
+    {
+      "kind": "elapsed",
+      "args": [
+        45,
+        "live",
+        "bogus"
+      ],
+      "attrs": " data-motion=\"elapsed\" data-elapsed-seconds=\"45\" data-style=\"upper\" data-cite=\"s.wait\""
+    },
+    {
+      "kind": "elapsed",
+      "args": [
+        86500,
+        "live",
+        "upper"
+      ],
+      "attrs": " data-motion=\"elapsed\" data-elapsed-seconds=\"86500\" data-style=\"upper\" data-cite=\"s.wait\""
+    },
+    {
+      "kind": "elapsed",
+      "args": [
+        86500,
+        "live",
+        "lower"
+      ],
+      "attrs": " data-motion=\"elapsed\" data-elapsed-seconds=\"86500\" data-style=\"lower\" data-cite=\"s.wait\""
+    },
+    {
+      "kind": "trace",
+      "args": [
+        true,
+        1,
+        4
+      ],
+      "attrs": " data-motion=\"trace\" data-cite=\"doors[].state\" data-index=\"1\" data-total=\"4\""
+    },
+    {
+      "kind": "trace",
+      "args": [
+        false,
+        1,
+        4
+      ],
+      "attrs": " data-motion=\"still\" data-still-reason=\"nothing travelled this path\""
+    },
+    {
+      "kind": "trace",
+      "args": [
+        true,
+        null,
+        null
+      ],
+      "attrs": " data-motion=\"trace\" data-cite=\"doors[].state\""
+    },
+    {
+      "kind": "trace",
+      "args": [
+        true,
+        0,
+        0
+      ],
+      "attrs": " data-motion=\"trace\" data-cite=\"doors[].state\""
+    },
+    {
+      "kind": "traffic",
+      "args": [
+        1.6,
+        "live"
+      ],
+      "attrs": " data-motion=\"traffic\" data-period=\"1.6\" data-cite=\"oldest_wait\""
+    },
+    {
+      "kind": "traffic",
+      "args": [
+        null,
+        "live"
+      ],
+      "attrs": " data-motion=\"still\" data-still-reason=\"no interval was measured\""
+    },
+    {
+      "kind": "traffic",
+      "args": [
+        0,
+        "live"
+      ],
+      "attrs": " data-motion=\"still\" data-still-reason=\"measured interval is zero\""
+    },
+    {
+      "kind": "traffic",
+      "args": [
+        -1,
+        "live"
+      ],
+      "attrs": " data-motion=\"still\" data-still-reason=\"measured interval is zero\""
+    },
+    {
+      "kind": "traffic",
+      "args": [
+        1.6,
+        "stale"
+      ],
+      "attrs": " data-motion=\"still\" data-still-reason=\"source is stale, not live\""
+    },
+    {
+      "kind": "traffic",
+      "args": [
+        1.6,
+        "unavailable"
+      ],
+      "attrs": " data-motion=\"still\" data-still-reason=\"source is unavailable, not live\""
+    },
+    {
+      "kind": "cycle",
+      "args": [
+        3.0,
+        10.0,
+        "live"
+      ],
+      "attrs": " data-motion=\"cycle\" data-spent=\"0.3\" data-period=\"10\" data-cite=\"poll.interval\""
+    },
+    {
+      "kind": "cycle",
+      "args": [
+        null,
+        10.0,
+        "live"
+      ],
+      "attrs": " data-motion=\"still\" data-still-reason=\"poll interval was not measured\""
+    },
+    {
+      "kind": "cycle",
+      "args": [
+        3.0,
+        0,
+        "live"
+      ],
+      "attrs": " data-motion=\"still\" data-still-reason=\"poll interval was not measured\""
+    },
+    {
+      "kind": "cycle",
+      "args": [
+        14.0,
+        10.0,
+        "live"
+      ],
+      "attrs": " data-motion=\"still\" data-still-reason=\"poll is overdue\""
+    },
+    {
+      "kind": "cycle",
+      "args": [
+        3.0,
+        10.0,
+        "stale"
+      ],
+      "attrs": " data-motion=\"still\" data-still-reason=\"source is stale, not live\""
+    },
+    {
+      "kind": "cycle",
+      "args": [
+        0.0,
+        10.0,
+        "live"
+      ],
+      "attrs": " data-motion=\"cycle\" data-spent=\"0\" data-period=\"10\" data-cite=\"poll.interval\""
+    },
+    {
+      "kind": "intent",
+      "args": [
+        "hover"
+      ],
+      "attrs": " data-motion=\"intent\" data-intent=\"hover\""
+    },
+    {
+      "kind": "intent",
+      "args": [
+        "press"
+      ],
+      "attrs": " data-motion=\"intent\" data-intent=\"press\""
+    }
+  ],
+  "duration_words": [
+    {
+      "seconds": 0,
+      "style": "upper",
+      "words": "0S"
+    },
+    {
+      "seconds": 1,
+      "style": "upper",
+      "words": "1S"
+    },
+    {
+      "seconds": 45,
+      "style": "upper",
+      "words": "45S"
+    },
+    {
+      "seconds": 59,
+      "style": "upper",
+      "words": "59S"
+    },
+    {
+      "seconds": 60,
+      "style": "upper",
+      "words": "1M"
+    },
+    {
+      "seconds": 61,
+      "style": "upper",
+      "words": "1M"
+    },
+    {
+      "seconds": 599,
+      "style": "upper",
+      "words": "9M"
+    },
+    {
+      "seconds": 3599,
+      "style": "upper",
+      "words": "59M"
+    },
+    {
+      "seconds": 3600,
+      "style": "upper",
+      "words": "1H 00M"
+    },
+    {
+      "seconds": 3661,
+      "style": "upper",
+      "words": "1H 01M"
+    },
+    {
+      "seconds": 7200,
+      "style": "upper",
+      "words": "2H 00M"
+    },
+    {
+      "seconds": 86399,
+      "style": "upper",
+      "words": "23H 59M"
+    },
+    {
+      "seconds": 86400,
+      "style": "upper",
+      "words": "1D 00H"
+    },
+    {
+      "seconds": 90061,
+      "style": "upper",
+      "words": "1D 01H"
+    },
+    {
+      "seconds": 172800,
+      "style": "upper",
+      "words": "2D 00H"
+    },
+    {
+      "seconds": 1000000,
+      "style": "upper",
+      "words": "11D 13H"
+    },
+    {
+      "seconds": 0,
+      "style": "lower",
+      "words": "0s"
+    },
+    {
+      "seconds": 1,
+      "style": "lower",
+      "words": "1s"
+    },
+    {
+      "seconds": 45,
+      "style": "lower",
+      "words": "45s"
+    },
+    {
+      "seconds": 59,
+      "style": "lower",
+      "words": "59s"
+    },
+    {
+      "seconds": 60,
+      "style": "lower",
+      "words": "1m"
+    },
+    {
+      "seconds": 61,
+      "style": "lower",
+      "words": "1m"
+    },
+    {
+      "seconds": 599,
+      "style": "lower",
+      "words": "9m"
+    },
+    {
+      "seconds": 3599,
+      "style": "lower",
+      "words": "59m"
+    },
+    {
+      "seconds": 3600,
+      "style": "lower",
+      "words": "1h 0m"
+    },
+    {
+      "seconds": 3661,
+      "style": "lower",
+      "words": "1h 1m"
+    },
+    {
+      "seconds": 7200,
+      "style": "lower",
+      "words": "2h 0m"
+    },
+    {
+      "seconds": 86399,
+      "style": "lower",
+      "words": "23h 59m"
+    },
+    {
+      "seconds": 86400,
+      "style": "lower",
+      "words": "1d 0h"
+    },
+    {
+      "seconds": 90061,
+      "style": "lower",
+      "words": "1d 1h"
+    },
+    {
+      "seconds": 172800,
+      "style": "lower",
+      "words": "2d 0h"
+    },
+    {
+      "seconds": 1000000,
+      "style": "lower",
+      "words": "11d 13h"
+    },
+    {
+      "seconds": 0,
+      "style": "tenths",
+      "words": "0.0S"
+    },
+    {
+      "seconds": 1,
+      "style": "tenths",
+      "words": "1.0S"
+    },
+    {
+      "seconds": 45,
+      "style": "tenths",
+      "words": "45.0S"
+    },
+    {
+      "seconds": 59,
+      "style": "tenths",
+      "words": "59.0S"
+    },
+    {
+      "seconds": 60,
+      "style": "tenths",
+      "words": "60.0S"
+    },
+    {
+      "seconds": 61,
+      "style": "tenths",
+      "words": "61.0S"
+    },
+    {
+      "seconds": 599,
+      "style": "tenths",
+      "words": "599.0S"
+    },
+    {
+      "seconds": 3599,
+      "style": "tenths",
+      "words": "3599.0S"
+    },
+    {
+      "seconds": 3600,
+      "style": "tenths",
+      "words": "3600.0S"
+    },
+    {
+      "seconds": 3661,
+      "style": "tenths",
+      "words": "3661.0S"
+    },
+    {
+      "seconds": 7200,
+      "style": "tenths",
+      "words": "7200.0S"
+    },
+    {
+      "seconds": 86399,
+      "style": "tenths",
+      "words": "86399.0S"
+    },
+    {
+      "seconds": 86400,
+      "style": "tenths",
+      "words": "86400.0S"
+    },
+    {
+      "seconds": 90061,
+      "style": "tenths",
+      "words": "90061.0S"
+    },
+    {
+      "seconds": 172800,
+      "style": "tenths",
+      "words": "172800.0S"
+    },
+    {
+      "seconds": 1000000,
+      "style": "tenths",
+      "words": "1000000.0S"
+    }
+  ]
+}
