@@ -179,7 +179,16 @@ export function syncRatio({ output, state, verdict = null,
 export function hardCut({ changed = null, inFlight = null, attempt = null,
                           branch = null, cite = 'evidence.git.changed_files' }) {
   const priced = changed !== null && changed !== undefined;
-  const bar = 7, gap = 6;
+  // The stack of work in flight is as long as the change set, and the card it is
+  // drawn in is 200 units tall with a readout below the scar that needs about 52
+  // of them. Fixed 13-unit rows fit six; a seventh pushed the labels over the
+  // card's own note, which is how a measurement ends up struck through by the
+  // sentence that named it. So the pitch is what is left divided by what was
+  // measured -- every bar still drawn, none of them off the bottom.
+  const drawn = priced ? Math.max(1, Math.trunc(changed) + (inFlight ? 1 : 0)) : 1;
+  const pitch = Math.max(4, Math.min(13, 78 / drawn));
+  const bar = Math.max(2.5, pitch - 6);
+  const gap = pitch - bar;
   let y = 22;
   const g = [];
   if (priced) {
