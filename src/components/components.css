@@ -109,3 +109,66 @@
   color: var(--cd-signal-amber-dim); letter-spacing: .04em; text-align: center;
 }
 [data-motion="still"] > svg { opacity: .55; }
+
+/* ——— the card ———
+   The form factor that makes these components rather than page sections:
+   a bounded frame with its name and, when it refused, its reason. Nothing
+   here assumes a page width, so a card is droppable into a deck beside
+   its neighbours. */
+
+/* A grid of these should not stretch a card that has nothing to draw to
+   the height of one that has. The refusal is short because it is short. */
+.cd-deck {
+  display: grid; gap: 1rem; align-items: start;
+  grid-template-columns: repeat(auto-fill, minmax(19rem, 1fr));
+}
+
+.cd-card {
+  margin: 0; display: flex; flex-direction: column; gap: .55rem;
+  border: 1px solid var(--cd-steel-line); background: var(--cd-void-panel);
+  padding: .85rem .95rem 1rem;
+  color: var(--cd-signal-data);
+}
+.cd-card-name {
+  order: -1; font-size: .68rem; letter-spacing: .16em; text-transform: uppercase;
+  color: var(--cd-signal-amber);
+}
+.cd-card-body { line-height: 0; }
+.cd-card-body svg { width: 100%; height: auto; overflow: visible; }
+/* A drawing given an intrinsic size means it. Anything drawn at true
+   scale -- a crush, a wall, a rack -- is wrong when stretched: fifty-four
+   cells widened to a card is fifty-four enormous hexagons, which is the
+   opposite of what a scale crush is for. */
+.cd-card-body svg.cd-draw-fixed { width: auto; max-width: 100%; }
+.cd-card-note {
+  margin: 0; font-size: .66rem; line-height: 1.45; color: var(--cd-steel-muted);
+  letter-spacing: .03em;
+}
+/* A refused card is dimmed as a whole and says why, so a reader never has
+   to work out whether it is empty or broken. */
+.cd-card[data-motion="still"] .cd-card-body { opacity: .5; }
+
+/* Field-specific roles. Every one of these is a state, never a colour --
+   the token set decides what the state looks like in this theme. */
+.cd-fd-leader[data-known="0"] { color: var(--cd-steel-muted); opacity: .5; }
+.cd-fd-lens { color: var(--cd-steel-muted); }
+.cd-fd-lens[data-on="1"] { color: var(--cd-signal-amber); }
+.cd-fd-hex[data-known="0"] { color: var(--cd-health-colour-unknown); opacity: .8; }
+.cd-fd-hex[data-hot="1"] { color: var(--cd-signal-amber); }
+.cd-bleed { color: var(--cd-health-colour-critical); }
+.cd-fd-dark { color: var(--cd-health-colour-unknown); }
+.cd-fd-contour { color: var(--cd-signal-cyan, var(--cd-signal-data-dim)); }
+.cd-fd-chip[data-on="0"] { color: var(--cd-steel-muted); }
+.cd-fd-sweep { color: var(--cd-signal-data); }
+.cd-fd-contact[data-band="stale"] { color: var(--cd-signal-amber); }
+.cd-fd-contact[data-band="unmeasured"] { color: var(--cd-health-colour-unknown); }
+.cd-fd-offscope { color: var(--cd-steel-muted); }
+/* The unmeasured colour is a warning, so it is spent only when something
+   actually is unmeasured -- otherwise the good state reads as a fault. */
+.cd-fd-offscope[data-any="1"] { color: var(--cd-health-colour-unknown); }
+.cd-fd-needle[data-hot="1"] { color: var(--cd-signal-amber); }
+.cd-fd-needle[data-known="0"] { color: var(--cd-health-colour-unknown); opacity: .7; }
+.cd-fd-glyph[data-glyph="blocked"] { color: var(--cd-health-colour-critical); }
+.cd-fd-glyph[data-glyph="needs_you"] { color: var(--cd-signal-amber); }
+.cd-fd-glyph[data-glyph="unmeasured"] { color: var(--cd-health-colour-unknown); }
+.cd-fd-glyph[data-glyph="draining"] { color: var(--cd-signal-cyan, var(--cd-signal-data-dim)); }

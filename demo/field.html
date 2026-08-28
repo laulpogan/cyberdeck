@@ -1,0 +1,107 @@
+<!doctype html>
+<meta charset="utf-8">
+<title>Cyberdeck — THE FIELD</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Saira+Condensed:wght@700&display=swap">
+<link rel="stylesheet" href="../src/tokens.css">
+<link rel="stylesheet" href="../src/motion.css">
+<link rel="stylesheet" href="../src/components/components.css">
+<style>
+  :root{--cd-mono:"JetBrains Mono",ui-monospace,monospace}
+  body{margin:0;background:var(--cd-void-base);color:var(--cd-steel-ink);
+       font:400 13px/1.55 var(--cd-mono)}
+  .wrap{max-width:78rem;margin:0 auto;padding:2.5rem 1.4rem 5rem}
+  h1{font-family:"Saira Condensed",sans-serif;text-transform:uppercase;
+     font-size:clamp(2rem,5vw,3.4rem);margin:0 0 .3rem;letter-spacing:.02em}
+  h1 em{font-style:normal;color:var(--cd-signal-amber)}
+  .lede{color:var(--cd-steel-muted);max-width:62ch;margin:0 0 1.4rem}
+  .bar{display:flex;gap:1.3rem;flex-wrap:wrap;border:1px solid var(--cd-steel-line);
+       padding:.65rem .9rem;margin-bottom:2rem;align-items:center}
+  .bar b{color:var(--cd-signal-data);font-variant-numeric:tabular-nums}
+  button{font:500 .7rem/1 var(--cd-mono);letter-spacing:.14em;text-transform:uppercase;
+         background:transparent;color:var(--cd-signal-amber);
+         border:1px solid var(--cd-signal-amber-dim);padding:.5rem 1rem;cursor:pointer}
+  h2{font-family:"Saira Condensed",sans-serif;text-transform:uppercase;font-size:1.3rem;
+     color:var(--cd-signal-amber);margin:2.4rem 0 .2rem;letter-spacing:.03em}
+  .sub{color:var(--cd-steel-muted);font-size:.78rem;margin:0 0 1rem}
+  .grid{display:grid;gap:1rem;align-items:start;grid-template-columns:repeat(auto-fill,minmax(19rem,1fr))}
+</style>
+<div class="wrap">
+  <h1>THE FIELD — <em>eight components</em></h1>
+  <p class="lede">Each drawn twice: once given evidence, once with the evidence
+    missing. The second row is the half the illustrations never had to survive.</p>
+  <div class="bar">
+    <span>ANIMATIONS <b id="a">0</b></span><span>MARKS <b id="m">0</b></span>
+    <span>DECLARED STILL <b id="s">0</b></span>
+    <span>MOVING WITHOUT EVIDENCE <b id="l">0</b></span>
+    <button id="kill" type="button">Motion off</button>
+    <button id="replay" type="button">Replay</button>
+  </div>
+  <h2>Given evidence</h2><p class="sub">Real models, every measurement present.</p>
+  <div class="grid" id="live"></div>
+  <h2>Evidence absent</h2>
+  <p class="sub">The same eight components, each missing the number it draws from.</p>
+  <div class="grid" id="dead"></div>
+</div>
+<script src="../vendor/motion.min.js"></script>
+<script src="../src/runtime.js"></script>
+<script type="module">
+import * as f from '../src/components/field.js';
+
+const cells = Array.from({length:10},(_,i)=>({measured:i!==7,health:'ok',hot:i===4}));
+const glyphs=[['working','WORKING'],['blocked','BLOCKED'],['needs_you','NEEDS YOU'],
+  ['unmeasured','UNMEASURED'],['landed','LANDED'],['draining','DRAINING']]
+  .map(([key,label])=>({key,label}));
+const contours=[0,1,2,3,4].map(i=>Array.from({length:26},(_,j)=>
+  [j/25, .5+Math.sin(j/3.4+i)*.16-i*.09]));
+
+document.getElementById('live').innerHTML = [
+  f.scanOverlay({subject:{name:'s-incident',state:'needs_human',settled:true,
+    changed_at:970,now:1000,identity:'s-incident · hermes · dellpromax',
+    authority:'RETRY · NO_GRANT',blocked:'Credential expired mid-run'}}),
+  f.triVision({cells,lens:'health'}),
+  f.scaleCrush({count:54,bleeding:[4,11,27,41]}),
+  f.coverage({contours,dark:true,endpoints:[{id:'dell-local',x:60,y:96}]}),
+  f.chipBudget({ceiling:64,chips:[{name:'FLEET BAR',cost:12,on:true},
+    {name:'QUEUE',cost:8,on:true},{name:'COST STRIP',cost:10,on:false},
+    {name:'3D LENS',cost:22,on:false},{name:'WALLS',cost:6,on:true}]}),
+  f.radar({pollElapsed:3,pollPeriod:10,sourceState:'live',contacts:[
+    {age_seconds:2,bearing:-0.2,window:60,band:'fresh'},
+    {age_seconds:18,bearing:0.9,window:60,band:'fresh'},
+    {age_seconds:44,bearing:2.6,window:60,band:'stale'},
+    {age_seconds:58,bearing:4.0,window:60,band:'stale'}]}),
+  f.needleField({workers:Array.from({length:28},(_,i)=>
+    ({bearing:i===5?-1.2:.9+(i%7)*.1,hot:i===5}))}),
+  f.standardSheet({glyphs}),
+].join('');
+
+document.getElementById('dead').innerHTML = [
+  f.scanOverlay({subject:null}),
+  f.triVision({cells:[]}),
+  f.scaleCrush({count:null}),
+  f.coverage({contours:[],dark:true}),
+  f.chipBudget({chips:[]}),
+  f.radar({contacts:[],pollElapsed:140,pollPeriod:10,sourceState:'live'}),
+  f.needleField({workers:[]}),
+  f.standardSheet({glyphs}),
+].join('');
+
+window.CyberdeckMotion.start();
+const el=id=>document.getElementById(id);
+function report(){const A=document.getAnimations();
+  el('a').textContent=A.length;
+  el('m').textContent=document.querySelectorAll('[data-motion]').length;
+  el('s').textContent=document.querySelectorAll('[data-motion="still"]').length;
+  let n=0;A.forEach(a=>{const t=a.effect&&a.effect.target;
+    if(t&&t.closest&&t.closest('[data-motion="still"]'))n++});el('l').textContent=n;}
+setInterval(report,400);report();
+let off=false;
+el('kill').addEventListener('click',e=>{off=!off;
+  e.target.textContent=off?'Motion on':'Motion off';
+  if(off){window.CyberdeckMotion.settle();document.documentElement.setAttribute('data-motion-off','')}
+  else{document.documentElement.removeAttribute('data-motion-off');window.CyberdeckMotion.start()}
+  report();});
+el('replay').addEventListener('click',()=>{window.CyberdeckMotion.settle();
+  document.documentElement.removeAttribute('data-motion-off');
+  window.CyberdeckMotion.start();report();});
+</script>

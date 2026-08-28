@@ -4,3 +4,4 @@
 export { gauge } from './gauge.js';
 export { river } from './river.js';
 export { globe, paintGlobe } from './globe.js';
+export * from "./field.js";
