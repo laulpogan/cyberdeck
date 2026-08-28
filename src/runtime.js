@@ -40,7 +40,52 @@
   }
 
   var running = [];
+
+  // The style each touched element had before anything touched it, `null` meaning
+  // the server wrote no style attribute at all.
+  //
+  // Cancelling an animation is not the whole of cancelling it. The engine writes
+  // the resting value into the `style` ATTRIBUTE on its way out --
+  // `style="opacity: 1"`, `style="transform: none"` -- and the trace writes a
+  // dash array into it on the way in. Nothing renders differently for any of it,
+  // because a resting value is by construction what the markup already said. But
+  // settle()'s claim is that a settled page is the static export byte for byte,
+  // and a claim about bytes that holds everywhere except here is a claim that
+  // fails for whoever checks it next. So every element the runtime touches is
+  // remembered once, at the moment before it is touched, and given back at settle.
+  var untouched = new Map();
+  function remember(node) {
+    if (node && !untouched.has(node)) untouched.set(node, node.getAttribute('style'));
+  }
+  function restoreUntouched() {
+    var bare = [];
+    untouched.forEach(function (was, node) {
+      if (was === null) { if (node.hasAttribute('style')) node.removeAttribute('style'); }
+      else if (node.getAttribute('style') !== was) node.setAttribute('style', was);
+      if (was === null) bare.push(node);
+    });
+    untouched.clear();
+    // One more pass, a microtask later. A cancelled animation rejects its
+    // `finished` promise, and the undo handlers above run on that rejection --
+    // after this function has returned -- writing `element.style.x = ''` into
+    // elements where the server wrote no style attribute at all. The result is a
+    // byte the export does not have: `style=""`, which changes nothing about how
+    // the page draws and everything about whether "a settled page is the rendered
+    // page" survives being checked. Emptying an empty attribute cannot affect a
+    // running animation, so this sweep is safe to leave unsequenced.
+    if (typeof queueMicrotask === 'function' && bare.length) {
+      queueMicrotask(function () {
+        for (var k = 0; k < bare.length; k++) {
+          var node = bare[k];
+          if (node.hasAttribute && node.hasAttribute('style')
+              && !(node.getAttribute('style') || '').trim()) node.removeAttribute('style');
+        }
+      });
+    }
+  }
+
   function play(el, keyframes, options) {
+    remember(el);
     var handle = M.animate(el, keyframes, options);
     running.push(handle);
     return handle;
@@ -122,6 +167,7 @@
       // instead, spinning the sweep around its own middle somewhere off
       // in the corner of the panel.
       var origin = el.getAttribute('data-cycle-origin');
+      remember(bar);
       el.style.transformBox = 'view-box';
       el.style.transformOrigin = origin
         ? origin.split(/\s+/).map(function (n) { return n + 'px'; }).join(' ')
@@ -253,6 +299,7 @@
       try { length = path.getTotalLength(); } catch (e) { continue; }
       if (!(length > 0)) continue;
       var restore = path.getAttribute('stroke-dasharray');
+      remember(path);
       path.style.strokeDasharray = length + ' ' + length;
       path.style.strokeDashoffset = String(length);
       (function (node, was) {
@@ -261,6 +308,14 @@
         var done = function () {
           node.style.strokeDashoffset = '';
           node.style.strokeDasharray = was === null ? '' : was;
+          // Setting every longhand to '' leaves the ATTRIBUTE behind, empty: `style=""`
+          // in the markup, where the server wrote no style attribute at all. Nothing
+          // renders differently -- an empty style declaration has no effect either
+          // way -- but "a settled page IS the static export" is a claim about bytes,
+          // and a byte comparison that passes everywhere except here is a claim that
+          // is going to fail in whoever runs it next. So the attribute goes the way
+          // the properties did, and only when nothing is left in it.
+          if (!(node.getAttribute('style') || '').trim()) node.removeAttribute('style');
         };
         if (handle && handle.finished && handle.finished.then) {
           handle.finished.then(done, done);
@@ -341,6 +396,11 @@
       var all = document.getAnimations();
       for (var j = 0; j < all.length; j++) { try { all[j].cancel(); } catch (e) {} }
     }
+    // After the cancellation passes, not before: cancelling a style-driven
+    // animation removes the property the engine put in, and removing the last
+    // longhand from a `style` attribute leaves the attribute behind, empty. Give
+    // the document back once nothing is going to write into it again.
+    restoreUntouched();
     root.setAttribute('data-motion-off', '');
   }
 
