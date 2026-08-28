@@ -167,7 +167,12 @@
       // instead, spinning the sweep around its own middle somewhere off
       // in the corner of the panel.
       var origin = el.getAttribute('data-cycle-origin');
-      remember(bar);
+      // The dial itself takes the inline `transform-box` and `transform-origin`
+      // below, so the dial is what has to be remembered. `bar` is declared later in
+      // this function and is a hoisted `var` here -- remembering it would record
+      // `undefined`, skip the one element this branch styles, and leave the radar's
+      // sweep holding an inline box after settle().
+      remember(el);
       el.style.transformBox = 'view-box';
       el.style.transformOrigin = origin
         ? origin.split(/\s+/).map(function (n) { return n + 'px'; }).join(' ')
