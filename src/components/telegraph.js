@@ -24,24 +24,10 @@
 import { frame, rect, line, dot, ring, arc, text, hatched } from '../draw.js';
 import { trace, count, traffic, elapsed, intent, still, durationWords, attrs }
   from '../marks.js';
-import { card, esc, W, H } from './card.js';
+import { card, esc, wrapped, W, H } from './card.js';
 
 const PAD = 12;
 const SPAN = W - PAD * 2;
-
-/** Two lines where one would run past the edge of the box that holds it.
- * SVG text does not wrap, so a caption sized for a card has to be broken
- * on purpose or it silently leaves the drawing. */
-function wrapped(x, y, value, chars, options) {
-  const words = String(value).split(/\s+/);
-  const lines = [''];
-  for (const word of words) {
-    const line = lines[lines.length - 1];
-    if (line && (line + ' ' + word).length > chars) lines.push(word);
-    else lines[lines.length - 1] = line ? line + ' ' + word : word;
-  }
-  return lines.map((line, i) => text(x, y + i * 9, line, options)).join('');
-}
 
 /** Wait band -> tick seconds. The tracker tightens; it never loosens on
  * its own, and it never runs at all without a measured wait. */

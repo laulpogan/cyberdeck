@@ -123,6 +123,12 @@
   grid-template-columns: repeat(auto-fill, minmax(19rem, 1fr));
 }
 
+/* The library brings its own box model rather than assuming the host set
+   one. A control with width:100% plus padding and a border overflowed its
+   own card by exactly the border-box difference, which is a bug that
+   arrives silently and only in someone else's page. */
+.cd-card, .cd-card *, .cd-card *::before, .cd-card *::after { box-sizing: border-box; }
+
 .cd-card {
   margin: 0; display: flex; flex-direction: column; gap: .55rem;
   border: 1px solid var(--cd-steel-line); background: var(--cd-void-panel);
@@ -436,3 +442,95 @@
   box-shadow: inset 2px 0 var(--cd-signal-amber); }
 .cd-og-grid tr[data-state="failed"] td:first-child {
   box-shadow: inset 2px 0 var(--cd-signal-alert); }
+
+/* Authority. Every base rule is written as .cd-grant[data-grant] so the
+   control keeps its shape inside a host that styles bare `button`. A
+   component that only looks right in one container is not a component. */
+.cd-grant-stack, .cd-ladder ul { display: flex; flex-direction: column; gap: .4rem;
+  list-style: none; margin: 0; padding: 0; }
+.cd-grant-cell { display: grid; gap: 2px; min-width: 0; }
+.cd-grant[data-grant] {
+  display: flex; align-items: center; gap: .5rem; width: 100%; min-width: 0;
+  /* 44px. This surface is the phone, and an approval that is cheaper from
+     the sofa is an approval that will be given from the sofa. */
+  min-height: 44px; padding: .5rem .6rem; text-align: left;
+  font: 500 .62rem/1.3 inherit; letter-spacing: .08em; text-transform: uppercase;
+  border: 1px solid var(--cd-steel-line); background: var(--cd-void-panel);
+  color: var(--cd-steel-ink);
+  clip-path: polygon(0 0, calc(100% - 7px) 0, 100% 7px, 100% 100%, 7px 100%, 0 calc(100% - 7px));
+}
+.cd-grant-label { flex: 1 1 auto; min-width: 0; overflow: hidden;
+  text-overflow: ellipsis; white-space: nowrap; }
+.cd-grant-word { flex: 0 0 auto; font-size: .52rem; letter-spacing: .14em; }
+.cd-grant-wait { flex: 0 0 auto; font-size: .52rem; color: var(--cd-steel-muted);
+  letter-spacing: .1em; }
+.cd-grant-wait[data-unmeasured="1"] { color: var(--cd-health-colour-unknown); }
+/* GRANTED: the only state that is a button, and it looks like one. */
+.cd-grant[data-grant="granted"] { color: var(--cd-signal-data);
+  border-color: var(--cd-signal-data-dim); cursor: pointer; }
+.cd-grant[data-grant="granted"]:hover { background: var(--cd-void-raised); }
+.cd-grant[data-grant="granted"]:focus-visible {
+  outline: 2px solid var(--cd-signal-data); outline-offset: 2px; }
+/* NO GRANT: inert glass. Flat, translucent, no hover, no pointer. It does
+   not read as a thing that could be pressed harder. */
+.cd-grant[data-grant="no_grant"] { color: var(--cd-steel-muted);
+  border-style: dashed; background: transparent; cursor: default; }
+/* CEREMONY: the grant exists; the weight says the action is not casual. */
+.cd-grant[data-grant="ceremony_required"] { color: var(--cd-signal-amber);
+  border-color: var(--cd-signal-amber-dim); cursor: default; }
+.cd-grant-why { display: flex; flex-wrap: wrap; gap: .2rem .5rem;
+  font-size: .54rem; line-height: 1.4; color: var(--cd-steel-muted); }
+.cd-grant-missing { letter-spacing: .1em; text-transform: uppercase; }
+.cd-grant-missing b { margin-right: .3rem; font-weight: 600; }
+/* The epistemic class of the block decides its colour. "Nobody said" and
+   "somebody said no" are opposite facts and must never share an ink. */
+.cd-grant-missing[data-kind="unknown"] { color: var(--cd-health-colour-unknown); }
+.cd-grant-missing[data-kind="refused"] { color: var(--cd-signal-alert); }
+.cd-grant-missing[data-kind="absent"] { color: var(--cd-steel-muted); }
+.cd-grant-why cite { font-style: normal; font-size: .5rem; }
+.cd-ladder header { display: flex; justify-content: space-between;
+  font-size: .56rem; letter-spacing: .14em; color: var(--cd-steel-muted);
+  margin-bottom: .4rem; }
+.cd-ladder header b { color: var(--cd-signal-amber); font-weight: 500; }
+
+/* Decision roles. */
+.cd-dc-frame { color: var(--cd-steel-line); }
+.cd-dc-subject { color: var(--cd-health-colour-unknown); }
+.cd-dc-seat[data-standing="spoke"] { color: var(--cd-signal-data); }
+.cd-dc-seat[data-standing="silent"] { color: var(--cd-steel-muted); }
+.cd-dc-seat[data-standing="unreachable"] { color: var(--cd-health-colour-unknown); }
+.cd-dc-glass { color: var(--cd-signal-wire, var(--cd-signal-data-dim)); }
+.cd-dc-through { color: var(--cd-signal-data); }
+.cd-dc-blocked { color: var(--cd-health-colour-unknown); }
+.cd-dc-blocked[data-why="withheld"] { color: var(--cd-signal-alert); }
+.cd-dc-sightline { color: var(--cd-signal-amber); }
+.cd-dc-door[data-state="open"] { color: var(--cd-signal-data); }
+.cd-dc-door[data-state="shut"] { color: var(--cd-signal-alert); }
+/* Not reached is a thing nobody knows, so it wears the cannot-see colour.
+   Painting it clear or grey are both readings of a measurement nobody
+   took. */
+.cd-dc-door[data-state="not_reached"],
+.cd-dc-wall[data-state="not_reached"],
+.cd-dc-walllabel[data-state="not_reached"],
+.cd-dc-unstamped { color: var(--cd-health-colour-unknown); }
+.cd-dc-untested[data-any="1"] { color: var(--cd-health-colour-unknown); }
+.cd-dc-untested[data-any="0"] { color: var(--cd-steel-muted); }
+.cd-dc-wall[data-state="open"], .cd-dc-walllabel[data-state="open"]
+  { color: var(--cd-signal-data); }
+.cd-dc-wall[data-state="shut"], .cd-dc-walllabel[data-state="shut"]
+  { color: var(--cd-signal-alert); }
+
+.cd-dc-gevulot { list-style: none; margin: 0; padding: 0; font-size: .6rem; }
+.cd-dc-gevulot li { display: flex; gap: .5rem; align-items: baseline;
+  border-top: 1px solid var(--cd-steel-line); padding: .15rem 0; }
+.cd-dc-gevulot b { flex: 0 0 auto; font-weight: 500; font-size: .54rem;
+  letter-spacing: .08em; color: var(--cd-steel-muted); text-transform: uppercase; }
+.cd-dc-gevulot span { flex: 1 1 auto; letter-spacing: .1em; font-size: .54rem;
+  color: var(--cd-health-colour-unknown); }
+.cd-dc-gevulot li[data-stated="1"] span { color: var(--cd-signal-data); }
+.cd-dc-gevulot cite { font-style: normal; font-size: .5rem;
+  color: var(--cd-steel-muted); }
+.cd-dc-ruling { margin: .5rem 0 0; font-size: .6rem; line-height: 1.45;
+  color: var(--cd-steel-muted); }
+.cd-dc-ruling b { display: block; color: var(--cd-health-colour-unknown);
+  letter-spacing: .1em; }
