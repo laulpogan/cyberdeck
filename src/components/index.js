@@ -10,4 +10,5 @@ export * from './thread.js';
 export * from './organism.js';
 export * from './decision.js';
 export { dominator, ladder, control, evaluate } from './authority.js';
+export * from './agents.js';
 export { card, wrapped } from './card.js';

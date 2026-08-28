@@ -141,7 +141,10 @@
 }
 .cd-card-body { line-height: 1.45; }
 .cd-card-body > svg { display: block; }
-.cd-card-body svg { width: 100%; height: auto; overflow: visible; }
+/* Only a `frame()` drawing fills the card. Every other SVG in here is a
+   glyph at an intrinsic size -- an identity disc, a trust trace -- and the
+   blanket rule stretched a 30px disc to the width of the card. */
+.cd-card-body svg.cd-draw { width: 100%; height: auto; overflow: visible; }
 /* A drawing given an intrinsic size means it. Anything drawn at true
    scale -- a crush, a wall, a rack -- is wrong when stretched: fifty-four
    cells widened to a card is fifty-four enormous hexagons, which is the
@@ -534,3 +537,116 @@
   color: var(--cd-steel-muted); }
 .cd-dc-ruling b { display: block; color: var(--cd-health-colour-unknown);
   letter-spacing: .1em; }
+
+/* Agents and comms. */
+.cd-ag-disc { display: block; overflow: visible; color: var(--cd-signal-data); }
+.cd-ag-ring { fill: none; stroke: currentColor; stroke-width: 2; }
+.cd-ag-core { fill: currentColor; opacity: .22; stroke: currentColor; stroke-width: 1; }
+.cd-ag-notch { fill: currentColor; }
+.cd-ag-disc[data-redacted="1"] { color: var(--cd-health-colour-unknown); }
+.cd-ag-strike { stroke: currentColor; stroke-width: 2; }
+.cd-ag-disc-word { font-size: 7px; letter-spacing: .1em; fill: currentColor; }
+
+/* Trust drawn as signal quality. The noise IS the reading, so the scale
+   has to be visible at once -- one row at a time teaches nothing. */
+.cd-ag-trace { display: block; color: var(--cd-signal-data); }
+.cd-ag-trace[data-noise="1"] { color: var(--cd-signal-data-dim); }
+.cd-ag-trace[data-noise="2"] { color: var(--cd-signal-amber); }
+.cd-ag-trace[data-noise="3"] { color: var(--cd-health-colour-unknown); }
+.cd-ag-trusts { list-style: none; margin: 0; padding: 0;
+  display: flex; flex-direction: column; gap: .45rem; font-size: .6rem; }
+.cd-ag-trusts li { display: grid; grid-template-columns: 1fr auto;
+  gap: .1rem .6rem; align-items: center;
+  border-top: 1px solid var(--cd-steel-line); padding-top: .3rem; }
+.cd-ag-trusts b { font-weight: 500; letter-spacing: .1em; font-size: .56rem;
+  color: var(--cd-steel-ink); }
+.cd-ag-trusts .cd-ag-trace { grid-row: 1 / 3; grid-column: 2; }
+.cd-ag-trusts span { color: var(--cd-steel-muted); font-size: .54rem; }
+
+.cd-ag-group header { display: flex; flex-wrap: wrap; gap: .2rem .6rem;
+  font-size: .56rem; letter-spacing: .1em; margin-bottom: .4rem; }
+.cd-ag-group header b { color: var(--cd-signal-amber); font-weight: 500; }
+.cd-ag-group header span { color: var(--cd-steel-muted); }
+.cd-ag-group[data-diverged="1"] header span { color: var(--cd-signal-amber); }
+.cd-ag-group header span[data-measured="0"] { color: var(--cd-health-colour-unknown); }
+.cd-ag-arrival { flex: 0 0 auto; }
+.cd-ag-sibling { display: flex; gap: .55rem; align-items: flex-start;
+  border-top: 1px solid var(--cd-steel-line); padding: .35rem 0; }
+.cd-ag-body { flex: 1 1 auto; min-width: 0; font-size: .6rem; }
+.cd-ag-body > b { display: block; font-weight: 500; color: var(--cd-steel-ink);
+  overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.cd-ag-ident { display: block; font-size: .52rem; letter-spacing: .08em;
+  color: var(--cd-steel-muted); text-transform: uppercase; }
+.cd-ag-measures { display: flex; flex-wrap: wrap; gap: .1rem .6rem;
+  margin: .15rem 0; min-width: 0; }
+.cd-ag-measure { font-size: .52rem; letter-spacing: .06em;
+  color: var(--cd-signal-data); font-variant-numeric: tabular-nums; }
+.cd-ag-measure b { margin-right: .25rem; font-weight: 500;
+  color: var(--cd-steel-muted); }
+.cd-ag-measure[data-unmeasured="1"] { color: var(--cd-health-colour-unknown); }
+/* The numeral rides the edge it describes. Parked at the end of the track
+   it read as a value near the maximum whatever the fill said. */
+.cd-ag-track { display: block; position: relative; height: 3px;
+  background: var(--cd-steel-line);
+  /* Inset, so the numeral riding the edge stays inside the card at both
+     ends of the span. */
+  margin: .5rem 10px 0; }
+.cd-ag-track i { position: absolute; top: -2px; width: 2px; height: 7px;
+  background: var(--cd-signal-amber); }
+.cd-ag-track em { position: absolute; bottom: 6px; left: 50%;
+  transform: translateX(-50%); font-style: normal; font-size: .5rem;
+  color: var(--cd-signal-amber); }
+.cd-ag-burn[data-measured="0"] i { font-style: normal; font-size: .52rem;
+  letter-spacing: .08em; color: var(--cd-health-colour-unknown); }
+.cd-ag-sibling[data-redacted="1"] .cd-ag-body > b { color: var(--cd-health-colour-unknown); }
+
+.cd-ag-part[data-fitted="1"], .cd-ag-link[data-fitted="1"] { color: var(--cd-signal-data); }
+.cd-ag-part[data-fitted="0"], .cd-ag-link[data-fitted="0"] { color: var(--cd-health-colour-unknown); }
+.cd-ag-fragment[data-held="1"] { color: var(--cd-signal-data); }
+.cd-ag-fragment[data-held="0"], .cd-ag-noforecast { color: var(--cd-health-colour-unknown); }
+
+.cd-ag-dossier { display: flex; gap: .8rem; align-items: flex-start; }
+.cd-ag-face { flex: 0 0 auto; }
+.cd-ag-rows { flex: 1 1 auto; list-style: none; margin: 0; padding: 0;
+  font-size: .58rem; min-width: 0; }
+.cd-ag-rows li { display: flex; gap: .5rem; justify-content: space-between;
+  border-top: 1px solid var(--cd-steel-line); padding: .1rem 0; }
+.cd-ag-rows b { font-weight: 500; font-size: .52rem; letter-spacing: .1em;
+  color: var(--cd-steel-muted); }
+.cd-ag-rows span { color: var(--cd-signal-data); overflow: hidden;
+  text-overflow: ellipsis; white-space: nowrap; }
+.cd-ag-rows li[data-known="0"] span { color: var(--cd-health-colour-unknown); }
+
+.cd-ag-redactions { list-style: none; margin: 0; padding: 0; font-size: .58rem; }
+.cd-ag-redactions li { display: flex; gap: .5rem; align-items: center;
+  border-top: 1px solid var(--cd-steel-line); padding: .25rem 0; }
+.cd-ag-redactions b { flex: 1 1 auto; font-weight: 500; min-width: 0;
+  overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.cd-ag-redactions > li > span { font-size: .52rem; letter-spacing: .08em;
+  color: var(--cd-signal-data); }
+.cd-ag-redactions li[data-redacted="1"] > span { color: var(--cd-health-colour-unknown); }
+.cd-ag-note { margin: .5rem 0 0; font-size: .58rem; line-height: 1.45;
+  color: var(--cd-steel-muted); }
+.cd-ag-note b { display: block; letter-spacing: .1em; color: var(--cd-signal-amber); }
+
+.cd-ag-receipt { font-size: .58rem; }
+.cd-ag-receipt header { display: flex; justify-content: space-between;
+  gap: .5rem; align-items: baseline; }
+.cd-ag-receipt header b { color: var(--cd-steel-ink); font-weight: 500; }
+.cd-ag-receipt code { font-size: .5rem; color: var(--cd-steel-muted); }
+.cd-ag-receipt h5 { margin: .45rem 0 .1rem; font-size: .52rem;
+  letter-spacing: .16em; color: var(--cd-signal-amber); font-weight: 500; }
+.cd-ag-receipt ul { list-style: none; margin: 0; padding: 0; }
+.cd-ag-receipt li { display: flex; justify-content: space-between; gap: .5rem;
+  border-top: 1px solid var(--cd-steel-line); padding: .08rem 0; }
+.cd-ag-receipt li b { font-weight: 500; font-size: .52rem; letter-spacing: .08em;
+  color: var(--cd-steel-muted); }
+.cd-ag-receipt li span { color: var(--cd-signal-data); }
+.cd-ag-receipt li[data-unmeasured="1"] span { color: var(--cd-health-colour-unknown); }
+/* UNPRICED is a truthful value, not a placeholder, so it is drawn as a
+   reading in the cannot-see colour rather than as an empty field. */
+.cd-ag-cost { margin: .15rem 0 0; }
+.cd-ag-cost b { font-size: .8rem; letter-spacing: .1em;
+  color: var(--cd-health-colour-unknown); }
+.cd-ag-cost[data-priced="1"] b { color: var(--cd-signal-data); }
+.cd-ag-cost span { display: block; font-size: .5rem; color: var(--cd-steel-muted); }
