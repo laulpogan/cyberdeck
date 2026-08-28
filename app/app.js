@@ -15,6 +15,7 @@ import { clone, setPath } from './util.js';
 import { copyFor } from './copy.js';
 import { markBays, primitiveBays } from './galleries.js';
 import { paintHonesty } from './honesty.js';
+import { liveView, liveStart, liveStop } from './live.js';
 import { paintGlobe } from '../src/components/globe.js';
 
 const root = document.documentElement;
@@ -66,6 +67,7 @@ function parseRoute() {
   if (parts[0] === 'component' && parts[1] && SPECS[parts[1]]) return { page: 'component', key: parts[1] };
   if (parts[0] === 'rules') return { page: 'rules' };
   if (parts[0] === 'primitives') return { page: 'primitives' };
+  if (parts[0] === 'live') return { page: 'live' };
   return { page: 'missing', want: parts.join('/') };
 }
 
@@ -250,6 +252,7 @@ function mount() {
     }
     case 'rules': html = viewRules(); activeFam = '#/rules'; break;
     case 'primitives': html = viewPrimitives(); activeFam = '#/primitives'; break;
+    case 'live': html = liveView(); break;
     case 'missing': html = viewMissing(route.want); break;
     default: html = viewLanding();
   }
@@ -259,6 +262,7 @@ function mount() {
     ...FAMILIES.map((f) => `<a href="#/families/${f.id}">${esc(f.name)}</a>`),
     '<a href="#/rules">RULES</a>',
     '<a href="#/primitives">PRIMITIVES</a>',
+    '<a href="#/live">LIVE</a>',
   ].map((a) => a.replace('<a ', `<a ${a.includes(`href="${activeFam}"`) ? 'aria-current="page" ' : ''}`))
     .join('');
 
@@ -289,6 +293,11 @@ function mount() {
   wire(route);
   applyMotion();
   if (route.page === 'component' && SPECS[route.key]) collectAfterRender(route.key);
+  // The live page owns its own update beat; every other route stops it.
+  // `() => !state.motionOff` is read at each poll, so a kill switch
+  // thrown while the page is open still reaches the next frame's data.
+  if (route.page === 'live') liveStart(() => !state.motionOff);
+  else liveStop();
   // A re-render because an evidence box was ticked is not a navigation:
   // only a changed route resets the scroll, so the control you just
   // clicked stays under the cursor.

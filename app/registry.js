@@ -96,7 +96,7 @@ export const SPECS = {
     'An overdue poll refuses to sweep rather than wrapping, since a wrap would '
       + 'erase the finding.',
     [{ label: 'poll interval measured', paths: ['pollElapsed', 'pollPeriod'], off: null },
-     { label: 'contacts aged', paths: ['contacts[*].age_seconds'], off: null },
+     { label: 'contacts aged', paths: ['contacts[*].age_seconds', 'contacts[*].band'], off: null },
      { label: 'source live', paths: ['sourceState'], off: 'unavailable' }]),
   needles: W('needles', 'field', fieldC.needleField, 'needleField', 'field.js',
     'Magnetic needle field',

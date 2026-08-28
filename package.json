@@ -19,7 +19,8 @@
   "files": ["src", "react", "vendor", "docs", "README.md", "LICENSE"],
   "scripts": {
     "test": "node --test \"test/*.test.mjs\"",
-    "demo": "python3 -m http.server 8199"
+    "demo": "python3 -m http.server 8199",
+    "demo:live": "node scripts/live-feed.mjs"
   },
   "keywords": ["cyberpunk", "hud", "fui", "sci-fi", "dashboard", "motion",
                "animation", "design-system", "svg", "observability"],
