@@ -228,6 +228,102 @@ for (const route of routes) {
           bad.push(`${spec.label}: ${spec.content}px of drawing in a ${spec.w}px box with nothing to scroll it`);
         }
       }
+      // —— two pieces of type in the same pixels, measured where HTML and SVG meet.
+      //
+      // `individuation` draws each row's context bar as its own little svg and prints the
+      // percentage at the end of the bar. A worker at 82% is fine. A worker at 12% puts
+      // the label under the row above, on top of "TOOLS 22" — a measurement overprinted by
+      // another measurement, which is the failure this library exists to prevent, and
+      // invisible to a check that only looks inside one svg at a time. So this collects
+      // every run of type in the specimen — HTML text leaves a client rect, `<text>` is
+      // mapped through its own CTM into the same coordinates — and asks whether any two
+      // of them share pixels.
+      const collisions = await page.evaluate(() => {
+        const hits = [];
+        for (const view of document.querySelectorAll('[data-specimen-view]')) {
+          const label = view.getAttribute('data-specimen-view') || '?';
+          const runs = [];
+          for (const node of view.querySelectorAll('*')) {
+            if (node.closest('svg')) continue;
+            const own = [...node.childNodes].filter((n) => n.nodeType === 3 && n.textContent.trim());
+            if (!own.length) continue;
+            for (const text of own) {
+              const range = document.createRange();
+              range.selectNodeContents(text);
+              // One client rect per run, unioned. A range can hand back a rect per line
+              // box, and two rects for one piece of type would collide with each other --
+              // a `NO SNOOZE` that reports itself printed over itself is the check lying,
+              // not the page.
+              const boxes = [...range.getClientRects()].filter((r) => r.width > 1 && r.height > 1);
+              if (boxes.length) {
+                const left = Math.min(...boxes.map((r) => r.left));
+                const top = Math.min(...boxes.map((r) => r.top));
+                const right = Math.max(...boxes.map((r) => r.right));
+                const bottom = Math.max(...boxes.map((r) => r.bottom));
+                runs.push({
+                  text: text.textContent.trim().slice(0, 20),
+                  node: text,
+                  rect: { left, top, right, bottom, width: right - left, height: bottom - top },
+                });
+              }
+            }
+          }
+          const ctmOf = (svg) => {
+            const ctm = svg.getScreenCTM();
+            return ctm ? [ctm.a, ctm.b, ctm.c, ctm.d, ctm.e, ctm.f] : null;
+          };
+          for (const svg of view.querySelectorAll('svg')) {
+            const m = ctmOf(svg);
+            if (!m) continue;
+            for (const text of svg.querySelectorAll('text, tspan')) {
+              const content = text.textContent.trim();
+              if (!content || text.querySelector('tspan')) continue;
+              let box;
+              try { box = text.getBBox(); } catch (e) { continue; }
+              if (!box.width || !box.height) continue;
+              const corners = [
+                [box.x, box.y].map((v, i) => m[i === 0 ? 0 : 2] * v),
+                [box.x + box.width, box.y + box.height].map((v, i) => m[i === 0 ? 0 : 2] * v),
+              ];
+              void corners;
+              const x0 = m[0] * box.x + m[2] * (box.x + box.width) + m[4];
+              const x1 = m[0] * box.x + m[2] * box.x + m[4];
+              const y0 = m[1] * box.y + m[3] * (box.y + box.height) + m[5];
+              const y1 = m[1] * box.y + m[3] * box.y + m[5];
+              runs.push({
+                text: content.slice(0, 20),
+                node: text,
+                rect: {
+                  left: Math.min(x0, x1), right: Math.max(x0, x1),
+                  top: Math.min(y0, y1), bottom: Math.max(y0, y1),
+                  width: Math.abs(x0 - x1), height: Math.abs(y0 - y1),
+                },
+              });
+            }
+          }
+          for (let i = 0; i < runs.length; i += 1) {
+            for (let j = i + 1; j < runs.length; j += 1) {
+              if (runs[i].node === runs[j].node) continue;
+              const a = runs[i].rect;
+              const b = runs[j].rect;
+              const x = Math.min(a.right, b.right) - Math.max(a.left, b.left);
+              const y = Math.min(a.bottom, b.bottom) - Math.max(a.top, b.top);
+              if (x < 2 || y < 2) continue;
+              const smaller = Math.min(a.width * a.height, b.width * b.height);
+              // A quarter of the smaller string covered is where "close together"
+              // becomes "one of these is unreadable". The threshold was set by the
+              // defect it now guards: a context numeral riding 4px into the line
+              // above it grazed a fifth of "TOOLS 22" at 0.28, and nothing else in
+              // the set is anywhere near it.
+              if (smaller <= 0 || (x * y) / smaller < 0.25) continue;
+              hits.push(`${label}: "${runs[i].text}" is printed over "${runs[j].text}"`);
+            }
+          }
+        }
+        return [...new Set(hits)];
+      });
+      bad.push(...collisions);
+
       if (consoleProblems.length) bad.push(...consoleProblems.slice(0, 4));
 
       // —— what the drawing contains: type small enough to be decoration, text

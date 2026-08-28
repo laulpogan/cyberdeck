@@ -21,7 +21,7 @@ export function Rules({ evidence = { globalOff: false } }) {
   return (
     <div className="cd-page cd-page-rules">
       <p className="cd-kicker">{MARK_KINDS.length} marks · src/marks.js · one rule{off ? ' · evidence absent' : ''}</p>
-      <h1 className="cd-display">Motion is a measurement<br />or it does not happen.</h1>
+      <h1 className="cd-display">Eleven ways<br />to refuse.</h1>
       <p className="cd-lede">
         Every animation in the library is one of these eleven attributes, and every
         one of them can be refused by the arguments it was handed. What follows is the

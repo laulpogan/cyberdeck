@@ -101,7 +101,7 @@ export function App() {
             CYBERDECK<span>SHOWCASE</span>
           </a>
           <nav className="cd-nav" aria-label="Sections">
-            {[['overview', 'INDEX'], ['rules', 'MARKS'], ['primitives', 'PRIMITIVES']].map(
+            {[['overview', 'INDEX'], ['rules', 'RULES'], ['primitives', 'PRIMITIVES']].map(
               ([kind, label]) => (
                 <a key={kind} href={href({ kind })}
                    data-active={route.kind === kind ? '1' : '0'}>{label}</a>
