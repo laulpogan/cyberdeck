@@ -83,7 +83,15 @@ export function setMotionOff(doc, off) {
  * for stillness, and walks the tree that is actually on screen. */
 export function rewalk(doc = globalThis.document, { stopped = false } = {}) {
   settleMotion();
-  if (stopped) {
+  // The stamp is not only the kill switch's. `off` is computed at load from
+  // `prefers-reduced-motion`, `?still=1`, and a missing engine, and the runtime's own
+  // auto-start is the only thing it gates -- a caller that ignores it and animates
+  // anyway is what this bridge exists to stop. But stopping `start()` is not enough,
+  // because the stamp is also how the *rest* of the page learns: `paintGlobe` reads
+  // `data-motion-off` on the root every frame, and on a `?still=1` page that never
+  // arrived, so the canvas turned while every mark around it sat still. Refusing is
+  // recorded, in the place everything else already reads it.
+  if (stopped || stillnessReason()) {
     doc.documentElement.setAttribute('data-motion-off', '');
     return false;
   }

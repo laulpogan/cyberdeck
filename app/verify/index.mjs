@@ -421,6 +421,19 @@ if (!process.env.SKIP_REDUCED) {
     page.on('pageerror', (e) => problems.push(String(e)));
     await page.goto(BASE + route, { waitUntil: 'networkidle' });
     await page.waitForTimeout(700);
+    // A canvas is not an `Animation` either, and the globe's painter reads the root's
+    // `data-motion-off` every frame -- so a page can satisfy "no animations" while the
+    // mesh keeps turning. Hash the pixels before and after the same window the counters
+    // are watched in.
+    const meshHash = () => page.evaluate(() => {
+      const canvas = document.querySelector('.cd-globe-mesh');
+      if (!canvas) return null;
+      const data = canvas.getContext('2d').getImageData(0, 0, canvas.width, canvas.height).data;
+      let hash = 2166136261;
+      for (let i = 0; i < data.length; i += 16384) hash = ((hash ^ data[i]) * 16777619) >>> 0;
+      return hash;
+    });
+    const meshBefore = await meshHash();
     const elapsedBefore = await page.evaluate(() => [...document.querySelectorAll('[data-elapsed-text]')].map((n) => n.textContent));
     await page.waitForTimeout(1200);
     const elapsedAfter = await page.evaluate(() => [...document.querySelectorAll('[data-elapsed-text]')].map((n) => n.textContent));
@@ -452,6 +465,9 @@ if (!process.env.SKIP_REDUCED) {
     if (r.verdict !== 0) bad.push(`the readout reads ${r.verdict} under reduced motion`);
     if (!r.kill || !r.kill.disabled) bad.push('the kill switch offers to un-decide reduced motion');
     if (!r.meshPainted) bad.push('the globe mesh was never painted — a canvas the host forgot is a black box');
+    if (meshBefore !== null && meshBefore !== (await meshHash())) {
+      bad.push('the globe mesh is still turning under prefers-reduced-motion — the canvas did not read the refusal');
+    }
     if (problems.length) bad.push(...problems);
     report(`${route.replace(/^#/, '') || '/'}@reduced`,
       `animations=${r.live} marks=${r.marks} verdict=${r.verdict} switch=${JSON.stringify(r.kill)}`, bad);
