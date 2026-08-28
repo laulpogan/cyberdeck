@@ -121,6 +121,48 @@ Three details that cost an hour each:
   after settle, the pins stop moving — detected from the DOM rather than from a route
   list, because a carve-out written against a pathname exempts whatever it names.
 
+The sweep is 261 page loads. `npm run verify` runs one browser and takes an hour;
+`npm run verify:all` splits the routes across `SHARDS` processes (four by default),
+merges the result files, and exits non-zero if any shard saw anything. Same code, same
+assertions, one verdict.
+
+## Two checks that only exist because a person looked
+
+- **Type printed over type.** Everything the gate knew about composition was measured
+  inside one box at a time — text inside its viewBox, text above five pixels, the
+  specimen keeping its height. A card whose body is HTML with small SVGs set between the
+  lines can overlap itself across that seam. So the gate collects every run of type in a
+  specimen, HTML by its range rect and `<text>` mapped through its own `getScreenCTM()`
+  into the same coordinates, and asks whether two of them share a quarter of the smaller
+  one's pixels. One unioned rect per run: a range returns a rect per line box, and a
+  label colliding with itself is the check lying, not the page being wrong. The threshold
+  is set by the defect that produced it: the numeral measured 14×10 px, the line above it
+  cut 4 px off its bottom, and 4 px of a 10 px string is 40% of the smaller of the two.
+  The sweep at 0.25 finds nothing else anywhere in the set, so the two are far apart —
+  0.4 would have just missed the one case worth catching.
+- **Whether the app, rather than the library, shrank a drawing.** The scale check runs
+  once per specimen, on the svg the container sizes. A `<svg>` carrying its own `width`
+  attribute was sized by the library — the 48-unit identity disc drawn at 30 — and its
+  ratio to its own viewBox is a glyph, not evidence about the page.
+
+Both were found by looking at screenshots, and both are now gates: the eye's job is to
+find the class of defect once, not the same defect on every page every time.
+
+## The round trip: `npm run verify:roundtrip`
+
+The strongest claim the showcase makes is that the block under COPY-TO-USE reproduces
+what is on screen. `app/verify/roundtrip.mjs` loads each component page with `?still=1`,
+reads the printed block, runs that call in node against the module the registry names,
+and compares markup; all 51 come back identical. Two differences are removed, and named
+in the file rather than hidden in a helper:
+
+- The produced string is pushed through the browser's parser first, because `<line/>` in
+  and `</line>` out are two texts describing one drawing.
+- `paintGlobe` places the pins even in stillness — a mesh that never paints is a black
+  box — so `transform` and `style` are stripped from `.cd-globe-pin` on both sides.
+  Nothing else the painter leaves behind is excused, and the script refuses to compare at
+  all if the specimen is still being written to.
+
 ## The traps, paid for
 
 - **`<repo>/react/` shadows the npm `react` package.** With the Vite root at the
@@ -129,13 +171,18 @@ Three details that cost an hour each:
   `src/marks.js` and every page died with *"does not provide an export named
   'useEffect'"*. Root the build at `app/` (`vite.config.js`) and the collision
   disappears. Anyone adding a second build config will hit this again.
-- **`CyberdeckMotion.start()` does not consult `CyberdeckMotion.off`.** `off` is
+- **`CyberdeckMotion.start()` does not consult `CyberdeckMotion.off`, and refusing to
+  call it is not enough.** `off` is
   computed once at load from `prefers-reduced-motion`, `?still=1`, and a missing
   engine, and it gates only the runtime's own auto-start. A caller that calls
   `start()` anyway re-enables motion on a page whose operator asked for none —
   including `react/index.js`'s own `useMotion`/`useMotionEffect`. Everything in
   `app/` goes through `app/src/motion-bridge.js`, which refuses when `off` is
-  set. Upstream, `start()` should check it.
+  set. Refusing quietly turned out to be its own defect: `paintGlobe` decides each frame
+  whether to turn by reading `data-motion-off` on `<html>`, nothing ever stamped that on a
+  `?still=1` page, and so a globe turned beside fourteen marks that had correctly refused.
+  `rewalk()` now records the refusal in the place everything else already reads it. Upstream,
+  `start()` should check `off`, and `paintGlobe` should read the same flag.
 - **An animation count taken after the page settles reads 0 whether or not
   anything moved.** Entrances are over in ~300 ms. `app/verify/inspect.mjs`
   therefore samples `document.getAnimations().length` per frame from a standing
