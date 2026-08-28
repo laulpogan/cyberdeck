@@ -264,3 +264,74 @@
 .cd-tg-body p { margin: .2rem 0; }
 .cd-tg-blocker { color: var(--cd-steel-ink); }
 @media (prefers-reduced-motion: reduce) { .cd-tg-shutter { transition: none; } }
+
+/* Thread roles. Half of this family is a lane nobody records, so the
+   unmeasured colour is load-bearing and the measured stroke is the
+   exception. */
+.cd-th-pane[data-known="0"] { color: var(--cd-steel-muted); }
+.cd-th-dark, .cd-th-lane[data-known="0"], .cd-th-ratio,
+.cd-th-noburn { color: var(--cd-health-colour-unknown); }
+.cd-th-read { color: var(--cd-signal-data); }
+.cd-th-axis { color: var(--cd-steel-line); }
+/* The cut is the one line on the drawing that must read as final. */
+.cd-th-scar { color: var(--cd-signal-alert); }
+.cd-th-grain { color: var(--cd-signal-amber); }
+.cd-draw[data-past-edge="1"] .cd-th-grain { color: var(--cd-signal-alert); }
+.cd-th-edgemark { color: var(--cd-steel-muted); }
+.cd-th-burnread { color: var(--cd-signal-amber); }
+/* Work about to be destroyed. Drawn in the measured-and-well colour it
+   read as a healthy quantity rather than as what the cut costs. */
+.cd-th-flight { color: var(--cd-signal-amber); }
+.cd-th-verdict[data-state="unmeasured"] { color: var(--cd-health-colour-unknown); }
+.cd-th-verdict[data-state="spinning"] { color: var(--cd-signal-amber); }
+.cd-th-verdict[data-state="stalled"] { color: var(--cd-signal-alert); }
+
+/* The interrogative console. The refusals get the same prompt and the same
+   rule as the answers, because they are answers. */
+.cd-th-crt { border: 1px solid var(--cd-steel-line); padding: .5rem .6rem;
+  font-size: .62rem; line-height: 1.5; }
+.cd-th-crt-head, .cd-th-crt-foot {
+  margin: 0; font-size: .56rem; letter-spacing: .16em;
+  color: var(--cd-steel-muted); text-transform: uppercase;
+}
+.cd-th-queries { list-style: none; margin: .4rem 0; padding: 0;
+  display: flex; flex-direction: column; gap: .35rem; }
+.cd-th-queries li { border-top: 1px solid var(--cd-steel-line); padding-top: .25rem; }
+.cd-th-queries b { display: block; color: var(--cd-signal-amber); font-weight: 500;
+  letter-spacing: .06em; }
+.cd-th-queries i { color: var(--cd-steel-muted); font-style: normal;
+  margin-right: .35rem; }
+.cd-th-queries span { display: block; color: var(--cd-signal-data); }
+.cd-th-queries li[data-answered="0"] span { color: var(--cd-health-colour-unknown); }
+.cd-th-queries cite { display: block; font-style: normal; font-size: .54rem;
+  color: var(--cd-steel-muted); }
+.cd-th-cursor { display: inline-block; width: .45em; height: 1em;
+  margin-left: .3em; background: currentColor; vertical-align: -.15em; }
+.cd-th-edge { margin: 0; font-size: .62rem; color: var(--cd-signal-amber);
+  letter-spacing: .1em; }
+
+/* The projection sits over the panel and never inside it. */
+.cd-th-projection { position: relative; padding-bottom: 1.2rem; }
+.cd-th-canon, .cd-th-overlay { list-style: none; margin: 0; padding: 0;
+  font-size: .62rem; line-height: 1.4; }
+.cd-th-canon { border: 1px solid var(--cd-steel-line);
+  /* Room for the projection to overlap. The overlay must sit ON the panel
+     and must never sit on a reading -- hiding an observation behind an
+     inference is the exact inversion this component argues against. */
+  padding: .45rem .55rem 1.6rem; }
+.cd-th-overlay {
+  position: relative; margin: -.7rem 0 0 1.4rem; padding: .45rem .55rem;
+  border: 1px dashed var(--cd-signal-wire, var(--cd-signal-data-dim));
+  background: var(--cd-void-raised);
+  color: var(--cd-signal-wire, var(--cd-signal-data-dim));
+}
+.cd-th-head { font-size: .54rem; letter-spacing: .16em;
+  color: var(--cd-steel-muted); text-transform: uppercase; }
+.cd-th-row { display: flex; gap: .5rem; align-items: baseline; }
+.cd-th-row b { font-weight: 500; letter-spacing: .06em; font-size: .56rem;
+  color: var(--cd-steel-muted); text-transform: uppercase; }
+.cd-th-row span { flex: 1 1 auto; }
+.cd-th-row[data-unmeasured="1"] span { color: var(--cd-health-colour-unknown); }
+.cd-th-row cite { font-style: normal; font-size: .52rem; color: var(--cd-steel-muted); }
+.cd-th-noburn { font-size: .64rem; line-height: 1.5; }
+.cd-th-noburn b { display: block; letter-spacing: .1em; }
