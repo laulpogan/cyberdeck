@@ -90,6 +90,13 @@ export function paintGlobe(figure) {
   // One full turn per measured interval. The rate IS the reading.
   const rate = turning && period > 0 ? (Math.PI * 2) / (period * 60) : 0;
   const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  // The library's off switch has to reach in here too. A canvas loop is
+  // outside the runtime's reach -- it owns Animation objects, and this
+  // owns a frame callback -- so settling stopped every marked element on
+  // the page and left this one turning. One control has to settle the
+  // whole page or it is not a control, so the loop reads the same flag
+  // the runtime sets rather than keeping its own idea of whether it is on.
+  const stopped = () => document.documentElement.hasAttribute('data-motion-off');
   let rot = 0;
 
   const project = (lat, lon) => {
@@ -130,7 +137,14 @@ export function paintGlobe(figure) {
       pin.style.opacity = z < 0 ? '0.18' : '1';
     });
 
-    if (rate && !reduced) { rot += rate; requestAnimationFrame(draw); }
+    if (rate && !reduced && !stopped()) { rot += rate; requestAnimationFrame(draw); }
   };
   draw();
+
+  // And it has to come back when motion does, without a second control.
+  const observer = new MutationObserver(() => {
+    if (rate && !reduced && !stopped()) draw();
+  });
+  observer.observe(document.documentElement,
+    { attributes: true, attributeFilter: ['data-motion-off'] });
 }
