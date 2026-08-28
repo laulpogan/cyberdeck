@@ -5,36 +5,42 @@
 
 /* ——— the trinity dial ——— */
 
-.cd-gauge { display: flex; flex-direction: column; align-items: center; gap: .5rem; }
+/* Tone is a role, never a colour: a caller asks for "warn" and the token
+   set decides what that is in this theme. It is set once, on the figure,
+   so the arc, the reading and the bloom are the same colour by
+   construction rather than by three declarations agreeing. */
+.cd-gauge { display: flex; flex-direction: column; align-items: center; gap: .5rem;
+            color: var(--cd-signal-data); }
+.cd-gauge[data-tone="warn"] { color: var(--cd-signal-amber); }
+.cd-gauge[data-tone="unmeasured"] { color: var(--cd-health-colour-unknown); }
 .cd-gauge svg { overflow: visible; }
+
 .cd-gauge-track {
   fill: none; stroke: var(--cd-steel-faint); stroke-width: 10; stroke-linecap: butt;
 }
 .cd-gauge-ticks line { stroke: var(--cd-steel-line); stroke-width: 1; }
+
+/* The bloom. A phosphor dot does not have an edge -- it has a bright
+   core and a halo that falls off, which is why the canvas original
+   carried a shadow at every stroke. Two shadows rather than one: a tight
+   core so the stroke still reads as a line, and a wide one for the
+   spill. Both take currentColor, so a new tone needs no new glow. */
 .cd-gauge-arc {
-  fill: none; stroke-width: 10; stroke-linecap: butt;
-  stroke: var(--cd-signal-data);
-  filter: drop-shadow(0 0 6px var(--cd-signal-data-fill));
+  fill: none; stroke: currentColor; stroke-width: 10; stroke-linecap: butt;
+  filter: drop-shadow(0 0 3px currentColor) drop-shadow(0 0 11px currentColor);
 }
-/* Tone is a role, never a colour: a caller asks for "warn", the token
-   set decides what that looks like in this theme. */
-.cd-gauge[data-tone="warn"] .cd-gauge-arc {
-  stroke: var(--cd-signal-amber);
-  filter: drop-shadow(0 0 6px var(--cd-signal-amber-fill));
-}
-.cd-gauge[data-tone="unmeasured"] .cd-gauge-arc {
-  stroke: var(--cd-health-colour-unknown); filter: none;
-}
+/* An unmeasured dial gets the colour and none of the light. The glow is
+   how this palette says "live", so spending it on a quantity nobody
+   measured would be the whole argument undone in a stylesheet. */
+.cd-gauge[data-tone="unmeasured"] .cd-gauge-arc { filter: none; }
 .cd-gauge-absent { opacity: .5; }
+
 .cd-gauge-read {
   fill: currentColor; font: 700 1.55rem/1 var(--cd-mono, inherit);
   font-variant-numeric: tabular-nums;
+  filter: drop-shadow(0 0 8px currentColor);
 }
-.cd-gauge[data-tone="warn"] .cd-gauge-read { fill: var(--cd-signal-amber); }
-.cd-gauge[data-tone="unmeasured"] .cd-gauge-read { fill: var(--cd-health-colour-unknown); }
-.cd-gauge:not([data-tone="warn"]):not([data-tone="unmeasured"]) .cd-gauge-read {
-  fill: var(--cd-signal-data);
-}
+.cd-gauge[data-tone="unmeasured"] .cd-gauge-read { filter: none; }
 .cd-gauge figcaption {
   font-size: .72rem; letter-spacing: .14em; color: var(--cd-signal-amber);
   text-transform: uppercase; text-align: center;
@@ -47,19 +53,22 @@
 .cd-riv-id { fill: var(--cd-steel-muted); font-size: 10px; font-weight: 500; }
 .cd-riv-lane[data-state="needs_human"] .cd-riv-id { fill: var(--cd-signal-amber); }
 .cd-riv-state { fill: var(--cd-steel-line); font-size: 9px; letter-spacing: .06em; }
-.cd-riv-seg { stroke: var(--cd-signal-data-fill); stroke-width: 2; }
-.cd-riv-seg[data-blocked="1"] { stroke: var(--cd-health-colour-critical); opacity: .55; }
+.cd-riv-seg { stroke: var(--cd-signal-data-dim); stroke-width: 2; opacity: .75;
+              filter: drop-shadow(0 0 3px var(--cd-signal-data-dim)); }
+.cd-riv-seg[data-blocked="1"] { stroke: var(--cd-health-colour-critical); opacity: .7;
+  filter: drop-shadow(0 0 3px var(--cd-health-colour-critical)); }
 /* An empty lane is drawn, and drawn as empty. Omitting the row would let
    "nothing happened here" and "this subject does not exist" look alike. */
 .cd-riv-empty { stroke: var(--cd-steel-line); stroke-width: 1; stroke-dasharray: 3 4; }
-.cd-riv-ev { fill: var(--cd-steel-ink); }
-.cd-riv-ev[data-kind="sealed"] { fill: var(--cd-signal-data); }
-.cd-riv-ev[data-kind="blocked"] { fill: var(--cd-health-colour-critical); }
-.cd-riv-ev[data-kind="retry"] { fill: var(--cd-signal-amber); }
+.cd-riv-ev { fill: currentColor; color: var(--cd-steel-ink);
+              filter: drop-shadow(0 0 5px currentColor); }
+.cd-riv-ev[data-kind="sealed"] { color: var(--cd-signal-data); }
+.cd-riv-ev[data-kind="blocked"] { color: var(--cd-health-colour-critical); }
+.cd-riv-ev[data-kind="retry"] { color: var(--cd-signal-amber); }
 .cd-riv-ring { fill: none; stroke: currentColor; stroke-width: 1; }
-.cd-riv-ev[data-kind="sealed"] .cd-riv-ring { stroke: var(--cd-signal-data); }
 .cd-riv-await text {
   fill: var(--cd-health-colour-unknown); font-size: 9px; letter-spacing: .1em;
+  filter: drop-shadow(0 0 6px var(--cd-health-colour-unknown));
 }
 
 /* ——— the globe ——— */
@@ -72,8 +81,10 @@
   display: block; width: 100%; height: auto; aspect-ratio: 1;
 }
 .cd-globe-layer { position: absolute; inset: 0; overflow: visible; }
-.cd-globe-dot { fill: var(--cd-signal-data); }
-.cd-globe-pin[data-awaiting="1"] .cd-globe-dot { fill: var(--cd-signal-amber); }
+.cd-globe-dot { fill: var(--cd-signal-data);
+                filter: drop-shadow(0 0 5px var(--cd-signal-data)); }
+.cd-globe-pin[data-awaiting="1"] .cd-globe-dot { fill: var(--cd-signal-amber);
+  filter: drop-shadow(0 0 7px var(--cd-signal-amber)); }
 .cd-globe-halo { fill: none; stroke: var(--cd-signal-amber); stroke-width: 1.4; }
 .cd-globe-arc { fill: none; stroke: var(--cd-signal-amber-dim); stroke-width: 1.1; }
 .cd-globe figcaption {
