@@ -6,6 +6,7 @@
   "main": "src/index.js",
   "exports": {
     ".": "./src/index.js",
+    "./draw": "./src/draw.js",
     "./react": "./react/index.js",
     "./runtime.js": "./src/runtime.js",
     "./components": "./src/components/index.js",

@@ -15,10 +15,20 @@
 .cd-gauge[data-tone="unmeasured"] { color: var(--cd-health-colour-unknown); }
 .cd-gauge svg { overflow: visible; }
 
+/* The unlit part of the ring has to be legible, and this is not a taste
+   call. A dial is read as "this much of that much": with the track too
+   faint to see, the eye takes the lit arc for the whole instrument, so a
+   part-filled dial looks like a complete dial sitting off to one side --
+   and the amount NOT filled, which is the finding on a proof gauge,
+   disappears entirely. The track is the denominator. It gets to be seen.
+
+   Tinted with the tone rather than neutral grey, so the empty span reads
+   as the same instrument rather than as a shadow behind it. */
 .cd-gauge-track {
-  fill: none; stroke: var(--cd-steel-faint); stroke-width: 10; stroke-linecap: butt;
+  fill: none; stroke-width: 10; stroke-linecap: butt;
+  stroke: currentColor; opacity: .16;
 }
-.cd-gauge-ticks line { stroke: var(--cd-steel-line); stroke-width: 1; }
+.cd-gauge-ticks line { stroke: currentColor; opacity: .3; stroke-width: 1; }
 
 /* The bloom. A phosphor dot does not have an edge -- it has a bright
    core and a halo that falls off, which is why the canvas original
