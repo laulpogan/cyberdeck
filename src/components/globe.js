@@ -137,12 +137,18 @@ export function paintGlobe(figure) {
       pin.style.opacity = z < 0 ? '0.18' : '1';
     });
 
-    if (rate && !reduced && !stopped()) { rot += rate; requestAnimationFrame(draw); }
+    if (rate && !reduced && !stopped() && canvas.isConnected) { rot += rate; requestAnimationFrame(draw); }
   };
   draw();
 
   // And it has to come back when motion does, without a second control.
   const observer = new MutationObserver(() => {
+    // A figure that has left the document takes its loop with it. A host
+    // that re-renders its deck -- a dashboard refresh, a showcase re-render
+    // -- would otherwise accumulate one spinning globe per refresh, each
+    // painting a canvas nobody can see. Motion past its own expiry is the
+    // exact lie the wrapper's mark refuses in every other channel.
+    if (!canvas.isConnected) { observer.disconnect(); return; }
     if (rate && !reduced && !stopped()) draw();
   });
   observer.observe(document.documentElement,

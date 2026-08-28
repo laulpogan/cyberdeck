@@ -40,7 +40,19 @@
   }
 
   var running = [];
+  // Motion mini commits its final keyframe into inline style when an
+  // animation finishes; the dial rewrites its transform origin to start
+  // its loop, and the trace borrows the dash geometry while it draws.
+  // Every element a handler styles is recorded here together with the
+  // style the render wrote, and a settle puts every one of them back.
+  // Only then is "a settled page IS the static export" literally true --
+  // byte equality is the check, and appearance alone would not pass it.
+  var firstStyle = new Map();
+  function remember(node) {
+    if (!firstStyle.has(node)) firstStyle.set(node, node.getAttribute('style'));
+  }
   function play(el, keyframes, options) {
+    remember(el);
     var handle = M.animate(el, keyframes, options);
     running.push(handle);
     return handle;
@@ -122,6 +134,10 @@
       // instead, spinning the sweep around its own middle somewhere off
       // in the corner of the panel.
       var origin = el.getAttribute('data-cycle-origin');
+      // The dial's inline style belongs to the loop, not the render. It is
+      // remembered before being written so the settle can hand the element
+      // back exactly as the render had drawn it.
+      remember(el);
       el.style.transformBox = 'view-box';
       el.style.transformOrigin = origin
         ? origin.split(/\s+/).map(function (n) { return n + 'px'; }).join(' ')
@@ -252,20 +268,31 @@
       var length = 0;
       try { length = path.getTotalLength(); } catch (e) { continue; }
       if (!(length > 0)) continue;
-      var restore = path.getAttribute('stroke-dasharray');
+      // Remembered before the borrow, not at play(): play would capture
+      // the dash this handler is about to write and "restore" the borrow
+      // instead of the render.
+      remember(path);
       path.style.strokeDasharray = length + ' ' + length;
       path.style.strokeDashoffset = String(length);
-      (function (node, was) {
+      (function (node) {
         var handle = play(node, { strokeDashoffset: [String(length), '0'] },
           { duration: T.enter / 1000, easing: 'ease-out', delay: delay });
         var done = function () {
+          // Clearing the properties is enough to let a rendered
+          // stroke-dasharray shine through again -- writing the old value
+          // back as a property would duplicate the attribute inline and
+          // leave the settled page differing from the render by bytes.
           node.style.strokeDashoffset = '';
-          node.style.strokeDasharray = was === null ? '' : was;
+          node.style.strokeDasharray = '';
+          // Clearing every property leaves an empty style attribute behind.
+          // The static export never wrote one, so the settled page has to
+          // not have one either.
+          if (node.getAttribute('style') === '') node.removeAttribute('style');
         };
         if (handle && handle.finished && handle.finished.then) {
           handle.finished.then(done, done);
         }
-      })(path, restore);
+      })(path);
     }
   }
 
@@ -340,6 +367,30 @@
     if (document.getAnimations) {
       var all = document.getAnimations();
       for (var j = 0; j < all.length; j++) { try { all[j].cancel(); } catch (e) {} }
+    }
+    // Last in wins per node, and the map kept the FIRST sighting of each,
+    // which is the style the render wrote. Replaying it back is what makes
+    // the settled document byte-equal the exported one.
+    var emptied = [];
+    firstStyle.forEach(function (was, node) {
+      if (was === null) { node.removeAttribute('style'); emptied.push(node); }
+      else node.setAttribute('style', was);
+    });
+    firstStyle.clear();
+    // Blink re-serialises a bare `style=""` attribute once when it flushes
+    // the cancellations above -- no script writes it, so no script can be
+    // trusted to not have written it. The settled page has to match the
+    // export after that flush, not merely at the instant of the settle, so
+    // the sweep returns one more time when the frame machinery has caught
+    // up. A byte comparison between the two documents is the check.
+    if (emptied.length && window.requestAnimationFrame) {
+      requestAnimationFrame(function () {
+        for (var k = 0; k < emptied.length; k++) {
+          if (emptied[k].getAttribute('style') === '') {
+            emptied[k].removeAttribute('style');
+          }
+        }
+      });
     }
     root.setAttribute('data-motion-off', '');
   }
