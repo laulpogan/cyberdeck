@@ -1,0 +1,126 @@
+<!doctype html>
+<meta charset="utf-8">
+<title>Cyberdeck — THE ORGANISM</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Saira+Condensed:wght@700&display=swap">
+<link rel="stylesheet" href="../src/tokens.css">
+<link rel="stylesheet" href="../src/motion.css">
+<link rel="stylesheet" href="../src/components/components.css">
+<style>
+  :root{--cd-mono:"JetBrains Mono",ui-monospace,monospace}
+  body{margin:0;background:var(--cd-void-base);color:var(--cd-steel-ink);
+       font:400 13px/1.55 var(--cd-mono)}
+  .wrap{max-width:78rem;margin:0 auto;padding:2.5rem 1.4rem 5rem}
+  h1{font-family:"Saira Condensed",sans-serif;text-transform:uppercase;
+     font-size:clamp(2rem,5vw,3.4rem);margin:0 0 .3rem;letter-spacing:.02em}
+  h1 em{font-style:normal;color:var(--cd-signal-amber)}
+  .lede{color:var(--cd-steel-muted);max-width:62ch;margin:0 0 1.4rem}
+  .bar{display:flex;gap:1.3rem;flex-wrap:wrap;border:1px solid var(--cd-steel-line);
+       padding:.65rem .9rem;margin-bottom:2rem;align-items:center}
+  .bar b{color:var(--cd-signal-data);font-variant-numeric:tabular-nums}
+  button{font:500 .7rem/1 var(--cd-mono);letter-spacing:.14em;text-transform:uppercase;
+         background:transparent;color:var(--cd-signal-amber);
+         border:1px solid var(--cd-signal-amber-dim);padding:.5rem 1rem;cursor:pointer}
+  h2{font-family:"Saira Condensed",sans-serif;text-transform:uppercase;font-size:1.3rem;
+     color:var(--cd-signal-amber);margin:2.4rem 0 .2rem;letter-spacing:.03em}
+  .sub{color:var(--cd-steel-muted);font-size:.78rem;margin:0 0 1rem}
+  .grid{display:grid;gap:1rem;align-items:start;grid-template-columns:repeat(auto-fill,minmax(19rem,1fr))}
+</style>
+<div class="wrap">
+  <h1>THE ORGANISM — <em>eight components</em></h1>
+  <p class="lede">Supply, structure, and where the fleet sits. One rule runs
+    through all eight: a level and a rate are different kinds of number and
+    may never wear the same mark. The second is Rasmussen's — a system does
+    not fail at a limit, it drifts toward one.</p>
+  <div class="bar">
+    <span>ANIMATIONS <b id="a">0</b></span><span>MARKS <b id="m">0</b></span>
+    <span>DECLARED STILL <b id="s">0</b></span>
+    <span>MOVING WITHOUT EVIDENCE <b id="l">0</b></span>
+    <button id="kill" type="button">Motion off</button>
+    <button id="replay" type="button">Replay</button>
+  </div>
+  <h2>A fleet somebody counted</h2>
+  <p class="sub">Sessions, hosts, routes, admission — all enumerated.</p>
+  <div class="grid" id="live"></div>
+  <h2>And the counts nobody took</h2>
+  <p class="sub">No rate from one snapshot, no beam drawn level, no host that
+    vanished when it emptied, no comfortable middle.</p>
+  <div class="grid" id="dead"></div>
+</div>
+<script src="../vendor/motion.min.js"></script>
+<script src="../src/runtime.js"></script>
+<script type="module">
+import * as og from '../src/components/organism.js';
+
+const LEVELS=[
+ {label:'SESSIONS',value:12,cite:'sessions[]'},
+ {label:'NEEDS HUMAN',value:3,cite:'sessions[].state'},
+ {label:'QUEUE DEPTH',value:7,cite:'capacity.admission.queue_depth'}];
+const LEVELS_DARK=LEVELS.map(l=>({...l,value:null}));
+const RATES=[
+ {label:'ADMITTED',value:null,period:'MIN',cite:'no admission-event producer'},
+ {label:'COMPLETED',value:null,period:'MIN',cite:'no completion-event producer'},
+ {label:'RETRIED',value:null,period:'MIN',cite:'no retry-rate producer'}];
+const HOSTS=[
+ {host:'dellpromax',workers:[{state:'running'},{state:'NEEDS HUMAN'},{state:'running'}]},
+ {host:'spark',workers:[{state:'running'},{state:'failed'}]},
+ {host:'dotair',workers:[]}];
+const ROUTES=[
+ {origin:'kanpai',carrier:'opus-5',destination:'dellpromax',delivered:true},
+ {origin:'kanpai',carrier:'opus-5',destination:'dellpromax',delivered:true},
+ {origin:'scape',carrier:'sonnet-5',destination:'spark',delivered:true},
+ {origin:'cron',carrier:'haiku-4.5',destination:'dotair',delivered:false}];
+const ROWS=[
+ {task:'W-2211',state:'running',host:'dellpromax',harness:'kanpai',model:'opus-5',run:4,proof:'passed',ctx:82},
+ {task:'W-2212',state:'NEEDS HUMAN',host:'spark',harness:'scape',model:'sonnet-5',run:1,proof:null,ctx:41},
+ {task:'W-2213',state:'failed',host:'spark',harness:null,model:'haiku-4.5',run:2,proof:'failed',ctx:null}];
+const SCOPES=[
+ {label:'SUBJECT',count:1,reach:'one session'},
+ {label:'TASK',count:4,reach:'every attempt of one task'},
+ {label:'HOST',count:9,reach:'every worker on one host'},
+ {label:'FLEET',count:31,reach:'everything'}];
+
+document.getElementById('live').innerHTML=[
+  og.stockFlow({levels:LEVELS,rates:RATES}),
+  og.envelope({}),
+  og.admission({offered:40,taken:31,status:'THROTTLED',
+    reason:'The gap is what the fleet turned away, not a percentage.'}),
+  og.city({hosts:HOSTS}),
+  og.garage({loadouts:[
+    {model:'opus-5',harness:'kanpai',count:4,proof:{passed:3,failed:1}},
+    {model:'sonnet-5',harness:'scape',count:2,proof:{}}]}),
+  og.strands({routes:ROUTES}),
+  og.grid({rows:ROWS}),
+  og.atField({scopes:SCOPES}),
+].join('');
+
+document.getElementById('dead').innerHTML=[
+  og.stockFlow({levels:LEVELS_DARK,rates:RATES}),
+  og.envelope({}),
+  og.admission({offered:40,taken:null}),
+  og.city({hosts:[]}),
+  og.garage({loadouts:[]}),
+  og.strands({routes:[]}),
+  og.grid({rows:[]}),
+  og.atField({scopes:[]}),
+].join('');
+
+window.CyberdeckMotion.start();
+const el=id=>document.getElementById(id);
+function report(){const A=document.getAnimations();
+  el('a').textContent=A.length;
+  el('m').textContent=document.querySelectorAll('[data-motion]').length;
+  el('s').textContent=document.querySelectorAll('[data-motion="still"]').length;
+  let n=0;A.forEach(a=>{const t=a.effect&&a.effect.target;
+    if(t&&t.closest&&t.closest('[data-motion="still"]'))n++});el('l').textContent=n;}
+setInterval(report,400);report();
+let off=false;
+el('kill').addEventListener('click',e=>{off=!off;
+  e.target.textContent=off?'Motion on':'Motion off';
+  if(off){window.CyberdeckMotion.settle();document.documentElement.setAttribute('data-motion-off','')}
+  else{document.documentElement.removeAttribute('data-motion-off');window.CyberdeckMotion.start()}
+  report();});
+el('replay').addEventListener('click',()=>{window.CyberdeckMotion.settle();
+  document.documentElement.removeAttribute('data-motion-off');
+  window.CyberdeckMotion.start();report();});
+</script>

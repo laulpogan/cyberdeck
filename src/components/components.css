@@ -133,7 +133,8 @@
   order: -1; font-size: .68rem; letter-spacing: .16em; text-transform: uppercase;
   color: var(--cd-signal-amber);
 }
-.cd-card-body { line-height: 0; }
+.cd-card-body { line-height: 1.45; }
+.cd-card-body > svg { display: block; }
 .cd-card-body svg { width: 100%; height: auto; overflow: visible; }
 /* A drawing given an intrinsic size means it. Anything drawn at true
    scale -- a crush, a wall, a rack -- is wrong when stretched: fifty-four
@@ -335,3 +336,103 @@
 .cd-th-row cite { font-style: normal; font-size: .52rem; color: var(--cd-steel-muted); }
 .cd-th-noburn { font-size: .64rem; line-height: 1.5; }
 .cd-th-noburn b { display: block; letter-spacing: .1em; }
+
+/* Organism roles. */
+.cd-og-wall, .cd-og-nodot, .cd-og-dark { color: var(--cd-health-colour-unknown); }
+.cd-og-position { color: var(--cd-signal-data); }
+/* Neutral. A green box around the operating space says a safe region was
+   measured, which is the exact claim this gauge refuses. */
+.cd-og-space { color: var(--cd-steel-line); }
+.cd-og-arm { color: var(--cd-steel-ink); }
+.cd-og-crate { color: var(--cd-signal-data-dim); }
+.cd-og-gap[data-any="1"] { color: var(--cd-signal-amber); }
+.cd-og-gap[data-any="0"] { color: var(--cd-signal-data); }
+.cd-og-tower { color: var(--cd-steel-line); }
+.cd-og-window { color: var(--cd-signal-data); }
+.cd-og-window[data-state="needs human"], .cd-og-window[data-state="needs_human"]
+  { color: var(--cd-signal-amber); }
+.cd-og-window[data-state="failed"] { color: var(--cd-signal-alert); }
+.cd-og-route[data-delivered="0"] { color: var(--cd-steel-muted); }
+.cd-og-route[data-delivered="1"] { color: var(--cd-signal-data); }
+/* Wider reach, fainter ring. The eye reads the escalation before the
+   numbers, and everything is the scope that looks least solid. */
+.cd-og-scope { color: var(--cd-signal-amber); }
+.cd-og-scope[data-scope="fleet"] { color: var(--cd-signal-alert); }
+
+/* A level is a filled bar standing on a floor. A rate is an arrow with a
+   period. The two glyphs must stay distinguishable with the labels
+   covered, so neither is allowed to borrow the other's geometry. */
+.cd-og-stockflow { font-size: .62rem; line-height: 1.4; }
+.cd-og-stockflow h4 {
+  margin: .5rem 0 .3rem; font-size: .54rem; letter-spacing: .16em;
+  color: var(--cd-steel-muted); font-weight: 500;
+}
+.cd-og-stockflow h4:first-child { margin-top: 0; }
+.cd-og-level, .cd-og-rate {
+  display: grid; grid-template-columns: 26px 1fr auto; gap: .2rem .5rem;
+  align-items: center; padding: .2rem 0;
+  border-top: 1px solid var(--cd-steel-line);
+}
+.cd-og-level b, .cd-og-rate b { font-weight: 500; letter-spacing: .08em;
+  color: var(--cd-steel-muted); text-transform: uppercase; font-size: .56rem; }
+.cd-og-level strong, .cd-og-rate strong {
+  font-weight: 600; color: var(--cd-signal-data); font-variant-numeric: tabular-nums;
+}
+.cd-og-level[data-measured="0"] strong,
+.cd-og-rate[data-measured="0"] strong { color: var(--cd-health-colour-unknown); }
+.cd-og-level cite, .cd-og-rate cite {
+  grid-column: 2 / -1; font-style: normal; font-size: .52rem;
+  color: var(--cd-steel-muted);
+}
+.cd-og-rate em { font-style: normal; font-size: .52rem; letter-spacing: .1em;
+  color: var(--cd-steel-muted); }
+/* Forrester's level notation: a filled bar on a floor. Same size at three
+   as at three hundred -- it is a KIND mark, not a quantity. */
+.cd-og-level-mark { display: block; width: 24px; height: 14px; position: relative;
+  border-bottom: 2px solid var(--cd-steel-muted); }
+.cd-og-level-mark i { position: absolute; inset: 2px 3px 2px 3px;
+  background: var(--cd-signal-data); opacity: .8; }
+.cd-og-level[data-measured="0"] .cd-og-level-mark i {
+  background: none; border: 1px dashed var(--cd-health-colour-unknown); }
+.cd-og-rate-mark { display: block; color: var(--cd-signal-data); }
+.cd-og-rate[data-measured="0"] .cd-og-rate-mark { color: var(--cd-health-colour-unknown); }
+
+.cd-og-uncounted { margin: 0; font-size: .66rem; letter-spacing: .1em;
+  color: var(--cd-health-colour-unknown); }
+
+.cd-og-loadout { border-top: 1px solid var(--cd-steel-line); padding: .3rem 0;
+  font-size: .62rem; }
+.cd-og-loadout header { display: flex; gap: .5rem; align-items: baseline; }
+.cd-og-loadout b { color: var(--cd-signal-data); font-weight: 600; }
+.cd-og-loadout span { color: var(--cd-steel-muted); }
+.cd-og-loadout em { margin-left: auto; font-style: normal; font-size: .54rem;
+  letter-spacing: .1em; color: var(--cd-steel-muted); }
+.cd-og-fit { display: flex; flex-wrap: wrap; gap: .3rem; margin-top: .2rem; }
+.cd-og-fit span { font-size: .54rem; letter-spacing: .08em;
+  border: 1px solid var(--cd-steel-line); padding: .1rem .35rem;
+  color: var(--cd-steel-muted); }
+.cd-og-fit span[data-proof="passed"] { color: var(--cd-signal-data);
+  border-color: var(--cd-signal-data-dim); }
+.cd-og-fit span[data-proof="failed"] { color: var(--cd-signal-alert);
+  border-color: var(--cd-signal-alert-dim); }
+.cd-og-fit span[data-proof="unmeasured"] { color: var(--cd-health-colour-unknown); }
+.cd-og-fit i { font-style: normal; font-weight: 600; }
+
+/* Wide content scrolls inside its own container. The page body never
+   scrolls sideways because a table wanted to. */
+.cd-og-grid { overflow-x: auto; }
+.cd-og-grid table { border-collapse: collapse; font-size: .56rem; width: 100%; }
+.cd-og-grid th, .cd-og-grid td {
+  text-align: left; padding: .18rem .4rem; white-space: nowrap;
+  border-bottom: 1px solid var(--cd-steel-line);
+  font-variant-numeric: tabular-nums;
+}
+.cd-og-grid th { letter-spacing: .12em; color: var(--cd-steel-muted); font-weight: 500; }
+.cd-og-grid td { color: var(--cd-steel-ink); }
+/* Blank reads as zero, or as fine. The word is what makes it a gap. */
+.cd-og-grid td[data-unmeasured="1"] { color: var(--cd-health-colour-unknown); }
+.cd-og-grid tr[data-state="needs human"] td:first-child,
+.cd-og-grid tr[data-state="needs_human"] td:first-child {
+  box-shadow: inset 2px 0 var(--cd-signal-amber); }
+.cd-og-grid tr[data-state="failed"] td:first-child {
+  box-shadow: inset 2px 0 var(--cd-signal-alert); }
