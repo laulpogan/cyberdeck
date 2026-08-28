@@ -1,0 +1,355 @@
+// The rack the components were installed in.
+//
+// No colour is named here. Every one is a token from `src/tokens.css`, or a
+// `color-mix` of tokens, and `test/tokens-ratchet.test.mjs` proves it -- the
+// same ratchet the library holds itself to, extended to the app's own
+// source. Nothing is rounded, nothing floats, nothing is lit from a gradient:
+// these are instruments and the chrome is a rack, not a storefront.
+
+*, *::before, *::after { box-sizing: border-box; }
+
+/* The two faces the components were drawn against, and the one token the
+   library leaves to its host: `src/tokens.css` names colours only, and
+   `components.css` reads `--cd-mono` with an `inherit` fallback, so a host
+   that never sets one gets the components in the browser's UI face. */
+:root {
+  --cd-mono: "JetBrains Mono", ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+  --cd-display: "Saira Condensed", "Arial Narrow", "Helvetica Neue Condensed", sans-serif;
+  --cd-hair: 1px solid var(--cd-steel-line);
+  --cd-hair-strong: 1px solid var(--cd-steel-muted);
+  --cd-cell: var(--cd-void-panel);
+}
+
+html { background: var(--cd-void-base); }
+
+body {
+  margin: 0;
+  background: var(--cd-void-base);
+  color: var(--cd-steel-ink);
+  font: 400 13px/1.55 var(--cd-mono);
+  font-variant-numeric: tabular-nums;
+}
+
+/* A declared stillness extends to everything inside it. The library's own
+   guard in `motion.css` matches the element carrying the mark; the mark is
+   routinely stamped on a whole card, so its descendants are still inside the
+   refusal. A chrome hover that runs inside a refused card is exactly what
+   `MOVING WITHOUT EVIDENCE` hunts, so it is refused structurally rather
+   than left to discipline. */
+[data-motion="still"],
+[data-motion="still"] *,
+[data-motion="still"] *::before,
+[data-motion="still"] *::after {
+  animation: none !important;
+  transition: none !important;
+}
+
+::selection { background: var(--cd-signal-amber-fill); }
+
+:focus-visible {
+  outline: 2px solid var(--cd-signal-amber);
+  outline-offset: 1px;
+}
+
+/* ——— the rack ——— */
+
+.cd-rack {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  background: var(--cd-void-warm);
+  border-bottom: var(--cd-hair-strong);
+}
+
+.cd-rack-top {
+  display: flex;
+  align-items: center;
+  gap: 1.2rem;
+  padding: 0.5rem 1.1rem;
+  border-bottom: var(--cd-hair);
+}
+
+.cd-mark {
+  font: 700 1.25rem/1 var(--cd-display);
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  text-decoration: none;
+  color: var(--cd-signal-amber);
+  white-space: nowrap;
+}
+.cd-mark span {
+  display: block;
+  font: 400 0.56rem/1 var(--cd-mono);
+  letter-spacing: 0.22em;
+  color: var(--cd-steel-muted);
+  margin-top: 0.2rem;
+}
+
+.cd-nav {
+  display: flex;
+  gap: 0.1rem;
+  flex: 1 1 auto;
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+.cd-nav::-webkit-scrollbar { display: none; }
+
+.cd-nav a {
+  font: 500 0.66rem/1 var(--cd-mono);
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  text-decoration: none;
+  color: var(--cd-steel-muted);
+  border-bottom: 2px solid transparent;
+  padding: 0.35rem 0.5rem;
+  white-space: nowrap;
+}
+.cd-nav a:hover { color: var(--cd-signal-amber); }
+.cd-nav a[data-active="1"] {
+  color: var(--cd-signal-amber);
+  border-bottom-color: var(--cd-signal-amber);
+}
+
+.cd-switches {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  margin-left: auto;
+}
+.cd-switches-group { display: flex; gap: 0.15rem; }
+.cd-switches-label {
+  font: 400 0.56rem/1 var(--cd-mono);
+  letter-spacing: 0.16em;
+  color: var(--cd-steel-muted);
+  text-transform: uppercase;
+}
+
+/* ——— the honesty readout ——— */
+
+.cd-honesty {
+  display: flex;
+  align-items: baseline;
+  gap: 0;
+  flex-wrap: wrap;
+  font: 400 0.62rem/1 var(--cd-mono);
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+.cd-honesty-cell {
+  display: flex;
+  align-items: baseline;
+  gap: 0.4rem;
+  padding: 0.42rem 0.8rem;
+  border-right: var(--cd-hair);
+}
+.cd-honesty-cell em { font-style: normal; color: var(--cd-steel-muted); }
+.cd-honesty-cell b {
+  font-weight: 700;
+  font-size: 0.78rem;
+  color: var(--cd-signal-data);
+}
+.cd-honesty-verdict b { color: var(--cd-signal-data); }
+.cd-honesty[data-lying="1"] { background: var(--cd-signal-alert-fill); }
+.cd-honesty[data-lying="1"] .cd-honesty-verdict b { color: var(--cd-signal-alert); }
+.cd-honesty[data-lying="1"] .cd-honesty-verdict {
+  outline: 1px solid var(--cd-signal-alert);
+  outline-offset: -1px;
+}
+
+.cd-honesty-note {
+  padding: 0.42rem 0.8rem;
+  color: var(--cd-steel-muted);
+  letter-spacing: 0.08em;
+  text-transform: none;
+  font-size: 0.62rem;
+}
+.cd-honesty[data-lying="1"] .cd-honesty-note { color: var(--cd-signal-alert); }
+
+/* ——— buttons ——— */
+
+button {
+  font: 500 0.64rem/1 var(--cd-mono);
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  background: transparent;
+  color: var(--cd-signal-amber);
+  border: var(--cd-hair-strong);
+  border-radius: 0;
+  padding: 0.45rem 0.6rem;
+  cursor: pointer;
+}
+button:hover:not(:disabled) { background: var(--cd-signal-amber-fill); }
+button[aria-pressed="true"], button[data-active="1"] {
+  background: var(--cd-signal-amber);
+  color: var(--cd-void-base);
+  border-color: var(--cd-signal-amber);
+}
+button:disabled {
+  color: var(--cd-steel-muted);
+  border-color: var(--cd-steel-line);
+  cursor: not-allowed;
+  background: var(--cd-steel-faint);
+}
+
+/* ——— pages ——— */
+
+.cd-page {
+  max-width: 84rem;
+  margin: 0 auto;
+  padding: 1.8rem 1.1rem 3.5rem;
+}
+
+.cd-kicker {
+  font: 400 0.62rem/1 var(--cd-mono);
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--cd-signal-amber);
+  margin: 0 0 0.7rem;
+}
+
+.cd-display {
+  font-family: var(--cd-display);
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.015em;
+  line-height: 1.04;
+  margin: 0 0 0.8rem;
+}
+h1.cd-display { font-size: clamp(1.9rem, 5.2vw, 3.4rem); }
+.cd-h2 {
+  font-size: clamp(1.05rem, 2.4vw, 1.5rem);
+  color: var(--cd-signal-amber);
+  margin: 2.6rem 0 0.5rem;
+}
+
+.cd-lede {
+  max-width: 68ch;
+  color: var(--cd-steel-muted);
+  margin: 0 0 1.2rem;
+}
+
+.cd-note { color: var(--cd-steel-muted); max-width: 76ch; margin: 0 0 1rem; }
+.cd-footnote { color: var(--cd-steel-muted); max-width: 76ch; }
+.cd-footnote em { font-style: normal; color: var(--cd-signal-amber); }
+
+/* Wide things scroll in their own container so the page body never does. */
+.cd-scroll { overflow-x: auto; }
+
+table.cd-table {
+  border-collapse: collapse;
+  width: 100%;
+  /* A two-column table stretched across an 84rem page leaves a void after the
+     prose and reads as a broken layout. The instrument gets a measure: wide
+     enough to sit the two answers apart, no wider than the sentence needs. */
+  max-width: 60rem;
+  font-size: 0.8rem;
+}
+.cd-table th, .cd-table td {
+  text-align: left;
+  padding: 0.4rem 0.6rem;
+  border-bottom: var(--cd-hair);
+  vertical-align: top;
+}
+.cd-table th:first-child, .cd-table td:first-child { width: 40%; }
+.cd-table th {
+  font: 500 0.62rem/1.4 var(--cd-mono);
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--cd-signal-amber);
+  border-bottom: var(--cd-hair-strong);
+}
+.cd-table td:first-child { color: var(--cd-steel-ink); }
+
+code {
+  font: 400 0.86em var(--cd-mono);
+  background: var(--cd-void-panel);
+  padding: 0.05em 0.25em;
+  border: var(--cd-hair);
+  overflow-wrap: anywhere;
+}
+pre {
+  font: 400 0.78rem/1.5 var(--cd-mono);
+  background: var(--cd-void-panel);
+  border: var(--cd-hair);
+  padding: 0.7rem 0.8rem;
+  margin: 0 0 1.1rem;
+  overflow-x: auto;
+  max-width: 100%;
+}
+
+/* ——— the landing pair ——— */
+
+.cd-pair {
+  display: grid;
+  gap: 1.2rem;
+  grid-template-columns: repeat(auto-fit, minmax(21rem, 1fr));
+  border: var(--cd-hair);
+  background: var(--cd-void-panel);
+  padding: 0.9rem;
+  margin: 1.6rem 0 1rem;
+}
+.cd-pair-cell { margin: 0; min-width: 0; }
+.cd-pair-cell figcaption {
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+  margin-bottom: 0.6rem;
+  padding-bottom: 0.4rem;
+  border-bottom: var(--cd-hair);
+}
+.cd-pair-cell figcaption b {
+  font: 700 0.72rem/1 var(--cd-display);
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--cd-signal-data);
+}
+.cd-pair-cell[data-measured="0"] figcaption b { color: var(--cd-signal-alert); }
+.cd-pair-cell figcaption span {
+  font-size: 0.68rem;
+  color: var(--cd-steel-muted);
+}
+.cd-pair-verdict { max-width: 74ch; margin: 0 0 0.8rem; }
+.cd-cite-line { color: var(--cd-signal-wire); }
+
+/* ——— the specimen itself ——— */
+
+.cd-specimen { min-width: 0; }
+/* The library's cards are `figure` boxes sized for a deck. In a rack they
+   must fill the cell they are given and never push the page wider. */
+.cd-specimen > .cd-card { width: 100%; }
+.cd-specimen svg { max-width: 100%; }
+
+/* ——— the footer ——— */
+
+.cd-footer {
+  border-top: var(--cd-hair-strong);
+  margin-top: 1.5rem;
+  padding: 1rem 1.1rem 3rem;
+  font-size: 0.68rem;
+  color: var(--cd-steel-muted);
+  max-width: 84rem;
+  margin-inline: auto;
+}
+.cd-footer a { color: var(--cd-signal-amber); }
+
+/* ——— narrow ——— */
+
+@media (max-width: 62rem) {
+  .cd-rack-top { flex-wrap: wrap; gap: 0.5rem 1rem; }
+  .cd-nav { order: 3; flex-basis: 100%; }
+  .cd-switches { margin-left: auto; }
+  .cd-honesty-cell { padding: 0.4rem 0.55rem; }
+  .cd-honesty-note { display: none; }
+}
+
+@media (max-width: 30rem) {
+  .cd-rack-top { padding: 0.45rem 0.6rem; }
+  .cd-page { padding: 1.1rem 0.6rem 2.5rem; }
+  .cd-switches { flex-wrap: wrap; }
+  /* Four counters stacked one per line ate a third of a phone's height. Two
+     by two keeps the readout on screen without pushing the specimen off it. */
+  .cd-honesty { display: grid; grid-template-columns: 1fr 1fr; }
+  .cd-honesty-cell { border-right: var(--cd-hair); border-bottom: var(--cd-hair); }
+  .cd-honesty-verdict { grid-column: 1 / -1; border-right: 0; }
+}

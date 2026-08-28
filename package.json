@@ -16,15 +16,53 @@
     "./tokens.css": "./src/tokens.css",
     "./vendor/motion.min.js": "./vendor/motion.min.js"
   },
-  "files": ["src", "react", "vendor", "docs", "README.md", "LICENSE"],
+  "files": [
+    "src",
+    "react",
+    "vendor",
+    "docs",
+    "README.md",
+    "LICENSE"
+  ],
   "scripts": {
     "test": "node --test \"test/*.test.mjs\"",
-    "demo": "python3 -m http.server 8199"
+    "demo": "python3 -m http.server 8199",
+    "app": "vite",
+    "app:build": "vite build",
+    "app:preview": "vite preview",
+    "verify": "node app/verify/index.mjs"
   },
-  "keywords": ["cyberpunk", "hud", "fui", "sci-fi", "dashboard", "motion",
-               "animation", "design-system", "svg", "observability"],
+  "keywords": [
+    "cyberpunk",
+    "hud",
+    "fui",
+    "sci-fi",
+    "dashboard",
+    "motion",
+    "animation",
+    "design-system",
+    "svg",
+    "observability"
+  ],
   "license": "MIT",
-  "peerDependencies": { "react": ">=17" },
-  "peerDependenciesMeta": { "react": { "optional": true } },
-  "sideEffects": ["./src/runtime.js", "./src/*.css", "./vendor/*.js"]
+  "peerDependencies": {
+    "react": ">=17"
+  },
+  "peerDependenciesMeta": {
+    "react": {
+      "optional": true
+    }
+  },
+  "sideEffects": [
+    "./src/runtime.js",
+    "./src/*.css",
+    "./vendor/*.js"
+  ],
+  "devDependencies": {
+    "@vitejs/plugin-react": "^6.1.1",
+    "playwright": "1.58",
+    "react": "^19.2.8",
+    "react-dom": "^19.2.8",
+    "vite": "^8.2.2"
+  }
 }
