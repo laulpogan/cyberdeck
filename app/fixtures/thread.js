@@ -62,7 +62,7 @@ export const THREAD_FIXTURES = {
     // supply it. The refusals get the same prompt and the same rule as the
     // answers: they are answers, and demoting them is how a console starts to
     // look more capable than it is.
-    fields: ['answers[].answer'],
+    fields: ['answers[].answer', 'answers'],
     refusalText: 'UNABLE TO COMPUTE',
     model: {
       answers: [

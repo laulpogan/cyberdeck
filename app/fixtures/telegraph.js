@@ -63,7 +63,7 @@ export const TELEGRAPH_FIXTURES = {
     // One strip per decision, read in the order it will hurt. Each strip's clock
     // is its own measured wait, so removing the waits stops every counter on the
     // page while the queue keeps its shape and its ranking.
-    fields: ['items[].wait_seconds'],
+    fields: ['items[].wait_seconds', 'items'],
     model: {
       sourceState: 'live',
       cite: 'items[].wait.seconds',

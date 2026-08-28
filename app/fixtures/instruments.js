@@ -27,7 +27,8 @@ export const INSTRUMENT_FIXTURES = {
     // measured interval, or the globe holds still. An unattended globe turning
     // over a dead source is the easiest lie to ship, because a turning globe looks
     // like health.
-    fields: ['periodSeconds', 'endpoints[].workers', { path: 'sourceState', value: 'unavailable' }],
+    fields: ['periodSeconds', 'endpoints[].workers', 'endpoints',
+            { path: 'sourceState', value: 'unavailable' }],
     model: {
       cite: 'fleet.endpoints',
       periodSeconds: 4,

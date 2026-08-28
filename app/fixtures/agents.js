@@ -9,7 +9,7 @@ export const AGENTS_FIXTURES = {
     // has barely spoken; the bars are against the GROUP'S own span, so "same" and
     // "different lives" are one glance apart. An unmeasured worker gets no bar and
     // says so -- an unmeasured worker is not an identical one.
-    fields: ['siblings[].context_percent'],
+    fields: ['siblings[].context_percent', 'siblings'],
     model: {
       profile: 'hermes · migration-sweep',
       cite: 'telemetry.context_percent',

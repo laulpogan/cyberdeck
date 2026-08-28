@@ -82,7 +82,11 @@ export const FIELD_FIXTURES = {
     // Strip the series and the contours stop drawing themselves -- and the card
     // says the sentence nobody reads: terrain quietly left flat is
     // indistinguishable from terrain measured as flat.
-    fields: ['contours'],
+    // The posts along the coast are a population: the library staggers them on
+    // the count it was given, so the count is a measurement and comes out with
+    // the rest. `coverage` iterates endpoints without a null guard, so absence
+    // is declared as the empty set it is rather than as null.
+    fields: ['contours', { path: 'endpoints', value: [] }],
     model: { contours, dark: true, endpoints: [{ id: 'dell-local', x: 60, y: 96 }],
       cite: 'coverage.observed' },
   },
@@ -91,7 +95,7 @@ export const FIELD_FIXTURES = {
     // A spend is a measurement. Unpriced chips are listed and marked rather
     // than counted as free, and the budget bar hatches instead of growing to
     // zero -- an empty bar is a spend of zero, and nobody measured a zero.
-    fields: ['chips[].cost'],
+    fields: ['chips[].cost', 'chips'],
     model: {
       ceiling: 64,
       chips: [
@@ -111,7 +115,7 @@ export const FIELD_FIXTURES = {
     // the sweep is refused; let the elapsed run past an intact period and the
     // component refuses differently -- `poll is overdue`, rather than wrapping and
     // starting again, which would erase the finding.
-    fields: ['pollElapsed', 'pollPeriod'],
+    fields: ['pollElapsed', 'pollPeriod', 'contacts'],
     model: {
       sourceState: 'live',
       pollElapsed: 3,

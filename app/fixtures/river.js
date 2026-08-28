@@ -45,7 +45,7 @@ export const RIVER_FIXTURES = {
     // A dive is as deep as the record goes. The floor is drawn as a frame, not
     // left off the end: a viewer that keeps offering another step teaches an
     // operator that the detail exists somewhere.
-    fields: ['levels[].value'],
+    fields: ['levels[].value', 'levels'],
     model: {
       levels: [
         { label: 'SUBJECT', value: 'ses-4419', cite: 'sessions[].id' },
