@@ -1,0 +1,471 @@
+// The gate. `npm run verify` -- every route, both widths, both themes, and the
+// four claims that only exist once a browser has run the page.
+//
+// Why this is a gate and not a look: every composition defect this library has had
+// (labels struck through by the lines they named, a projection covering the
+// observation it was projected over, `line-height: 0` flattening a page) passed the
+// unit tests, because a unit test cannot see. So the checks below are the ones a
+// person would perform by eye, written down: does anything overflow, is any text
+// too small to read, does the page scroll sideways, does the honesty readout read
+// zero, and does settling give the markup back. `app/verify/inspect.mjs` remains the
+// tool for *looking* -- this file exists so that what was found while looking cannot
+// come back.
+//
+//   node app/verify/index.mjs                    # the whole sweep
+//   ROUTES='#/component/collar' node app/verify/index.mjs
+//   KEEP=1 OUT=/tmp/gate-shots                   # keep the pictures as evidence
+
+import { chromium } from 'playwright';
+import { mkdirSync, writeFileSync } from 'node:fs';
+
+import { REGISTRY, allComponents } from '../src/registry/index.js';
+import { UNCONDITIONAL_MARKS } from '../src/undeclared.js';
+
+const BASE = process.env.BASE || 'http://127.0.0.1:5199/';
+const OUT = process.env.OUT || '/tmp/cyberdeck-gate';
+const widths = (process.env.WIDTHS || '1280,390').split(',').map(Number);
+const schemes = (process.env.SCHEMES || 'dark,light').split(',');
+const settleMs = Number(process.env.SETTLE_MS || 900);
+
+const COMPONENT_KEYS = new Set(allComponents().map((component) => component.key));
+// Components that refuse by drawing the absence -- UNMEASURED, DARK, NO PROOF HISTORY
+// -- are known to the registry by the word they print, and they stamp no
+// `data-motion="still"` anywhere. That gap is reported in AGENTS.md; here it means the
+// page-wide "with evidence absent the page must declare a refusal" assertion cannot be
+// made over a page whose only specimen is one of them.
+const DRAWN_ONLY = new Set(allComponents()
+  .filter((component) => component.refusalText)
+  .map((component) => component.key));
+
+// The full sweep is 63 routes × 2 widths × 2 schemes, and one browser doing that
+// serially takes an hour. `SHARD=2/4` takes every fourth route starting at the second,
+// so four processes finish together and each writes its own results file.
+const SHARD = process.env.SHARD ? process.env.SHARD.split('/').map(Number) : [1, 1];
+const _all = process.env.ROUTES
+  ? process.env.ROUTES.split(',')
+  : [
+    '#/',
+    '#/overview',
+    '#/rules',
+    '#/primitives',
+    ...REGISTRY.map((family) => `#/families/${family.slug}`),
+    ...allComponents().map((component) => `#/component/${component.key}`),
+  ];
+const routes = _all.filter((_, i) => i % SHARD[1] === SHARD[0] - 1);
+if (SHARD[1] > 1) console.log(`shard ${SHARD[0]}/${SHARD[1]}: ${routes.length} of ${_all.length} routes`);
+
+// Any page carrying the globe's canvas gets a different assertion, not a pass:
+// `paintGlobe`
+// writes a transform and an opacity onto every pin every frame, and `settle()` stops
+// the loop wherever it started, leaving the pins wherever the last frame put them.
+// The byte-identity assertion therefore runs everywhere else, and this route is
+// checked for the weaker, still-true property -- after settle the pins do not move.
+// Detected from the page rather than from a route list, so the exemption cannot
+// spread to a page that does not carry a canvas.
+
+mkdirSync(OUT, { recursive: true });
+
+const browser = await chromium.launch();
+const results = [];
+const report = (name, line, bad = []) => {
+  results.push({ name, line, bad });
+  console.log(`${bad.length ? '✗' : '·'} ${name}  ${line}${bad.length ? `\n    ${bad.join('\n    ')}` : ''}`);
+};
+
+for (const route of routes) {
+  for (const width of widths) {
+    for (const scheme of schemes) {
+      // One pass per (route, width, theme): the claims are cheap together and the
+      // alternative -- a context per claim -- is 10x the browser starts for no
+      // extra truth.
+      const ctx = await browser.newContext({
+        viewport: { width, height: 900 },
+        colorScheme: scheme,
+        reducedMotion: 'no-preference',
+        deviceScaleFactor: 1,
+      });
+      const page = await ctx.newPage();
+      const consoleProblems = [];
+      page.on('console', (m) => {
+        if (m.type() === 'error' || m.type() === 'warning') consoleProblems.push(`${m.type()}: ${m.text()}`);
+      });
+      page.on('pageerror', (e) => consoleProblems.push(`pageerror: ${e.message}`));
+      page.on('requestfailed', (r) => {
+        if (!r.url().startsWith('data:')) consoleProblems.push(`requestfailed: ${r.url()}`);
+      });
+
+      await page.addInitScript(() => {
+        window.__peak = 0;
+        const sample = () => {
+          const n = document.getAnimations ? document.getAnimations().length : 0;
+          if (n > window.__peak) window.__peak = n;
+          requestAnimationFrame(sample);
+        };
+        document.addEventListener('DOMContentLoaded', () => requestAnimationFrame(sample));
+
+        // The export, per specimen: the bytes that went IN, before any animation
+        // touched them. `settle()` claims to give this back, and the only honest
+        // comparison is against the render rather than against "a second later",
+        // when a live counter is legitimately mid-tick.
+        //
+        // Watched at the setter, not with a MutationObserver. The observer's callback
+        // is a microtask, and React's effects run before it: by the time the record
+        // landed, the runtime had already written a trace's dash array into the brand
+        // new subtree, and the gate was comparing a settled page against markup from
+        // a page mid-animation -- which it then reported as settle having changed
+        // something. The value handed to the setter is the component's own output.
+        window.__export = {};
+        const innerHTML = Object.getOwnPropertyDescriptor(Element.prototype, 'innerHTML');
+        Object.defineProperty(Element.prototype, 'innerHTML', {
+          configurable: true,
+          get: innerHTML.get,
+          set(value) {
+            if (this.matches?.('[data-specimen-view]')) {
+              innerHTML.set.call(this, value);
+              // Read it BACK rather than recording what came in. `<line/>` goes in
+              // and `</line>` comes out: an HTML parser normalises self-closing SVG
+              // tags, so the string the component returned and the bytes the element
+              // holds are different texts describing the same drawing. The claim is
+              // about the bytes on the page, so those are the bytes to keep.
+              window.__export[this.getAttribute('data-specimen-view') || '?'] = this.innerHTML;
+              window.__writes = (window.__writes || 0) + 1;
+              return;
+            }
+            return innerHTML.set.call(this, value);
+          },
+        });
+      });
+
+      await page.goto(BASE + route, { waitUntil: 'networkidle' });
+      await page.waitForTimeout(settleMs);
+
+      const name = `${route.replace(/^#/, '') || '/'}@${width}-${scheme}`;
+      const bad = [];
+
+      // —— what the page says about itself
+      const readout = await page.evaluate(() => {
+        const cells = [...document.querySelectorAll('[data-honesty]')]
+          .map((n) => [n.dataset.honesty, Number(n.textContent.trim())]);
+        const values = Object.fromEntries(cells);
+        return {
+          values,
+          cells: cells.length,
+          live: document.getAnimations().length,
+          marks: document.querySelectorAll('[data-motion]').length,
+          still: document.querySelectorAll('[data-motion="still"]').length,
+          lying: document.getAnimations().filter((a) => {
+            const t = a.effect && a.effect.target;
+            return t && t.closest && t.closest('[data-motion="still"]');
+          }).length,
+          peak: window.__peak ?? 0,
+          // How many drawings on the page were told to move. An animation count taken
+          // after the page settles reads zero whether or not anything moved, and so does
+          // a peak of zero on a page that should have been moving: that is the
+          // invisible-motion defect, and it has passed this repo's own tests once.
+          liveSpecimen: [...document.querySelectorAll('[data-specimen-view] [data-motion]')]
+            .filter((el) => !['still', 'intent'].includes(el.getAttribute('data-motion'))).length,
+          // `elapsed` is a `setInterval` that rewrites text, not an `Animation`, so the
+          // peak can never see it and neither can `getAnimations()`. It gets measured
+          // with the instrument that fits it -- whether the words change -- below.
+          elapsedMarks: document.querySelectorAll('[data-specimen-view] [data-motion="elapsed"]').length,
+          theme: document.documentElement.getAttribute('data-theme')
+            || `system(${matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light'})`,
+          docScroll: document.documentElement.scrollWidth,
+          client: document.documentElement.clientWidth,
+          specimens: [...document.querySelectorAll('[data-specimen-view]')].map((n) => {
+            const box = n.getBoundingClientRect();
+            // Being wider than the box is not the defect -- for the wide drawings it
+            // is the design, and the box is inside a scroller on purpose. The defect
+            // is content wider than its box with nothing to scroll it, because then it
+            // is either cut off or the page scrolls sideways, and the page does neither.
+            const wider = n.scrollWidth > n.clientWidth + 1;
+            const scroller = n.closest('.cd-scroll');
+            const scrolls = scroller
+              && ['auto', 'scroll'].includes(getComputedStyle(scroller).overflowX);
+            return {
+              label: n.getAttribute('data-specimen-view') || '?',
+              h: Math.round(box.height),
+              w: Math.round(box.width),
+              content: n.scrollWidth,
+              overflow: wider && !scrolls,
+              scrolled: wider && scrolls,
+            };
+          }),
+          bodyScrolls: document.body.scrollWidth > document.documentElement.clientWidth + 1,
+        };
+      });
+
+      if (readout.cells !== 4) bad.push(`the honesty readout shows ${readout.cells} counters, not 4`);
+      if (readout.liveSpecimen - readout.elapsedMarks > 0 && !readout.peak) {
+        bad.push(`${readout.liveSpecimen} drawings carry a mark and the peak animation count is 0 — motion was asked for and never happened`);
+      }
+      if (readout.elapsedMarks && !readout.liveSpecimen) {
+        // The page's only motion is a running counter. Then the counter had better run:
+        // `elapsed` writes text only when the words change, which is honest at hour
+        // granularity and indistinguishable from a stuck widget at a glance. Measured
+        // over 1.5s, because that is roughly how long a reader looks at one number
+        // before deciding whether it is alive.
+        const words = () => page.evaluate(() => [...document.querySelectorAll('[data-elapsed-text]')]
+          .map((n) => n.textContent));
+        const first = await words();
+        await page.waitForTimeout(1500);
+        const after = await words();
+        if (first.join('|') === after.join('|')) {
+          bad.push(`${readout.elapsedMarks} counter${readout.elapsedMarks > 1 ? 's' : ''} on the page and nothing changed in 1.5s (${first.join(' / ') || 'no text'}) — a stopped counter is the defect the kind exists to avoid`);
+        }
+      }
+      if (readout.lying) bad.push(`MOVING WITHOUT EVIDENCE=${readout.lying} (live count agrees: ${readout.live})`);
+      if (readout.values['moving-without-evidence'] !== readout.lying) {
+        bad.push(`the counter reads ${readout.values['moving-without-evidence']} while the page has ${readout.lying} — the readout and the truth disagree`);
+      }
+      if (readout.docScroll > readout.client) {
+        bad.push(`the document scrolls sideways (${readout.docScroll} > ${readout.client})`);
+      }
+      if (readout.bodyScrolls) bad.push('the body itself scrolls sideways');
+      for (const spec of readout.specimens) {
+        if (spec.h < 24) bad.push(`${spec.label}: specimen is ${spec.h}px tall — a refusal must keep its space`);
+        if (spec.overflow) {
+          bad.push(`${spec.label}: ${spec.content}px of drawing in a ${spec.w}px box with nothing to scroll it`);
+        }
+      }
+      if (consoleProblems.length) bad.push(...consoleProblems.slice(0, 4));
+
+      // —— what the drawing contains: type small enough to be decoration, text
+      // outside the box it was drawn in, and marks that never got a movement
+      const drawn = await page.evaluate(() => {
+        const problems = [];
+        // Judge the drawing the page laid out, not the symbols inside it. A disc the
+        // library writes as `<svg width="30" viewBox="-24 -24 48 48">` is a glyph at a
+        // size the library chose, and its ratio to its own viewBox says nothing about
+        // whether the app starved the specimen. A svg with an explicit `width`
+        // attribute was sized by the library; one without is sized by its container,
+        // which is the thing the app controls, and the first such svg in the specimen
+        // is the drawing.
+        const isSymbol = (svg) => {
+          const given = svg.getAttribute('width') || '';
+          return Boolean((given && !given.endsWith('%'))
+            || (svg.parentElement && svg.parentElement.closest('svg')));
+        };
+        for (const view of document.querySelectorAll('[data-specimen-view]')) {
+          const label = view.getAttribute('data-specimen-view') || '?';
+          const drawing = [...view.querySelectorAll('svg[viewBox]')].find((svg) => {
+            const vb = svg.viewBox && svg.viewBox.baseVal;
+            return vb && vb.width && !isSymbol(svg);
+          });
+          if (drawing) {
+            const vb = drawing.viewBox.baseVal;
+            const scale = drawing.getBoundingClientRect().width / vb.width;
+            if (scale < 0.85) {
+              problems.push(`${label}: drawn at ${(scale * 100).toFixed(0)}% of its own size — type below its design floor`);
+            }
+          }
+          for (const svg of view.querySelectorAll('svg')) {
+            const vb = svg.viewBox && svg.viewBox.baseVal;
+            if (!vb || !vb.width) continue;
+            // The library's own floor is instrument type drawn at about 6.5 user
+            // units, so the property worth asserting is not "the app finds 7px
+            // acceptable" -- it is that the app never draws the thing SMALLER than
+            // it was drawn. A card is drawn to fill the cell it is given
+            // (`components.css`: `svg.cd-draw { width: 100% }`), so scaling with the
+            // cell is the design; what is not the design is the app taking a chart
+            // drawn for a spread and squeezing it into a column. That is measured once
+            // per specimen above, and what is checked here is the type itself.
+            for (const text of svg.querySelectorAll('text')) {
+              const size = Number.parseFloat(getComputedStyle(text).fontSize || '16');
+              // The library's own floor: `keycard` draws its column labels at about
+              // 5.5 user units, which is the smallest type anywhere in the set and is
+              // recorded in AGENTS.md as the library's choice rather than something the
+              // app can fix from outside. Below five, no screen is reading it.
+              if (size > 0 && size < 5) {
+                problems.push(`${label}: ${size.toFixed(1)}px type on "${text.textContent.trim().slice(0, 24)}"`);
+              }
+              let box;
+              try { box = text.getBBox(); } catch (e) { continue; }
+              if (!box || !box.width) continue;
+              if (box.x < vb.x - 1 || box.y < vb.y - 1
+                  || box.x + box.width > vb.x + vb.width + 1
+                  || box.y + box.height > vb.y + vb.height + 1) {
+                problems.push(`${label}: text drawn outside its viewBox — "${text.textContent.trim().slice(0, 28)}"`);
+              }
+            }
+          }
+        }
+        return [...new Set(problems)];
+      });
+      bad.push(...drawn);
+
+      // —— evidence off: every specimen on screen loses its number and keeps its shape
+      const evidenceSwitch = await page.$('[data-control="evidence"]');
+      if (evidenceSwitch && readout.specimens.length) {
+        const before = readout;
+        await evidenceSwitch.click();
+        await page.waitForTimeout(600);
+        const off = await page.evaluate(() => ({
+          still: document.querySelectorAll('[data-motion="still"]').length,
+          // Counted per specimen, because a component can answer "no measurement" by
+          // throwing its whole drawing away and returning one refused card -- the
+          // ceremony does exactly that. Its marked-element count goes DOWN, and the
+          // page is more honest for it. What must not go down is how many drawings on
+          // the page admit they were refused.
+          refusing: [...document.querySelectorAll('[data-specimen-view]')]
+            .filter((n) => n.querySelector('[data-motion="still"], [data-still-reason]')).length,
+          reasons: document.querySelectorAll('[data-still-reason]').length,
+          liveMarks: [...document.querySelectorAll('[data-specimen-view]')].map((n) => ({
+            label: n.getAttribute('data-specimen-view') || '?',
+            marks: [...n.querySelectorAll('[data-motion]')]
+              .map((el) => `${el.getAttribute('data-motion')}@${(el.getAttribute('class') || el.tagName).split(' ')[0]}`)
+              .filter((m) => !m.startsWith('still@') && !m.startsWith('intent@')),
+          })).filter((specimen) => specimen.marks.length),
+          lying: document.getAnimations().filter((a) => {
+            const t = a.effect && a.effect.target;
+            return t && t.closest && t.closest('[data-motion="still"]');
+          }).length,
+          verdict: Number(document.querySelector('[data-honesty="moving-without-evidence"]')?.textContent.trim() ?? -1),
+          heights: [...document.querySelectorAll('[data-specimen-view]')]
+            .map((n) => Math.round(n.getBoundingClientRect().height)),
+          painted: getComputedStyle(document.body).backgroundColor,
+        }));
+        if (off.verdict !== 0) bad.push(`with evidence absent the verdict reads ${off.verdict}`);
+        // The promise this app makes, stated as a check: with evidence absent, no
+        // drawing on the page is still moving. Four specimens in the library mark
+        // themselves as moving without asking a measurement first -- `trace(true)` and
+        // `count(0, 1)`, named one by one in `app/src/undeclared.js` -- so those marks
+        // are allowed, and only those, and only where they are named. An empty list
+        // here means an empty licence: everything else has to refuse.
+        const licence = Object.fromEntries(Object.entries(UNCONDITIONAL_MARKS)
+          .map(([key, entries]) => [key, entries.map((entry) => `${entry.kind}@${entry.carrier}`)]));
+        for (const specimen of off.liveMarks) {
+          const allowed = licence[specimen.label] || [];
+          const extra = specimen.marks.filter((m) => !allowed.includes(m));
+          if (extra.length) {
+            bad.push(`${specimen.label} is still marked ${extra.join(', ')} with every measurement removed `
+              + `(named here: ${allowed.join(', ') || 'nothing'})`);
+          }
+        }
+        // Only pages that show registry components owe this one. The primitives page
+        // is a shape gallery -- seventeen drawings, no measurement anywhere to remove --
+        // and demanding a refusal from it would be demanding a lie.
+        const declaredOnes = before.specimens
+          .filter((spec) => COMPONENT_KEYS.has(spec.label) && !DRAWN_ONLY.has(spec.label));
+        if (declaredOnes.length && off.still < 1) {
+          bad.push('with evidence absent the page declares no refusal anywhere');
+        }
+        await evidenceSwitch.click();
+        await page.waitForTimeout(400);
+      }
+
+      // —— the kill switch: settle gives the markup back
+      const kill = await page.$('[data-control="kill"]');
+      if (kill) {
+        const disabled = await kill.evaluate((b) => b.disabled);
+        if (!disabled) {
+          await kill.click();
+          await page.waitForTimeout(500);
+          const settled = await page.evaluate(() => ({
+            live: document.getAnimations().length,
+            stamped: document.documentElement.hasAttribute('data-motion-off'),
+            identical: [...document.querySelectorAll('[data-specimen-view]')].every((n) => {
+              const label = n.getAttribute('data-specimen-view') || '?';
+              return window.__export[label] === n.innerHTML;
+            }),
+            recorded: Object.keys(window.__export).length,
+            // Decided by what is on the page, not by the route it arrived on: the
+            // globe appears on its own page and in the instruments family, and a
+            // carve-out written against a pathname would quietly exempt whichever
+            // page it happened to name.
+            globe: !!document.querySelector('.cd-globe-mesh'),
+          }));
+          if (settled.live) bad.push(`${settled.live} animations survived settle()`);
+          if (!settled.stamped) bad.push('settle() did not stamp the root');
+          if (settled.globe) {
+            // The one route where byte-identity is not the property: the pins keep
+            // wherever the last frame left them. What can be asserted is that
+            // settling stopped the loop, which is the same claim one level down.
+            const moved = await page.evaluate(async () => {
+              const read = () => [...document.querySelectorAll('.cd-globe-pin')]
+                .map((p) => `${p.getAttribute('transform')}|${p.style.opacity}`).join(' ');
+              const first = read();
+              await new Promise((r) => setTimeout(r, 350));
+              return first !== read();
+            });
+            if (moved) bad.push('the globe is still turning after settle() — the canvas loop outran the kill switch');
+          } else if (settled.recorded && !settled.identical) {
+            bad.push('a settled page is not the rendered page (specimen markup differs from the export)');
+          } else if (!settled.recorded && readout.specimens.length) {
+            bad.push('a specimen is on the page and nothing recorded what it looked like before motion — the identity claim is unchecked here');
+          }
+          await kill.click();
+          await page.waitForTimeout(300);
+        }
+      }
+
+      if (process.env.KEEP === '1') {
+        await page.screenshot({ path: `${OUT}/${name.replace(/[^\w.-]+/g, '-')}.png`, fullPage: true });
+      }
+      report(name,
+        `peak=${readout.peak} marks=${readout.marks} still=${readout.still} lying=${readout.lying} theme=${readout.theme}`,
+        bad);
+      await ctx.close();
+    }
+  }
+}
+
+// Reduced motion is a fifth condition on every route, and it is the one an operator
+// can impose on a page they did not build. It gets its own pass over what should be
+// moving, at one width, because the claim is about the runtime, not the composition.
+if (!process.env.SKIP_REDUCED) {
+  for (const route of routes.filter((r) => r === '#/' || r.startsWith('#/families'))) {
+    const ctx = await browser.newContext({ viewport: { width: 1280, height: 900 }, reducedMotion: 'reduce' });
+    const page = await ctx.newPage();
+    const problems = [];
+    page.on('pageerror', (e) => problems.push(String(e)));
+    await page.goto(BASE + route, { waitUntil: 'networkidle' });
+    await page.waitForTimeout(700);
+    const elapsedBefore = await page.evaluate(() => [...document.querySelectorAll('[data-elapsed-text]')].map((n) => n.textContent));
+    await page.waitForTimeout(1200);
+    const elapsedAfter = await page.evaluate(() => [...document.querySelectorAll('[data-elapsed-text]')].map((n) => n.textContent));
+    const r = await page.evaluate(() => ({
+      live: document.getAnimations().length,
+      verdict: Number(document.querySelector('[data-honesty="moving-without-evidence"]')?.textContent.trim() ?? -1),
+      marks: document.querySelectorAll('[data-motion]').length,
+      kill: (() => {
+        const b = document.querySelector('[data-control="kill"]');
+        return b ? { label: b.textContent.trim(), disabled: b.disabled } : null;
+      })(),
+      meshPainted: (() => {
+        const canvas = document.querySelector('.cd-globe-mesh');
+        if (!canvas) return true;
+        const data = canvas.getContext('2d').getImageData(0, 0, canvas.width, canvas.height).data;
+        for (let i = 3; i < data.length; i += 4) if (data[i]) return true;
+        return false;
+      })(),
+    }));
+    const bad = [];
+    if (r.live) bad.push(`prefers-reduced-motion left ${r.live} animations running`);
+    // A counter is not an `Animation`, so `live: 0` would say nothing about it. Under a
+    // reduced-motion request the words must stop changing as surely as the arcs stop
+    // drawing -- otherwise the operator's request is honoured only for the kinds this
+    // check happens to be able to see.
+    if (elapsedBefore.join('|') !== elapsedAfter.join('|')) {
+      bad.push(`prefers-reduced-motion left a counter writing text (${elapsedBefore.join(' / ')} -> ${elapsedAfter.join(' / ')})`);
+    }
+    if (r.verdict !== 0) bad.push(`the readout reads ${r.verdict} under reduced motion`);
+    if (!r.kill || !r.kill.disabled) bad.push('the kill switch offers to un-decide reduced motion');
+    if (!r.meshPainted) bad.push('the globe mesh was never painted — a canvas the host forgot is a black box');
+    if (problems.length) bad.push(...problems);
+    report(`${route.replace(/^#/, '') || '/'}@reduced`,
+      `animations=${r.live} marks=${r.marks} verdict=${r.verdict} switch=${JSON.stringify(r.kill)}`, bad);
+    await ctx.close();
+  }
+}
+
+await browser.close();
+const failures = results.filter((r) => r.bad.length);
+writeFileSync(`${OUT}/results.json`, JSON.stringify(results, null, 2));
+console.log(`\n${results.length} passes over ${routes.length} routes × ${widths.length} widths × ${schemes.length} schemes`);
+if (failures.length) {
+  console.log(`✗ ${failures.length} with problems — ${failures.map((f) => f.name).join(', ')}`);
+  console.log(`  evidence in ${OUT}/results.json`);
+  process.exit(1);
+}
+console.log(`✓ every claim held. results in ${OUT}/results.json`);

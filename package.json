@@ -30,7 +30,8 @@
     "app": "vite",
     "app:build": "vite build",
     "app:preview": "vite preview",
-    "verify": "node app/verify/index.mjs"
+    "verify": "node app/verify/index.mjs",
+    "verify:all": "node app/verify/all.mjs"
   },
   "keywords": [
     "cyberpunk",

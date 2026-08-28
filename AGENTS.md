@@ -36,6 +36,91 @@ library. App logic that a test should be able to read — fixtures, evidence
 derivation, cites, copy-to-use, route parsing, theme mapping, the honesty
 counts — is plain ESM with no JSX, so `node --test` reads it with no transform.
 
+## What the host owes the library
+
+- **The globe's mesh is painted by the host, not the runtime.** `globe()` returns a
+  `<canvas>` and does not fill it: the library's own demo calls
+  `paintGlobe(figure)` per figure, and an app that forgets renders a black box with a
+  caption — present, marked, invisible. `app/src/globe-paint.js` does it after
+  `rewalk()` (the mesh reads `data-motion` on its own wrapper to decide whether it may
+  turn at all) and keeps a `WeakSet` of the figures it has painted, because
+  `paintGlobe` installs a frame callback *and* a root `MutationObserver`: run it twice
+  on one figure and the globe turns at double the measured interval, and the interval
+  is the whole reading.
+- **`globe`'s arcs are never drawn.** `<path class="cd-globe-arc">` is emitted with a
+  `trace` mark and CSS, and nothing anywhere gives it a `d` — `globe()` does not
+  compute one and `paintGlobe` moves the pins but not the arcs. The figcaption says
+  *ARCS ARE MEMBERSHIP, NOT TRAFFIC* about geometry that cannot appear, and the runtime
+  skips the mark because `getTotalLength()` is zero. Reported, not fixed: it is a
+  feature to write, in a file the showcase was not asked to change.
+- **Four marks in the library do not ask a measurement first.** `trace(true, …)` on
+  `syncRatio`'s axis (`cd-th-axis`), on `oscillation`'s threshold
+  (`cd-riv-threshold`), and on `glassCell`'s sightline (`cd-dc-sightline`); `count(0, 1)`
+  on `radar`'s off-scope marker (`cd-fd-offscope`). Everything else is computed from an
+  argument and returns `still(reason)` when the argument is missing. These four are the
+  holes in "pull the evidence and the page stops", so they are named one by one in
+  `app/src/undeclared.js`, licensed in the gate *per specimen*, and asserted present by
+  `test/app-undeclared.test.mjs` — which fails if upstream fixes one and the list is not
+  updated, so the exemption can only shrink by being earned.
+- **A population is a measurement, so the fixture lists have to say so.**
+  `count(i, xs.length)` staggers over an array, and the first version of the fixtures
+  declared the *reading* and left the array, so with the rack switch off eleven
+  specimens were still animating on a count nobody had said was supplied. `chips`,
+  `contacts`, `levels`, `items`, `answers`, `siblings`, `endpoints` are now declared as
+  evidence fields where a mark counts over them. `coverage.endpoints` is declared as
+  `{ path, value: [] }` rather than null, because `coverage` iterates it without a guard
+  and absence there really is the empty set.
+- **The smallest type in the library is `keycard`'s**, whose column labels compute to
+  about 5.5px at the sizes the rack gives it. That is the library's instrument floor, not
+  something the app can correct from outside; `app/verify/index.mjs` fails below 5px and
+  measures the render scale so the app can never be the thing that shrank a drawing.
+
+## Measuring a counter, and when you cannot
+
+`elapsed` is a `setInterval` that rewrites text, not an `Animation`. Neither
+`getAnimations()` nor the peak counter can see it, so a page whose only mark is a
+counter reports `peak=0` while visibly alive, and a counter that has stopped reports
+the same. The gate therefore splits by kind: where a page carries a mark that is *not*
+`elapsed`, it asserts `peak >= 1`; where `elapsed` is the only kind on the page, it
+samples `[data-elapsed-text]`, waits 1.5 s, and requires the words to have changed. The
+reduced-motion condition gets the mirror image — the words must *not* change, or the
+operator's request was honoured only for the kinds the check could see.
+
+That check can only decide what the reading's own resolution makes decidable.
+`durationWords` prints `10m` for anything between a minute and an hour — inherited from
+`hive_motion.py`, held by `test/contract.json`, and not this app's to change — so the
+collar's measured readout legitimately changes once a minute and no 1.5 s window can
+prove it alive. `stripChart` prints tenths of a second, and there the window decides.
+A frozen-looking counter that is honest at its own granularity is explained on the page
+rather than propped up with motion it has no measurement for.
+
+## What the gate measures, and why those five things
+
+`npm run verify` sweeps every route at 1280 and 390 in both schemes and re-runs the
+reduced-motion condition over the pages that should be moving. The checks are the ones
+a person would do by eye: the four counters, and whether the counter and the page agree;
+whether anything scrolls sideways; whether a refusal collapsed its specimen below 24px;
+whether text is drawn outside the viewBox it was drawn in and whether the app shrank the
+drawing under 85% of its own size; and what happens when the evidence switch is thrown.
+
+Three details that cost an hour each:
+
+- **The pristine markup is captured on the `innerHTML` setter, not with a
+  MutationObserver.** The observer's callback is a microtask, and React's effects run
+  first: the "export" it recorded already had a trace's dash array in it, and the gate
+  reported that *settling* had changed the page. Reading the value at the setter is
+  synchronous and exact.
+- **Compare against the bytes the parser produced, not the string that went in.**
+  `<line/>` in, `</line>` out: an HTML parser normalises self-closing SVG tags, so the
+  component's output and the element's `innerHTML` are different texts describing one
+  drawing. Record what the element holds after the assignment.
+- **The globe route cannot be held to byte-identity, and the exemption is decided by
+  content.** `paintGlobe` writes a `transform` and an `opacity` onto every pin every
+  frame; `settle()` stops the loop and leaves the pins where the last frame put them.
+  So any page carrying a `.cd-globe-mesh` is asserted on the weaker true property —
+  after settle, the pins stop moving — detected from the DOM rather than from a route
+  list, because a carve-out written against a pathname exempts whatever it names.
+
 ## The traps, paid for
 
 - **`<repo>/react/` shadows the npm `react` package.** With the Vite root at the
@@ -118,6 +203,12 @@ counts — is plain ESM with no JSX, so `node --test` reads it with no transform
   `'../../../src/marks.js'`. The browser's answer to either is one line of console
   and no DOM. `test/app-shell.test.mjs` walks `app/` and asserts every relative
   specifier lands on a file and every named import is something the target exports.
+
+- **A percentage height needs a definite height, and the failure is silent.**
+  `.cd-rule-bar i { height: 100% }` inside a parent with only `min-height` resolved to
+  zero: the measured `level` bar on `/rules` — the one specimen whose entire subject was
+  a quantity drawing itself out — rendered as an empty box, at every width, with no
+  console message. It is a real property of `height` and nothing about the app.
 
 ## The marks contract
 
