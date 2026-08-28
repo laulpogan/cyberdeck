@@ -126,6 +126,59 @@ attribute and an explicit light choice under a dark OS only works because the
 attribute keeps the media query off. Never define a colour only inside a media or
 `[data-theme]` block.
 
+## Fixtures and the registry (51 components, 82 evidence fields)
+
+`app/fixtures/` holds one bright model per component and names which of its fields
+carry a measurement. The dark model is computed by `darkOf`, never written, so the
+two columns on screen cannot drift into being two different components. A declared
+field must already hold a value in the bright model — nulling something that was
+never there is how a fixture starts claiming a measurement it does not have. A
+field may instead be `{ path, value }` for the cases where absence is not `null`:
+an unreachable source sends `sourceState: 'unavailable'`, and a producer that
+retained nothing sends `[]`, because `observed.length` throws on null. Those
+substitutions are the only non-null differences allowed, and only at the path that
+declared them.
+
+`app/src/registry/` is what makes "every component is reachable" checkable:
+`test/app-registry.test.mjs` walks the exports of the component modules and fails
+on any function that is neither a rendered component nor listed in `NON_COMPONENTS`
+with a reason. Adding a component upstream turns the showcase red until it is on a
+page. The same file carries the copy: the refusal sentences are quoted out of the
+components' doc comments, and the test looks for them in the source so a page
+cannot quietly start paraphrasing a refusal into marketing.
+
+Things the fixtures turned up, all of them in the library rather than the app:
+
+- **`killmail` stamps a refusal it does not mean.** The cost line carries
+  `data-motion="still" data-still-reason="no canonical charge record is supplied"`
+  unconditionally, so given a charge record it prints `data-priced="1"`, the
+  amount, and a sentence denying the amount exists. `agents.js` computes `priced`
+  two lines above and never uses it for the mark. The fixture keeps the receipt
+  honestly UNPRICED so the showcase does not ship the contradiction.
+- **Twelve components refuse by drawing rather than declaring.** `tapeSplice`,
+  `twoState`, `muthur`, `city`, `garage`, `grid`, `gevulot`, `dominator`, `ladder`,
+  `dossier`, `channel` and `redaction` write their absence as ink — `UNMEASURED`,
+  `DARK`, `NO PROOF HISTORY`, `UNATTRIBUTED` — with no `data-motion="still"`
+  anywhere, so `DECLARED STILL` reads 0 over a deliberate refusal and a review
+  script cannot tell "we drew nothing on purpose" from "we forgot". Each names its
+  word in the registry as `refusalText`, and the fixture test asserts the word is
+  really on screen. The `standardSheet` in the same role *does* stamp, which is
+  what makes the other twelve read as a gap rather than a choice.
+- **`atField` prints the word `undefined`** for a scope with no count: the label is
+  built by `${scope.label}  ${scope.count}` with no `UNMEASURED` branch, which is
+  the one state in that file that does not have one.
+- **`arrive` takes stamps in seconds and `river` takes them in milliseconds.**
+  `field.scanOverlay` windows an arrival at `30`, so a fixture in epoch
+  milliseconds is "older than the arrival window" forever. Fixtures derive both
+  units from one frozen instant in `app/fixtures/time.js` and pick per component.
+- **The globe's canvas loop edits markup the kill switch cannot rewind.**
+  `paintGlobe` writes `transform` and `opacity` onto the pins every frame and reads
+  `data-motion-off` to stop, which is right as far as it goes — but the pins keep
+  wherever the last frame left them, so "settle leaves the markup byte-identical"
+  holds on every route except one carrying a *turning* globe. The verify gate
+  asserts byte-identity everywhere and asserts frozen-ness instead on that one
+  specimen, named in its output rather than quietly excluded.
+
 ## The rack, not a storefront
 
 No hero gradient, no floating shadows, no rounded card grid with an accent rail.
