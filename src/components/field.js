@@ -13,26 +13,9 @@
 import { frame, hexCell, rect, line, dot, ring, arc, wedge, needle, text,
          hatched, scanlines, wall, curve } from '../draw.js';
 import { trace, count, level, cycle, arrive, still, attrs } from '../marks.js';
+import { card, esc, W, H } from './card.js';
 
-const esc = (v) => String(v)
-  .replace(/&/g, '&amp;').replace(/</g, '&lt;')
-  .replace(/>/g, '&gt;').replace(/"/g, '&quot;');
 
-/** The wrapper every specimen in this family shares: a bounded card with
- * a name, the drawing, and -- when the drawing refused -- the reason.
- * The reason is rendered from the mark rather than passed separately, so
- * a card cannot disagree with the component inside it. */
-function card(key, title, body, { mark = null, note = null } = {}) {
-  const refused = mark && mark['data-motion'] === 'still';
-  return `<figure class="cd-card" data-specimen="${key}"${refused ? attrs(mark) : ''}>
-  <figcaption class="cd-card-name">${esc(title)}</figcaption>
-  <div class="cd-card-body">${body}</div>
-  ${refused ? `<i class="cd-why">${esc(mark['data-still-reason'])}</i>`
-            : (note ? `<p class="cd-card-note">${esc(note)}</p>` : '')}
-</figure>`;
-}
-
-const W = 340, H = 200;
 
 /** Kiroshi scan overlay -- annotation over the map, never instead of it.
  *

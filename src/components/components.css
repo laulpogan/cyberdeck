@@ -172,3 +172,44 @@
 .cd-fd-glyph[data-glyph="needs_you"] { color: var(--cd-signal-amber); }
 .cd-fd-glyph[data-glyph="unmeasured"] { color: var(--cd-health-colour-unknown); }
 .cd-fd-glyph[data-glyph="draining"] { color: var(--cd-signal-cyan, var(--cd-signal-data-dim)); }
+
+/* River-specific roles. The family draws time, and most of what it draws
+   is time nobody recorded -- so the unmeasured colour carries most of the
+   weight here, and the measured stroke is the exception. */
+.cd-riv-floor, .cd-riv-dark, .cd-riv-noref, .cd-riv-missing, .cd-riv-nocount,
+.cd-riv-nodial, .cd-riv-gap { color: var(--cd-health-colour-unknown); }
+.cd-riv-frame[data-known="0"] { color: var(--cd-steel-muted); }
+.cd-riv-crop { color: var(--cd-signal-amber); opacity: .8; }
+.cd-riv-leader { color: var(--cd-steel-muted); opacity: .65; }
+.cd-riv-level[data-known="0"] { color: var(--cd-steel-muted); }
+.cd-riv-level[data-floor="1"] { color: var(--cd-health-colour-unknown); }
+.cd-riv-stock, .cd-riv-sample, .cd-riv-elapsed { color: var(--cd-signal-data); }
+/* The seam is the finding, so it is the one thing on the tape that is
+   allowed to shout. */
+.cd-riv-seam { color: var(--cd-signal-amber); }
+.cd-riv-threshold { color: var(--cd-signal-amber); opacity: .85; }
+.cd-riv-attempt { color: var(--cd-signal-data); }
+.cd-draw[data-candidate="1"] .cd-riv-attempt { color: var(--cd-health-colour-critical); }
+.cd-riv-noend { color: var(--cd-steel-muted); opacity: .7; }
+.cd-riv-event { color: var(--cd-signal-data); }
+
+/* The one live number a card carries outside its drawing. It sits under
+   the SVG rather than inside it because the runtime rewrites its text,
+   and text that is rewritten needs to reflow. */
+.cd-riv-readout {
+  display: flex; flex-wrap: wrap; gap: .1rem .9rem;
+  font-size: .64rem; letter-spacing: .08em; text-transform: uppercase;
+  color: var(--cd-steel-muted);
+}
+.cd-riv-readout b { color: var(--cd-signal-data); font-weight: 600;
+  font-variant-numeric: tabular-nums; }
+.cd-riv-readout [data-motion="still"] b { color: var(--cd-health-colour-unknown); }
+
+/* The oscillation verdict, which is where the beat lives. It is a sibling
+   of the drawing rather than its parent: a period nobody measured must
+   not still the attempt ticks somebody counted. */
+.cd-riv-osc { display: flex; flex-wrap: wrap; align-items: baseline; gap: .1rem .7rem;
+  font-size: .64rem; letter-spacing: .09em; text-transform: uppercase; }
+.cd-riv-osc b { color: var(--cd-signal-data); font-weight: 600; }
+.cd-riv-osc[data-candidate="1"] b { color: var(--cd-health-colour-critical); }
+.cd-riv-osc span { color: var(--cd-steel-muted); }
