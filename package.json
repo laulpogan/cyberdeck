@@ -8,6 +8,9 @@
     ".": "./src/index.js",
     "./react": "./react/index.js",
     "./runtime.js": "./src/runtime.js",
+    "./components": "./src/components/index.js",
+    "./components.css": "./src/components/components.css",
+    "./crt.css": "./src/components/crt.css",
     "./motion.css": "./src/motion.css",
     "./tokens.css": "./src/tokens.css",
     "./vendor/motion.min.js": "./vendor/motion.min.js"

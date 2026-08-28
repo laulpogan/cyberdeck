@@ -1,0 +1,41 @@
+/* The tube. Opt in by putting `cd-crt` on any container.
+
+   This is the one place in the library where motion is not a measurement,
+   and it is allowed only because it makes no claim: scanlines and a
+   vignette are a surface, the way a bezel is. They say "this is a screen".
+   They do not say anything about the fleet, and an operator cannot read
+   a number off them.
+
+   The one moving part, the beam, is deliberately slow and dim enough to
+   read as tube behaviour rather than as an event. If it ever starts
+   looking like a sweep that means something, delete it. */
+
+.cd-crt { position: relative; isolation: isolate; }
+
+.cd-crt::before, .cd-crt::after {
+  content: ""; position: absolute; inset: 0; pointer-events: none; z-index: 2;
+}
+.cd-crt::before {
+  background: repeating-linear-gradient(
+    to bottom, var(--cd-crt-line, rgba(0,0,0,.22)) 0 1px, transparent 1px 3px);
+}
+.cd-crt::after {
+  background: radial-gradient(ellipse at 50% 45%,
+    transparent 55%, var(--cd-crt-vignette, rgba(0,0,0,.6)) 100%);
+}
+
+.cd-crt-beam {
+  position: absolute; left: 0; right: 0; height: 120px; z-index: 1;
+  pointer-events: none;
+  background: linear-gradient(to bottom, transparent,
+    var(--cd-signal-data-faint) 50%, transparent);
+  animation: cd-beam 7s linear infinite;
+}
+@keyframes cd-beam { from { top: -140px; } to { top: 110%; } }
+
+/* R11: the operator's preference wins over the surface, always. */
+@media (prefers-reduced-motion: reduce) {
+  .cd-crt-beam { animation: none; opacity: 0; }
+}
+/* And so does the library's own switch, so one control settles the page. */
+[data-motion-off] .cd-crt-beam { animation: none; opacity: 0; }
