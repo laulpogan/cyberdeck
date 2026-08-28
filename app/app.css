@@ -1,0 +1,246 @@
+/* The rack. This site is not a marketing page with cards floating on
+   gradients; it is the deck the components were installed into. Chrome
+   reads only --cd-* tokens -- a colour literal in this file is the same
+   bug as a colour literal in a component, and the grep gate fails on it
+   the same way.
+
+   There is no animation in this file. Chrome motion is either the
+   runtime's (inside a specimen) or the operator's -- buttons carry
+   data-motion="intent" and motion.css gives them the shared transition.
+   No spinner, no shimmer, no ambient pulse: the app that argues against
+   invented motion cannot commit it in its own chrome. */
+
+:root { --cd-app-mono: ui-monospace, "SF Mono", Menlo, Consolas, monospace; }
+
+html { background: var(--cd-void-base); }
+body {
+  margin: 0;
+  background: var(--cd-void-base);
+  color: var(--cd-steel-ink);
+  font: 400 13px/1.55 var(--cd-app-mono);
+  overflow-x: hidden; /* nothing may push the body sideways; wide blocks
+                         carry their own overflow-x: auto containers */
+}
+
+/* ------------------------------------------------------------- masthead */
+.masthead {
+  position: sticky; top: 0; z-index: 50;
+  background: var(--cd-void-base);
+  border-bottom: 1px solid var(--cd-steel-line);
+}
+.mast-row {
+  display: flex; align-items: center; gap: .9rem;
+  padding: .55rem 1.1rem; flex-wrap: wrap;
+}
+.wordmark {
+  font: 700 15px/1 var(--cd-app-mono); letter-spacing: .12em;
+  color: var(--cd-steel-ink); text-decoration: none; white-space: nowrap;
+}
+.wordmark b { color: var(--cd-signal-amber); font-weight: 700; }
+.mast-rule {
+  font-size: .62rem; letter-spacing: .22em; color: var(--cd-signal-amber-dim);
+  border: 1px solid var(--cd-signal-amber-dim); padding: .2rem .45rem; white-space: nowrap;
+}
+.mast-nav { display: flex; gap: .1rem; flex-wrap: wrap; }
+.mast-nav a {
+  color: var(--cd-steel-muted); text-decoration: none; font-size: .68rem;
+  letter-spacing: .12em; padding: .3rem .45rem;
+}
+.mast-nav a:hover { color: var(--cd-steel-ink); background: var(--cd-steel-faint); }
+.mast-nav a[aria-current="page"] { color: var(--cd-signal-amber); }
+.mast-flex { flex: 1 1 auto; }
+.mast-themes { display: flex; gap: .25rem; }
+
+/* Honesty bar: the counters are the most important chrome on the page and
+   the law says they read 0. When they do not, the counter itself wears the
+   alert colour -- the app reports its own crime rather than hiding it. */
+.honesty {
+  display: flex; gap: 1.1rem; align-items: center; flex-wrap: wrap;
+  border-top: 1px solid var(--cd-steel-line);
+  padding: .45rem 1.1rem;
+  font-size: .66rem; letter-spacing: .14em; color: var(--cd-steel-muted);
+}
+.honesty-item { display: inline-flex; align-items: center; gap: .4rem; white-space: nowrap; }
+.honesty-item b { color: var(--cd-signal-data); font-variant-numeric: tabular-nums; }
+.honesty-item:last-child b { color: var(--cd-signal-data); }
+.honesty-item[data-bad="1"] b { color: var(--cd-signal-alert); }
+
+.hbtn {
+  font: 500 .64rem/1 var(--cd-app-mono); letter-spacing: .14em;
+  text-transform: uppercase; background: transparent;
+  color: var(--cd-signal-amber); border: 1px solid var(--cd-signal-amber-dim);
+  padding: .35rem .7rem; cursor: pointer;
+}
+.hbtn[aria-pressed="true"] { background: var(--cd-signal-amber-fill); }
+.hbtn[data-state="on"] { background: var(--cd-signal-amber-fill); }
+.hbtn-strong { color: var(--cd-signal-amber-hot); }
+.hbtn:active { transform: translateY(1px); }
+
+/* ----------------------------------------------------------------- main */
+main { max-width: 84rem; margin: 0 auto; padding: 1.6rem 1.1rem 3.5rem; }
+
+.crumb { font-size: .66rem; letter-spacing: .14em; color: var(--cd-steel-muted); margin-bottom: 1rem; }
+.crumb a { color: var(--cd-steel-muted); text-decoration: none; }
+.crumb a:hover { color: var(--cd-signal-amber); }
+
+h1 {
+  font: 700 clamp(1.5rem, 4vw, 2.4rem)/1.1 var(--cd-app-mono);
+  letter-spacing: .04em; text-transform: uppercase; margin: 0 0 .4rem;
+}
+h1 em { font-style: normal; color: var(--cd-signal-amber); }
+.lede { color: var(--cd-steel-muted); max-width: 64ch; margin: 0 0 1.6rem; }
+.lede b { color: var(--cd-steel-ink); }
+
+h2.family-head {
+  font: 700 1rem/1.3 var(--cd-app-mono); letter-spacing: .18em;
+  color: var(--cd-signal-amber); text-transform: uppercase;
+  margin: 2.2rem 0 .2rem; border-bottom: 1px solid var(--cd-steel-line); padding-bottom: .3rem;
+}
+p.family-arg { color: var(--cd-steel-muted); max-width: 74ch; margin: 0 0 1.2rem; font-size: .8rem; }
+
+/* The rack grid: dense, aligned, bordered. align-items:start so a refusal
+   stays short because it is short. */
+.rack-grid {
+  display: grid; gap: 1px; align-items: start;
+  grid-template-columns: repeat(auto-fill, minmax(min(22rem, 100%), 1fr));
+  background: var(--cd-steel-line); border: 1px solid var(--cd-steel-line);
+  margin-bottom: 2.2rem;
+}
+.rack-grid > .bay { background: var(--cd-void-base); display: flex; flex-direction: column; }
+.rack-grid > .bay.wide { grid-column: 1 / -1; }
+.bay-link {
+  display: block; padding: .4rem .7rem; border-bottom: 1px solid var(--cd-steel-line);
+  font-size: .66rem; letter-spacing: .14em; color: var(--cd-steel-muted);
+  text-decoration: none; display: flex; justify-content: space-between; gap: .6rem;
+}
+.bay-link:hover { color: var(--cd-signal-amber); background: var(--cd-void-warm); }
+.bay-link .fn { color: var(--cd-signal-wire); }
+.bay-body { padding: .8rem; overflow-x: auto; }
+
+/* ------------------------------------------------------ component page */
+.specimen-stage {
+  border: 1px solid var(--cd-steel-line); background: var(--cd-void-warm);
+  padding: 1rem; overflow-x: auto; margin-bottom: 1.4rem;
+}
+.specimen-stage > .cd-card, .specimen-stage > .cd-river, .specimen-stage > .cd-gauge,
+.specimen-stage > .cd-globe { max-width: 60rem; }
+.specimen-note { font-size: .66rem; letter-spacing: .12em; color: var(--cd-steel-muted); margin: 0 0 1rem; }
+
+.refuse-line {
+  display: block; border: 1px solid var(--cd-signal-amber-dim);
+  background: var(--cd-signal-amber-fill); color: var(--cd-signal-amber);
+  padding: .4rem .7rem; font-size: .72rem; margin: 0 0 1rem;
+}
+
+.evidence-list { list-style: none; margin: 0 0 1.6rem; padding: 0; max-width: 44rem; }
+.evidence-list li { border-bottom: 1px solid var(--cd-steel-line); padding: .35rem 0; }
+.evidence-list label {
+  display: flex; gap: .6rem; align-items: center; cursor: pointer;
+  font-size: .72rem; letter-spacing: .06em; color: var(--cd-steel-muted);
+}
+.evidence-list label:hover { color: var(--cd-steel-ink); }
+.evidence-list input { accent-color: var(--cd-signal-amber); margin: 0; }
+.evidence-list .path { color: var(--cd-signal-wire); font-size: .66rem; }
+.evidence-list li[data-off="1"] label { color: var(--cd-signal-alert); }
+
+.detail-grid { display: grid; gap: 1.4rem; grid-template-columns: 1fr 1fr; margin-bottom: 1.6rem; }
+@media (max-width: 700px) { .detail-grid { grid-template-columns: 1fr; } }
+.detail h3 {
+  font-size: .64rem; letter-spacing: .18em; color: var(--cd-signal-amber);
+  text-transform: uppercase; margin: 0 0 .5rem;
+}
+.detail .quote { margin: 0; font-size: .82rem; color: var(--cd-steel-ink); }
+.detail .quote::before { content: '“'; color: var(--cd-signal-amber); }
+.detail .quote::after { content: '”'; color: var(--cd-signal-amber); }
+
+.cite-list { list-style: none; margin: 0; padding: 0; font-size: .72rem; }
+.cite-list li { padding: .2rem 0; color: var(--cd-signal-wire); word-break: break-all; }
+.cite-list .none { color: var(--cd-steel-muted); }
+
+.code-block {
+  border: 1px solid var(--cd-steel-line); background: var(--cd-void-panel);
+  padding: .8rem; overflow-x: auto; font-size: .68rem; line-height: 1.5;
+  color: var(--cd-steel-ink); margin: 0 0 .6rem; white-space: pre;
+}
+.code-block code { word-break: normal; }
+.copy-btn { margin-bottom: 1.6rem; }
+.copy-btn[data-copied="1"] { color: var(--cd-signal-data); border-color: var(--cd-signal-data-dim); }
+
+.pager { display: flex; gap: .8rem; flex-wrap: wrap; font-size: .7rem; letter-spacing: .12em; margin-bottom: 2rem; }
+.pager a { color: var(--cd-signal-amber); text-decoration: none; }
+.pager a:hover { text-decoration: underline; }
+.pager .mid { color: var(--cd-steel-muted); }
+
+/* ------------------------------------------------------- landing page */
+.hero { margin-bottom: 2.4rem; }
+.hero .hero-pair {
+  display: grid; gap: 1rem; grid-template-columns: 1fr 1fr; align-items: stretch;
+}
+@media (max-width: 700px) { .hero .hero-pair { grid-template-columns: 1fr; } }
+.hero .stage-cell { border: 1px solid var(--cd-steel-line); background: var(--cd-void-warm); padding: 1rem; overflow-x: auto; }
+.hero .stage-cell h3 { font-size: .62rem; letter-spacing: .18em; margin: 0 0 .6rem; color: var(--cd-steel-muted); text-transform: uppercase; }
+.hero .stage-cell.measured h3 { color: var(--cd-signal-data); }
+.hero .stage-cell.refused h3 { color: var(--cd-signal-alert); }
+.rule-quote {
+  border-left: 3px solid var(--cd-signal-amber);
+  padding: .2rem 0 .2rem 1rem; margin: 0 0 1.2rem; max-width: 62ch;
+  font-size: 1.05rem; color: var(--cd-steel-ink);
+}
+/* In-body links wear the palette. Specific class rules (crumb, pager,
+   foot) still win over this type-level default. */
+main a { color: var(--cd-signal-wire); text-decoration: none; }
+main a:hover { text-decoration: underline; }
+
+/* The browser-default blue control belongs to nobody's palette. */
+input[type="checkbox"] { accent-color: var(--cd-signal-amber); }
+
+.landing-foot { color: var(--cd-steel-muted); font-size: .72rem; max-width: 74ch; }
+.landing-foot a { color: var(--cd-signal-wire); }
+.landing-counter-demo { margin: 0 0 1.4rem; }
+
+/* ------------------------------------------------- rules / primitives */
+.rule-grid { display: grid; gap: 1px; background: var(--cd-steel-line); border: 1px solid var(--cd-steel-line);
+  grid-template-columns: repeat(auto-fill, minmax(min(24rem, 100%), 1fr)); margin-bottom: 2rem; }
+.rule-bay { background: var(--cd-void-base); padding: 1rem; overflow-x: auto; }
+.rule-bay h3 { font-size: .8rem; letter-spacing: .16em; color: var(--cd-signal-amber); margin: 0 0 .2rem; text-transform: uppercase; }
+.rule-bay .q { color: var(--cd-steel-muted); font-size: .72rem; margin: 0 0 .7rem; }
+.rule-pair { display: grid; grid-template-columns: 1fr 1fr; gap: .7rem; margin-bottom: .7rem; }
+.rule-pair h4 { font-size: .6rem; letter-spacing: .16em; margin: 0 0 .4rem; text-transform: uppercase; }
+.rule-pair .yes h4 { color: var(--cd-signal-data); }
+.rule-pair .no h4 { color: var(--cd-signal-alert); }
+.rule-chip {
+  display: inline-block; border: 1px solid var(--cd-signal-data-dim);
+  padding: .2rem .5rem; font-size: .7rem; margin: 0 .25rem .25rem 0;
+}
+.rule-chip.is-clock { border-color: var(--cd-signal-wire-dim); }
+.rule-chip.is-clock b { color: var(--cd-signal-wire); font-variant-numeric: tabular-nums; }
+.rule-bar { display: block; height: 8px; border: 1px solid var(--cd-signal-data-dim); margin: 0 0 .3rem; max-width: 12rem; }
+.rule-bar i { display: block; height: 100%; width: 100%; background: var(--cd-signal-data); transform-origin: left center; transform: scaleX(0); }
+.rule-bar.is-void { border-color: var(--cd-signal-amber-dim); border-style: dashed; }
+.rule-btn { font: inherit; font-size: .7rem; letter-spacing: .14em; background: transparent; cursor: pointer;
+  color: var(--cd-signal-amber); border: 1px solid var(--cd-signal-amber-dim); padding: .3rem .7rem; }
+.rule-mini { display: block; }
+.mark-attrs { display: inline-block; font-size: .62rem; color: var(--cd-signal-wire); word-break: break-all; }
+.mark-attrs-line { margin: .35rem 0; min-height: 1em; }
+.rule-reason-inline { font-size: .66rem; color: var(--cd-steel-muted); }
+.rule-reason { display: block; font-size: .66rem; color: var(--cd-signal-alert); margin-top: .5rem; }
+.prim-card-demo .cd-card { max-width: 20rem; }
+
+/* The library dims refused cards; the landing page's hero needs the refusal
+   readable, not dimmed -- this is a display choice for the rack, not a new
+   motion. */
+.hero .cd-card[data-motion="still"] .cd-card-body { opacity: .68; }
+
+/* ---------------------------------------------------------------- footer */
+.page-foot {
+  border-top: 1px solid var(--cd-steel-line);
+  color: var(--cd-steel-muted); font-size: .66rem; letter-spacing: .04em;
+  padding: 1rem 1.2rem 2rem; display: flex; gap: 2rem; flex-wrap: wrap;
+}
+.page-foot code { color: var(--cd-signal-wire); }
+
+/* The operator asked for no motion: chrome holds still, and intent marks
+   are the only transitions there are anyway. */
+@media (prefers-reduced-motion: reduce) {
+  .hbtn:active { transform: none; }
+}

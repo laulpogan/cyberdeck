@@ -1,0 +1,54 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Cyberdeck — motion is a measurement</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="icon" href="data:,">
+<link rel="stylesheet" href="../src/tokens.css">
+<link rel="stylesheet" href="../src/motion.css">
+<link rel="stylesheet" href="../src/components/components.css">
+<link rel="stylesheet" href="./app.css">
+</head>
+<body>
+<div class="masthead">
+  <div class="mast-row">
+    <a class="wordmark" href="#/">CYBERDECK<b>_UI</b></a>
+    <span class="mast-rule" aria-hidden="true">MOTION IS A MEASUREMENT</span>
+    <nav class="mast-nav" id="nav" aria-label="Sections"></nav>
+    <span class="mast-flex" aria-hidden="true"></span>
+    <span class="mast-themes" role="group" aria-label="Theme">
+      <button type="button" class="hbtn" data-theme-choice="light">LIGHT</button>
+      <button type="button" class="hbtn" data-theme-choice="dark">DARK</button>
+      <button type="button" class="hbtn" data-theme-choice="system">SYSTEM</button>
+    </span>
+  </div>
+  <div class="honesty" id="honesty-bar">
+    <span class="honesty-item">EVIDENCE
+      <button type="button" id="btn-evidence" class="hbtn hbtn-strong" aria-pressed="true">PRESENT</button>
+    </span>
+    <span class="honesty-item">MOTION
+      <button type="button" id="btn-motion" class="hbtn hbtn-strong" aria-pressed="false">OFF</button>
+    </span>
+    <span class="honesty-item" aria-hidden="true"></span>
+    <span class="honesty-item">ANIMATIONS <b id="h-anim">0</b></span>
+    <span class="honesty-item">MARKS <b id="h-marks">0</b></span>
+    <span class="honesty-item">DECLARED STILL <b id="h-still">0</b></span>
+    <span class="honesty-item" data-bad="0">MOVING WITHOUT EVIDENCE <b id="h-lying">0</b></span>
+  </div>
+</div>
+
+<main id="view" tabindex="-1"></main>
+
+<footer class="page-foot">
+  <span>Runtime <code>src/runtime.js</code> · marks <code>src/marks.js</code> ·
+    palette <code>src/tokens.css</code>, both themes · engine Motion mini, MIT, 3.1&nbsp;kb.</span>
+  <span>Every specimen on this site is the real function rendering into the real DOM
+    with the real runtime running. Nothing here is a screenshot.</span>
+</footer>
+
+<script src="../vendor/motion.min.js"></script>
+<script src="../src/runtime.js"></script>
+<script type="module" src="./app.js"></script>
+</body>
+</html>
