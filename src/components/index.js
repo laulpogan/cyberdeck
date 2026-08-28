@@ -5,4 +5,5 @@ export { gauge } from './gauge.js';
 export * from './river.js';
 export { globe, paintGlobe } from './globe.js';
 export * from './field.js';
+export * from './telegraph.js';
 export { card } from './card.js';
