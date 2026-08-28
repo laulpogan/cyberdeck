@@ -5,12 +5,16 @@
 
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import http from 'node:http';
 import fs from 'node:fs';
 import os from 'node:os';
 import path from 'node:path';
 import { execFileSync } from 'node:child_process';
 import { fileURLToPath, pathToFileURL } from 'node:url';
+
+// The feed server doubles as the static server: the live page fetches
+// '/feed/radar.json' from the same origin it is served from, exactly as
+// `npm run demo:live` runs it.
+import { startFeed } from '../scripts/live-feed.mjs';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 
@@ -41,25 +45,6 @@ async function resolveChromium() {
   return null;
 }
 
-const MIME = {
-  '.html': 'text/html', '.css': 'text/css', '.js': 'text/javascript',
-  '.mjs': 'text/javascript', '.json': 'application/json', '.svg': 'image/svg+xml',
-};
-
-function serve() {
-  const server = http.createServer((req, res) => {
-    const url = new URL(req.url, 'http://127.0.0.1');
-    if (url.pathname === '/favicon.ico') { res.writeHead(204); res.end(); return; }
-    const file = path.join(ROOT, path.normalize(decodeURIComponent(url.pathname)));
-    if (!file.startsWith(ROOT) || !fs.existsSync(file) || fs.statSync(file).isDirectory()) {
-      res.writeHead(404); res.end('nope'); return;
-    }
-    res.writeHead(200, { 'content-type': MIME[path.extname(file)] ?? 'application/octet-stream' });
-    fs.createReadStream(file).pipe(res);
-  });
-  return new Promise((done) => server.listen(0, '127.0.0.1', () => done({ server, port: server.address().port })));
-}
-
 const chromium = await resolveChromium();
 const skip = chromium ? false : 'playwright not resolvable here';
 
@@ -82,16 +67,23 @@ const counters = (page) => page.evaluate(() => ({
 }));
 
 test('app browser pass', { skip }, async (t) => {
-  const { server, port } = await serve();
+  const { server, port } = await startFeed();
   const base = `http://127.0.0.1:${port}/app/index.html`;
   const browser = await chromium.launch();
 
   const openPage = async (ctx, opts = {}) => {
     const page = await ctx.newPage();
     const noise = [];
-    page.on('console', (m) => { if (m.type() === 'error') noise.push(m.text()); });
-    page.on('pageerror', (e) => noise.push(String(e)));
-    page.on('requestfailed', (r) => noise.push(`net ${r.url()}`));
+    const suppressed = opts.suppressed || (() => false);
+    page.on('console', (m) => {
+      if (m.type() === 'error' && !m.text().includes('/feed/radar.json')
+        && !suppressed(m.text())) noise.push(m.text());
+    });
+    page.on('pageerror', (e) => { if (!suppressed(String(e))) noise.push(String(e)); });
+    // '/feed/radar.json' failures are the feed-down scenario, on purpose.
+    page.on('requestfailed', (r) => {
+      if (!r.url().includes('/feed/radar.json')) noise.push(`net ${r.url()}`);
+    });
     return { page, noise, ...opts };
   };
 
@@ -236,6 +228,41 @@ test('app browser pass', { skip }, async (t) => {
         assert.ok(over <= 0, `${route || 'landing'}: ${over}px of horizontal overflow`);
         await page.close();
       }
+      await ctx.close();
+    });
+
+    await t.test('the live page moves on its producer clock and refuses when it stops', async () => {
+      const ctx = await browser.newContext();
+      let feedDown = false;
+      const { page, noise } = await openPage(ctx, {
+        // The aborted fetch prints one generic line without the URL; it
+        // is only forgiven while the feed is deliberately down.
+        suppressed: (t) => feedDown && /Failed to load resource|ERR_FAILED|AbortError/.test(t),
+      });
+      await page.goto(base + '#/live');
+      await page.waitForTimeout(800); // first poll is immediate
+      const first = await page.$eval('#live-slot', (el) => el.innerHTML);
+      assert.ok(first.includes('<svg'), 'the first poll did not render the radar');
+      assert.ok(!(await page.$eval('#live-slot', (el) => el.textContent)).includes('AWAITING'));
+      assert.match(await page.$eval('#live-readout', (el) => el.textContent), /ANSWERED/);
+      assert.equal((await counters(page)).lying, 0);
+
+      await page.waitForTimeout(4400); // two more polls, a producer age change
+      const later = await page.$eval('#live-slot', (el) => el.innerHTML);
+      assert.notEqual(later, first, 'the same bytes twice while the producer keeps answering');
+      assert.ok((await counters(page)).anim > 0, 'the live sweep is not moving');
+      assert.equal((await counters(page)).lying, 0);
+
+      feedDown = true;
+      await page.route('**/feed/radar.json', (r) => r.abort());
+      await page.waitForTimeout(4400); // two failed polls
+      const dark = await page.$eval('#live-slot', (el) => el.innerHTML);
+      assert.match(dark, /data-motion="still"/, 'the darkened radar kept live motion');
+      assert.ok((await page.$eval('#live-slot', (el) => el.textContent)).includes('NO SWEEP'),
+        'the sweep did not refuse in the markup');
+      assert.match(await page.$eval('#live-readout', (el) => el.textContent), /NO ANSWER/);
+      assert.equal((await counters(page)).lying, 0);
+      assert.deepEqual(noise, []);
       await ctx.close();
     });
 

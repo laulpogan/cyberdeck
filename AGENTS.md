@@ -5,10 +5,13 @@ measurement or a written refusal. Nothing here is a screenshot.
 
 ## Commands
 
-- `npm test` — full suite: library contract tests, app logic tests, browser
-  gates. It launches headless Chromium; expect about a minute.
+- `npm test` — full suite: library contract tests, app logic tests, adapter
+  tests, browser gates. It launches headless Chromium; expect about a minute.
 - `npm run demo` — static server on :8199 for the hand-written demos. The
   app lives at `app/index.html` in the same tree; no build step, ever.
+- `npm run demo:live` — the showcase plus `scripts/live-feed.mjs`, the demo
+  producer behind the app's `#/live` route (static files and
+  `/feed/radar.json` on :8299).
 
 ## The two halves
 
@@ -26,6 +29,24 @@ Adding a component means: a fixture in `app/fixtures/`, a `W(...)` spec in the
 registry, and a family id. `test/app.test.mjs` fails the closed set if fixtures
 and specs drift, if a dark model touches an undeclared path, or if removing
 evidence ever manufactures motion instead of refusing it.
+
+## The data adapter (`#/live`)
+
+`app/adapter.js` is the seam between a live producer and a fixture, and
+`app/live.js` is its only consumer. The adapter's rules are load-bearing:
+
+- A feed may only supply values on the paths the component's evidence
+  controls declare. Anything else is rejected leaf by leaf, and the
+  rejected paths are shown on the page — a producer cannot add claims to
+  a drawing it does not animate.
+- A failed or absent poll yields the dark model: the same nulled control
+  paths the evidence toggle shows, with the component's own refusal
+  reasons. There is no "keep showing the last values" state.
+- Staleness is measured from the poll clock against the source's own
+  period (`isStale`, `ageSeconds`), never from a label in the payload.
+
+`test/adapter.test.mjs` holds those three rules; the browser pass proves
+the page moves on the producer's clock and goes dark when it stops.
 
 ## Non-negotiables
 
@@ -59,3 +80,10 @@ evidence ever manufactures motion instead of refusing it.
   pages from the NO ROUTE fallback ("view not empty" proves nothing).
 - A page whose only live motion is an interval clock has zero WAAPI
   animations; check clocks and loops separately when asserting liveness.
+- `liveStart` assigns the poll timer before the first `tick()`: tick
+  guards on the timer's existence so a route change mid-poll cannot land
+  DOM on a dead page. Calling tick first makes the first poll abort
+  itself and the page sits "AWAITING" until the interval's second beat.
+- An aborted fetch logs one generic `Failed to load resource` with no
+  URL in the console. Feed-down tests suppress exactly that line, and
+  only while the feed is deliberately down — never widen the filter.
