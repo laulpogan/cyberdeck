@@ -80,6 +80,45 @@ counts — is plain ESM with no JSX, so `node --test` reads it with no transform
   nothing breaks, but the token is a leftover. `--cd-globe-size` is set inline by
   `globe.js` and is not a host token.
 
+- **React re-serialises `dangerouslySetInnerHTML` when the wrapper object changes.**
+  React diffs the prop's *value*, and the value is an object literal, so any
+  re-render of the chrome — theme switch, kill switch, a counter — hands it a new
+  `{ __html }` holding the same string, React decides the property changed, and the
+  browser reparses the specimen. Every animation the runtime had started is then
+  attached to a node that is no longer in the document, and the `elapsed` counters
+  go on writing text into it. `app/src/components/Specimen.jsx` caches the object so
+  its identity tracks the string. "React never reaches inside a specimen" is one
+  line of code, not a stance, and the byte-identity assertion is what proved it.
+- **`settle()` was not giving the markup back. Three writers, all now closed.** The
+  animation engine writes the resting value into the `style` *attribute* on its way
+  out (`style="opacity: 1"`); `traced` writes a dash array into that attribute on its
+  way in; and a cancelled animation's undo handler runs a microtask *later* and
+  leaves `style=""` where the server wrote no attribute at all. None of it moves a
+  pixel — a resting value is by construction what the markup already said — and all
+  of it breaks "a settled page IS the static export" at the byte level. `src/runtime.js`
+  now remembers each element's `style` attribute the moment before anything touches
+  it and hands it back at settle, after the cancellation passes, then once more on a
+  microtask for the handlers that run on the rejection.
+- **The settle assertion is `settled == export`, not `before == after`.** A running
+  `elapsed` counter is *meant* to differ from the export — that is its job, and the
+  first version of the assertion failed on a page that was behaving perfectly. The
+  snapshot to compare against is the markup as it landed, before motion touched it,
+  which `app/verify/probe-evidence.mjs` records with a MutationObserver. Cancelling
+  does restore the text: `elapsing`'s cancel writes back what the server wrote, which
+  is why the claim survives a minute ticking over.
+- **The kill switch's own state is chrome, and the comparison is scoped to say so.**
+  Pressing it changes `aria-pressed` and the button's `aria-label`, and `settle()`
+  stamps `data-motion-off` on `<html>`. Both are records that the operator asked —
+  same category as the stamp the bridge already exempts — so the assertion runs over
+  the `[data-specimen-view]` subtrees, which is the claim: *no component's markup
+  changed when motion was cancelled.*
+- **Two typos that render as a blank page, so both are now tests.**
+  `import { motionIsOff } from './motion-bridge.js'` against a module exporting
+  `isMotionOff`, and `'../../src/marks.js'` where the file is at
+  `'../../../src/marks.js'`. The browser's answer to either is one line of console
+  and no DOM. `test/app-shell.test.mjs` walks `app/` and asserts every relative
+  specifier lands on a file and every named import is something the target exports.
+
 ## The marks contract
 
 A mark is a plain object of `data-*` attributes and carries no animation code —

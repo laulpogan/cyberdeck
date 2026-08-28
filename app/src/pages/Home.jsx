@@ -1,5 +1,7 @@
 import { collar } from '../../../src/components/river.js';
 import { Specimen } from '../components/Specimen.jsx';
+import { resolveModel, evidenceSummary, emptyEvidenceState } from '../evidence.js';
+import { darkFor } from '../../fixtures/index.js';
 
 // The landing page has one job: make a visitor understand the rule in
 // under fifteen seconds by watching something refuse. So this is not an
@@ -12,21 +14,20 @@ import { Specimen } from '../components/Specimen.jsx';
 // measurement away and it stops, keeps its shape, and says why in its own
 // markup. The copy below is the component's own sentence, not a paraphrase.
 
-const MEASURED = {
-  elapsedSeconds: 9400,
-  waitingSeconds: 640,
-  sourceState: 'live',
-  cite: 'evidence.operator.deadline_at',
-};
+// The models are the registry's, not a second copy written for this page: the
+// collar a visitor sees here is the collar at `#/component/collar`, with the same
+// numbers and the same code block underneath it.
 
-const UNMEASURED = {
-  elapsedSeconds: null,
-  waitingSeconds: null,
-  sourceState: 'live',
-  cite: 'evidence.operator.deadline_at',
-};
+export function Home({ evidence = emptyEvidenceState() }) {
+  // The rack switch reaches the landing too. With evidence absent, the left collar
+  // loses its elapsed the same as the right one, and the caption says so instead of
+  // leaving two specimens that look like the same refusal by accident. A page that
+  // kept animating while declaring nothing on it was supplied would be exactly the
+  // defect `MOVING WITHOUT EVIDENCE` exists to catch.
+  const measured = resolveModel('collar', evidence);
+  const unmeasured = darkFor('collar');
+  const taken = evidenceSummary('collar', evidence).removed > 0;
 
-export function Home() {
   return (
     <div className="cd-page cd-page-home">
       <p className="cd-kicker">Cyberdeck · sixty components · seven families · one rule</p>
@@ -41,19 +42,21 @@ export function Home() {
       </p>
 
       <div className="cd-pair" data-evidence-pair="collar">
-        <figure className="cd-pair-cell" data-measured="1">
+        <figure className="cd-pair-cell" data-measured={taken ? '0' : '1'}>
           <figcaption>
-            <b>MEASURED</b>
-            <span>evidence.operator.deadline_at supplies how long it has run</span>
+            <b>{taken ? 'EVIDENCE ABSENT' : 'MEASURED'}</b>
+            <span>{taken
+              ? 'the rack switch took the elapsed reading: nothing on this page was supplied'
+              : 'evidence.operator.deadline_at supplies how long it has run'}</span>
           </figcaption>
-          <Specimen html={collar(MEASURED)} revision="home-measured" label="collar" />
+          <Specimen html={collar(measured)} label="collar-measured" />
         </figure>
         <figure className="cd-pair-cell" data-measured="0">
           <figcaption>
             <b>UNMEASURED</b>
             <span>the same component, the same shape, one field removed</span>
           </figcaption>
-          <Specimen html={collar(UNMEASURED)} revision="home-unmeasured" label="collar" />
+          <Specimen html={collar(unmeasured)} label="collar-unmeasured" />
         </figure>
       </div>
 
@@ -61,7 +64,7 @@ export function Home() {
         The left collar counts because somebody measured how long it has run. The
         right collar does not count, because nobody did. It keeps its frame, its
         dial and its words — the dial goes dashed and reads <code>UNMEASURED</code>{' '}
-        — and it writes the reason where you can inspect it:
+        — and it writes the reason where a person can inspect it:
       </p>
       <pre className="cd-cite-line">data-motion=&quot;still&quot;
 data-still-reason=&quot;no duration was measured&quot;</pre>

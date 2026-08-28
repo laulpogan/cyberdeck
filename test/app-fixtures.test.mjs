@@ -10,10 +10,11 @@ import assert from 'node:assert/strict';
 import { readFileSync, readdirSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 
-import { FIXTURES, FIXTURE_KEYS, brightFor, darkFor, fieldsFor, modelFor, callFor }
+import { FIXTURES, FIXTURE_KEYS, brightFor, darkFor, fieldsFor, callFor }
   from '../app/fixtures/index.js';
 import { darkOf, hasValue, addedOrChanged, normalizeField, clone } from '../app/fixtures/project.js';
 import { allComponents } from '../app/src/registry/index.js';
+import { resolveModel, emptyEvidenceState } from '../app/src/evidence.js';
 
 const FIXTURE_DIR = fileURLToPath(new URL('../app/fixtures/', import.meta.url));
 
@@ -176,7 +177,7 @@ test('copy-to-use is the real call, and the strip control changes one field at a
   assert.equal(callFor(key), `${key}(${JSON.stringify(brightFor(key), null, 2)})`);
   // The strip control removes one field, not the whole picture.
   const field = normalizeField(fieldsFor('collar')[0]).path;
-  const stripped = modelFor('collar', { evidence: false, strip: [field] });
+  const stripped = resolveModel('collar', { globalOff: false, perKey: { collar: [field] } });
   assert.equal(stripped.elapsedSeconds, null);
   assert.equal(stripped.sourceState, 'live', 'everything else is untouched');
   assert.equal(stripped.cite, brightFor('collar').cite);
@@ -184,6 +185,6 @@ test('copy-to-use is the real call, and the strip control changes one field at a
 
 test('evidence on means the bright model, byte for byte', () => {
   for (const key of FIXTURE_KEYS) {
-    assert.deepEqual(modelFor(key, { evidence: true }), brightFor(key));
+    assert.deepEqual(resolveModel(key, emptyEvidenceState()), brightFor(key));
   }
 });

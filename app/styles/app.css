@@ -322,7 +322,13 @@ pre {
 
 /* ——— the footer ——— */
 
+/* Two claims in one box, laid out as two. Left in normal flow they ran together
+   into "…motion is a measurement or it does not happenevery specimen is…". */
 .cd-footer {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 0.3rem 1.5rem;
   border-top: var(--cd-hair-strong);
   margin-top: 1.5rem;
   padding: 1rem 1.1rem 3rem;
@@ -332,6 +338,229 @@ pre {
   margin-inline: auto;
 }
 .cd-footer a { color: var(--cd-signal-amber); }
+
+/* ——— one specimen, full bleed ——— */
+
+/* A single specimen at 1240px is the library's 340x200 drawing area magnified
+   three and a half times: the type stays crisp and the composition falls apart.
+   The card was drawn at a size, so the rack gives it that size and centres it. */
+.cd-stage .cd-specimen { max-width: 54rem; margin-inline: auto; }
+
+.cd-stage {
+  border: var(--cd-hair);
+  background: var(--cd-void-panel);
+  padding: 0.9rem;
+  margin: 1.4rem 0 1.2rem;
+  min-width: 0;
+}
+
+/* The panels under a specimen are the argument in order: the switch, the refusal
+   it caused, the cite, the code. They are equal-weight boxes because each one is
+   a separate claim, not a hierarchy of them. */
+.cd-panels {
+  display: grid;
+  gap: 1rem;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 21rem), 1fr));
+  margin-bottom: 1.4rem;
+}
+.cd-panel {
+  border: var(--cd-hair);
+  background: var(--cd-void-panel);
+  padding: 0.8rem 0.9rem;
+  min-width: 0;
+}
+.cd-panel h2 { margin-top: 0; }
+.cd-panel > :last-child { margin-bottom: 0; }
+.cd-panel .cd-note { margin-bottom: 0.7rem; }
+
+.cd-cite {
+  font: 500 0.72rem/1.5 var(--cd-mono);
+  letter-spacing: 0.04em;
+  color: var(--cd-signal-wire);
+  overflow-wrap: anywhere;
+  margin: 0 0 0.7rem;
+}
+.cd-refusal-quote q { color: var(--cd-steel-ink); }
+
+/* ——— the per-field evidence controls ——— */
+
+.cd-evidence-summary {
+  font: 500 0.68rem/1.4 var(--cd-mono);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--cd-steel-muted);
+  margin: 0 0 0.5rem;
+}
+.cd-evidence-summary b { color: var(--cd-signal-data); }
+.cd-evidence-summary[data-evidence-scope="global"] b { color: var(--cd-signal-alert); }
+
+.cd-evidence-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 0;
+}
+.cd-evidence-list li {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  border-bottom: var(--cd-hair);
+  padding: 0.3rem 0;
+  min-width: 0;
+}
+.cd-evidence-list li:last-child { border-bottom: 0; }
+.cd-evidence-list button { flex: 0 0 5.4rem; padding: 0.3rem 0.35rem; font-size: 0.56rem; }
+.cd-evidence-list code { flex: 1 1 auto; border: 0; background: transparent; padding: 0; }
+/* A removed field stays on the list, struck through. Deleting the row would make
+   the control forget what it had done, and the whole point is that the absence is
+   a fact about this component, not a blank. */
+.cd-evidence-list li[data-measured="0"] code {
+  color: var(--cd-steel-muted);
+  text-decoration: line-through;
+}
+.cd-evidence-note {
+  font-size: 0.68rem;
+  color: var(--cd-steel-muted);
+  margin: 0.5rem 0 0;
+}
+
+/* ——— the refusal ledger ——— */
+
+.cd-ledger {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 0.5rem;
+}
+.cd-ledger li { display: grid; gap: 0.15rem; min-width: 0; }
+.cd-ledger li code { overflow-wrap: anywhere; }
+.cd-ledger li span {
+  font: 400 0.64rem/1.4 var(--cd-mono);
+  color: var(--cd-steel-muted);
+}
+.cd-ledger li em { font-style: normal; color: var(--cd-signal-wire); }
+.cd-ledger-line { margin: 0; }
+
+/* ——— copy-to-use ——— */
+
+.cd-use {
+  border: var(--cd-hair);
+  background: var(--cd-void-panel);
+  padding: 0.8rem 0.9rem;
+  min-width: 0;
+  grid-column: 1 / -1;
+}
+.cd-use-head {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  margin-bottom: 0.6rem;
+}
+.cd-use-head b {
+  font: 500 0.62rem/1 var(--cd-mono);
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--cd-signal-amber);
+}
+.cd-use-head span {
+  font: 400 0.62rem/1 var(--cd-mono);
+  color: var(--cd-steel-muted);
+  overflow-wrap: anywhere;
+}
+.cd-use pre { margin: 0; }
+
+/* ——— a family on one page ——— */
+
+.cd-deck {
+  display: grid;
+  gap: 1.1rem;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 23rem), 1fr));
+  margin-top: 1.4rem;
+}
+.cd-deck-item {
+  border: var(--cd-hair);
+  background: var(--cd-void-panel);
+  padding: 0.7rem;
+  min-width: 0;
+}
+.cd-deck-item.is-wide { grid-column: 1 / -1; }
+.cd-deck-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 0.7rem;
+  margin-bottom: 0.5rem;
+  min-width: 0;
+}
+.cd-deck-head a {
+  /* The export key, spelled the way the import spells it. Uppercasing it would
+     turn `scanOverlay` into something that cannot be pasted. */
+  font: 500 0.74rem/1.3 var(--cd-mono);
+  letter-spacing: 0.04em;
+  color: var(--cd-signal-amber);
+  text-decoration: none;
+  border-bottom: var(--cd-hair);
+}
+.cd-deck-head a:hover { border-bottom-color: var(--cd-signal-amber); }
+.cd-deck-cite {
+  font: 400 0.6rem/1.4 var(--cd-mono);
+  color: var(--cd-steel-muted);
+  text-align: right;
+  overflow-wrap: anywhere;
+}
+
+/* ——— the index ——— */
+
+table.cd-index { max-width: none; }
+.cd-index th:nth-child(2) { width: 14%; }
+.cd-index th:nth-child(3) { width: 34%; }
+.cd-index th:nth-child(4) { width: 12%; }
+.cd-index td a { color: var(--cd-signal-amber); text-decoration: none; }
+/* A list where every row is a link is a list where no row is a link: the
+   underline appears on the one being hovered, which is the only honest
+   affordance at this density. */
+.cd-index td a:hover { text-decoration: underline; }
+.cd-index td code {
+  display: block;
+  border: 0;
+  background: transparent;
+  padding: 0;
+  margin-top: 0.15rem;
+  color: var(--cd-steel-muted);
+  font-size: 0.7em;
+}
+.cd-index-producer {
+  font: 400 0.7rem/1.5 var(--cd-mono);
+  color: var(--cd-signal-wire);
+  overflow-wrap: anywhere;
+}
+.cd-index-fields { font: 500 0.72rem/1 var(--cd-mono); color: var(--cd-signal-data); }
+
+.cd-index-links {
+  list-style: none;
+  margin: 0.4rem 0 0;
+  padding: 0;
+  display: grid;
+  gap: 0.45rem;
+}
+.cd-index-links a { color: var(--cd-signal-amber); }
+
+.cd-page-nav {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 1rem;
+  border-top: var(--cd-hair-strong);
+  margin-top: 1.6rem;
+  padding-top: 0.8rem;
+  font: 500 0.66rem/1.4 var(--cd-mono);
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+.cd-page-nav a { color: var(--cd-signal-amber); text-decoration: none; }
+.cd-page-nav a:hover { text-decoration: underline; }
 
 /* ——— narrow ——— */
 
@@ -345,6 +574,11 @@ pre {
 
 @media (max-width: 30rem) {
   .cd-rack-top { padding: 0.45rem 0.6rem; }
+  /* The words THEME / EVIDENCE / MOTION are what let the row wrap to a third of a
+     phone's height. The buttons say what they are and each carries an aria-label,
+     so on a narrow screen the labels are the first thing to go. */
+  .cd-switches-label { display: none; }
+  .cd-switches { gap: 0.3rem; }
   .cd-page { padding: 1.1rem 0.6rem 2.5rem; }
   .cd-switches { flex-wrap: wrap; }
   /* Four counters stacked one per line ate a third of a phone's height. Two

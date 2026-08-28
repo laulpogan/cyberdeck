@@ -1,169 +1,144 @@
 import { useEffect, useState } from 'react';
-import { currentRoute, subscribeRoute, href, HOME } from './router.js';
-import { FAMILIES } from './catalog.js';
+import { applyTheme, readStoredTheme, storeTheme, effectiveTheme } from './theme.js';
+import { currentRoute, subscribeRoute, href } from './router.js';
 import { HonestyBar } from './components/HonestyBar.jsx';
 import { Home } from './pages/Home.jsx';
-import {
-  readStoredTheme, storeTheme, applyTheme, effectiveTheme, attributeFor,
-} from './theme.js';
-import { isMotionOff, setMotionOff, stillnessReason, motionAvailable } from './motion-bridge.js';
+import { Overview } from './pages/Overview.jsx';
+import { FamilyPage } from './pages/Family.jsx';
+import { ComponentPage } from './pages/Component.jsx';
+import { emptyEvidenceState, withGlobal, withField } from './evidence.js';
+import { rewalk, motionAvailable, stillnessReason } from './motion-bridge.js';
 import { intent } from '../../src/marks.js';
 
-const NAV = [
-  { route: HOME, label: 'The rule' },
-  { route: { kind: 'overview' }, label: 'Families' },
-  { route: { kind: 'rules' }, label: 'Mark kinds' },
-  { route: { kind: 'primitives' }, label: 'Primitives' },
-];
+/** The rack the library hangs in.
+ *
+ * Three pieces of chrome are load-bearing: the theme switch, the evidence switch,
+ * and the kill switch. They are in the rack rather than on a page because the
+ * claim they demonstrate is about every screen, including the one that says the
+ * screen is honest.
+ *
+ * The evidence switch is not a “dark mode for data”. It changes which models get
+ * handed to the components, which changes what they refuse to animate -- so a
+ * model change re-walks the runtime exactly the way a route change does. Whatever
+ * was animating before belonged to a claim that is no longer on the page. */
+export function App() {
+  const [theme, setTheme] = useState(() => readStoredTheme(typeof window !== 'undefined' ? window.localStorage : null));
+  const [route, setRoute] = useState(() =>
+    typeof window === 'undefined' ? { kind: 'home' } : currentRoute(window));
+  const [settled, setSettled] = useState(false);
+  const [evidence, setEvidence] = useState(emptyEvidenceState);
 
-function routeKey(route) {
-  return [route.kind, route.family || '', route.key || ''].join(':');
-}
+  useEffect(() => subscribeRoute(window, setRoute), []);
 
-function isActive(navRoute, route) {
-  if (navRoute.kind === 'overview') {
-    return route.kind === 'overview' || route.kind === 'family' || route.kind === 'component';
+  useEffect(() => {
+    applyTheme(document, theme);
+    storeTheme(window.localStorage, theme);
+    // The choice and the result are different facts. Under `system` the attribute
+    // is absent -- which is the only way an explicit light choice survives a dark
+    // OS -- so what the page is painted as has to be read, not assumed.
+    document.documentElement.dataset.painted = effectiveTheme(window, theme);
+  }, [theme]);
+
+  useEffect(() => {
+    document.documentElement.dataset.evidence = evidence.globalOff ? 'absent' : 'present';
+  }, [evidence]);
+
+  // The one place the runtime is started. It runs after the whole tree has
+  // committed, because the runtime's only cancel is global: settle, lift the
+  // operator's stamp unless they asked for stillness, then walk what is actually
+  // on screen. See `rewalk()` in motion-bridge.js for what leaks otherwise.
+  useEffect(() => {
+    rewalk(document, { stopped: settled });
+  }, [route, evidence, settled]);
+
+  // Under `prefers-reduced-motion`, or with no engine, the runtime decided this is
+  // the static export before this component existed. The switch says so and does
+  // not offer to un-decide it: `start()` does not consult `off`, so the only way to
+  // honour that decision is not to call it.
+  const refused = !motionAvailable();
+
+  const kill = () => {
+    if (refused) return;
+    setSettled((current) => !current);
+  };
+
+  const pageProps = { evidence, settled };
+  let page = <Overview />;
+  if (route.kind === 'home') page = <Home {...pageProps} />;
+  else if (route.kind === 'family') page = <FamilyPage slug={route.family} {...pageProps} />;
+  else if (route.kind === 'component') {
+    page = (
+      <ComponentPage
+        componentKey={route.key}
+        evidence={evidence}
+        onToggleField={(path) => setEvidence((current) => withField(current, route.key, path))}
+      />
+    );
   }
-  return navRoute.kind === route.kind;
-}
 
-/** The family index. Every family is reachable from here in one click, and
- * the count beside each name is checked against the exports by
- * `test/app-registry.test.mjs`, so the number cannot go stale quietly. */
-function Overview() {
-  return (
-    <div className="cd-page">
-      <p className="cd-kicker">Seven families · one rule</p>
-      <h1 className="cd-display">The families</h1>
-      <p className="cd-lede">
-        Each family answers one question about a fleet. Every component in every
-        family is on the next page, running, with its measurement and its refusal
-        beside each other.
-      </p>
-      <table className="cd-table">
-        <thead>
-          <tr><th>Family</th><th>The question it answers</th><th>Components</th></tr>
-        </thead>
-        <tbody>
-          {FAMILIES.map((family) => (
-            <tr key={family.slug}>
-              <td>
-                <a href={href({ kind: 'family', family: family.slug })}>{family.name}</a>
-              </td>
-              <td>{family.question}</td>
-              <td data-count-for={family.slug}>—</td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
-    </div>
-  );
-}
-
-function Pending({ route }) {
-  return (
-    <div className="cd-page">
-      <p className="cd-kicker">Not wired yet</p>
-      <h1 className="cd-display">{route.kind}</h1>
-      <p className="cd-note">
-        This route is on the way. It is declared rather than faked: the rule of
-        this app is that nothing on screen pretends to be something it is not,
-        and a page of stand-in content would be the app committing the thing the
-        library exists to argue against.
-      </p>
-      <p className="cd-note">
-        <a href={href(HOME)}>Back to the rule</a> ·{' '}
-        <a href={href({ kind: 'overview' })}>The families</a>
-      </p>
-    </div>
-  );
-}
-
-function Page({ route }) {
-  if (route.kind === 'home') return <Home />;
-  if (route.kind === 'overview') return <Overview />;
-  return <Pending route={route} />;
-}
-
-export function App({ win = globalThis.window }) {
-  const doc = win.document;
-  const [route, setRoute] = useState(() => currentRoute(win));
-  const [theme, setTheme] = useState(() => readStoredTheme(win.localStorage));
-  const [off, setOff] = useState(() => isMotionOff(doc));
-
-  useEffect(() => subscribeRoute(win, (next) => {
-    setRoute(next);
-    win.scrollTo(0, 0);
-  }), [win]);
-
-  useEffect(() => { applyTheme(doc, theme); }, [doc, theme]);
-
-  // The route is the revision the specimens and the readout key off: new
-  // page, new walk, fresh counts.
-  const revision = routeKey(route);
-  const reason = stillnessReason(win);
-  const canRunMotion = motionAvailable();
-  const painted = effectiveTheme(win, theme);
-
-  const chooseTheme = (choice) => {
-    setTheme(choice);
-    storeTheme(win.localStorage, choice);
-  };
-
-  const toggleMotion = () => {
-    const next = !off;
-    setMotionOff(doc, next);
-    setOff(isMotionOff(doc));
-  };
+  // Everything the counters are supposed to describe: the tree on screen, the
+  // models it was handed, and whether the runtime is stopped. The readout polls on
+  // its own interval; this only makes it re-read on the beat the change lands.
+  const revision = [route.kind, route.family ?? '', route.key ?? '',
+    evidence.globalOff ? 'off' : 'on', JSON.stringify(evidence.perKey), settled ? 'still' : 'moving'].join('|');
 
   return (
-    <>
+    <div className="cd-app">
       <header className="cd-rack">
         <div className="cd-rack-top">
-          <a className="cd-mark" href={href(HOME)}>Cyberdeck<span>the showcase</span></a>
+          <a className="cd-mark" href={href({ kind: 'home' })}>
+            CYBERDECK<span>SHOWCASE</span>
+          </a>
           <nav className="cd-nav" aria-label="Sections">
-            {NAV.map((item) => (
-              <a key={item.label} href={href(item.route)}
-                 data-active={isActive(item.route, route) ? '1' : '0'}
-                 {...intent('hover')}>{item.label}</a>
-            ))}
+            {[['overview', 'INDEX'], ['rules', 'MARKS'], ['primitives', 'PRIMITIVES']].map(
+              ([kind, label]) => (
+                <a key={kind} href={href({ kind })}
+                   data-active={route.kind === kind ? '1' : '0'}>{label}</a>
+              ),
+            )}
           </nav>
           <div className="cd-switches">
             <span className="cd-switches-label">theme</span>
             <div className="cd-switches-group" role="group" aria-label="Theme">
-              {['system', 'light', 'dark'].map((choice) => (
-                <button key={choice} type="button" data-theme-choice={choice}
-                        data-active={theme === choice ? '1' : '0'}
-                        aria-pressed={theme === choice}
-                        onClick={() => chooseTheme(choice)}
-                        {...intent('press')}>{choice}</button>
+              {['light', 'dark', 'system'].map((option) => (
+                <button key={option} type="button" data-theme-option={option}
+                        aria-pressed={theme === option}
+                        onClick={() => setTheme(option)} {...intent('press')}>
+                  {option}
+                </button>
               ))}
             </div>
+            <span className="cd-switches-label">evidence</span>
+            <button type="button" data-control="evidence" aria-pressed={!evidence.globalOff}
+                    aria-label={evidence.globalOff
+                      ? 'Evidence absent: switch measurements back on'
+                      : 'Evidence present: switch measurements off'}
+                    onClick={() => setEvidence((current) => withGlobal(current, !current.globalOff))}
+                    {...intent('press')}>
+              {evidence.globalOff ? 'ABSENT' : 'PRESENT'}
+            </button>
             <span className="cd-switches-label">motion</span>
-            <div className="cd-switches-group">
-              <button type="button" data-control="motion" onClick={toggleMotion}
-                      disabled={!canRunMotion}
-                      aria-pressed={off}
-                      title={reason || 'settle every animation the runtime is running'}
-                      {...intent('press')}>
-                {reason ? `still · ${reason}` : (off ? 'motion on' : 'motion off')}
-              </button>
-            </div>
+            <button type="button" data-control="kill" aria-pressed={settled || refused}
+                    disabled={refused} title={refused ? stillnessReason() : undefined}
+                    aria-label={refused ? `Motion refused: ${stillnessReason()}`
+                      : (settled ? 'Motion is stopped: run it again' : 'Stop every animation')}
+                    onClick={kill} {...intent('press')}>
+              {refused ? 'REFUSED' : (settled ? 'STOPPED' : 'SETTLE')}
+            </button>
           </div>
         </div>
-        <HonestyBar doc={doc} revision={revision} />
+        <HonestyBar doc={typeof document !== 'undefined' ? document : undefined} revision={revision} />
       </header>
 
-      <main className="cd-main" data-route={route.kind} data-theme-painted={painted}
-            data-theme-choice={theme} data-attribute={attributeFor(theme) || 'none'}>
-        <Page route={route} />
+      <main key={`${route.kind}:${route.family ?? route.key ?? ''}`}
+            data-evidence={evidence.globalOff ? 'absent' : 'present'}>
+        {page}
       </main>
 
       <footer className="cd-footer">
-        Cyberdeck · MIT · every component on this page is the library function
-        called with a fixture, rendered by the real runtime. Nothing here is a
-        screenshot, and nothing here moves without a number behind it.
+        <span>cyberdeck-ui · motion is a measurement or it does not happen</span>
+        <span>every specimen is the library function running, not a capture of it</span>
       </footer>
-    </>
+    </div>
   );
 }

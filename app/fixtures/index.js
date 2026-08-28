@@ -50,16 +50,6 @@ export function darkFor(key) {
   return darkOf(brightFor(key), fieldsFor(key));
 }
 
-/** The model the app renders for a given evidence state. `all` is the switch on
- * the rack; a single field is what the per-field control strips. */
-export function modelFor(key, { evidence = true, strip = null } = {}) {
-  const model = brightFor(key);
-  if (evidence) return model;
-  if (!strip) return darkFor(key);
-  const fields = fieldsFor(key).filter((field) => strip.includes(field.path));
-  return darkOf(model, fields);
-}
-
 /** Valid JavaScript, not a paraphrase: this is the string copy-to-use hands a
  * visitor, and the test that asserts it equals the real call is the same one
  * that runs it back through the component. */

@@ -33,9 +33,15 @@ export function stillnessReason(win = globalThis.window) {
   return 'the animation engine is unavailable';
 }
 
-/** Run the runtime over whatever markup is currently in the document. */
-export function startMotion(scope) {
+/** Run the runtime over whatever markup is currently in the document.
+ *
+ * Refuses while the root carries `data-motion-off`: that stamp is the record that
+ * the operator (or the page) asked for the static export, and a re-render that
+ * called `start()` regardless would quietly un-ask it. */
+export function startMotion(scope, doc = globalThis.document) {
   if (!motionAvailable()) return false;
+  const root = doc && doc.documentElement;
+  if (root && root.hasAttribute('data-motion-off')) return false;
   runtime().start(scope);
   return true;
 }
@@ -58,10 +64,30 @@ export function setMotionOff(doc, off) {
   if (off) {
     settleMotion();
     root.setAttribute('data-motion-off', '');
-    return;
+    return false;
   }
   root.removeAttribute('data-motion-off');
-  startMotion();
+  return startMotion(null, doc);
+}
+
+/** Re-run the runtime after the tree changed.
+ *
+ * Settling first is not tidiness. The runtime has no per-scope cancel, and a
+ * specimen React has just thrown away keeps its animation: a cancelled-late
+ * `element.animate()` stays in `document.getAnimations()` after its target leaves
+ * the document, so a page navigated away from still counts toward ANIMATIONS and
+ * can still be sitting inside a declared stillness. `settle()` is the only cancel
+ * the runtime offers -- including the `elapsed` counters, which are intervals
+ * rather than Animations and would otherwise keep writing text into nodes that no
+ * longer exist -- so the app settles, lifts the stamp unless the operator asked
+ * for stillness, and walks the tree that is actually on screen. */
+export function rewalk(doc = globalThis.document, { stopped = false } = {}) {
+  settleMotion();
+  if (stopped) {
+    doc.documentElement.setAttribute('data-motion-off', '');
+    return false;
+  }
+  return setMotionOff(doc, false);
 }
 
 export function isMotionOff(doc) {

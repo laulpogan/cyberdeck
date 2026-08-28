@@ -7,6 +7,9 @@
 
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
+import { readdirSync, readFileSync, existsSync } from 'node:fs';
+import { fileURLToPath } from 'node:url';
+import { dirname, resolve } from 'node:path';
 
 import { parseHash, href, sameRoute } from '../app/src/router.js';
 import {
@@ -166,4 +169,86 @@ test('the kill switch settles and stamps the root; turning it back on clears the
   assert.equal(bridge.isMotionOff(doc), false, 'a stale stamp leaves every later intent() dead');
   assert.equal(starts, 1);
   delete globalThis.CyberdeckMotion;
+});
+
+test('every relative import in the app points at a file that exists', () => {
+  // Vite reports an unresolved import as a 500 on the module request, which in a
+  // browser looks like a blank page with four console errors and no sentence
+  // naming the file that was wrong. `app/src/components/../fixtures` is one `..`
+  // away from working and one away from being a blank screen, so it is checked
+  // here rather than discovered by a person waiting for a page to paint.
+  const root = `${fileURLToPath(new URL('..', import.meta.url))}app`;
+  const files = [];
+  const walk = (dir) => {
+    for (const entry of readdirSync(dir, { withFileTypes: true })) {
+      const path = `${dir}/${entry.name}`;
+      if (entry.isDirectory()) walk(path);
+      else if (/\.(js|jsx|mjs)$/.test(entry.name)) files.push(path);
+    }
+  };
+  walk(root);
+  assert.ok(files.length > 15, 'the walk found the app sources');
+
+  const broken = [];
+  for (const file of files) {
+    const source = readFileSync(file, 'utf8');
+    for (const match of source.matchAll(/from\s+'(\.[^']+)'|import\('(\.[^']+)'\)|import\s+'(\.[^']+)'/g)) {
+      const spec = match[1] || match[2] || match[3];
+      const target = resolve(dirname(file), spec);
+      const exists = [target, `${target}.js`, `${target}.jsx`, `${target}.css`]
+        .some((candidate) => existsSync(candidate));
+      if (!exists) broken.push(`${file.replace(root, 'app')} -> ${spec}`);
+    }
+  }
+  assert.deepEqual(broken, [], 'every relative specifier lands on a file');
+});
+
+test('every named import the app takes is something the module exports', () => {
+  // The failure this stands guard over: `import { motionIsOff } from './motion-bridge.js'`
+  // against a module that exports `isMotionOff`. The browser raises one page error
+  // and renders nothing at all -- no file name, no line, no candidate spelling -- so
+  // a rename in one file reads as a blank screen until someone reads the console.
+  const root = `${fileURLToPath(new URL('..', import.meta.url))}app`;
+  const files = [];
+  const walk = (dir) => {
+    for (const entry of readdirSync(dir, { withFileTypes: true })) {
+      const path = `${dir}/${entry.name}`;
+      if (entry.isDirectory()) walk(path);
+      else if (/\.(js|jsx)$/.test(entry.name)) files.push(path);
+    }
+  };
+  walk(root);
+
+  const exportsOf = (path) => {
+    const source = readFileSync(path, 'utf8');
+    const names = new Set();
+    for (const match of source.matchAll(/export\s+(?:async\s+)?(?:function|class|const|let|var)\s+([A-Za-z0-9_$]+)/g)) {
+      names.add(match[1]);
+    }
+    for (const match of source.matchAll(/export\s*\{([^}]*)\}/g)) {
+      for (const part of match[1].split(',')) {
+        const name = part.trim().split(/\s+as\s+/).pop();
+        if (name) names.add(name.trim());
+      }
+    }
+    return names;
+  };
+
+  const missing = [];
+  for (const file of files) {
+    const source = readFileSync(file, 'utf8');
+    for (const match of source.matchAll(/import\s+([^;\n]*?)\s+from\s+'(\.[^']+)'/g)) {
+      const clause = match[1];
+      const braces = /\{([^}]*)\}/.exec(clause);
+      if (!braces) continue;
+      const target = resolve(dirname(file), match[2]);
+      if (!existsSync(target)) continue; // the resolution test owns that failure
+      const have = exportsOf(target);
+      for (const raw of braces[1].split(',')) {
+        const name = raw.trim().split(/\s+as\s+/)[0];
+        if (name && !have.has(name)) missing.push(`${file.replace(root, 'app')} wants ${name} from ${match[2]}`);
+      }
+    }
+  }
+  assert.deepEqual(missing, [], 'no module is asked for something it does not give');
 });
