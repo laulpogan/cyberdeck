@@ -589,11 +589,14 @@
 .cd-ag-track { display: block; position: relative; height: 3px;
   background: var(--cd-steel-line);
   /* Inset, so the numeral riding the edge stays inside the card at both
-     ends of the span. */
-  margin: .5rem 10px 0; }
+     ends of the span. The top margin is a lane for that numeral: at .5rem
+     the label stood 4px into the TURNS/TOOLS line above, and a worker at
+     12% -- whose edge is at the far left, under that line -- printed its
+     context over its own tool count. */
+  margin: 1.05rem 10px 0; }
 .cd-ag-track i { position: absolute; top: -2px; width: 2px; height: 7px;
   background: var(--cd-signal-amber); }
-.cd-ag-track em { position: absolute; bottom: 6px; left: 50%;
+.cd-ag-track em { position: absolute; bottom: 4px; left: 50%;
   transform: translateX(-50%); font-style: normal; font-size: .5rem;
   color: var(--cd-signal-amber); }
 .cd-ag-burn[data-measured="0"] i { font-style: normal; font-size: .52rem;
