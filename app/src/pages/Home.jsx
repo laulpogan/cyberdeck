@@ -69,6 +69,14 @@ export function Home({ evidence = emptyEvidenceState() }) {
       <pre className="cd-cite-line">data-motion=&quot;still&quot;
 data-still-reason=&quot;no duration was measured&quot;</pre>
       <p className="cd-pair-verdict">
+        The two readings under the dial are <code>2h 36m</code> and <code>10m</code>, and
+        they will read <code>2h 37m</code> and <code>11m</code> when the next minute has
+        been measured. They do not tick, because the producer reports minutes, and a
+        counter that moved faster than its source would be theatre. What the readings did
+        do is draw the ring: the arc across the dial <em>is</em> the elapsed measurement,
+        and the right collar has no arc to draw.
+      </p>
+      <p className="cd-pair-verdict">
         Nothing was softened and nothing was filled in. One field went away and a
         motion stopped happening. That is the whole library, sixty times over.
       </p>

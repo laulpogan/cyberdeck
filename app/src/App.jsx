@@ -6,8 +6,11 @@ import { Home } from './pages/Home.jsx';
 import { Overview } from './pages/Overview.jsx';
 import { FamilyPage } from './pages/Family.jsx';
 import { ComponentPage } from './pages/Component.jsx';
+import { Rules } from './pages/Rules.jsx';
+import { Primitives } from './pages/Primitives.jsx';
 import { emptyEvidenceState, withGlobal, withField } from './evidence.js';
 import { rewalk, motionAvailable, stillnessReason } from './motion-bridge.js';
+import { paintGlobes } from './globe-paint.js';
 import { intent } from '../../src/marks.js';
 
 /** The rack the library hangs in.
@@ -49,6 +52,12 @@ export function App() {
   // on screen. See `rewalk()` in motion-bridge.js for what leaks otherwise.
   useEffect(() => {
     rewalk(document, { stopped: settled });
+    // The globe's mesh is canvas, and the runtime has no reach into a bitmap: the
+    // host is expected to call `paintGlobe` per figure, which is what the library's
+    // own demo does. Skip it and the component renders as a black box with a
+    // caption -- marked, present, invisible. After `rewalk`, because the mesh reads
+    // `data-motion` on its own wrapper to decide whether it may turn at all.
+    paintGlobes(document);
   }, [route, evidence, settled]);
 
   // Under `prefers-reduced-motion`, or with no engine, the runtime decided this is
@@ -66,6 +75,8 @@ export function App() {
   let page = <Overview />;
   if (route.kind === 'home') page = <Home {...pageProps} />;
   else if (route.kind === 'family') page = <FamilyPage slug={route.family} {...pageProps} />;
+  else if (route.kind === 'rules') page = <Rules evidence={evidence} />;
+  else if (route.kind === 'primitives') page = <Primitives />;
   else if (route.kind === 'component') {
     page = (
       <ComponentPage

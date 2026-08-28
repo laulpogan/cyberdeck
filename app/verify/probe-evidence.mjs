@@ -22,22 +22,19 @@ async function open(route, width = 1280) {
     // comparison has to be against this and not against whatever the page happened
     // to look like a second later, with a live counter mid-tick.
     window.__export = {};
-    const record = (node) => {
-      if (!node || node.nodeType !== 1) return;
-      const views = node.matches('[data-specimen-view]') ? [node]
-        : [...node.querySelectorAll('[data-specimen-view]')];
-      for (const view of views) {
-        window.__export[view.getAttribute('data-specimen-view') || '?'] = view.innerHTML;
-      }
-    };
-    const obs = new MutationObserver((records) => {
-      for (const r of records) {
-        if (r.type !== 'childList') continue;
-        if (r.addedNodes.length && r.removedNodes.length) record(r.target);
-        for (const n of r.addedNodes) record(n);
-      }
+    const innerHTML = Object.getOwnPropertyDescriptor(Element.prototype, 'innerHTML');
+    Object.defineProperty(Element.prototype, 'innerHTML', {
+      configurable: true,
+      get: innerHTML.get,
+      set(value) {
+        if (this.matches?.('[data-specimen-view]')) {
+          innerHTML.set.call(this, value);
+          window.__export[this.getAttribute('data-specimen-view') || '?'] = this.innerHTML;
+          return;
+        }
+        return innerHTML.set.call(this, value);
+      },
     });
-    obs.observe(document, { childList: true, subtree: true });
 
     window.__peak = 0;
     const tick = () => {

@@ -18,6 +18,12 @@
   --cd-hair: 1px solid var(--cd-steel-line);
   --cd-hair-strong: 1px solid var(--cd-steel-muted);
   --cd-cell: var(--cd-void-panel);
+  /* A canvas cannot inherit a custom property, so `paintGlobe` reads this one off
+     the figure and passes it to `strokeStyle`. Left unset it falls back to
+     `currentColor`, which paints a wireframe at full ink weight -- the mesh means
+     "this is a globe" and nothing else, so the host dims it to the wire the rest
+     of the page uses for a connection nobody measured. */
+  --cd-globe-mesh-colour: var(--cd-signal-wire-dim);
 }
 
 html { background: var(--cd-void-base); }
@@ -319,6 +325,22 @@ pre {
    must fill the cell they are given and never push the page wider. */
 .cd-specimen > .cd-card { width: 100%; }
 .cd-specimen svg { max-width: 100%; }
+/* Inside a scroll container the opposite rule holds: the drawing keeps its own
+   width and the container scrolls, because `max-width: 100%` there shrinks a
+   1200-unit-wide chart into 390 CSS pixels, which is not "it fits", that is type
+   nobody can read. `app/verify/index.mjs` measures the scale and fails on it. */
+.cd-scroll .cd-specimen svg, .cd-scroll > svg { max-width: none; }
+/* The lane chart is drawn for a page, not a column: `river()` asks for 900 units and
+   its own CSS then says `width: 100%`. Inside a scroll container the request is
+   honoured instead -- the box keeps a readable width, the container scrolls, and the
+   body does not. Measured by the gate at both widths (`drawn at N% of its own size`). */
+/* A card is 340 units wide by contract (`card.js`), and the deck would happily give
+   it 268 on a phone: 79% of a drawing is not a scaled card, it is type nobody reads.
+   Inside a scroll container the card keeps the width it was drawn at and the deck
+   scrolls, which is what the container is for. */
+.cd-scroll .cd-specimen > .cd-card { min-width: 21.25rem; }
+.cd-scroll .cd-river { min-width: 56.25rem; }
+.cd-scroll .cd-globe { min-width: 26.25rem; }
 
 /* ——— the footer ——— */
 
@@ -561,6 +583,120 @@ table.cd-index { max-width: none; }
 }
 .cd-page-nav a { color: var(--cd-signal-amber); text-decoration: none; }
 .cd-page-nav a:hover { text-decoration: underline; }
+
+/* ——— the eleven marks ——— */
+
+.cd-rule-replay {
+  display: flex;
+  align-items: center;
+  gap: 0.7rem;
+  flex-wrap: wrap;
+  margin: 1.2rem 0 0;
+  font-size: 0.68rem;
+  color: var(--cd-steel-muted);
+}
+.cd-rules {
+  display: grid;
+  gap: 1.2rem;
+  margin-top: 1.6rem;
+}
+.cd-rule {
+  border: var(--cd-hair);
+  background: var(--cd-void-panel);
+  padding: 0.8rem 0.9rem 1rem;
+  min-width: 0;
+}
+.cd-rule-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 0.4rem 0.9rem;
+  border-bottom: var(--cd-hair);
+  padding-bottom: 0.4rem;
+}
+.cd-rule-head h2 { margin: 0; }
+.cd-rule-attrs {
+  font: 400 0.66rem/1.5 var(--cd-mono);
+  color: var(--cd-steel-muted);
+  overflow-wrap: anywhere;
+  border: 0;
+  background: transparent;
+  padding: 0;
+}
+.cd-rule-attrs[data-state='measured'] { color: var(--cd-signal-data); }
+.cd-rule-attrs[data-state='refused'] { color: var(--cd-signal-alert); }
+.cd-rule-line { margin: 0.7rem 0 0.9rem; max-width: 92ch; }
+.cd-rule-pair {
+  display: grid;
+  gap: 1rem;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 20rem), 1fr));
+  margin: 0;
+}
+.cd-rule-cell { margin: 0; min-width: 0; }
+.cd-rule-cell figcaption {
+  font: 400 0.62rem/1.4 var(--cd-mono);
+  letter-spacing: 0.04em;
+  color: var(--cd-steel-muted);
+  margin-bottom: 0.4rem;
+}
+.cd-rule-cell[data-state='refused'] figcaption { color: var(--cd-signal-alert); }
+.cd-rule-reason { margin: 0.45rem 0 0; }
+.cd-rule-reason code { overflow-wrap: anywhere; color: var(--cd-signal-alert); }
+
+/* `level` marks an element and animates the `<i>` inside it -- the same shape the
+   components hand the runtime. The scale the server wrote stays in the markup, so a
+   refused bar rests at the reading rather than at full width. */
+.cd-rule-bar {
+  display: block;
+  /* A definite height, not a min-height: the `<i>` inside is the bar, it is
+     `height: 100%`, and a percentage resolves against a definite height or collapses
+     to nothing -- which is how a measured bar rendered as an empty box. */
+  height: 1.75rem;
+  border: var(--cd-hair-strong);
+  color: var(--cd-signal-data);
+  margin: 0.9rem 0;
+}
+.cd-rule-bar i { display: block; height: 100%; background: currentColor; }
+.cd-rule-intent { margin: 0.7rem 0; }
+
+/* ——— the drawing exports ——— */
+
+.cd-primitives {
+  display: grid;
+  gap: 1rem;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 21rem), 1fr));
+  margin-top: 1.6rem;
+}
+.cd-primitive {
+  border: var(--cd-hair);
+  background: var(--cd-void-panel);
+  padding: 0.7rem 0.8rem;
+  min-width: 0;
+}
+.cd-primitive header {
+  display: grid;
+  gap: 0.15rem;
+  border-bottom: var(--cd-hair);
+  padding-bottom: 0.4rem;
+  margin-bottom: 0.5rem;
+}
+.cd-primitive header b {
+  font: 500 0.76rem/1.2 var(--cd-mono);
+  color: var(--cd-signal-amber);
+}
+.cd-primitive header code {
+  border: 0;
+  background: transparent;
+  padding: 0;
+  font-size: 0.62rem;
+  color: var(--cd-steel-muted);
+  overflow-wrap: anywhere;
+}
+.cd-primitive-note {
+  font-size: 0.7rem;
+  color: var(--cd-steel-muted);
+  margin: 0.5rem 0 0;
+}
 
 /* ——— narrow ——— */
 

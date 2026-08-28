@@ -54,9 +54,12 @@ export function ComponentPage({ componentKey, evidence, onToggleField }) {
       <h1 className="cd-display">{component.title}</h1>
       <p className="cd-lede">{component.note}</p>
 
+      {/* Wide drawings scroll here rather than shrinking to the page: a lane chart
+          squeezed to a phone's width is not "responsive", it is illegible. */}
       <div className="cd-stage" ref={stage} data-evidence-count={component.fields.length}>
-        <Specimen html={html} label={componentKey}
-                  className={component.fullWidth ? 'is-full-width' : ''} />
+        <div className="cd-scroll">
+          <Specimen html={html} label={componentKey} />
+        </div>
       </div>
 
       <div className="cd-panels">
