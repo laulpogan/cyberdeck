@@ -192,7 +192,14 @@ export function chipBudget({ chips, ceiling, cite = 'hud.channel_budget' }) {
  * The sweep runs the producer's real poll interval, so an operator reads
  * "is this being polled" off the movement rather than trusting a
  * timestamp. An overdue poll refuses to sweep rather than wrapping, since
- * a wrap would erase the finding. */
+ * a wrap would erase the finding.
+ *
+ * Brightness is a second measurement and a separate one: how long since
+ * the sweep last crossed this contact's bearing, spent against that same
+ * poll interval. A blip firms as the wedge reaches it and spends itself
+ * until the next pass; with no measured pass time it refuses and is drawn
+ * ringed, because the thing that would have brightened it is the thing
+ * that is missing. */
 export function radar({ contacts, pollElapsed = null, pollPeriod = null,
                         sourceState = 'unavailable', cite = 'source.poll_interval_ms' }) {
   const cx = 100, cy = 100;
@@ -210,9 +217,30 @@ export function radar({ contacts, pollElapsed = null, pollPeriod = null,
     // the centre, which would read as the freshest thing on the screen.
     if (c.age_seconds === null || c.age_seconds === undefined) return;
     const r = 28 + Math.min(1, c.age_seconds / (c.window || 60)) * 48;
-    g.push(`<g class="cd-fd-contact" data-band="${c.band || 'fresh'}"`
+    const x = cx + r * Math.cos(c.bearing), y = cy + r * Math.sin(c.bearing);
+    // Brightness is the second clock, and it is a measurement rather than a
+    // label. `band` used to be the ink here -- a category someone typed --
+    // so a contact held its brightness while a measured sweep went round it,
+    // which is the freshest-looking lie in the library. The mark refuses on
+    // an unmeasured pass time, on a source that is not live, and on an
+    // overrun; in every one of those cases the contact is drawn ringed.
+    const pass = cycle(c.swept_ago_seconds, pollPeriod, sourceState, {
+      cite: c.cite || 'contacts[].swept_ago_seconds',
+    });
+    const passing = pass['data-motion'] === 'cycle';
+    // The source's own band word only gets to choose ink while the pass time
+    // is measured. A contact typed `fresh` whose sweep-pass was never
+    // recorded must not be drawn in freshness ink on the strength of the
+    // word alone; `unmeasured` is the colour the library already defines for
+    // exactly this.
+    const band = passing ? (c.band || 'fresh') : 'unmeasured';
+    g.push(`<g class="cd-fd-contact" data-band="${band}"`
+      + ` data-pass="${passing ? 'measured' : 'refused'}"`
       + `${attrs(count(i, contacts.length))}>`
-      + dot(cx + r * Math.cos(c.bearing), cy + r * Math.sin(c.bearing), 3.4) + '</g>');
+      + `<g${attrs(pass)}${passing ? ' data-cycle-axis="brightness"' : ''}>`
+      + dot(x, y, 3.4)
+      + (passing ? '' : ring(x, y, 6.5, { dashed: true }))
+      + '</g></g>');
   });
   const offScope = (contacts || []).filter((c) => c.age_seconds === null
     || c.age_seconds === undefined).length;

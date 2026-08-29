@@ -176,3 +176,17 @@ that should deliberate), `collar` (the elapsed counter the landing page depends 
 node app/verify/filmstrip.mjs ALL                     # frames + JSON into /tmp/film
 python3 app/verify/sheet.py /tmp/film $(cd /tmp/film && ls *.json | sed 's/\.json$//')
 ```
+
+## Addendum — radar re-captured after its brightness became a measurement
+
+Captured the same way into `/tmp/film5` once the contacts were tied to the sweep's clock
+(`app/verify/sweep-clock.mjs`, `npm run verify:clock`). The row above is the older capture and is
+left standing, because it is what the readings in `MOTION-READINGS.md` were written from.
+
+| state | entrance changed | loop changed | peak `getAnimations()` | height | marks |
+| --- | --- | --- | --- | --- | --- |
+| measured | 16/17 | 11/12 | 6 | 571px | `count`, `cycle`, `still` |
+| refused | 0/13 | 0/2 | 0 | 571px | `still` |
+
+Measured, six animations are alive — the wedge, two contacts spending their remaining poll, and the
+three population staggers. Refused, none, and the specimen is 571px on both sides of the switch.

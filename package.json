@@ -33,6 +33,7 @@
     "verify": "node app/verify/index.mjs",
     "verify:all": "node app/verify/all.mjs",
     "verify:roundtrip": "node app/verify/roundtrip.mjs",
+    "verify:clock": "node app/verify/sweep-clock.mjs",
     "verify:control": "node app/verify/negative-control.mjs"
   },
   "keywords": [

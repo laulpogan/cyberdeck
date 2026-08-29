@@ -756,6 +756,22 @@ measured quantity rather than an animation. The refusal even names `NO CADENCE` 
 `NO CONTACT`, which is the distinction `radar` is missing. If the radar redesign is going to borrow
 anything from the vault, it should first borrow this.
 
+**Fixed on this branch, and measured.** Each placed contact now carries its own `cycle` mark on a
+new `brightness` axis, spent against the producer's poll interval — the same number the wedge turns
+on — so a contact firms as the sweep crosses its bearing and spends itself to a floor of 0.32 by the
+next pass. `npm run verify:clock` (`app/verify/sweep-clock.mjs`) measures it in the browser rather
+than asserting it: the wedge names a 10s poll at 0.30 spent with a 7000ms first turn; contacts at
+0.15 and 0.64 spent run 8500ms and 3600ms, and elapsed-plus-remaining is 10000ms on every element,
+which is what "same clock" means when the first animation is deliberately the *remaining* poll.
+Across 1321 sampled frames each contact's progress ran 0→1 and reset exactly once per period —
+a sawtooth against the pass, not a `traffic` breathe that recovers before anything arrives. The
+third contact is 12s since its pass against a 10s poll, so `cycle` refuses (`poll is overdue`) and
+the dot is drawn **ringed** instead of bright: the missing look-again is the finding. Remove only
+`contacts[].swept_ago_seconds` and three contacts stay placed, declared `still`, unanimated, and
+`data-band="unmeasured"`, while the sweep keeps turning — one measurement gone, its own refusal,
+the rest of the clock untouched. The typed `band` word chooses ink only while the pass time is
+measured.
+
 ### `triVision` — TrisonVision tabs
 
 **Measured:** 8 of 17 changed, 2 of 12, `count`, 571px held. Three mode tabs (`HEALTH / COST /

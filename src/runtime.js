@@ -187,6 +187,29 @@
       }
       return;
     }
+    // Brightness rather than geometry. A radar contact is fresh the moment
+    // the sweep crosses its bearing and stays fresh for the rest of that
+    // poll, so the ink spends itself against the same clock the wedge turns
+    // on: `data-spent` is how long ago this contact was last looked at, and
+    // the period is the producer's poll interval -- the mark's refusals come
+    // from `cycle` unchanged, so a contact nobody re-passed refuses instead
+    // of brightening on schedule. Two animations for the bar's reason: one
+    // repeating tween would restart every period at the freshness of the
+    // FIRST poll rather than at full, and the contact would be a beat late
+    // forever. It never fades out: a contact that goes dark reads as gone,
+    // and "we have not looked again" is a different fact from "it left".
+    if (el.getAttribute('data-cycle-axis') === 'brightness') {
+      var DIM = 0.32;
+      var firstFade = play(el, { opacity: [1 - spent * (1 - DIM), DIM] },
+        { duration: period * (1 - spent), easing: 'linear' });
+      if (firstFade && firstFade.finished && firstFade.finished.then) {
+        firstFade.finished.then(function () {
+          play(el, { opacity: [1, DIM] },
+            { duration: period, easing: 'linear', repeat: Infinity });
+        }, function () {});
+      }
+      return;
+    }
     var bar = el.querySelector('i') || el;
     // Linear, and this is the one place R11's ban on it is wrong. An
     // eased clock runs fast in the middle and slow at the ends, which

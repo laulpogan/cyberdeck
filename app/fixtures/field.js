@@ -115,15 +115,21 @@ export const FIELD_FIXTURES = {
     // the sweep is refused; let the elapsed run past an intact period and the
     // component refuses differently -- `poll is overdue`, rather than wrapping and
     // starting again, which would erase the finding.
-    fields: ['pollElapsed', 'pollPeriod', 'contacts'],
+    // Brightness is a second measurement, so it is declared separately: remove
+    // `contacts[].swept_ago_seconds` alone and the dial keeps its contacts,
+    // ringed, because the pass time is the only thing gone. The third contact
+    // is 12s since its pass against a 10s poll, which is overdue: `cycle`
+    // refuses rather than wrapping, and the ring around that dot is the
+    // finding, not a missing value.
+    fields: ['pollElapsed', 'pollPeriod', 'contacts', 'contacts[].swept_ago_seconds'],
     model: {
       sourceState: 'live',
       pollElapsed: 3,
       pollPeriod: 10,
       contacts: [
-        { age_seconds: 2, bearing: -0.2, window: 60, band: 'fresh' },
-        { age_seconds: 18, bearing: 0.9, window: 60, band: 'fresh' },
-        { age_seconds: 44, bearing: 2.6, window: 60, band: 'stale' },
+        { age_seconds: 2, bearing: -0.2, window: 60, band: 'fresh', swept_ago_seconds: 1.5 },
+        { age_seconds: 18, bearing: 0.9, window: 60, band: 'fresh', swept_ago_seconds: 6.4 },
+        { age_seconds: 44, bearing: 2.6, window: 60, band: 'stale', swept_ago_seconds: 12 },
         { age_seconds: null, bearing: 4.0, window: 60, band: 'unknown' },
       ],
       cite: 'source.poll_interval_ms',

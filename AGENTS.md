@@ -378,3 +378,22 @@ sized with padding and a 1px frame overflows its cell by the frame otherwise —
 which is the same border-box bug the library already learned once. Wide things
 (the overview grid, code blocks, the lane chart) scroll in their own
 `overflow-x: auto` container; the body never scrolls sideways, at 390 or 1280.
+
+## The radar's two clocks
+
+A contact's **radius** is evidence age; its **brightness** is a separate measurement — how long
+since the sweep crossed its bearing — spent against the same poll interval the wedge turns on
+(`data-motion="cycle"` + `data-cycle-axis="brightness"`). The runtime's `cycle` now has three
+geometries behind one mark: the bar, the dial (`rotate`), and the ink (`brightness`). Three rules
+fall out of it and a reviewer should not have to rediscover them:
+
+- The first animation is the **remaining** poll, not the whole period. So the check is never
+  "durations equal" — it is elapsed + remaining = one period, on the wedge and every contact alike.
+  `npm run verify:clock` measures exactly that, plus a per-frame sawtooth reset, plus the
+  per-field removal state. A repeating tween started at `spent` would be a beat late forever; that
+  is why `cycle` uses two animations, here and on the bar.
+- Brightness never fades to zero (floor 0.32). A contact that goes dark reads as *gone*, and
+  "we have not looked again" is a different fact.
+- The source's `band` word chooses ink only while the pass time is measured. Otherwise the contact
+  is drawn `data-band="unmeasured"` with a ring: a typed category must not keep a dot glowing after
+  the clock it was supposed to describe has refused.
