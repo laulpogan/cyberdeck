@@ -1373,3 +1373,48 @@ deck; the ruler carries no motion mark; `now` is one line at the deck's x; a cla
 refuses and keeps its cue), gate green on `#/families/river` and `#/component/river` at both widths and both themes.
 The gauntlet row that recorded this as *not held* — on the grounds that an assert cannot fail on a geometry the
 component never draws — is now asserted, which is the outcome that entry was written hoping for.
+
+## The HUD's cue rule, audited: the library draws three cues, and my instrument was wrong three times
+
+`f16-hud-gcas.gif` was quoted against `mfd` last time with three demands. Checking `mfd`'s drawing killed two of
+them and left one: a warning cue **arrives, holds while the condition lasts, and leaves** — the FLYUP limit cue
+comes in around 2.7s of the window with GND PROX beside it and is gone by 10.7s. That demand does not belong to
+`mfd`, which has neither a scale nor a cue element. It belongs to whichever components draw a triggered state, so
+the residue became an audit: find every cue in the library, and ask each one whether it can leave.
+
+**The inventory is smaller than the reference implies.** Rendering every fixture bright and reading its drawn text
+nodes, virtually every uppercase phrase this library prints is a *label* (`PANE A`, `HOST`, `RATIO`, `PERIOD`,
+`COST`) or a *measured value* (`12.4 OF A 20 CEILING`, `ECONOMIC 0.70`, `41/60`). The genuine condition-cues —
+a state asserted of the subject, not a name and not an absence — number **three**: `IN FLIGHT` (`hardCut`),
+`PAST THE CEILING — DRAWN CLAMPED HERE` (`envelope`), `AWAITING OPERATOR` (`river`). The HUD reference's cue class
+is barely instantiated here, which is itself a reading: this library asserts very little about its subjects, and
+when it does, the assertion is worth the scrutiny the reference demands.
+
+**All three hold.** `hardCut`'s in-flight bar arrives with the value and leaves without it — the plate draws
+`changed + 1` flight groups with `inFlight` and exactly `changed` without, and the readout row for in-flight stays
+behind printing `UNMEASURED` rather than vanishing with the cue. `envelope` prints its clamp notice only past the
+ceiling, and at double its ceiling it still names the *measured* position (`40 OF A 20 CEILING`) while the dot sits
+clamped — the number and the clamp are separate claims. `river`'s operator cue follows the lane's **state**, not the
+presence of ink: `needs_human` with a run draws it, `running` does not, an empty `queued` lane does not, and an
+empty `needs_human` lane does — the case the axis work added.
+
+**And the audit instrument was wrong three times before the tests were right**, which is the part worth keeping.
+A word-substring scan over stripped markup reported `hardCut` printing `IN FLIGHT` with no in-flight — because
+**`NOTHING IN FLIGHT` contains `IN FLIGHT`**, and the library deliberately draws that negation. Then a `endsWith`
+match missed `PAST THE CEILING` entirely, because the drawn phrase is `PAST THE CEILING — DRAWN CLAMPED HERE` and
+the cue is the *prefix*: a scan blind to prefixes finds no cue and reports the vocabulary as smaller than it is.
+Then one regex — `class="cd-th-flight"` … `IN FLIGHT` — reached from a counted row's group across to the readout's
+`IN FLIGHT` **label** and reported a second time that the cue never leaves. It does leave; the count of groups goes
+7 → 6. Each failure has the same shape: matching drawn ink by fragment instead of by the whole drawn node. Every
+assertion in `test/cue-liveness.test.mjs` now matches an entire text node, a group count, or a whole phrase, and
+`hardCut`'s assertion counts groups precisely *because* the cue's words and the label's words are the same two words.
+
+Written as four differential tests rather than a ledger with a vocabulary, because the vocabulary form needs a human
+to separate cue from label anyway and gives them a machine they cannot trust. The tests can ring — deleting the
+`envelope` clamp notice produces *"a position at double its ceiling is drawn clamped and does not say so"*, and the
+original `hardCut` sabotage (a cue that never leaves) produced *"the in-flight bar is still on the plate with no
+in-flight — a cue that outlives its condition"* — restored from `/tmp` snapshots, both files carrying uncommitted
+work. The fourth test pins the vocabulary itself: if a fourth cue appears it inherits the obligation, and the
+reading that produced it has to name the field that governs it before the ink is allowed. No gauntlet row: the
+on-screen half of this rule is already held by `envelope-limit-named`, which asserts the honest page names
+`12.4 OF A 20 CEILING` — and an absent cue is not something the browser can be asked to show. `npm test` 292.

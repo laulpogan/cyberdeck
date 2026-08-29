@@ -818,3 +818,20 @@ Two reusable pieces from that change:
 SVG labels: a `text-anchor="middle"` label centred near the right edge **hangs past the viewBox**, and
 `app/verify/index.mjs` reads that as a plate defect (it turned 8 viewport/theme combinations red before it was
 anchored to whichever side has room). Long notices go inside the plate, not off its edge.
+
+## Match drawn ink by the whole drawn node, not by a fragment
+
+An audit of the library's cues — phrases asserting a condition of the subject — reached three wrong conclusions
+before it reached one right answer, all three from loose matching over stripped markup:
+
+- **A word-substring scan found a defect that did not exist**, because `NOTHING IN FLIGHT` contains `IN FLIGHT`,
+  and the library draws that negation on purpose.
+- **An `endsWith` scan missed a real cue**, because the drawn phrase is `PAST THE CEILING — DRAWN CLAMPED HERE`
+  and the cue is the *prefix*. A prefix-blind scan reports the vocabulary as smaller than the library's.
+- **One regex spanned two elements**: `class="cd-th-flight"` … `IN FLIGHT` reached from a counted row's group to
+  the readout's `IN FLIGHT` **label**. The cue's words and a label's words can be the same words; where they are,
+  count the groups (`changed + 1` with the value, `changed` without) instead of searching for text.
+
+So: match an entire `>([^<>]+)<` node, a whole phrase, or an element count. And when an audit needs a human to
+separate cue from label anyway, ship it as **named differential tests** — render with the condition, render
+without, assert what arrives and what leaves — not as a report with a vocabulary nobody can trust.
