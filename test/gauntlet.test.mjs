@@ -13,7 +13,12 @@ import { fileURLToPath } from 'node:url';
 import { allComponents, COMPONENT_KEYS } from '../app/src/registry/index.js';
 
 const here = (f) => fileURLToPath(new URL(f, import.meta.url));
-const GAUNTLET = JSON.parse(readFileSync(here('../vault/GAUNTLET.json'), 'utf8')).gaps;
+// Overridable so this file's own refusals can be proved red against a doctored copy in a temp
+// directory. The first version of this guard was proven by editing vault/GAUNTLET.json in place and
+// reverting, which is fine alone and a race the moment `node --test` runs another file that reads
+// the same manifest — which it does, and it cost a red push on the coverage test's account.
+const GAUNTLET = JSON.parse(
+  readFileSync(process.env.CYBERDECK_GAUNTLET || here('../vault/GAUNTLET.json'), 'utf8')).gaps;
 const EYEBALL = JSON.parse(readFileSync(here('../vault/EYEBALL.json'), 'utf8'));
 const MANIFEST = JSON.parse(readFileSync(here('../vault/MANIFEST.json'), 'utf8')).files;
 const SPECS = readFileSync(here('../vault/SPECS.md'), 'utf8');
@@ -35,6 +40,16 @@ test('every gap names a component the registry can render, or a route', () => {
 
 test('no gap is asserted from a picture nobody looked at', () => {
   for (const gap of GAUNTLET) {
+    if (!gap.reference) {
+      // A row may assert something no picture bears on — that our own cascade arrives in the order
+      // our own `data-index` claims, for instance. What it may not do is go unnamed: a row with a
+      // quiet hole where the citation should be reads as a lost reference, and the honest reader's
+      // fix is to go find one and paste it in.
+      assert.equal(gap.referenceRelation, 'self',
+        `${gap.id} cites no picture and does not file itself as self: either it imitates something and `
+        + `the citation went missing, or it asserts an internal claim and must say so`);
+      continue;
+    }
     const record = byName.get(gap.reference);
     assert.ok(record, `${gap.id} cites ${gap.reference}, which is not in vault/MANIFEST.json`);
     const seen = EYEBALL[record.file];
@@ -49,6 +64,12 @@ test('every quoted figure is the figure vault/SPECS.md measured', () => {
   const squash = (t) => t.replace(/\s+/g, ' ');
   const specs = squash(SPECS);
   for (const gap of GAUNTLET) {
+    if (!gap.reference) {
+      assert.ok(!gap.referenceFigure,
+        `${gap.id} cites no picture yet quotes a figure — a number with no measurement behind it is `
+        + `exactly what this file exists to refuse`);
+      continue;
+    }
     const figure = squash(gap.referenceFigure);
     // SPECS writes `travel of the bright head: 0.701 of the frame crossed, 0.46 of the way
     // along at half the duration`; a row may quote a fragment of that sentence, so the test
@@ -91,9 +112,25 @@ test('a row says whether its picture informs the drawing or only bore the demand
   // like drift. Now the row states its relation, and this check keeps the two records consistent.
   for (const gap of GAUNTLET) {
     const rel = gap.referenceRelation;
-    assert.ok(rel === 'informs' || rel === 'origin',
+    assert.ok(rel === 'informs' || rel === 'origin' || rel === 'self',
       `${gap.id} carries no referenceRelation — a reader cannot tell whether the cited picture is `
       + `supposed to inform this drawing or is only where the demand was first measured`);
+    if (rel === 'self') {
+      assert.ok(!gap.reference,
+        `${gap.id} is filed as self and still cites ${gap.reference}: a row that names a picture is `
+        + `claiming it bears on the drawing, and must file itself as informs or origin`);
+      assert.ok(gap.component,
+        `${gap.id} is a route row filed as self — a route row holds the rack to a picture someone `
+        + `measured, and there is nothing to substitute for it`);
+      const claim = gap.selfClaim || '';
+      assert.ok(claim.length >= 160,
+        `${gap.id} is self-asserted and owes a sentence saying why no picture is implicated — `
+        + `${claim.length} characters is a shrug, not an argument`);
+      assert.ok(/no reference|no picture|nothing to imitate/i.test(claim),
+        `${gap.id}'s selfClaim has to say in words that no reference bears on it, or the field becomes `
+        + `a place to park a row too lazy to cite`);
+      continue;
+    }
     if (!gap.component) {
       assert.equal(rel, 'informs',
         `${gap.id} is a route row: there is no drawing to disentangle the citation from, so `
@@ -119,6 +156,22 @@ test('a row says whether its picture informs the drawing or only bore the demand
         + `records drift apart again without anyone noticing`);
     }
   }
+});
+
+test('no assert kind is implemented twice in the tool', () => {
+  // Found while adding the sixteenth kind: `no_residual_motion` and `dead_cells` each had TWO branch
+  // heads in the same else-if chain. They were byte-identical, so nothing was wrong today — which is
+  // precisely the trap. The later head can never be reached, so the engineer who "fixed" the residual
+  // motion rule in that copy would ship the old rule and believe the new one. A chain where a kind
+  // appears twice has one live implementation and one decoy, and only one of them is editable.
+  const heads = {};
+  for (const m of TOOL.matchAll(/^ {6}\} else if \(a\.kind === '([a-z_]+)'\)/gm)) {
+    heads[m[1]] = (heads[m[1]] || 0) + 1;
+  }
+  const dupes = Object.entries(heads).filter(([, n]) => n > 1).map(([k, n]) => `${k} (${n}×)`);
+  assert.deepEqual(dupes, [],
+    `${dupes.join(', ')} — only the first branch head runs, so the rest are decoys an editor will `+
+    `change to no effect. Delete the unreachable copy.`);
 });
 
 test('every assert kind is implemented by the tool, not wished for', () => {

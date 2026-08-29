@@ -144,9 +144,9 @@
       "component": "globe",
       "reference": "hologlobe--blob.gifcities.org_gifcities_2442E47OQDW3JQT5LC2S3S2O6QNUVCEW.gif",
       "referenceRelation": "informs",
-      "referenceFigure": "`N/A` — no bright marker crosses the frame, motion amplitude (max difference from frame zero): 31.15",
+      "referenceFigure": "`N/A` \u2014 no bright marker crosses the frame, motion amplitude (max difference from frame zero): 31.15",
       "heldAs": "caution",
-      "gap": "a motion carried only in hue vanishes in monochrome — shown on the sheet, asserted by test/affordance.test.mjs and the shape rule, not by a frame count"
+      "gap": "a motion carried only in hue vanishes in monochrome \u2014 shown on the sheet, asserted by test/affordance.test.mjs and the shape rule, not by a frame count"
     },
     {
       "id": "rules-forbidden-idioms",
@@ -186,7 +186,7 @@
       "referenceRelation": "informs",
       "referenceFigure": "0.756 of the frame crossed, 0.6 of the way along at half the duration, not monotone (it comes back), cells that never move: 1 of 12",
       "heldAs": "model",
-      "gap": "the verified panel arrives over a field that keeps running — 11 of its 12 cells change and a contact crosses the frame. `dossier` answers \"which exact thing am I about to command\" from facts already true at read time, so it has no running field and must hold perfectly still: the reference is what makes the stated reason visible rather than merely stated",
+      "gap": "the verified panel arrives over a field that keeps running \u2014 11 of its 12 cells change and a contact crosses the frame. `dossier` answers \"which exact thing am I about to command\" from facts already true at read time, so it has no running field and must hold perfectly still: the reference is what makes the stated reason visible rather than merely stated",
       "assert": {
         "kind": "no_motion"
       }
@@ -198,7 +198,7 @@
       "referenceRelation": "informs",
       "referenceFigure": "80 frames over 13.33s, cells that never move: 0 of 12, travel of the bright head: 0.605 of the frame crossed",
       "heldAs": "model",
-      "gap": "FLYUP arrives when the measured closure violates the limit, holds exactly as long as the violation lasts, and is gone by 10.7s — a limit cue that pulses would be an animation, not a state. The library's envelope extent must arrive and HOLD, and the limit it is measured against has to be named beside it, the way AL 500 sits under the live value (finding #12's homeless 0.62).",
+      "gap": "FLYUP arrives when the measured closure violates the limit, holds exactly as long as the violation lasts, and is gone by 10.7s \u2014 a limit cue that pulses would be an animation, not a state. The library's envelope extent must arrive and HOLD, and the limit it is measured against has to be named beside it, the way AL 500 sits under the live value (finding #12's homeless 0.62).",
       "assert": {
         "kind": "no_residual_motion",
         "selector": "[data-motion='level']",
@@ -229,7 +229,7 @@
       "referenceRelation": "informs",
       "referenceFigure": "measured: 48 frames over 8.0s, no bright marker crosses the frame",
       "heldAs": "model",
-      "gap": "In the audio editor the waveform exists as ink along a named lane and the ONLY thing that moves is a marker crossing an axis already fully drawn — ruler, labels and selection block hold still. A component that grows its own series into being is animating the data instead of reading it, so the library's series must arrive and then hold.",
+      "gap": "In the audio editor the waveform exists as ink along a named lane and the ONLY thing that moves is a marker crossing an axis already fully drawn \u2014 ruler, labels and selection block hold still. A component that grows its own series into being is animating the data instead of reading it, so the library's series must arrive and then hold.",
       "assert": {
         "kind": "no_residual_motion",
         "selector": "[data-motion='trace']",
@@ -243,7 +243,7 @@
       "referenceRelation": "informs",
       "referenceFigure": "measured: 48 frames over 8.0s, motion amplitude (max difference from frame zero): 5.4",
       "heldAs": "model",
-      "gap": "The audio editor's whole idiom is a marker crossing a strip that is ALREADY ink: the waveform, the ruler, the track labels and the selection block hold still and one hairline travels. `tape` has no such marker — it stamps `count`, `elapsed`, `still` and one refusal, and nothing translates along its axis. The five mark kinds that exist cannot express it: `trace` reveals a shape, `count` reveals by index, `cycle` addresses a clock, `level` is an extent from an anchor. Building it means a kind that moves a marker along an axis, which is a library change, not a showcase change.",
+      "gap": "The audio editor's whole idiom is a marker crossing a strip that is ALREADY ink: the waveform, the ruler, the track labels and the selection block hold still and one hairline travels. `tape` has no such marker \u2014 it stamps `count`, `elapsed`, `still` and one refusal, and nothing translates along its axis. The five mark kinds that exist cannot express it: `trace` reveals a shape, `count` reveals by index, `cycle` addresses a clock, `level` is an extent from an anchor. Building it means a kind that moves a marker along an axis, which is a library change, not a showcase change.",
       "notHeld": "Two facts, read out of the source rather than the name. `tape` is the DECISION tape -- a queue of waits with an `elapsed` clock on each row and no axis to cross, so there is no position for a marker to have. And the component that DOES draw time, `river`, scales every lane to its own first-and-last event (px(t) normalises by that lane's span), so there is no shared present anywhere in the drawing to put a line on; a now-line clamped to each lane's right edge would say 'now is where this lane stopped', which is the falsest sentence a time chart can make. The idiom needs a shared absolute axis, which the library does not draw."
     },
     {
@@ -273,7 +273,7 @@
       "referenceRelation": "informs",
       "referenceFigure": "travel of the bright head: 0.163 of the frame crossed",
       "heldAs": "model",
-      "gap": "A flap has a fixed set of faces and no in-between state to render: it goes from one character to the next, and the low measured centroid travel (0.163, most of it the handheld camera) is the number that says so — a change in place, not a change arriving across the screen. `hardCut` must therefore never be an eased crossfade of the old value into the new.",
+      "gap": "A flap has a fixed set of faces and no in-between state to render: it goes from one character to the next, and the low measured centroid travel (0.163, most of it the handheld camera) is the number that says so \u2014 a change in place, not a change arriving across the screen. `hardCut` must therefore never be an eased crossfade of the old value into the new.",
       "assert": {
         "kind": "no_blend_on_change",
         "route": "#/component/hardCut",
@@ -293,7 +293,7 @@
         "route": "#/component/radar",
         "selector": "[data-specimen-view=\"radar\"] [data-motion=\"cycle\"][data-cycle-axis=\"rotate\"]"
       },
-      "observed": "the wedge turns on the dial centre and crosses its seam forward: the seam is a jump with real travel after it, and nothing fades at the turnover. Before this row was asserted the sweep carried no cycle geometry at all and the runtime animated it as a bar — one non-repeating transform, angle 0 throughout.",
+      "observed": "the wedge turns on the dial centre and crosses its seam forward: the seam is a jump with real travel after it, and nothing fades at the turnover. Before this row was asserted the sweep carried no cycle geometry at all and the runtime animated it as a bar \u2014 one non-repeating transform, angle 0 throughout.",
       "watch": "the needle or coverage mass easing back toward zero instead of stepping, or an opacity fade at the wrap"
     },
     {
@@ -302,7 +302,7 @@
       "referenceRelation": "origin",
       "originClaim": "This record's display is where `a wait with no terminus gets no bar` was measured. Its for-list names killmail, hardCut and tape; collar is not among them -- collar refuses a countdown on an absent deadline, which is the same argument these frames make about a different component.",
       "component": "collar",
-      "gap": "a wait with no deadline drawn as a measured extent, a percentage, or a remaining-time figure — the claim \"this much is left\" made from no measurement. The reference states an unknown wait in words and draws nothing measurable.",
+      "gap": "a wait with no deadline drawn as a measured extent, a percentage, or a remaining-time figure \u2014 the claim \"this much is left\" made from no measurement. The reference states an unknown wait in words and draws nothing measurable.",
       "referenceFigure": "24 frames over 4.0s, median delay 170.0ms, loop no return to frame zero",
       "assertKind": "no_bar_where_no_terminus",
       "assert": {
@@ -310,7 +310,7 @@
         "route": "#/component/collar",
         "selector": "[data-specimen-view=\"collar\"]"
       },
-      "observed": "asserted against `collar`, which has no deadline parameter at all and so draws a hatched area reading NO DEADLINE SET under REMAINING. The row was first filed against `dispatch`, which draws a fitted-parts chain and has no wait in it — named by resemblance instead of by drawing, the error class `scanOverlay` and `twoState` taught in the same week. Recorded here rather than quietly retargeted.",
+      "observed": "asserted against `collar`, which has no deadline parameter at all and so draws a hatched area reading NO DEADLINE SET under REMAINING. The row was first filed against `dispatch`, which draws a fitted-parts chain and has no wait in it \u2014 named by resemblance instead of by drawing, the error class `scanOverlay` and `twoState` taught in the same week. Recorded here rather than quietly retargeted.",
       "watch": "a level/extent mark or a percentage or ETA appearing in the REMAINING region; a blank area replacing the hatched one"
     },
     {
@@ -353,7 +353,7 @@
       "reference": "solari-departure-flap.gif",
       "referenceRelation": "informs",
       "component": "stockFlow",
-      "gap": "a list whose rows move with their content — a row that grows, re-sorts, or fills to its value — makes the operator compare geometry instead of reading figures, and turns a standing quantity into an extent.",
+      "gap": "a list whose rows move with their content \u2014 a row that grows, re-sorts, or fills to its value \u2014 makes the operator compare geometry instead of reading figures, and turns a standing quantity into an extent.",
       "referenceFigure": "Only the cells whose value changed move",
       "assertKind": "slots_do_not_move",
       "assert": {
@@ -385,8 +385,116 @@
         ],
         "tolerancePx": 0.75
       },
-      "observed": "asserted against the hatched ground rather than a legend: `coverage` draws no graticule and no colour key, so the reading's demand lands on the one element that exists to hold an absence — the dashed, hatched `UNMEASURED / terrain unrendered` block, which is `still`-stamped and must not translate while the contours arrive. Correcting the reading matters here: demanding an untouched legend from a component with no legend would be the `mfd` mistake in a new costume.",
+      "observed": "asserted against the hatched ground rather than a legend: `coverage` draws no graticule and no colour key, so the reading's demand lands on the one element that exists to hold an absence \u2014 the dashed, hatched `UNMEASURED / terrain unrendered` block, which is `still`-stamped and must not translate while the contours arrive. Correcting the reading matters here: demanding an untouched legend from a component with no legend would be the `mfd` mistake in a new costume.",
       "watch": "the dark ground translating or scaling while contours sweep; a mark appearing on the hatch; contours drawing over the hatched area instead of stopping at it"
+    },
+    {
+      "id": "killmail-two-cascades-arrive-in-claimed-order",
+      "component": "killmail",
+      "reference": null,
+      "referenceRelation": "self",
+      "selfClaim": "No reference is implicated: `data-index` is the library's OWN claim about sequence \u2014 this is the third thing to arrive out of four \u2014 and the row watches whether the drawing keeps it. A picture cannot inform the arithmetic of one's own stagger; only the plate can contradict it. It also carries the other half of the claim: the `no canonical charge record is supplied` refusal holds no slot, so it may not fade in as part of the cascade.",
+      "heldAs": "model",
+      "gap": "killmail got its first motion at 3204181: two populations (0-3 of 4 attributes, 0-2 of 3 proof rows) cascading at once. If the slots land out of order the numbers are still true and the plate still lies about what was read first. The UNPRICED cost line declares itself still and must not move at all while its neighbours arrive.",
+      "assert": {
+        "kind": "arrival_order"
+      }
+    },
+    {
+      "id": "oracle-fragments-arrive-in-claimed-order",
+      "component": "oracle",
+      "reference": null,
+      "referenceRelation": "self",
+      "selfClaim": "No reference is implicated: `data-index` is the library's OWN claim about sequence \u2014 this is the third thing to arrive out of four \u2014 and the row watches whether the drawing keeps it. A picture cannot inform the arithmetic of one's own stagger; only the plate can contradict it.",
+      "heldAs": "model",
+      "gap": "closed at 3204181 (the fix that handed this plate its first motion): Three fragments arrive 0, 1, 2 while the stated population says four \u2014 the missing fragment is drawn and declared absent, and the population still counts it. A cascade that arrives out of order would make the missing one look like the last thing to be read rather than the one that never came.",
+      "assert": {
+        "kind": "arrival_order"
+      }
+    },
+    {
+      "id": "joioverlay-canon-arrives-and-projections-hold",
+      "component": "joiOverlay",
+      "reference": null,
+      "referenceRelation": "self",
+      "selfClaim": "No reference is implicated: `data-index` is the library's OWN claim about sequence \u2014 this is the third thing to arrive out of four \u2014 and the row watches whether the drawing keeps it. A picture cannot inform the arithmetic of one's own stagger; only the plate can contradict it. This row is the frame-side half of the invariant the reveal-order test holds in markup.",
+      "heldAs": "model",
+      "gap": "closed at 3204181 (the fix that handed this plate its first motion): The canon rows arrive 0, 1 over two slots; three projections are declared still because a projection is not a reading. If the projections moved with the cascade, the plate would be animating a forecast \u2014 motion for something nobody measured.",
+      "assert": {
+        "kind": "arrival_order"
+      }
+    },
+    {
+      "id": "scanoverlay-trace-and-label-share-a-slot",
+      "component": "scanOverlay",
+      "reference": null,
+      "referenceRelation": "self",
+      "selfClaim": "No reference is implicated: `data-index` is the library's OWN claim about sequence \u2014 this is the third thing to arrive out of four \u2014 and the row watches whether the drawing keeps it. A picture cannot inform the arithmetic of one's own stagger; only the plate can contradict it.",
+      "heldAs": "model",
+      "gap": "closed at 4e48b20: the scan reveals in the order it claims. Each trace and its label carry the SAME slot (0,0,1,1,2,2), so a label arriving before its trace \u2014 or a later trace before an earlier one \u2014 makes the reading arrive before the evidence for it.",
+      "assert": {
+        "kind": "arrival_order"
+      }
+    },
+    {
+      "id": "dispatch-three-cascades-in-claimed-order",
+      "component": "dispatch",
+      "reference": null,
+      "referenceRelation": "self",
+      "selfClaim": "No reference is implicated: `data-index` is the library's OWN claim about sequence \u2014 this is the third thing to arrive out of four \u2014 and the row watches whether the drawing keeps it. A picture cannot inform the arithmetic of one's own stagger; only the plate can contradict it.",
+      "heldAs": "model",
+      "gap": "closed at 4cb3e9b: premises, then conclusion. dispatch runs three cascades (0-3, 0-2, 0-1) in one plate; the derived figure is the last slot of its own population. Two cascades in one neighbourhood must be read as two claims, which is why grouping is by parent and restart, not by class.",
+      "assert": {
+        "kind": "arrival_order"
+      }
+    },
+    {
+      "id": "glasscell-conclusion-arrives-after-its-premises",
+      "component": "glassCell",
+      "reference": null,
+      "referenceRelation": "self",
+      "selfClaim": "No reference is implicated: `data-index` is the library's OWN claim about sequence \u2014 this is the third thing to arrive out of four \u2014 and the row watches whether the drawing keeps it. A picture cannot inform the arithmetic of one's own stagger; only the plate can contradict it. The order here is a claim about derivation, not about taste in entrances.",
+      "heldAs": "model",
+      "gap": "closed at 4cb3e9b: three traces occupy slots 0, 1, 2 and the derived count sits at slot 3. The drawing says the figure is computed FROM the traces; if it appears first, the plate presents a conclusion before its evidence.",
+      "assert": {
+        "kind": "arrival_order"
+      }
+    },
+    {
+      "id": "ice-conclusion-arrives-after-its-premises",
+      "component": "ice",
+      "reference": null,
+      "referenceRelation": "self",
+      "selfClaim": "No reference is implicated: `data-index` is the library's OWN claim about sequence \u2014 this is the third thing to arrive out of four \u2014 and the row watches whether the drawing keeps it. A picture cannot inform the arithmetic of one's own stagger; only the plate can contradict it.",
+      "heldAs": "model",
+      "gap": "closed at 4cb3e9b: traces 0-2 then the derived count at slot 5. The gap in slot numbering is the library spending its own order budget on the traces; the assertion is only that the higher slot never arrives first.",
+      "assert": {
+        "kind": "arrival_order"
+      }
+    },
+    {
+      "id": "keycard-conclusion-arrives-after-its-premises",
+      "component": "keycard",
+      "reference": null,
+      "referenceRelation": "self",
+      "selfClaim": "No reference is implicated: `data-index` is the library's OWN claim about sequence \u2014 this is the third thing to arrive out of four \u2014 and the row watches whether the drawing keeps it. A picture cannot inform the arithmetic of one's own stagger; only the plate can contradict it.",
+      "heldAs": "model",
+      "gap": "closed at 4cb3e9b: four traces 0-3 then the derived count at slot 6. A keycard that shows its verdict before its four checks have been drawn is a decision with the evidence filed afterwards.",
+      "assert": {
+        "kind": "arrival_order"
+      }
+    },
+    {
+      "id": "magi-conclusion-arrives-after-its-premises",
+      "component": "magi",
+      "reference": null,
+      "referenceRelation": "self",
+      "selfClaim": "No reference is implicated: `data-index` is the library's OWN claim about sequence \u2014 this is the third thing to arrive out of four \u2014 and the row watches whether the drawing keeps it. A picture cannot inform the arithmetic of one's own stagger; only the plate can contradict it.",
+      "heldAs": "model",
+      "gap": "closed at 4cb3e9b: two traces at 0 and 1, the derived count at slot 3. MAGI's whole grammar is three systems consulted before a judgement, so the order is the content on this plate.",
+      "assert": {
+        "kind": "arrival_order"
+      }
     }
   ]
 }

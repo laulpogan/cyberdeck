@@ -14,6 +14,7 @@ const here = (f) => fileURLToPath(new URL(f, import.meta.url));
 const SPECS_FOR = JSON.parse(readFileSync(here('../vault/SPECS-FOR.json'), 'utf8'));
 const LEDGER = JSON.parse(readFileSync(here('../vault/DEMANDS.json'), 'utf8')).demands;
 const ROWS = JSON.parse(readFileSync(here('../vault/GAUNTLET.json'), 'utf8')).gaps;
+const BEFORE_AFTER = readFileSync(here('../app/verify/BEFORE-AFTER.md'), 'utf8');
 const byId = new Map(ROWS.map((r) => [r.id, r]));
 const testCache = new Map();
 const testFile = (f) => {
@@ -83,14 +84,37 @@ test('every asserted row also closes something in the ledger', () => {
   // has to have filed itself as `origin` for that; if it has not, it is asserting a claim no reference
   // asked for and no ledger entry owns, which is exactly how a gauntlet grows measurements nobody wanted.
   const adrift = ROWS
-    .filter((r) => r.assert && r.component && NAMED.has(r.component) && !claimed.has(`row:${r.id}`))
+    .filter((r) => r.assert && r.component && NAMED.has(r.component) && r.referenceRelation !== 'self'
+      && !claimed.has(`row:${r.id}`))
     .map((r) => r.id);
   const undeclaredBorrows = ROWS
-    .filter((r) => r.assert && r.component && !NAMED.has(r.component) && r.referenceRelation !== 'origin')
+    .filter((r) => r.assert && r.component && !NAMED.has(r.component) && r.referenceRelation !== 'origin'
+      && r.referenceRelation !== 'self')
     .map((r) => `${r.id} (${r.component})`);
   assert.deepEqual(undeclaredBorrows, [], `${undeclaredBorrows.join(', ')} asser${undeclaredBorrows.length === 1 ? 'ts' : 't'} a component no `
     + `reference is quoted for, without filing itself as origin: say where the demand came from, or drop the row`);
   assert.deepEqual(adrift, [], `${adrift.join(', ')} asser${adrift.length === 1 ? 'ts' : 't'} something no `
     + `reference is quoted for: the row is real work whose reason was never written down, which is how a `
     + `gauntlet accumulates measurements nobody asked for`);
+});
+
+test('a self-asserted row names the change it guards, and is attributed where motion is attributed', () => {
+  // The ledger above asks "what does the vault demand of the library?", and a self row answers to none of
+  // it: it watches an invariant of our OWN markup — that `data-index` arrives in the order it claims —
+  // usually because this branch is what created that motion. Those rows are legitimate, and they are also
+  // the easiest kind to accumulate, because nobody had to want one. So they answer to the other ledger this
+  // branch keeps: the commit they guard, named in the row, and the row named in app/verify/BEFORE-AFTER.md,
+  // where every motion change on this branch is attributed to the commit that caused it. A self row nobody
+  // attributed is a measurement nobody asked for, wearing a different coat.
+  const selfs = ROWS.filter((r) => r.assert && r.referenceRelation === 'self');
+  assert.ok(selfs.length,
+    'no self-asserted row exists: if none are ever needed, delete this rule rather than let it go vacuous');
+  for (const r of selfs) {
+    assert.ok(/\b[0-9a-f]{7}\b/.test(r.gap || ''),
+      `${r.id} asserts an internal claim and names no commit — say which change it is watching, or the row ` +
+      `has no reason to exist beyond the afternoon someone wrote it`);
+    assert.ok(BEFORE_AFTER.includes(r.id),
+      `${r.id} is asserted and cites a commit, but app/verify/BEFORE-AFTER.md never names it — the ` +
+      `attribution table is where a reader looks up what guards what`);
+  }
 });

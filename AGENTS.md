@@ -164,6 +164,22 @@ in the file rather than hidden in a helper:
   all if the specimen is still being written to.
 
 ## The traps, paid for
+- **A webfont landing mid-capture is not motion, and the instrument called it motion three times.**
+  The host loads its display and mono faces over the network; when they arrive (140-220 ms in) every text
+  box is re-metric'd — `magi`'s label grew from 25 px to 29 px, `killmail`'s UNPRICED line drifted 529.4 px
+  to 528.6 px, and integer rounding filed both as movement in refusals that had **zero animations, constant
+  opacity and constant text**. Geometry in `app/verify/gauntlet.mjs` is therefore parent-relative
+  (`relRectOf`), tolerance-banded, and judged from the frame `document.fonts.ready` settles; animation
+  counts are judged from frame 0, because a font swap never produces an `Animation` object.
+- **A duplicated branch head in a dispatch chain is a decoy, not a duplicate.** `no_residual_motion` and
+  `dead_cells` each had two `} else if (a.kind === …)` heads in the same chain in `gauntlet.mjs`:
+  byte-identical, so nothing was wrong *today*, and the later copy could never run — whoever "fixed" the
+  rule there would ship the old one believing the new. Both deleted, and
+  `test/gauntlet.test.mjs` refuses any kind implemented twice.
+- **An `ElementHandle` kept across a capture detaches, and it fails only under load.** The clip screenshot
+  held one handle for the whole window; on a 33-row sweep `admission` died with *"Element is not attached
+  to the DOM"* while passing three times out of three alone. A tool that fails only when someone runs the
+  whole thing teaches people to re-run rather than to read, so frames re-resolve their selector now.
 - **An empty Commons result is not an empty archive.** `filetype:video` is matched only against the
   File namespace: without `gsrnamespace=6` the query runs over *articles*, where no article can be a
   video, and the API replies `{"batchcomplete":""}` — no error, no warning, no `query` key. Two

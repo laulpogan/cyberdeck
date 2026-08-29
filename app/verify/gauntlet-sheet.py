@@ -120,12 +120,18 @@ def main():
             print(f"skip {gap['id']}: no specimen frames captured")
             continue
         app = [Image.open(f).convert("RGB") for f in app_files]
-        ref_path = os.path.join(RAW, gap["reference"])
-        if os.path.exists(ref_path):
-            refs = ref_strip(ref_path)
+        rel = gap.get("referenceRelation") or "informs"
+        if rel == "self":
+            # A self row cites no picture at all — it holds our own drawing to a claim our own markup
+            # makes. This script crashed on os.path.join(RAW, None) the first time one existed: the
+            # schema grew a third relation before the sheet knew about it. It gets a band that says so
+            # in words, so the sheet never reads as a side-by-side with half of it missing.
+            refs = []
+        elif gap.get("reference") and os.path.exists(os.path.join(RAW, gap["reference"])):
+            refs = ref_strip(os.path.join(RAW, gap["reference"]))
         else:
             refs = None
-            no_ref.append((gap["id"], gap["reference"]))
+            no_ref.append((gap["id"], gap.get("reference")))
 
         # The canvas used to be as wide as the SPECIMEN needed. A reference frame tiled to the same
         # height is often wider than a specimen cell, so a six-frame reference silently lost four of
@@ -145,13 +151,16 @@ def main():
         # An origin row cites the frames where its demand was measured, not a picture that informs
         # this drawing. On paper the two look identical — a strip of frames over a specimen — so the
         # label says which claim the sheet is making, in the space the reader's eye is already in.
-        rel = gap.get("referenceRelation") or "informs"
         if rel == "origin":
             ref_head = (f"borrowed from — {gap['reference']}   ORIGIN ONLY: these frames are where the "
                         f"demand was measured; they do not claim to inform this drawing, and the row is "
                         f"not coverage for {gap.get('component') or gap.get('route')}")
             claim = gap.get("originClaim") or ""
             ref_sub = f"why it is here: {claim}"   # measured to the edge below
+        elif rel == "self":
+            ref_head = ("no reference — SELF-ASSERTED: this row holds our own drawing to a claim our own "
+                        "markup makes. No picture is cited, and none is missing.")
+            ref_sub = f"why no reference: {gap.get('selfClaim') or ''}"
         else:
             ref_head = f"reference — {gap['reference']}"
             ref_sub = f"quoted figure: {gap['referenceFigure']}"
@@ -161,8 +170,13 @@ def main():
             y, kept_ref, total_ref = row(canvas, draw, y, refs, ref_head, ref_sub)
             if kept_ref < total_ref:
                 thin.append((gap['id'], 'reference', kept_ref, total_ref))
+        elif rel == "self":
+            draw.text((PAD, y), fit(draw, ref_head, room, SMALL), font=SMALL, fill=(150, 190, 205))
+            y += 18
+            draw.text((PAD, y), fit(draw, ref_sub, room, SMALL), font=SMALL, fill=(150, 190, 205))
+            y += 18
         else:
-            draw.text((PAD, y), f"reference NOT ON DISK: {gap['reference']}", font=SMALL, fill=(220, 120, 120))
+            draw.text((PAD, y), f"reference NOT ON DISK: {gap.get('reference')}", font=SMALL, fill=(220, 120, 120))
             y += 20
         y, kept_app, total_app = row(
             canvas, draw, y, app,

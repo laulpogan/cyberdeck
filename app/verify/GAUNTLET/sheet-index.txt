@@ -3,25 +3,34 @@
  pass  chipBudget-constant-rate         0.65 of the travel done at half the animation's duration (travel 145.29, animation 300ms)
  pass  chipBudget-furniture-still       7 of 12 cells never moved (5 carried something)
  pass  radar-furniture-still            furniture moved at most 0.50px (text|inner ring: fresh), widest text change 1.0px; 6 contact element(s), 6 animated at some point in the window (counted across every frame, with descendants), contacts moved up to 186.76px; furniture animated: 0, furniture opacity spread: 0.000
- pass  globe-constant-rate              turns of 4.00s, 4.00s against a declared 4s period (median 4001ms, drift 0.0%, widest spread 1ms)
+ pass  globe-constant-rate              turns of 4.00s, 4.00s against a declared 4s period (median 4000ms, drift 0.0%, widest spread 0ms)
  pass  glassCell-trace-holds            0 animation(s) on 3 element(s) 1500ms after the entrance
  pass  esperDive-no-furniture-trace     0 mark(s) on furniture across every bright model
  held  globe-hue-caution                held
  pass  rules-forbidden-idioms           all 2 figure(s) on screen
  pass  rules-chrome-still               0 animation(s) outside the specimens, sampled 90 times
- pass  dossier-does-not-breathe         0 animation(s) inside the specimen across 201 sampled frames (1028 chars of markup drawn)
+ pass  dossier-does-not-breathe         0 animation(s) inside the specimen across 199 sampled frames (1028 chars of markup drawn)
  pass  envelope-limit-holds             0 animation(s) on 3 element(s) 1500ms after the entrance
  pass  envelope-limit-named             all 2 figure(s) on screen
  pass  stripchart-series-is-drawn-ink   0 animation(s) on 1 element(s) 1500ms after the entrance
  held  tape-sweeps-a-drawn-strip        held
  pass  dispatch-unchanged-rows-hold     furniture moved at most 0.00px, widest text change 0.0px; 9 contact element(s), 9 animated at some point in the window (counted across every frame, with descendants), contacts moved up to 0.50px; furniture animated: 0, furniture opacity spread: 0.000
- pass  hardcut-has-no-in-between-state  106 sampled frame(s) across the change: 7 value(s) left the panel, 8 arrived, 0 frame(s) held both at once, max 0 opacity animation(s) running on text
- pass  radar-loop-wraps-without-a-tween 2251 frames over 18.7s (period 10s, spent 0.3) — net 700° against 700° travelled (sign consistency 1) = 1.94 completed revolution(s), 2 raw seam(s) [reported, not gated: committing the final 360deg mimics a wrap], opacity animations on the sweep: 0
+ pass  hardcut-has-no-in-between-state  107 sampled frame(s) across the change: 7 value(s) left the panel, 8 arrived, 0 frame(s) held both at once, max 0 opacity animation(s) running on text
+ pass  radar-loop-wraps-without-a-tween 2252 frames over 18.8s (period 10s, spent 0.3) — net 700° against 700° travelled (sign consistency 1) = 1.94 completed revolution(s), 2 raw seam(s) [reported, not gated: committing the final 360deg mimics a wrap], opacity animations on the sweep: 0
  pass  in-flight-wait-draws-no-progress-bar REMAINING label found: true; hatched refusal areas: 2; measured-extent marks in the specimen: 0; remaining-time figures in the label's region: none
  pass  river-lanes-share-one-now        2 run(s) on the plate — 2 distinct run end(s) (874.0, 407.9), 1 distinct start(s) (200.0), ruler=1, now-line=1
  pass  atfield-unread-scope-keeps-its-row all 2 figure(s) on screen
  pass  solari-rows-occupy-fixed-slots   5 rows, left edge spread 0px, width spread 0px, right edge spread 0px (tolerance 1.5px); measured-extent marks: 0; value=width: 12=831.6 7=831.6 3=831.6 41=831.6 $3.40=831.6
  pass  coverage-dark-ground-holds       furniture moved at most 0.00px, widest text change 0.0px; 6 contact element(s), 6 animated at some point in the window (counted across every frame, with descendants), contacts moved up to 0.50px; furniture animated: 0, furniture opacity spread: 0.000
+ pass  killmail-two-cascades-arrive-in-claimed-order 2 cascade(s) over 8 slot(s): 0@0ms → 1@45ms → 2@90ms → 3@135ms [animation clock]  |  0@0ms → 1@60ms → 2@120ms [animation clock]; 1 stillness(es) watched for 1751ms from the frame the fonts settled at 60ms (animations counted from frame 0)
+ pass  oracle-fragments-arrive-in-claimed-order 1 cascade(s) over 5 slot(s): 0@0ms → 1@45ms → 2@90ms [animation clock]; 2 stillness(es) watched for 1668ms from the frame the fonts settled at 59ms (animations counted from frame 0)
+ pass  joioverlay-canon-arrives-and-projections-hold 1 cascade(s) over 5 slot(s): 0@0ms → 1@90ms [animation clock]; 3 stillness(es) watched for 1656ms from the frame the fonts settled at 57ms (animations counted from frame 0)
+ pass  scanoverlay-trace-and-label-share-a-slot 1 cascade(s) over 6 slot(s): 0@0ms → 0@0ms → 1@60ms → 1@60ms → 2@120ms → 2@120ms [animation clock]; 0 stillness(es) watched for 1650ms from the frame the fonts settled at 41ms (animations counted from frame 0)
+ pass  dispatch-three-cascades-in-claimed-order 3 cascade(s) over 13 slot(s): 0@0ms → 1@45ms → 2@90ms → 3@135ms [animation clock]  |  0@0ms → 1@45ms → 2@90ms [animation clock]  |  0@0ms → 12@216ms [animation clock]; 4 stillness(es) watched for 1660ms from the frame the fonts settled at 61ms (animations counted from frame 0)
+ pass  glasscell-conclusion-arrives-after-its-premises 1 cascade(s) over 7 slot(s): 0@0ms → 1@60ms → 2@120ms → 3@135ms [animation clock]; 3 stillness(es) watched for 1671ms from the frame the fonts settled at 62ms (animations counted from frame 0)
+ pass  ice-conclusion-arrives-after-its-premises 1 cascade(s) over 6 slot(s): 0@0ms → 1@36ms → 2@72ms → 5@150ms [animation clock]; 2 stillness(es) watched for 1648ms from the frame the fonts settled at 44ms (animations counted from frame 0)
+ pass  keycard-conclusion-arrives-after-its-premises 1 cascade(s) over 8 slot(s): 0@0ms → 1@30ms → 2@60ms → 3@90ms → 6@154ms [animation clock]; 3 stillness(es) watched for 1767ms from the frame the fonts settled at 57ms (animations counted from frame 0)
+ pass  magi-conclusion-arrives-after-its-premises 1 cascade(s) over 5 slot(s): 0@0ms → 1@60ms → 3@135ms [animation clock]; 2 stillness(es) watched for 1760ms from the frame the fonts settled at 59ms (animations counted from frame 0)
 
-# 22 asserted row(s); 21 sheet(s) written.
+# 31 asserted row(s); 30 sheet(s) written.
 # no filmstrip for esperDive-no-furniture-trace: its assert kind samples markup across every bright model, not motion — the component's frames live in the task-1 filmstrips.

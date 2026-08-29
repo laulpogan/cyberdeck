@@ -54,6 +54,18 @@ const GAPS = JSON.parse(readFileSync(join(ROOT, 'vault/GAUNTLET.json'), 'utf8'))
 function recorder(cfg) {
   window.__cfg = cfg;
   window.__rec = { t0: null, frames: [], notes: [] };
+  // The host loads its display and mono faces over the network, and when they land — 140-220ms in
+  // here — every text box gets re-metric'd. That is not the library moving: three refusals in
+  // decision.js "moved 1-2px" on this row's first run with zero animations, constant opacity and
+  // constant text, because the webfont arrived mid-capture (magi's label grew from 25px to 29px). So
+  // the recorder notes when the fonts settle and geometry is judged from that frame onward — while the
+  // animation count is judged from frame 0, because a font swap never produces an Animation object.
+  window.__rec.fontsOk = !(document.fonts && document.fonts.ready);
+  if (document.fonts && document.fonts.ready) {
+    document.fonts.ready
+      .then(() => { window.__rec.fontsOk = true; })
+      .catch(() => { window.__rec.fontsOk = true; });
+  }
 
   const rectOf = (el) => {
     const r = el.getBoundingClientRect();
@@ -83,6 +95,38 @@ function recorder(cfg) {
   // element whether it is animating is how a moving thing reports "still" — the file's own
   // comment says so about the page-wide count, and the per-element count had been doing it.
   const ownKids = (el) => (el.getAnimations ? el.getAnimations({ subtree: true }).length : 0);
+  const relRectOf = (el) => {
+    // [x, y, w, h] in the parent's coordinate frame: what the element did, minus what the container
+    // did. A specimen that grows as its rows reveal repositions everything below the reveal, and that
+    // is the container's motion, not the refusal's — the runtime never touched the refusal.
+    const r = rectOf(el);
+    const pr = el.parentElement ? rectOf(el.parentElement) : r;
+    return [r[0] - pr[0], r[1] - pr[1], r[2], r[3]];
+  };
+  const dashOf = (el) => {
+    // A `trace` reveal draws itself with stroke-dashoffset, not opacity, so "has this arrived?"
+    // has to ask the property the reveal actually writes. getComputedStyle is the fallback: the
+    // runtime sets the style on the <path>, but a CSS rule would be invisible to `el.style`.
+    const raw = (el.style && el.style.strokeDashoffset) || getComputedStyle(el).strokeDashoffset;
+    const n = parseFloat(raw);
+    return Number.isFinite(n) ? Math.round(n * 10) / 10 : 0;
+  };
+  const beginOf = (el) => {
+    // The reveal's own claim about when it starts, read off the animation object rather than off
+    // the sampling grid. `subtree: true` and the minimum, because a slot's reveal usually lives on
+    // a child (the dash sits on the <path>, the fade on the group) and the earliest of several
+    // animations is the honest answer to "when did this slot begin".
+    if (!el.getAnimations) return null;
+    let best = null;
+    for (const an of el.getAnimations({ subtree: true })) {
+      if (!an || !an.effect) continue;
+      const ct = an.effect.getComputedTiming();
+      if (an.startTime === null || ct.delay === null || ct.delay === undefined) continue;
+      const b = an.startTime + Number(ct.delay);
+      if (best === null || b < best) best = b;
+    }
+    return best;
+  };
 
   const tick = () => {
     const doc = document;
@@ -93,6 +137,24 @@ function recorder(cfg) {
     // without failing the run — the recorder would simply have nothing to report.
     const furniture = cfg.furniture ? [...scope.querySelectorAll(cfg.furniture)] : [];
     const contacts = cfg.contacts ? [...scope.querySelectorAll(cfg.contacts)] : [];
+    // Reveal slots get their own recording when a row asks for arrival order. `data-index` is the
+    // library's own claim about sequence — "this is the third thing to arrive out of four" — and no
+    // instrument in this file had ever watched to see whether it arrived third. `data-motion="still"`
+    // is captured in the same pass because the other half of the claim is that a refusal is not part
+    // of the cascade at all: it has no slot, and it must not move while its neighbours arrive.
+    const revealEls = cfg.reveal
+      ? [...scope.querySelectorAll('[data-index], [data-motion="still"]')] : [];
+    if (!window.__rec.pid) window.__rec.pid = new WeakMap();
+    if (!window.__rec.pidNext) window.__rec.pidNext = 1;
+    const pidOf = (el) => {
+      // Cascade identity by DOM parent, not by class: killmail runs TWO cascades inside two <ul>s
+      // that carry the same class, and grouping by class merged them into one seven-slot sequence,
+      // which is a claim the drawing never made.
+      const key = el.parentElement || el;
+      let v = window.__rec.pid.get(key);
+      if (v === undefined) { v = window.__rec.pidNext++; window.__rec.pid.set(key, v); }
+      return v;
+    };
     // What has to exist before the clock starts. A cell-stillness check has no marked element
     // to wait for and must not start on an empty document — the first frame's boxes define the
     // grid, and a grid fitted over the app chrome would measure the rack instead of the specimen.
@@ -101,7 +163,7 @@ function recorder(cfg) {
     // collects zero frames, and the gap below reports "no text was sampled" -- which is at least
     // an honest failure, but only because the detail line prints the frame count.
     const ready = cfg.selector ? !!target
-      : cfg.gridCells || cfg.wantText ? !!view
+      : cfg.gridCells || cfg.wantText || cfg.reveal ? !!view
         : furniture.length > 0 || contacts.length > 0;
     if (ready && window.__rec.t0 === null) window.__rec.t0 = performance.now();
     if (window.__rec.t0 !== null) {
@@ -128,6 +190,7 @@ function recorder(cfg) {
       }
       window.__rec.frames.push({
         t,
+        fontsOk: window.__rec.fontsOk === true,
         clock,
         // In-specimen motion, counted separately from the page's. `no_motion` asserts a specimen
         // never moves; a page-wide count would fail the moment anything else on the route moved,
@@ -169,6 +232,23 @@ function recorder(cfg) {
         })),
         all: everything.map((el) => ({ r: rectOf(el), n: own(el), nk: ownKids(el),
           o: getComputedStyle(el).opacity })),
+        rev: revealEls.map((el) => ({
+          i: el.hasAttribute('data-index') ? Number(el.getAttribute('data-index')) : null,
+          tot: el.hasAttribute('data-total') ? Number(el.getAttribute('data-total')) : null,
+          m: el.getAttribute('data-motion'), p: pidOf(el),
+          o: Number(getComputedStyle(el).opacity) || 0,
+          r: rectOf(el), d: dashOf(el), nk: ownKids(el),
+          // Parent-relative geometry, because that is the only geometry the runtime could have
+          // animated. Measured against the page, a refusal sitting under a cascade reads as "moved"
+          // the moment the container reflows — and once, at sub-pixel scale, when nothing moved at
+          // all: killmail's UNPRICED line drifted 529.4px to 528.6px and integer rounding called it a
+          // 1px motion. That false red was worth having: it forced the question the row exists to ask,
+          // and the answer was zero animations, constant opacity, static parent.
+          rp: relRectOf(el),
+          x: (el.textContent || '').length,
+          b: beginOf(el),
+          k: (el.getAttribute('class') || el.tagName) + '|' + (el.textContent || '').trim().slice(0, 14),
+        })),
       });
     }
     requestAnimationFrame(tick);
@@ -311,6 +391,7 @@ for (const gap of GAPS) {
         gridCells: a.kind === 'dead_cells' || a.kind === 'no_motion',
         wantTranslate: a.kind === 'turn_period',
         wantText: a.kind === 'no_blend_on_change',
+        reveal: a.kind === 'arrival_order',
         scopeSpecimen: !!gap.component,
       });
       await page.goto(BASE + route, { waitUntil: 'commit' });
@@ -351,20 +432,38 @@ for (const gap of GAPS) {
       // costs tens of milliseconds, which is why every measurement above is timestamped inside
       // the page rather than counted from the outside.
       const clips = [];
-      const clipTarget = gap.component
-        ? await page.$(`[data-specimen-view="${gap.component}"]`)
-        : await page.$('.cd-vault');
+      const clipSel = gap.component ? `[data-specimen-view="${gap.component}"]` : '.cd-vault';
+      const snap = async (file) => {
+        // Re-resolve the element for EVERY frame. A specimen is re-mounted when its fixture re-renders,
+        // and an ElementHandle held across that is detached: on a full 33-row sweep `admission` failed
+        // with "Element is not attached to the DOM" and the row reported an instrument error where a
+        // motion verdict belongs. Alone it passed three times out of three, which is the worst kind of
+        // green — a tool that fails only under load teaches people to re-run rather than to read.
+        for (let tries = 0; tries < 3; tries++) {
+          const el = await page.$(clipSel);
+          if (el) {
+            try { await el.screenshot({ path: file }); return true; }
+            catch { /* detached between the query and the capture: re-query */ }
+          }
+          await page.waitForTimeout(60);
+        }
+        return false;
+      };
       const windowMs = a.windowMs || 1600;
       const started = Date.now();
-      for (let i = 0; i < 6 && clipTarget; i++) {
+      for (let i = 0; i < 6; i++) {
         const file = join(OUT, `${gap.id}-app-${String(i).padStart(2, '0')}.png`);
-        await clipTarget.screenshot({ path: file });
+        if (!await snap(file)) break;
         clips.push({ file, t: Date.now() - started });
       }
       await page.waitForTimeout(Math.max(windowMs - (Date.now() - started), 300));
       const settledFile = join(OUT, `${gap.id}-app-settled.png`);
-      if (clipTarget) await clipTarget.screenshot({ path: settledFile });
-      clips.push({ file: settledFile, t: Date.now() - started, settled: true });
+      if (await snap(settledFile)) {
+        clips.push({ file: settledFile, t: Date.now() - started, settled: true });
+      } else {
+        // Named, not swallowed: the sheet reports a row with no frames, and this line says why.
+        row.clipError = `no ${clipSel} could be captured — it was gone or re-mounting when the frame was due`;
+      }
       row.clips = clips;
 
       const rec = await page.evaluate(() => window.__rec);
@@ -440,6 +539,123 @@ for (const gap of GAPS) {
         if (row.verdict === 'FAIL' && still.count > 0) {
           row.detail = 'it is still moving after it should have arrived — '
             + `the reference ${a.kind === 'no_residual_motion' ? gap.referenceFigure : ''}`;
+        }
+      } else if (a.kind === 'arrival_order') {
+        // `data-index` is a claim about ORDER, and until this branch nothing watched the order.
+        // `no_residual_motion` proves a plate settles; `front_loaded` proves most of the travel lands
+        // early — both pass over a cascade that arrives BACKWARDS, which is precisely the defect a
+        // reveal-order claim can have while looking perfect on camera.
+        //
+        // Measurement, per slot, in milliseconds. Two clocks are available and they are not
+        // interchangeable: the animation object states its own begin (startTime + delay, exact), while
+        // the frame grid resolves to ~16ms — and on `killmail` the grid put all four reveals in the same
+        // frame, which would have let the row pass over an ordering it never measured. So the clock is
+        // preferred whenever every member of a cascade has one, and the change-grid is the fallback.
+        // "Did this slot change?" is answered on opacity, parent-relative box, dash offset and text
+        // length — which covers BOTH reveal mechanisms, the fade the runtime plays on a `count` member
+        // and the dash-draw it plays on a `trace`, without asking each component which it chose. Each
+        // carries a tolerance: a sub-pixel reflow is not a reveal, and integer rounding once called a
+        // 0.8px drift a motion.
+        const tolMs = Number(a.toleranceMs ?? 16);
+        const tolPx = Number(a.tolerancePx ?? 0.75);
+        const frames = (rec.frames || []).filter((f) => f.rev && f.rev.length);
+        const thin = (why) => {
+          row.verdict = 'held';
+          row.measured = `${(rec.frames || []).length} frame(s) captured`;
+          row.detail = why;
+        };
+        if (!(rec.frames || []).length) thin('the recorder collected nothing — the specimen never appeared');
+        else if (!frames.length) thin('no frame carried a reveal slot: this specimen stamps no data-index at all');
+        else {
+          const n = frames[0].rev.length;
+          const differs = (p, q) => Math.abs(Number(p.o) - Number(q.o)) > 0.01
+            || Math.abs(Number(p.d) - Number(q.d)) > 0.5
+            || p.x !== q.x
+            || [0, 1, 2, 3].some((k) => Math.abs(p.rp[k] - q.rp[k]) > tolPx);
+          const f0 = frames[0].rev;
+          // Geometry is judged from the frame the fonts settled in (see the recorder's note): a label
+          // re-metric'd by an arriving webfont is not a reveal, and 1-2px of text box is not motion.
+          // Animations are still counted from frame 0, which is where a real reveal lives.
+          const settledAt = frames.findIndex((f) => f.fontsOk);
+          const b0 = settledAt < 0 ? 0 : settledAt;
+          const rev0 = frames[b0].rev;
+          if (frames.some((f) => f.rev.length !== n)) {
+            thin(`${n} slot(s) at frame 0, then the tree changed mid-capture — a moving tree cannot be compared slot to slot`);
+          } else {
+            const starts = f0.map((_, e) => {
+              for (let i = b0 + 1; i < frames.length; i++) {
+                if (differs(rev0[e], frames[i].rev[e])) return frames[i].t;
+              }
+              return null;
+            });
+            const clocks = f0.map((_, e) => {
+              let best = null;
+              for (const fr of frames) {
+                const b = fr.rev[e].b;
+                if (b !== null && b !== undefined && (best === null || b < best)) best = b;
+              }
+              return best;
+            });
+            // A new cascade begins where the CLAIMED ORDER restarts. `killmail` runs 0,1,2,3 and then
+            // 0,1,2 as a second population; `scanOverlay` runs 0,0,1,1,2,2 because a trace and its
+            // label share a slot. A strict decrease separates the two without knowing either drawing.
+            const groups = [];
+            f0.forEach((e, idx) => {
+              if (e.i === null || Number.isNaN(e.i)) return;
+              const prev = groups[groups.length - 1];
+              if (!prev || e.i < f0[prev[prev.length - 1]].i) groups.push([idx]);
+              else prev.push(idx);
+            });
+            const inversions = [];
+            const described = [];
+            let incomplete = null;
+            for (const g of groups) {
+              // One clock per cascade, never two: animation begins run off the document timeline and
+              // frame changes off the recorder's t0, so comparing across them is arithmetic on
+              // unrelated rulers. Each cascade is normalised to its own earliest reveal, which is what
+              // "arrives first" means on a plate.
+              const clocked = g.every((e) => typeof clocks[e] === 'number');
+              const base = clocked ? Math.min(...g.map((e) => clocks[e])) : 0;
+              const tOf = (e) => (clocked ? clocks[e] - base : starts[e]);
+              const source = clocked ? 'animation clock' : 'first frame it changed';
+              const dead = g.find((e) => typeof tOf(e) !== 'number');
+              if (dead !== undefined) {
+                incomplete = `slot ${f0[dead].i} never changed during the capture and no animation survived to say when it began — the entrance outran the recorder`;
+                break;
+              }
+              for (let x = 0; x < g.length; x++) {
+                for (let y = 0; y < g.length; y++) {
+                  if (x === y || f0[g[y]].i < f0[g[x]].i) continue;
+                  if (tOf(g[y]) < tOf(g[x]) - tolMs) {
+                    inversions.push(`${f0[g[x]].k} claims slot ${f0[g[x]].i} and began at ${Math.round(tOf(g[x]))}ms, `
+                      + `but ${f0[g[y]].k} claims the later slot ${f0[g[y]].i} and began at ${Math.round(tOf(g[y]))}ms`);
+                  }
+                }
+              }
+              described.push(`${g.map((e) => `${f0[e].i}@${Math.round(tOf(e))}ms`).join(' → ')} [${source}]`);
+            }
+            const stills = f0.map((e, idx) => ({ e, idx })).filter(({ e }) => e.m === 'still');
+            const stirred = stills.filter(({ idx }) => {
+              for (let i = b0 + 1; i < frames.length; i++) {
+                if (differs(rev0[idx], frames[i].rev[idx])) return true;
+              }
+              // Any frame at all, including the ones before the fonts settled: a refusal with an
+              // animation inside it is the moving-without-evidence defect whoever wrote the drawing.
+              return frames.some((fr) => fr.rev[idx].nk > 0);
+            }).map(({ e }) => e.k);
+
+            if (incomplete) thin(incomplete);
+            else {
+              row.measured = `${groups.length} cascade(s) over ${n} slot(s): ${described.join('  |  ')}`
+                + `; ${stills.length} stillness(es) watched for ${Math.round(frames[frames.length - 1].t)}ms`
+                + ` from ${settledAt < 0 ? 'frame 0 (fonts never reported settled)'
+                  : `the frame the fonts settled at ${Math.round(frames[b0].t)}ms`} (animations counted from frame 0)`;
+              const bad = [...inversions, ...stirred.map((k) => `the refusal ${k} moved more than ${tolPx}px (or animated a descendant) while its neighbours arrived`)];
+              row.verdict = bad.length ? 'FAIL' : 'pass';
+              row.detail = bad.length ? bad.join('; ')
+                : `every slot arrived no earlier than the slot before it (±${tolMs}ms), and nothing marked still budged past ${tolPx}px in its own container`;
+            }
+          }
         }
       } else if (a.kind === 'lane_axis_shared') {
         // The reference is an audio editor: named lanes stacked under ONE ruler across
@@ -810,25 +1026,6 @@ for (const gap of GAPS) {
           if (row.verdict === 'FAIL') row.detail = `the turn takes ${(turns.medianMs / 1000).toFixed(2)}s `
             + `against the ${declared}s the mark declares — a hologlobe whose rate depends on the `
             + 'display refresh is a graphic, and the reference is quoted because its rate IS the reading';
-        }
-      } else if (a.kind === 'no_residual_motion') {
-        const still = await page.evaluate((sel) => {
-          const els = [...document.querySelectorAll(sel)];
-          return { count: els.length, anims: els.reduce((n, el) => n + el.getAnimations().length, 0) };
-        }, a.selector);
-        row.measured = `${still.anims} animation(s) on ${still.count} element(s) ${a.afterMs}ms after the entrance`;
-        row.verdict = still.count === 0 ? 'FAIL'
-          : still.anims === 0 ? 'pass' : 'FAIL';
-        if (row.verdict === 'FAIL' && still.count > 0) {
-          row.detail = 'it is still moving after it should have arrived — '
-            + `the reference ${a.kind === 'no_residual_motion' ? gap.referenceFigure : ''}`;
-        }
-      } else if (a.kind === 'dead_cells') {
-        const dc = deadCells(frames, 1);
-        row.measured = `${dc.dead} of 12 cells never moved (${dc.live} carried something)`;
-        row.verdict = frames.length < 5 ? 'FAIL' : dc.dead >= a.deadCellsMin ? 'pass' : 'FAIL';
-        if (row.verdict === 'FAIL' && frames.length >= 5) {
-          row.detail = `the reference holds ${row.referenceFigure}; this specimen has only ${dc.dead} quiet cells`;
         }
       } else if (a.kind === 'rate_fit') {
         const s = series(frames, 'translateX');
