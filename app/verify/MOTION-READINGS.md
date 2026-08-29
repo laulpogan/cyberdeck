@@ -1213,11 +1213,28 @@ Still observed and accepted: `XXX` and `12.4 OF A 20 CEILING` are on adjacent li
 Verified on the rendered page at 1280, both themes, plus the family route's refusal column: 9 gate
 passes, `npm test` 273.
 
-### Still open: `joiOverlay` draws a corner tick outside the band it ornaments
+### Closed: the `+` was two frames crossing where neither had a reason to
 
-A `+` lands at the observed lane's left edge with nothing adjacent to it, while the projection band's
-own corners are inside its dashes. Cosmetic, and the kind of thing a screenshot at 518px wide makes
-easy to miss, so it stays named with its specimen rather than smoothed over.
+No glyph, and no CSS pseudo-element — a probe over the rendered page reported `content: none` on every
+`::before` and `::after` in the specimen. It was geometry: `.cd-th-canon` reserved `padding-bottom:
+1.6rem` for the projection to overlap, while `.cd-th-overlay` only pulled itself up by `-.7rem`, so
+0.9rem of the observed panel's own frame hung below the band's top edge. The band is opaque —
+`background: var(--cd-void-raised)`, because an overlay that occludes nothing is not on top of
+anything — and it is inset `1.4rem` from the panel. That combination covered the hanging border
+*everywhere except its bottom-left corner*, leaving a short grey stub stranded in empty air beside the
+band's inset. At any zoom it reads as a stray `+`, and at 518px wide it is invisible.
+
+The reservation now equals the pull-up, `padding: .45rem .55rem .7rem`, so the two frames **meet**
+instead of crossing in the middle of nothing. The band still overhangs the panel and is still lifted
+clear of the observed rows — the idiom is the component's whole argument and it is unchanged — but the
+corner now lands on the band's own edge, where something is actually adjacent to it. Verified on the
+page at 3x, where the stub is visible in the before and gone in the after, and the observed box's
+height fell from 75px to 60px as the CSS says it should.
+
+The lesson generalises past this specimen: **a mark that nothing made is usually two drawings sharing
+space by accident**, and the instrument for it is a zoomed crop of the suspicious region, not another
+count. `app/verify/shot-one.mjs` and a five-line crop probe found in one look what three counters had
+never noticed.
 
 ## Finding #10 — closed: one vocabulary for an absence
 

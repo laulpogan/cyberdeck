@@ -328,8 +328,15 @@
 .cd-th-canon { border: 1px solid var(--cd-steel-line);
   /* Room for the projection to overlap. The overlay must sit ON the panel
      and must never sit on a reading -- hiding an observation behind an
-     inference is the exact inversion this component argues against. */
-  padding: .45rem .55rem 1.6rem; }
+     inference is the exact inversion this component argues against.
+
+     The reservation equals the band's own `margin-top: -.7rem`, and it used to be 1.6rem, which
+     is what drew a mark nobody made: the extra 0.9rem of frame hung below the band's top edge,
+     and because the band is inset by its own `margin-left`, the only part of that hangnail an
+     opaque band could NOT cover was its bottom-left corner -- a short stub in empty air that
+     reads, at any size, as a stray `+`. Two frames meeting is a junction; two frames crossing
+     in the middle of nothing is a glyph. */
+  padding: .45rem .55rem .7rem; }
 .cd-th-overlay {
   position: relative; margin: -.7rem 0 0 1.4rem; padding: .45rem .55rem;
   border: 1px dashed var(--cd-signal-wire, var(--cd-signal-data-dim));
