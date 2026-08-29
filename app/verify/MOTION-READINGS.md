@@ -1664,3 +1664,40 @@ than a *screen showing the thing* — the splicer whose display never faces the 
 suit on the turntable. What is left is not "write the specs we can see"; it is that the material for most of these
 components has not been found, and `gevulot` will not tell you and `ceremony` is a rite. `npm test` 303; coverage
 `22 + 0 + 17 + 12 = 51`.
+
+## Ink per state, enforced: a state difference has to survive a monitor with no hue discrimination
+
+The Solari board's last unasserted reading — *FINAL CALL arrives red, GATE closed arrives dimmed and lower-case, so
+"nothing about a difference is carried by hue alone here, each ink belongs to a different physical claim"* — was filed
+against `stockFlow` and correctly refused there (a stock list has no states). Its real home is the library's
+state-bearing components, and the library already has the rule in a comment (`river.js`: "Event kinds map to shapes,
+never to colour alone"). So `test/state-legibility.test.mjs` makes the rule a check instead of a comment: **a state
+difference must be legible without colour — in the form drawn, or in a word printed inside the state's own group.**
+
+The instrument had one false start of the kind this vault keeps meeting. The first draft compared each state's raw
+markup, and *could not fail*: two doors side by side differ in `x` for reasons that have nothing to do with their state,
+so every pair "differed" and the guard was decorative. The form signature now strips every coordinate
+(`x y x1 y1 x2 y2 cx cy r points`) and keeps only shape, `stroke-width`, `stroke-dasharray`, `fill`, `opacity`, plus the
+printed words. Same lesson as the radar dial's thresholds, one abstraction level up: **compare the property that carries
+the claim.**
+
+What it found is that the library is currently innocent, in five places, and the test says *how* each one is legible:
+`keycard` draws open at stroke 1 with a diagonal, shut at stroke 2 with a floor line, and not-reached as a dashed
+outline with nothing in it; `twoState` distinguishes chosen from unchosen by dash and weight, never warmth;
+`dispatch` breaks the chain's form at an unfitted part; `needleField` gives an unreported worker a dashed ring rather
+than a needle "pointing somewhere plausible"; `syncRatio` prints the verdict word and its sentence from `SYNC[key]`, so
+the CSS colour is confirmatory rather than load-bearing; and `river` colours a `needs_human` lane amber **and** prints
+`AWAITING OPERATOR` — which is exactly the board's move, ink *and* words, and the test now depends on the words staying.
+
+And one retraction, written into the test itself rather than into my memory. The first run reported a defect:
+*"syncRatio: stalled and spinning draw the same forms and print the same words — the only thing telling them apart is
+CSS colour."* That was my call shape, not the component's: `state` and `output` are channel objects (`{ known }`) and the
+word comes from `verdict`, so passing `state: 'spinning'` as a string made both renders agree on the fallback
+`UNMEASURED`. A differential is only as good as its contract, and a red that comes from the harness is worse than no
+red, because it teaches the reader to distrust the next true one.
+
+Both channels proven red on command: making `SYNC.stalled` share `spinning`'s word gives *"the only thing telling them
+apart is CSS colour, which is the distinction the rule says must not live in hue alone"*; deleting the amber lane's words
+gives *"the lane that owes a person stopped saying it, leaving hue to carry the whole difference"*. Restored from `/tmp`
+copies, and `git status` confirmed clean apart from the new file. `npm test` 309; gate 24 passes over
+`syncRatio`/`keycard`/`dispatch`/`needleField`/`twoState`/`river`.

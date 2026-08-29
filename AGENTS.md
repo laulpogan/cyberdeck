@@ -853,6 +853,9 @@ without, assert what arrives and what leaves — not as a report with a vocabula
   indistinguishable from a repeating poll *for the first period, because for the first period it is one*. Gate on
   accumulated revolutions plus a stall rule (no two degrees in two seconds while the source is live), not on
   anything visible inside a single cycle.
+- **Strip the coordinates before comparing two drawings.** The first state-legibility check compared raw markup and
+  could never go red: two doors side by side differ in `x` whatever their state. Keep shape, stroke-width, dash, fill
+  and opacity — the properties that carry the claim — and drop position.
 - **When the instrument cannot distinguish two causes, say both.** An `ease-in-out` reversal is nearly motionless
   at the seam, so the stall arm fires first; the message names the observation and both readings rather than
   guessing a mechanism.
