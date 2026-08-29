@@ -156,3 +156,34 @@ test('no component names a colour', () => {
   const body = readFileSync(join(here, '..', 'src', 'components', 'field.js'), 'utf8');
   assert.deepEqual(body.match(/#[0-9a-fA-F]{6}\b|#[0-9a-fA-F]{3}\b/g) || [], []);
 });
+
+test('a contact\'s brightness is a measurement, and refuses as one', () => {
+  const contacts = [
+    { age_seconds: 2, bearing: -0.2, window: 60, band: 'fresh', swept_ago_seconds: 1.5 },
+    { age_seconds: 18, bearing: 0.9, window: 60, band: 'fresh', swept_ago_seconds: 6.4 },
+    // 12s since its pass against a 10s poll: overdue, which `cycle` refuses
+    // rather than wrapping, because a re-pass that did not land is the finding.
+    { age_seconds: 44, bearing: 2.6, window: 60, band: 'stale', swept_ago_seconds: 12 },
+  ];
+  const lit = f.radar({ contacts, pollElapsed: 3, pollPeriod: 10, sourceState: 'live' });
+  assert.equal((lit.match(/data-cycle-axis="brightness"/g) || []).length, 2,
+    'only the contacts with a pass time inside the poll brighten on the clock');
+  assert.match(lit, /data-still-reason="poll is overdue"/, 'the overdue contact refuses, not wraps');
+  assert.match(lit, /data-pass="refused"/, 'a refused pass time is stated on the group');
+  assert.match(lit, /data-band="unmeasured"/, 'a refused contact does not keep freshness ink');
+
+  // Remove only the pass times. The interval is still measured — the sweep is
+  // still turning on it — so the refusal must not claim the interval is gone.
+  const dim = f.radar({
+    contacts: contacts.map(({ swept_ago_seconds, ...rest }) => rest),
+    pollElapsed: 3, pollPeriod: 10, sourceState: 'live',
+  });
+  assert.equal((dim.match(/class="cd-fd-contact"/g) || []).length, 3,
+    'losing the pass time must not remove the contacts');
+  assert.equal((dim.match(/data-motion="still" data-still-reason="this contact has no recorded sweep-pass time"/g) || []).length, 3);
+  assert.doesNotMatch(dim, /data-still-reason="poll interval was not measured"/,
+    'the interval WAS measured; a refusal that says otherwise is contradicted by the sweep');
+  assert.match(dim, /class="cd-fd-sweep" data-motion="cycle"/, 'the sweep keeps its own measured clock');
+  assert.equal((dim.match(/stroke-dasharray=/g) || []).length >= 3, true,
+    'each refused contact is ringed, so the absence is a shape');
+});

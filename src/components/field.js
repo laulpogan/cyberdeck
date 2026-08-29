@@ -224,9 +224,18 @@ export function radar({ contacts, pollElapsed = null, pollPeriod = null,
     // which is the freshest-looking lie in the library. The mark refuses on
     // an unmeasured pass time, on a source that is not live, and on an
     // overrun; in every one of those cases the contact is drawn ringed.
-    const pass = cycle(c.swept_ago_seconds, pollPeriod, sourceState, {
+    let pass = cycle(c.swept_ago_seconds, pollPeriod, sourceState, {
       cite: c.cite || 'contacts[].swept_ago_seconds',
     });
+    // `cycle` refuses a missing elapsed with the poll's own words, which are
+    // true of the river and wrong here: the interval *is* measured — the sweep
+    // two inches away is turning on it. The component names the quantity that
+    // is actually absent, which is what every other refusal in this library
+    // does, and leaves the mark's own refusals (a source that is not live, an
+    // overrun) alone because those are the same fact on any dial.
+    if (c.swept_ago_seconds === null || c.swept_ago_seconds === undefined) {
+      pass = still('this contact has no recorded sweep-pass time');
+    }
     const passing = pass['data-motion'] === 'cycle';
     // The source's own band word only gets to choose ink while the pass time
     // is measured. A contact typed `fresh` whose sweep-pass was never
