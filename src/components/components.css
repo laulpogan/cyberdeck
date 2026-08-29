@@ -69,7 +69,7 @@
   filter: drop-shadow(0 0 3px var(--cd-health-colour-critical)); }
 /* An empty lane is drawn, and drawn as empty. Omitting the row would let
    "nothing happened here" and "this subject does not exist" look alike. */
-.cd-riv-empty { stroke: var(--cd-steel-line); stroke-width: 1; stroke-dasharray: 3 4; }
+.cd-riv-empty { stroke: var(--cd-riv-rail); stroke-width: 1; stroke-dasharray: 3 4; }
 .cd-riv-ev { fill: currentColor; color: var(--cd-steel-ink);
               filter: drop-shadow(0 0 5px currentColor); }
 .cd-riv-ev[data-kind="sealed"] { color: var(--cd-signal-data); }

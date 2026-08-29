@@ -288,3 +288,17 @@ The regression now has a gate: the browser pass re-derives every ping's
 delay from the same data-period / data-spent / data-sweep-angle inputs
 the runtime reads, and fails on anything more than 2ms off the line.
 178/178.
+
+## Cycle: lanes rails, light theme (backlog)
+
+Raw frames both themes. Dark passed untouched. Light failed: the empty
+track -- the coordinate a refusal sits on -- was steel-line at .18 on
+cream, near invisible on ses-4421's NO RUN rail. Rail got its own token
+(--cd-riv-rail, .32 light; dark keeps the byte-identical .12) rather
+than raising --cd-steel-line and moving every hairline in the rack.
+
+During the gate run the ping-sync pin itself proved flaky: sampling
+live animations races the first decay under suite load, and a finished
+ping leaves getAnimations() entirely. Replaced with a creation-time
+recorder on Element.prototype.animate. Lesson: a check that reads a
+moving target must subscribe to creation, not to the current frame.

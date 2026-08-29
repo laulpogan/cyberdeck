@@ -34,6 +34,10 @@
   --cd-steel-muted: #665448;
   --cd-steel-faint: rgba(36, 26, 20, 0.07);
   --cd-steel-line: rgba(36, 26, 20, 0.18);
+  /* The empty track a lane's traffic runs on. On cream, steel-line at
+     .18 sinks the dashed rail below "where does the refusal sit" legible;
+     the rail is the coordinate of a refusal, so it reads in its own tone. */
+  --cd-riv-rail: rgba(36, 26, 20, 0.32);
   --cd-lifecycle-queued-fill: rgba(22,101,52,0.05);
   --cd-lifecycle-queued-ink: #665448;
   --cd-lifecycle-queued-mark: ·;
@@ -112,6 +116,7 @@
     --cd-steel-muted: #888880;
     --cd-steel-faint: rgba(200, 200, 192, 0.06);
     --cd-steel-line: rgba(200, 200, 192, 0.12);
+    --cd-riv-rail: rgba(200, 200, 192, 0.12);
     --cd-lifecycle-queued-fill: rgba(80,255,80,0.05);
     --cd-lifecycle-queued-ink: #888880;
     --cd-lifecycle-queued-mark: ·;
@@ -190,6 +195,7 @@
   --cd-steel-muted: #888880;
   --cd-steel-faint: rgba(200, 200, 192, 0.06);
   --cd-steel-line: rgba(200, 200, 192, 0.12);
+  --cd-riv-rail: rgba(200, 200, 192, 0.12);
   --cd-lifecycle-queued-fill: rgba(80,255,80,0.05);
   --cd-lifecycle-queued-ink: #888880;
   --cd-lifecycle-queued-mark: ·;
