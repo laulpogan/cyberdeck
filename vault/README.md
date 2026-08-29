@@ -15,6 +15,8 @@ reading a paragraph about a stopwatch.
 | `MANIFEST.json` | the record per file — committed |
 | `raw/` | the binaries — gitignored |
 | `acquire.log` | every page read, candidates offered, kept, refused |
+| `MISSION.md` | the standing goal — read it first; a session inherits nothing else |
+| `PROPOSALS.md` | motion the harvest found that no component asked for, queued for a person |
 
 ```sh
 MAX_PER_PAGE=4 SEED=motion-tracker node vault/acquire.mjs    # one seed
