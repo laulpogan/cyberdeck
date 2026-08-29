@@ -54,3 +54,16 @@ from stills alone. The next harvest pass targets the motion sources --
 scifiinterfaces' embedded clips, interfaceingame videos, animated-screen
 archives -- and this tool needs a frame-stepper that turns a GIF/clip
 into a labelled strip the way motion-film does for our own pages.
+
+## Motion vault (scripts/motion-harvest.mjs -> vault/motion/, gitignored)
+
+Stills capture look; this captures MOVE. Real game-UI clips (direct mp4s
+from interfaceingame's screenshots index -- the game galleries are
+JS-gated, the index is not) steeped by ffmpeg into 6-frame timestamped
+strips via montage (this box's ffmpeg has no drawtext; the timestamp is
+burnt from the filename instead). First five land real motion grammar:
+Division 2's inventory -- tab bloom, sequenced card reveal; Dishonored 2
+menu fades; the Overwatch callout. A component's target and its execution
+now sit in the same view: vault/motion/<game>/<clip>.png next to
+vault/film/<component>.png. The gauntlet's loop:
+steep a reference clip, film ours, read both, fix the numbers, re-shoot.
