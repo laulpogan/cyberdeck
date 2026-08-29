@@ -190,3 +190,15 @@ Side finding while wiring the reel: start() can now meet a page twice
 (the DOMContentLoaded auto-start and the app's kill-switch handoff); a
 per-node played-guard in the runtime makes a render play its marks once,
 which is the honest meaning of replay.
+
+### the live reel -- honesty theatre on camera
+--live-reel films #/live answering the producer, kills the feed server
+mid-reel, and keeps rolling. The sheet reads exactly as promised:
+awaiting stub, then the sweep drawing itself with phosphor trail and
+blip pings on the answered polls; at the kill the chip flips to NO
+ANSWER and the radar becomes a NO SWEEP refusal -- the dark model, not
+held-over values -- honesty bar at zero the whole way. Two camera traps
+caught: the live slot grows from a stub, so a clip taken at mount films
+an empty strip forever (frame the whole viewport for a page that grows
+into itself), and the page's own status text lives outside the slot
+node.

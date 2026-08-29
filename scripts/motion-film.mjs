@@ -153,6 +153,51 @@ await page.click('[data-theme-choice="dark"]');
 await page.waitForTimeout(300);
 
 const keys = only.length ? only : (interact ? ARRIVAL_KEYS : Object.keys(SPECS));
+
+// The honesty theatre on camera: film #/live answering the producer,
+// kill the producer mid-reel, and keep rolling. A failed poll yields the
+// dark model immediately -- the frames below must show the page go dark
+// with its own refusal reasons, honesty bar at zero throughout.
+if (process.argv.includes('--live-reel')) {
+  await page.goto(`http://127.0.0.1:${port}/app/index.html?film=${Math.random()}#/live`,
+    { waitUntil: 'commit' });
+  // The live slot starts as a stub and grows on the first answer: a clip
+  // taken at mount would film the empty strip forever. The whole viewport
+  // is the honest frame for a page that grows into itself.
+  const box = { x: 0, y: 0, width: 1320, height: 1000 };
+  const shots = []; const times = []; let t = 0;
+  const grab = async (waitMs, label) => {
+    await page.waitForTimeout(waitMs); t += waitMs;
+    shots.push({ buf: await page.screenshot({ clip: box, type: 'jpeg', quality: 70 }), t, label });
+  };
+  for (let i = 0; i < 9; i++) await grab(600, 'live');     // ~5.4s of answers
+  server.close();                                           // kill the producer
+  await page.waitForTimeout(2200); t += 2200;              // the next poll fails
+  for (let i = 0; i < 8; i++) await grab(700, 'dark');     // dark model holds
+  const lying = await page.textContent('#h-lying');
+  const flags = await page.evaluate(() => {
+    const s = document.querySelector('#view').textContent;
+    return { answered: s.includes('ANSWERED'), noAnswer: s.includes('NO ANSWER'),
+             unmeasured: /UNMEASURED|REFUS|AWAIT/i.test(s) }; });
+  let delta = 0;
+  for (let i = 0; i + 1 < shots.length; i++) {
+    const d = await blank.evaluate(new Function('p', `return (${DIFF})(p.a, p.b)`),
+      { a: `data:image/jpeg;base64,${shots[i].buf.toString('base64')}`,
+        b: `data:image/jpeg;base64,${shots[i + 1].buf.toString('base64')}` });
+    if (d > delta) delta = d;
+  }
+  const picked = [0, 3, 6, 8, 9, 11, 13, 16].filter((i) => i < shots.length)
+    .map((i) => ({ b64: shots[i].buf.toString('base64'), width: box.width,
+                   height: box.height, t: shots[i].t }));
+  await SHEET(sheet, picked, `live-reel  producer killed at ${shots[8].t}ms  `
+    + `MOVING-WITHOUT-EVIDENCE=${lying}`, picked[picked.length - 1].t);
+  await sheet.screenshot({ path: path.join(FILM_DIR, 'live-reel.png'), fullPage: true });
+  console.log(`live-reel: delta=${(delta * 100).toFixed(1)}% MEW=${lying} flags=${JSON.stringify(flags)}`);
+  console.log(flags.noAnswer && flags.unmeasured && Number(lying) === 0
+    ? 'DARK ON FEED-DOWN, honesty bar clean' : 'LIVE-REEL CHECK FAILED -- see flags');
+  await browser.close();
+  process.exit(0);
+}
 const report = [];
 for (const key of keys) {
   if (!SPECS[key]) { console.log(`skip ${key}: not a spec`); continue; }
@@ -187,14 +232,14 @@ async function shoot(key) {
   return await burst(key, '', box);
 }
 
-async function boxOf() {
-  return (await page.waitForFunction(() => {
-    const el = document.querySelector('#stage');
+async function boxOf(sel) {
+  return (await page.waitForFunction((q) => {
+    const el = document.querySelector(q || '#stage');
     if (!el) return null;
     const r = el.getBoundingClientRect();
     if (r.width < 8 || r.height < 8) return null;
     return { x: r.x, y: r.y, width: r.width, height: Math.min(r.height, 860) };
-  }, null, { timeout: 8000 })).jsonValue();
+  }, sel || '#stage', { timeout: 8000 })).jsonValue();
 }
 
 async function burst(key, suffix, pre) {
