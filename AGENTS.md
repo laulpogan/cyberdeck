@@ -540,3 +540,20 @@ delay), and verify with `getComputedTiming().delay` on both elements rather than
 markup. Labels — the questions a form asks — may print at frame 0; answers may not. And an unread
 field prints `NOT READ` at frame 0 with no mark: a reveal on an absence is a transition invented to
 look like a process.
+
+## An affordance is a shape, never a hue.
+
+`authority.js` renders a granted verb as a real `<button>` and every other state as
+`<span role="note" aria-disabled="true">` — "a disabled button is still a button and still invites
+the press". That half was right; the half that was wrong is that `ceremony_required` then differed
+from the live button by **amber instead of green** only. Two shapes, three states, and the third
+state's difference was one channel of one sense. It now carries an inset second rule
+(`box-shadow: inset 0 0 0 1px`) — a ring inside the frame reads as *exists and is weighted* in
+monochrome, and costs no layout. Solid = press me, ring-inside = weighted, dashed = no grant.
+
+`test/affordance.test.mjs` asserts this against the stylesheet rather than a screenshot, the way the
+token ratchet does, because the claim is about the rules that ship. Two durable lessons from the
+same pass: **an unlabelled glyph in a known idiom is a claim** — `channel`'s noise glyph measures
+amplitude in the shape of the `traffic` squiggle, so the column now says `SIGNAL NOISE · AMPLITUDE,
+NOT CADENCE`; and **a fixture that cannot reach a state leaves that state unreviewed** — `dominator`
+needed `TERMINATE` in the seam list before the ceremony shape ever appeared on a page.

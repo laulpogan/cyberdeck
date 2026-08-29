@@ -342,9 +342,20 @@ export function dossier({ worker }) {
  * Untrusted content is DATA, never a command. A message body asking to be
  * acted on is drawn at its own trust class and stays a message body. */
 export function channel({ classes = TRUST }) {
+  // The glyph on the right measures amplitude -- a clean line for a canonical
+  // observation, static for an unattributed one -- and it is drawn in the same visual
+  // idiom the `traffic` marks use for a live signal. Nothing here is live: nothing
+  // measured a cadence, and nothing will animate, which is correct for a legend of
+  // trust classes. An unlabelled squiggle is still a false indicator, so the column is
+  // named, in the words the measurement actually supports. If a producer ever reports
+  // a cadence, that is a `traffic(period)` mark on the row and the squiggle earns a
+  // pulse; until then it is ink and the header says what it is.
   return card('channel', 'Channel with noise',
-    `<ul class="cd-ag-trusts">${classes.map(([name, noise, why]) =>
-      `<li data-noise="${noise}"><b>${esc(name)}</b>${trace(name)}
+    `<header class="cd-ag-trusts-head"><span>TRUST CLASS</span>
+       <span>SIGNAL NOISE · AMPLITUDE, NOT CADENCE</span></header>
+     <ul class="cd-ag-trusts">${classes.map(([name, noise, why]) =>
+      `<li data-noise="${noise}"${NOISE[name] === 3 ? ' data-claim="unattributed"' : ''}>`
+      + `<b>${esc(name)}</b>${trace(name)}
         <span>${esc(why)}</span></li>`).join('')}</ul>`,
     { note: 'Nothing may present an inference at the weight of an observation.' });
 }

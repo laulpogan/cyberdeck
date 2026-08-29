@@ -99,7 +99,12 @@ export const DECISION_FIXTURES = {
     fields: ['verbs[].permit'],
     refusalText: 'PERMIT UNMEASURED',
     model: {
-      env: { mode: 'act-reversible', operator: 'laul', adapter: true, capabilities: ['RETRY'] },
+      // TERMINATE is in the seam list on purpose. Without it the second verb is refused
+      // for a missing mutation and the panel shows a button and two refusals -- never
+      // the ceremony state the comment above promises. The showcase has to show all
+      // three shapes, including the one with a rule inside its frame.
+      env: { mode: 'act-reversible', operator: 'laul', adapter: true,
+        capabilities: ['RETRY', 'TERMINATE'] },
       verbs: [
         { label: 'RETRY ATTEMPT', commandType: 'RETRY', permit: true, irreversible: false, expectedWait: 'ETA 4M', cite: 'orchestrator.commands.retry' },
         { label: 'TERMINATE', commandType: 'TERMINATE', permit: true, irreversible: true, expectedWait: null, cite: 'orchestrator.commands.terminate' },

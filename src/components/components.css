@@ -478,9 +478,15 @@
    not read as a thing that could be pressed harder. */
 .cd-grant[data-grant="no_grant"] { color: var(--cd-steel-muted);
   border-style: dashed; background: transparent; cursor: default; }
-/* CEREMONY: the grant exists; the weight says the action is not casual. */
+/* CEREMONY: the grant exists; the weight says the action is not casual.
+   The second rule is inset rather than a colour change, because a state that
+   differs from a live button only in hue is a lie in monochrome: pressed
+   against a granted row, amber-and-solid reads as amber-and-pressable. A ring
+   inside the frame is a shape, it costs no layout, and it says "this exists
+   and it is weighted" before any colour is consulted. */
 .cd-grant[data-grant="ceremony_required"] { color: var(--cd-signal-amber);
-  border-color: var(--cd-signal-amber-dim); cursor: default; }
+  border-color: var(--cd-signal-amber-dim); cursor: default;
+  box-shadow: inset 0 0 0 1px var(--cd-signal-amber-dim); }
 .cd-grant-why { display: flex; flex-wrap: wrap; gap: .2rem .5rem;
   font-size: .54rem; line-height: 1.4; color: var(--cd-steel-muted); }
 .cd-grant-missing { letter-spacing: .1em; text-transform: uppercase; }
@@ -553,7 +559,9 @@
 .cd-ag-trace[data-noise="1"] { color: var(--cd-signal-data-dim); }
 .cd-ag-trace[data-noise="2"] { color: var(--cd-signal-amber); }
 .cd-ag-trace[data-noise="3"] { color: var(--cd-health-colour-unknown); }
-.cd-ag-trusts { list-style: none; margin: 0; padding: 0;
+.cd-ag-trusts-head { display: flex; justify-content: space-between; gap: .6rem;
+  font-size: .5rem; letter-spacing: .14em; color: var(--cd-steel-muted); }
+.cd-ag-trusts { list-style: none; margin: .3rem 0 0; padding: 0;
   display: flex; flex-direction: column; gap: .45rem; font-size: .6rem; }
 .cd-ag-trusts li { display: grid; grid-template-columns: 1fr auto;
   gap: .1rem .6rem; align-items: center;
@@ -561,6 +569,13 @@
 .cd-ag-trusts b { font-weight: 500; letter-spacing: .1em; font-size: .56rem;
   color: var(--cd-steel-ink); }
 .cd-ag-trusts .cd-ag-trace { grid-row: 1 / 3; grid-column: 2; }
+/* The glyph measures amplitude, not cadence, and the class it stands for is
+   "no producer claimed this" -- which is a refusal, so it is drawn in the
+   refusal ink. Amber here would say "hot signal" about the one row that has
+   no signal at all. */
+.cd-ag-trusts li[data-noise="3"] > b,
+.cd-ag-trusts li[data-noise="3"] .cd-ag-trace { color: var(--cd-refusal-ink); }
+.cd-ag-trusts > li[data-claim="unattributed"] { border-top-color: var(--cd-refusal-ink); }
 .cd-ag-trusts span { color: var(--cd-steel-muted); font-size: .54rem; }
 
 .cd-ag-group header { display: flex; flex-wrap: wrap; gap: .2rem .6rem;

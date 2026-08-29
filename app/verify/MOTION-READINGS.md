@@ -898,6 +898,38 @@ the letters said one thing and the colour said the opposite, which is a green ch
 unchecked row one size up. It carries the refusal ink now. The green sequence rail under the
 labels stays green on purpose — the order of the doors *is* measured, only their states aren't.
 
+## Finding #8 is closed: the costume an inert thing wears
+
+Two specimens were charged with wearing live idioms while doing nothing. Read against the running
+app, the first charge was half mine again — the actions are `RETRY ATTEMPT / TERMINATE / PURGE
+EVIDENCE`, not the words I transcribed off the sheet — and `authority.js` was already doing the hard
+part right: a granted verb renders a real `<button>`, every other state renders `<span role="note"
+aria-disabled="true">`, because "a disabled button is still a button and still invites the press".
+Exactly one pressable thing exists on the panel, and the test now asserts that number.
+
+What was real is what the hue-only rule caught. Three states, three shapes was the claim, and
+`ceremony_required` differed from a granted button by **colour alone** — amber against green, both
+solid, both one-pixel borders. Pressed side by side in monochrome, a ceremony that will not act on a
+click looks exactly like a grant that will. It carries a second rule inset inside its frame now
+(`box-shadow: inset`), which is a shape, costs no layout, and reads before any colour is consulted:
+solid = press me, ring-inside = exists and is weighted, dashed = no grant. `test/affordance.test.mjs`
+reads the stylesheet for this, the way the token ratchet does, because the claim is about the rules
+that ship and a screenshot cannot be asserted in a unit test.
+
+The second specimen was not a false indicator by intent: `channel`'s glyph measures **amplitude** —
+flat for a canonical observation, static for an unattributed one — which is a measurement drawn in
+shape, and the deterministic noise is a function of the trust class, not a random walk. But it is
+drawn in the same idiom the `traffic` marks use for a live signal, and nothing was said about it, so
+the column is named now: `TRUST CLASS` … `SIGNAL NOISE · AMPLITUDE, NOT CADENCE`. And the
+unattributed row — the class whose own definition is "no producer claimed this" — wore signal amber,
+which says *hot*. It wears the refusal ink now, glyph and rule together, and `data-claim="unattributed"`
+is the hook it hangs on. If a producer ever reports a cadence, that is a `traffic(period)` mark and
+the squiggle earns a pulse; until then the header says what it is.
+
+The fixture moved too: `capabilities` gained `TERMINATE`, because without a seam the second verb is
+refused for a missing mutation and the showcase never rendered the ceremony state its own comment
+promised. A fixture that cannot show a state is how a shape goes unreviewed.
+
 ## Finding #7 is closed: the scan reveals in the order it claims
 
 `scanOverlay` stamped its leaders with `order`/`total` and then printed every answer in the 0ms
