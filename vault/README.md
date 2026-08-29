@@ -96,6 +96,8 @@ what it is good for will be used as if it were good.
 | NOAA / NWS radar loops on Commons (`hurricane-irma-radar-loop`) | ✓ the same direct-media path | a labelled geographic plate whose stamp steps by six minutes and whose wrap is a jump | the first reference in the vault for a **rolling loop** rather than a repeating one: everything in the field changes, the furniture is dark ink the instrument cannot see, and the age of the picture is printed on it |
 | Wikimedia Commons search API, under load | ⚠ throttles: `You are making too many requests to the API`, returned as **plain text**, so a script that pipes it into a JSON parser reports a parse error and looks like a code fault | — | resolve a known filename through `Special:FilePath/<name>` (not the search API) and read `url_effective`; never rebuild a URL from a truncated print — one run recorded a 137-byte 403 page as a candidate reference that way |
 | Commons search API **from a real browser** (Playwright, `fetch` run on-site) | ✓ answers JSON with no throttle where the plain client was refused: the block was a client property, not a network one | `filetype:video` in the query returned three families of motion files: level-crossing barriers going down (`twoState` — rejected), OLED/TV test patterns (`standardSheet` — rejected), optical-fibre splicing (`tapeSplice` — the only one whose drawing hosts its demand) | **the acquisition path is not blocked**; what limits coverage is the drawing test, not the network. Run `api.php` inside a page loaded from `commons.wikimedia.org` so the request is same-origin, and put `filetype:video` in the search string — bare nouns return still photographs of the *thing*, not the screen |  
+| Commons search, from a real browser, as a committed tool (`vault/common-search.mjs`) | ✓ the same same-origin `api.php` path, now reproducible by anyone | `filetype:video` works **only with `gsrnamespace=6`** — without it the query runs over articles, where no article can be a video, and the API answers `{"batchcomplete":""}`, which is indistinguishable from an empty archive. Two more traps found the same hour: the API appends `?utm_…` to every URL (so a `$`-anchored extension test fails on every webm), and sorting the results by file size buries the one relevant 1.7 MB file under four 1.4 GB planning calls |
+| Commons motion files for instrument nouns (`oscilloscope`, `seismograph`, `strip chart recorder`) | ✓ answers | **pedagogy, not panels**: an animated cutaway of a Tektronix 585A that assembles and disassembles itself; a 1963 Soviet tube scope filmed as a warm-up ritual; a camera walking up to a deployed seismometer. And a multi-word noun phrase (`mission control video wall`) returns whatever *mentions* those words — Wikimedia's own OTRS planning calls, a size-comparison-of-the-universe video | the search is not the limit, and neither is the network. What is missing from Commons is a **diegetic display filling the frame**, which is the only thing a motion spec can be read off |
 | Wikimedia Commons (`vault/clip.mjs`, direct media URLs) | ✓ `upload.wikimedia.org` answers a plain `curl`; the API answers in JSON; no browser needed | the first usable **moving diegetic interface** since the loaders: a declassified F-16 HUD (`raw/f16-hud-gcas.gif`) — tapes scrolling under pinned readouts, a FLYUP limit cue arriving and leaving, `xxx` printed where a value is unavailable | **the path that works**: search the API for `filetype:video`, take the URL, derive a window with `node vault/clip.mjs` |
 | YouTube clip harvest (`clip.mjs` pointed at a YouTube URL) | search works (`yt-dlp "ytsearch…"` returns titles and durations) | **media download is refused from this network**: `HTTP Error 403` on the plain client, `The page needs to be reloaded.` on the `tv` client. Two distinct client failures, so the path is not a flag away | blocked here; needs browser cookies or another host |
 | Internet Archive (`advancedsearch.php` + `metadata/`) | ✓ queries and direct file downloads both answer | its index points at ROMs, game builds and let's-play videos; a `ftl+faster+than+light+gameplay` query returned a ZX Spectrum tape, a Stellaris video and a GOG installer, not one HUD recording | reachable but not yet productive; the query, not the host, is the problem |
@@ -106,11 +108,11 @@ and the panel is a wedge in the corner of the shot. The verified corpus today (7
 quoted in `SPECS-FOR.json`, see `vault/MAPPING.md`) is not a ranking failure — `vault/rank.py`
 already puts the likeliest files first, and the likeliest files are stormtroopers.
 
-## Two files that were found and not acquired, and why
+## Three files that were found and not acquired, and why
 
 The Commons search block being a client artefact changed what "coverage is capped" means: the network can supply
 motion, so the limit is the **drawing test** — whether the component's own picture could host the demand the frames
-state. Two candidates died there, and are recorded so nobody re-acquires them:
+state. Three candidates died there, and are recorded so nobody re-acquires them:
 
 - **`twoState` ← level-crossing barrier footage** (`File:Gillingham Level Crossing barriers going down.webm`, and
   eleven neighbours). A barrier coming down is a machine changing state. `twoState` is a *commit decision*: two
@@ -122,8 +124,23 @@ state. Two candidates died there, and are recorded so nobody re-acquires them:
   by **shape** with the labels covered and that the key never read as a measurement. A burn-in video measures pixel
   damage over minutes. Quoting it would be `mfd` all over again — a reading implying work the drawing cannot host.
 
+- **`loopDeviation` ← `File:Oscilloscope.webm`** (Léa Georgelin, "L'Oscilloscope Tektronix 585A", Université
+  Paris-Sciences; 29.0 s, 1920×1080, 1.7 MB). This was the best remaining lever: an instrument drawing a measured
+  track, which is what the component needs in order to have its *observed* half informed by something real. Twelve
+  frames killed it. It is an **animated cutaway**: the instrument is drawn exploding open, `TUBE CATHODIQUE`,
+  `FAISCEAU D'ÉLECTRONS`, `TRACE DU FAISCEAU`, `GÉNÉRATEUR DE TENSION ALTERNATIVE` arriving one label at a time, a
+  signal-generator sliding in with a cable, the whole thing collapsing back at the end. The CRT is a coin-sized
+  circle with a squiggle in it and no legible graticule. Every duration in it belongs to the animator explaining a
+  beam, and none belongs to an instrument reporting a value — which is the same class of contamination as
+  `cameraDrift`, and quoting it would put pedagogical timing into a library whose whole rule is that motion is a
+  measurement. The seismograph and chart-recorder neighbours were worse in the other direction: camera footage of
+  hardware, with no screen at all.
+
 The honest consequence for the goal: **coverage is not going to reach 51 by searching harder**, and the number stays
-meaningful only if a `for` entry names where a reference actually informs a drawing. Of the twelve components still in
+meaningful only if a `for` entry names where a reference actually informs a drawing. That sentence used to be an
+argument; the round that produced this file made it a searched one — the two components with any chance, `loopDeviation`
+and `scaleCrush`, were queried for specifically, with the query shapes that had worked before, and what came back was an
+explainer and four Wikimedia planning calls. Of the twelve components still in
 the nothing tier — `scaleCrush`, `chipBudget`, `standardSheet`, `tapeSplice`, `loopDeviation`, `bypass`, `ceremony`,
 `twoState`, `contextBurn`, `garage`, `gevulot`, `channel` — several are Stargate metaphors with no diegetic screen in
 the world to photograph (`gevulot` will not tell you; `ceremony` is a commissioning rite), and two of them are legends

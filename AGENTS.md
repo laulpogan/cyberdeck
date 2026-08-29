@@ -164,6 +164,15 @@ in the file rather than hidden in a helper:
   all if the specimen is still being written to.
 
 ## The traps, paid for
+- **An empty Commons result is not an empty archive.** `filetype:video` is matched only against the
+  File namespace: without `gsrnamespace=6` the query runs over *articles*, where no article can be a
+  video, and the API replies `{"batchcomplete":""}` — no error, no warning, no `query` key. Two
+  separate sessions of mine read that as "Commons holds no motion" before probing the call shape
+  against a term known to have results. `list=search` with the same string is empty for the same
+  reason. The committed path is `vault/common-search.mjs`; it also strips the `?utm_…` the API appends
+  to every URL (a `$`-anchored extension test fails on every webm) and keeps the search's own relevance
+  order, because sorting by file size promotes a 1.4 GB planning call above the 1.7 MB file that
+  matched.
 ## The gate, and how it was bypassed twice in one session
 
 - **`npm test | grep ...` is not a gate.** A pipeline reports the exit status of its *last* command, so
