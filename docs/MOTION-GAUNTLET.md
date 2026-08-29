@@ -211,3 +211,12 @@ theme: the same 17 refuse and the same 35 move; magi reads as designed
 amber-and-ink, not an inversion. Open design note: the radar's phosphor
 trail washes paler on cream than on black -- a light-theme trail tuning
 is a candidate cycle, deliberately not yet paid for.
+
+### radar -- cycle 2 -- the trail speaks day theme
+The phosphor ladder is additive light: 15% on black is an echo, 15% on
+cream is a smudge. The decay slices now carry their own honest number in
+--trail-op while the theme supplies one multiplier -- 1 against the
+void, 1.85 against paper. The rendered ladder is unchanged in dark
+(byte-identity intact, opacity attributes untouched as the no-CSS
+fallback); in light the trail finally reads as a sweep instead of a
+stain. 176/176.

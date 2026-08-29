@@ -650,3 +650,7 @@
   color: var(--cd-health-colour-unknown); }
 .cd-ag-cost[data-priced="1"] b { color: var(--cd-signal-data); }
 .cd-ag-cost span { display: block; font-size: .5rem; color: var(--cd-steel-muted); }
+
+/* One wash per theme: the slice's own decay stays in --trail-op, the
+   theme decides whether the ladder needs the day-theme multiplier. */
+.cd-radar-trail { opacity: calc(var(--trail-op, .12) * var(--m-trail-boost, 1)); }

@@ -1,3 +1,12 @@
+/* Phosphor trails are additive light: on black a 15% wash reads as an
+   echo, on cream the same number reads as a smudge. The decay ladder
+   stays the honest ladder; the day theme gets one multiplier that keeps
+   each slice readable against paper instead of against the void. */
+:root {
+  --m-trail-boost: 1.85;
+}
+:root:not([data-theme="light"]) { --m-trail-boost: 1; }
+
 :root {
   --m-enter: 300ms;
   --m-leave: 200ms;

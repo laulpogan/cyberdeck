@@ -208,9 +208,11 @@ export function radar({ contacts, pollElapsed = null, pollPeriod = null,
   let sweepMark = '';
   if (sweeping) {
     let edge = -0.05;
-    sweepMark += wedge(cx, cy, 76, -0.05, 0, { opacity: '.38' });
+    sweepMark += wedge(cx, cy, 76, -0.05, 0,
+      { opacity: '.38', extra: 'class="cd-radar-trail" style="--trail-op:.38"' });
     for (const [back, op] of TRAIL) {
-      sweepMark += wedge(cx, cy, 76, back, edge, { opacity: op });
+      sweepMark += wedge(cx, cy, 76, back, edge,
+        { opacity: op, extra: `class="cd-radar-trail" style="--trail-op:${op}"` });
       edge = back;
     }
   }
