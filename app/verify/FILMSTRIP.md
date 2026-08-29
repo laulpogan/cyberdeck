@@ -123,6 +123,16 @@ frame and its refusal sentence and loses the shape the refusal is about.
 floor in the gate ran on the evidence-present page. The gate now pairs the heights across the
 switch and names each one (`2c35a94`). A refusal has to keep its space.
 
+**Fixed on this branch** (`3f095f2`). `card()` now reads its own body: an empty body over a
+refusal is not a drawing, so the card draws the absence — the library's unmeasured hatch
+bracketing a word that names what is missing, plus `ghost` geometry where the absent
+measurement has a shape (the twin MFD deck outlines its two bezels and drops the hatch, because
+the outline *is* the hatch). Twelve sites name their own word — `ONE PANE SHORT`, `BOARD
+UNCOUNTED`, `NOTHING PENDING` — since `UNMEASURED` everywhere would be a legend, not a reading.
+`globe` needed its own fix: its refusal path omitted the mesh and the SVG layer entirely. The
+thirteen routes now pass 52 of 52 at both widths and both schemes, where every one of them
+failed before.
+
 ## 4. Fifteen never move at all, and most of them are refusing
 
 `channel`, `dominator`, `dossier`, `garage`, `gevulot`, `grid`, `ladder`, `redaction`,
