@@ -231,7 +231,14 @@ export function radar({ contacts, pollElapsed = null, pollPeriod = null,
   [28, 52, 76].forEach((r) => g.push(ring(cx, cy, r, { width: 1, extra: 'opacity=".45"' })));
   const sweep = cycle(pollElapsed, pollPeriod, sourceState, { cite });
   const sweeping = sweep['data-motion'] === 'cycle';
-  g.push(`<g class="cd-fd-sweep"${attrs(sweep)}>`
+  // The dial geometry, declared. Without `data-cycle-axis` the runtime treated this wedge as a
+  // bar: one non-repeating transform on a group whose bounding box is a wide fan, angle 0 the whole
+  // way — a countdown that stops, printed on the one component whose whole claim is that the poll
+  // comes round again. The reference holds it: the NWS loop's step interval is the measurement, and
+  // `cycle` exists here precisely so the sweep an operator watches IS the poll interval they are
+  // waiting for. Origin is the dial centre in the drawing's own units, not fill-box.
+  g.push(`<g class="cd-fd-sweep"${attrs(sweep)}${
+    sweeping ? ` data-cycle-axis="rotate" data-cycle-origin="${cx} ${cy}"` : ''}>`
     + (sweeping ? wedge(cx, cy, 76, -0.5, 0.35, { opacity: '.14' })
                 : text(cx, cy - 86, 'NO SWEEP', { size: 8, anchor: 'middle' }))
     + '</g>');

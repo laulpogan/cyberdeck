@@ -187,3 +187,30 @@ test('a contact\'s brightness is a measurement, and refuses as one', () => {
   assert.equal((dim.match(/stroke-dasharray=/g) || []).length >= 3, true,
     'each refused contact is ringed, so the absence is a shape');
 });
+
+// The radar's wedge is the poll. A wedge that is animated as a bar — one non-repeating transform
+// on a wide fan, angle 0 the whole way — is a countdown that stops, printed on the one component
+// whose claim is that the survey comes round again. `vault/GAUNTLET.json` holds this against
+// `hurricane-irma-radar-loop.gif`, whose step interval IS the measurement.
+test('a measured poll turns the wedge on the dial centre', () => {
+  const html = f.radar({
+    contacts: [{ id: 'c-1', bearing: 40, range: 0.5, swept_ago_seconds: 2 }],
+    pollElapsed: 3, pollPeriod: 10, sourceState: 'live',
+  });
+  const sweep = html.match(/<g class="cd-fd-sweep"[^>]*>/)[0];
+  assert.match(sweep, /data-motion="cycle"/, 'the sweep carries no cycle mark');
+  assert.match(sweep, /data-cycle-axis="rotate"/,
+    'the wedge has no geometry, so the runtime falls through to the bar branch and the poll never comes round');
+  assert.match(sweep, /data-cycle-origin="100 100"/,
+    'the rotation is not anchored to the dial centre in the drawing\'s own units');
+});
+
+test('a refused sweep declares no geometry to animate', () => {
+  const html = f.radar({
+    contacts: [{ id: 'c-1', bearing: 40, range: 0.5, swept_ago_seconds: 2 }],
+    pollElapsed: null, pollPeriod: null, sourceState: 'unavailable',
+  });
+  assert.match(html, /NO SWEEP/);
+  assert.equal(/data-cycle-axis/.test(html), false,
+    'a sweep nobody measured declared geometry for the runtime to turn');
+});

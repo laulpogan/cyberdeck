@@ -467,6 +467,108 @@ for (const gap of GAPS) {
             + 'a deck whose lanes share no common now cannot carry a playhead, a cross-lane event, or a claim '
             + 'about which run finished late';
         }
+      } else if (a.kind === 'loop_wraps_in_a_jump') {
+        // The reference is a rolling NWS radar loop: measured over 25 frames it never returns to
+        // frame zero, and the wrap back to the oldest step is a discontinuity. On a dial the
+        // equivalent is a sweep that keeps going FORWARD through 0 — the seam is a jump, never a
+        // wind-back — and a sweep that stopped at the end of its first pass is a progress bar
+        // wearing a period.
+        //
+        // Angles come off the property the runtime actually drives (`rotate`), with the matrix as
+        // fallback for a host that authors the shorthand. An instrument reading `transform` here
+        // returned null on a dial spinning at full speed: reading the wrong property is how a gate
+        // certifies stillness over motion.
+        const spin = await page.evaluate(async (sel) => {
+          const el = document.querySelector(sel);
+          if (!el) return { missing: true };
+          const period = Number(el.getAttribute('data-period')) || 3;
+          const spent = Math.min(0.95, Math.max(0, Number(el.getAttribute('data-spent')) || 0));
+          const deg = () => {
+            const cs = getComputedStyle(el);
+            const r = /(-?[0-9.]+)deg/.exec(cs.rotate || '');
+            if (r) return ((Number(r[1]) % 360) + 360) % 360;
+            const m = (cs.transform || '').match(/matrix\(([^)]+)\)/);
+            if (!m) return null;
+            const [a2, b2] = m[1].split(',').map(Number);
+            return (Math.atan2(b2, a2) * 180 / Math.PI + 360) % 360;
+          };
+          const wait = () => new Promise((res) => requestAnimationFrame(res));
+          // Stop as soon as there is a seam with real travel after it; otherwise sit out the poll.
+          // Sample long enough to see the poll come round TWICE, or until it visibly stops. A
+          // dial that sweeps once, pauses, and says nothing else looks exactly like a repeating
+          // poll for one period — because for one period it is one. Only the second turn, or the
+          // absence of one, separates them.
+          const cap = period * 1000 * 3 + 2000;
+          const t0 = performance.now();
+          let prev = null, frames = 0, seams = 0, travel = 0, net = 0, total = 0, first = null, last = null;
+          let lastAdvance = performance.now(), stalled = false, lastNet = null;
+          for (;;) {
+            const d = deg();
+            if (d !== null) {
+              if (prev !== null) {
+                let step = d - prev;
+                if (step > 180) step -= 360;
+                if (step < -180) step += 360;
+                net += step;                          // signed: where the dial actually went
+                total += Math.abs(step);              // unsiged: how far its ink travelled
+                if (d < prev - 1) seams += 1;         // the dial came round
+                if (seams && step > 0) travel += step;
+                if (net - (lastNet ?? -1e9) > 2) { lastAdvance = performance.now(); lastNet = net; }
+              } else { first = d; lastNet = net; }
+              frames += 1; last = d; prev = d;
+            }
+            // A live source whose sweep has not moved two degrees in two seconds is not polling.
+            if (performance.now() - lastAdvance > 2000) { stalled = true; break; }
+            if (performance.now() - t0 > cap || net >= 700) break;
+            await wait();
+          }
+          const fades = el.getAnimations().reduce((n, an) => n
+            + ((an.effect && an.effect.getKeyframes && an.effect.getKeyframes())
+              .some((k) => 'opacity' in k) ? 1 : 0), 0);
+          // Net over total is the sign-consistency of the whole window: +1 for a dial that only
+          // ever goes forward, ~0 for one that sweeps out and eases back. Thresholding per-frame
+          // steps instead missed exactly that — a 10s reverse sweeps 0.6°/frame, under any
+          // threshold a jump-seam would need, and the instrument stayed green while printing
+          // "0° travelled forward after the seam". Read the aggregate.
+          const consistency = total > 0 ? net / total : 0;
+          return { period, spent, frames, seams, travel: Math.round(travel), fades, stalled,
+                   consistency: Number(consistency.toFixed(3)), net: Math.round(net), total: Math.round(total),
+                   span: Math.round(performance.now() - t0), first, last };
+        }, a.selector);
+        if (spin.missing) {
+          row.measured = `no element matched ${a.selector} — there is no rotating cycle mark on this plate`;
+          row.verdict = 'FAIL';
+        } else {
+          // A completed revolution is the only sound gate. "Seam" is not: the animation COMMITTING
+          // its final 360deg lands the needle on 0 and mimics a wrap exactly, so a dial that swept
+          // once and stopped read as a wrap with travel after it. Net rotation cannot be faked that
+          // way — one sweep tops out below a revolution.
+          const revolutions = spin.net / 360;
+          row.measured = `${spin.frames} frames over ${(spin.span / 1000).toFixed(1)}s (period ${spin.period}s, `
+            + `spent ${spin.spent}) — net ${spin.net}° against ${spin.total}° travelled `
+            + `(sign consistency ${spin.consistency}) = ${revolutions.toFixed(2)} completed revolution(s), `
+            + `${spin.seams} raw seam(s) [reported, not gated: committing the final 360deg mimics a wrap], `
+            + (spin.stalled ? 'STALLED before the window closed, ' : '')
+            + `opacity animations on the sweep: ${spin.fades}`;
+          row.verdict = spin.frames < 120 ? 'FAIL'
+            : spin.stalled ? 'FAIL'
+            : spin.consistency < 0.95 ? 'FAIL'
+            : revolutions < 0.92 ? 'FAIL'
+            : spin.fades > 0 ? 'FAIL' : 'pass';
+          if (row.verdict === 'FAIL') {
+            // Ordered worst-diagnosis-first: a red that names the wrong defect sends the next
+            // agent to fix the wrong thing.
+            row.detail = spin.stalled
+              ? `the sweep did not move two degrees in two seconds while the source was live (${(spin.span / 1000).toFixed(1)}s in, on a ${spin.period}s period) — a stall between polls, or an ease slow enough to read as one; either reading is the defect, because the reference keeps stepping on its interval until the source goes silent`
+              : spin.consistency < 0.95
+                ? `the sweep came back over ground it had already covered (net ${spin.net}° against ${spin.total}° travelled) — a rolling loop jumps at its seam, and a search that eases itself back is a search that never ended`
+                : revolutions < 0.92
+                ? `the sweep came back over ground it had already covered (net ${spin.net}° against ${spin.total}° travelled) — a rolling loop jumps at its seam, and a search that eases itself back is a search that never ended`
+                : spin.fades > 0
+                    ? 'the seam is faded: opacity at the wrap hides where the loop turned over'
+                    : `only ${spin.frames} frames were sampled, too few to tell a seam from a dropped frame`;
+          }
+        }
       } else if (a.kind === 'furniture_still') {
         // The recorder tracks the selector's elements, then the furniture, then the contacts, in
         // that order, every frame — so a slice of `f.el` addresses one of those groups across the

@@ -1418,3 +1418,54 @@ work. The fourth test pins the vocabulary itself: if a fourth cue appears it inh
 reading that produced it has to name the field that governs it before the ink is allowed. No gauntlet row: the
 on-screen half of this rule is already held by `envelope-limit-named`, which asserts the honest page names
 `12.4 OF A 20 CEILING` — and an absent cue is not something the browser can be asked to show. `npm test` 292.
+
+## The radar never turned: a `cycle` mark with no geometry, and a gate that took three calibrations to see it
+
+`hurricane-irma-radar-loop.gif` was quoted for the rule that a loop's step interval *is* the measurement. Writing
+the assert for it found a defect first. `radar` stamps `data-motion="cycle" data-spent="0.3" data-period="10"` on
+its wedge and **nothing else** — while the runtime's rotational branch is gated on `data-cycle-axis="rotate"`, a
+attribute only ever stamped by `app/src/rules.js`, the Rules page's own dial demo. So the sweep fell through to the
+default `cycle` branch: **one non-repeating transform on a wide fan, computed angle 0 the whole way**. A countdown
+bar wearing a radar dial, printed on the component whose entire claim is that the survey comes round again — and
+the runtime comment right above that branch says so ("the sweep an operator watches is the poll they are waiting
+for — the one thing a radar drawn as a still picture cannot say"). The fix is two attributes on the mark, plus a
+test each way: measured period ⇒ `data-cycle-axis="rotate" data-cycle-origin="100 100"`; refused sweep ⇒ no
+geometry for the runtime to turn, because an unmeasured poll must not animate.
+
+Then the instrument, which was wrong three times before it was worth its green:
+
+1. **It read the wrong property.** The runtime drives the individual `rotate` property; my sampler read
+   `getComputedStyle().transform` and got a plain matrix — `angleFirst: null` on a dial spinning at full speed. The
+   same blind spot had already cost me a false green earlier in the day on `hardCut`'s CSS animation. Measure the
+   property that is actually driven, with the matrix as fallback for hosts that author the shorthand.
+2. **"Seam" is not a sound gate.** The first gate looked for the angle crossing 0. But when an animation *commits*
+   its final `360deg`, the needle lands on 0 and that mimics a wrap exactly — so a dial that swept once and stopped
+   reported "1 seam crossed, travel after the seam" and passed. Raw seam counts are now reported and explicitly
+   **not** gated.
+3. **Per-frame thresholds cannot see the defect they name.** The next gate counted reversed frames with a step
+   threshold, and the eased-return sabotage — the exact thing the row exists to catch — **passed**: a 10-second
+   reverse sweeps 0.6°/frame, under any threshold that a jump-seam would need. It printed *"0° travelled forward
+   after the seam"* and stayed green. The aggregate is what works: **net rotation over total rotation** = +1 for a
+   dial that only ever goes forward, ≈ 0 for one that eases back. That made A red: *net −350° against 665°
+   travelled (sign consistency −0.525)*.
+4. **One period cannot tell a repeating poll from a single extra sweep.** Removing `repeat: Infinity` leaves a dial
+   that sweeps the partial, sweeps one full turn, then goes silent — which is indistinguishable from a poll for the
+   first ~9 seconds, *because for the first 9 seconds it is one*. The window now samples until **two revolutions**
+   have accumulated or the needle visibly stops moving (no two degrees in two seconds). That is what finally made
+   the stall case red, at 16.8s, and the honest build green at 18.8s: *2252 frames, net 700° against 700° travelled,
+   sign consistency 1, 1.94 completed revolutions*.
+
+One diagnosis stays deliberately hedged, because the instrument cannot resolve it honestly: under the eased-return
+sabotage the **stall** check fires first, at 7.1s, since an `ease-in-out` reversal is nearly motionless at the seam.
+The message therefore says what the eye sees — *did not move two degrees in two seconds while the source was live —
+a stall between polls, or an ease slow enough to read as one; either reading is the defect* — rather than naming a
+mechanism the sample cannot distinguish. A red that sends the next agent to the wrong file is nearly as bad as a
+false green.
+
+`radar-loop-wraps-without-a-tween` is **asserted** now, and both directions are proven: honest green at 1.94
+revolutions with sign consistency 1 and 0 opacity animations on the sweep; sabotage A red on consistency; sabotage
+B red on stall. Gate on `#/component/radar` and `#/families/field`: 9 passes, byte-identity holding with the
+runtime writing `transform-box`/`transform-origin` inline (that branch's own `remember()` was built for the Rules
+dial and it survives a real page). `test/field.test.mjs` pins both mark states. Gauntlet 22 rows — **19 pass, 3
+held, 0 FAIL** — with two rows flipped from held to asserted today (`river-lanes-share-one-now`, this one).
+`npm test` 294.

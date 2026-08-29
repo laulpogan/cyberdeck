@@ -835,3 +835,24 @@ before it reached one right answer, all three from loose matching over stripped 
 So: match an entire `>([^<>]+)<` node, a whole phrase, or an element count. And when an audit needs a human to
 separate cue from label anyway, ship it as **named differential tests** — render with the condition, render
 without, assert what arrives and what leaves — not as a report with a vocabulary nobody can trust.
+
+## A motion assert must be calibrated by the defect it names, or it is a green light
+
+`radar`'s wrap check took four calibrations, and each failure is a rule:
+
+- **Read the property that is actually driven.** The runtime animates the individual `rotate` property;
+  `getComputedStyle().transform` returned a plain matrix and the sampler reported `null` on a dial spinning at
+  full speed.
+- **Do not gate on an event the browser emits for the wrong reason.** An animation *committing* its final
+  `360deg` lands the needle on 0 and mimics a wrap exactly, so "a seam was crossed" certified a dial that swept
+  once and stopped.
+- **Per-frame thresholds cannot catch slow defects.** An eased 10-second reverse moves 0.6°/frame — under any
+  threshold a jump-seam needs. The gate stayed green while printing "0° travelled forward after the seam". The
+  aggregate works: **net ÷ total rotation** is +1 forward-only, ≈0 for out-and-back.
+- **Sample longer than one period.** A poll that sweeps the partial plus one turn and then goes silent is
+  indistinguishable from a repeating poll *for the first period, because for the first period it is one*. Gate on
+  accumulated revolutions plus a stall rule (no two degrees in two seconds while the source is live), not on
+  anything visible inside a single cycle.
+- **When the instrument cannot distinguish two causes, say both.** An `ease-in-out` reversal is nearly motionless
+  at the seam, so the stall arm fires first; the message names the observation and both readings rather than
+  guessing a mechanism.
