@@ -102,6 +102,16 @@ is animating, and the runtime answers honestly about animations that the compone
 without anything behind them — which is why an honesty readout built only from marks cannot see
 this, and a pixel-difference check can.
 
+**Fixed on this branch, and re-captured.** Each carrier now declares its stillness, and the
+refused strips read silent: 0 of 13 entrance frames changed and `getAnimations()` at 0 on all
+four, against 5 of 13 changed with live animations before. They still move when the evidence is
+there — `radar` 16 of 17 entrance frames and 11 of 12 loop frames, `oscillation` the same,
+`glassCell` 8 of 17 — so the fix removed the claim, not the drawing. `syncRatio` is now
+completely still, which is the specimen's own assertion: no series was retained for the lane, so
+nothing travelled the axis. See `app/src/undeclared.js`, whose licence list is empty, and
+`test/app-undeclared.test.mjs`, which renders each component with and without its evidence and
+reads the mark off the element.
+
 ## 3. Twelve refusals throw the drawing away
 
 The heights columns hold the finding. `globe` falls from 445px to 15px; `tape` from 275px to

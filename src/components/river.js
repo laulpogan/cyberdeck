@@ -280,7 +280,11 @@ export function oscillation({ attempt, reason = null, sourceState,
       + line(x, top + lane, x, top + 4, { width: 2 }) + '</g>');
   }
   const tx = PAD + (threshold + 0.5) * step;
-  g.push(`<g class="cd-riv-threshold"${attrs(trace(true, { cite }))}>`
+  // The ticks above are attempts that happened, each with its place in the
+  // series, so they may trace. This line is the threshold: a rule somebody set,
+  // drawn once, with nothing measured about its length. A rule that animates
+  // itself looks like an event.
+  g.push(`<g class="cd-riv-threshold"${attrs(still('the threshold is a rule, not a route'))}>`
     + line(tx, top - 6, tx, top + lane + 6, { dashed: true })
     + text(tx + 4, top - 8, `THRESHOLD ${threshold}`, { size: 7 }) + '</g>');
   if (!Number.isInteger(attempt)) {

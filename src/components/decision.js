@@ -122,7 +122,11 @@ export function glassCell({ passed = [], blocked = [],
       + dot(pane - 6, y, 2.4) + '</g>');
     y += step;
   });
-  g.push(`<g class="cd-dc-sightline"${attrs(trace(true, { cite: 'glass.sightline' }))}>`
+  // The sightline is the asymmetry itself: the glass is a window in one
+  // direction, and that is true whether or not anything is being observed this
+  // instant. The rows that crossed the glass carry the observation and trace;
+  // the geometry that makes the claim does not move.
+  g.push(`<g class="cd-dc-sightline"${attrs(still('the sightline is the asymmetry, not an observation'))}>`
     + line(W - PAD - 8, top + height - 8, pane + 6, top + height - 8, { width: 1.2 })
     + text(W - PAD - 12, top + height - 12, 'SEES',
         { size: 6.5, anchor: 'end' }) + '</g>');

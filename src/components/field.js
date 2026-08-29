@@ -217,9 +217,13 @@ export function radar({ contacts, pollElapsed = null, pollPeriod = null,
   g.push(text(200, 62, 'RADIUS = EVIDENCE AGE', { size: 7, opacity: '.7' }));
   g.push(text(200, 78, 'inner ring: fresh', { size: 8 }));
   g.push(text(200, 92, 'outer ring: stale', { size: 8 }));
+  // Either branch is a declaration. Contacts with no measured age are listed,
+  // not placed, and the list is stated. When nothing is off-scope there is no
+  // population to stagger a marker over: `count(0, 1)` moved a tally of
+  // nothing, which is the shape of a spinner wearing a count's clothes.
   g.push(`<g class="cd-fd-offscope" data-any="${offScope ? 1 : 0}"${attrs(offScope
-    ? still(`${offScope} contacts have no measured age`)
-    : count(0, 1))}>`
+    ? still(`${offScope} contact${offScope === 1 ? ' has' : 's have'} no measured age`)
+    : still('nothing is off-scope; a tally of nothing is not a count'))}>`
     + text(200, 106, offScope ? `${offScope} OFF-SCOPE · UNMEASURED` : 'all contacts aged',
         { size: 8, opacity: '.75' }) + '</g>');
   return card('radar', 'Radar freshness sweep',

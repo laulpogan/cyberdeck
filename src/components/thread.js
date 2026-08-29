@@ -140,9 +140,11 @@ export function syncRatio({ output, state, verdict = null,
     { size: 7.5, anchor: 'middle' }));
   g.push('</g>');
   y += lane + 6;
-  // The axis travels. A recorder was meant to sit on it, and drawing the
-  // frame is how the missing one stays visible.
-  g.push(`<g class="cd-th-axis"${attrs(trace(true, { cite: ratioCite }))}>`
+  // The axis is a frame, and a frame does not travel. A recorder was meant to
+  // sit on it; drawing the frame is how the missing one stays visible, and
+  // animating it would put motion on the one element that exists precisely
+  // because nothing was recorded. `trace` belongs to a path something crossed.
+  g.push(`<g class="cd-th-axis"${attrs(still('the axis is a frame; nothing travelled it'))}>`
     + `<g transform="translate(${PAD},0)">${axis(SPAN, y)}</g></g>`);
   const known = lanes.every(([, c]) => c && c.known);
   const key = verdict && SYNC[verdict] ? verdict : (known ? 'stalled' : 'unmeasured');

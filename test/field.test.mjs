@@ -93,7 +93,20 @@ test('a contact with no measured age is off-scope, not at the centre', () => {
     contacts: [{ age_seconds: null, bearing: 0 }, { age_seconds: 5, bearing: 1 }] });
   assert.equal((html.match(/cd-fd-contact/g) || []).length, 1);
   assert.match(html, /1 OFF-SCOPE/);
-  assert.match(html, /1 contacts have no measured age/);
+  assert.match(html, /1 contact has no measured age/);
+  assert.match(html, /data-motion="still"/);
+});
+
+test('the off-scope tally refuses rather than counting a population of none', () => {
+  // `count(0, 1)` staggered a marker over a population that is not there. A tally of
+  // nothing is a declaration, and the two counts that differ say so in different words.
+  const allAged = f.radar({ pollElapsed: 1, pollPeriod: 10, sourceState: 'live',
+    contacts: [{ age_seconds: 5, bearing: 1 }, { age_seconds: 8, bearing: 2 }] });
+  assert.match(allAged, /data-still-reason="nothing is off-scope; a tally of nothing is not a count"/);
+  assert.match(allAged, /all contacts aged/);
+  const two = f.radar({ pollElapsed: 1, pollPeriod: 10, sourceState: 'live',
+    contacts: [{ age_seconds: null, bearing: 0 }, { age_seconds: null, bearing: 1 }] });
+  assert.match(two, /2 contacts have no measured age/);
 });
 
 test('a worker with no constraint gets a hollow ring, not a bearing', () => {
