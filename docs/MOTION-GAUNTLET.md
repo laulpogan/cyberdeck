@@ -144,3 +144,20 @@ scope, we draw frames of data, not pixels.
   stays dark, reserved by refusal.
 - tape: transcript lays down line by line like a recorded call, no
   fake transport theatre, no VU meter invented from silence.
+
+### batch: needles, ice, keycard, at-field, splice, ceremony -- cycle 1
+- ice: walls draw outward ring by ring; unreached walls are held as
+  dashed refusals with the count stated. The layered-defense grammar is
+  exactly the canon. PASS.
+- keycard: seven cells pass left to right as a cascade, the revoked card
+  lands red, the eighth slot stays dashed unmeasured. PASS.
+- at-field: nested hex rings bloom outward from the core, statuses
+  arriving with each ring. PASS.
+- needles: the fan traces in per needle and holds; no sweep theatre. PASS.
+- splice: the measured span traces in; the seam itself refuses -- THE
+  SEAM IS SHADOW -- and unmeasured cells stay NO TAPE dashed. PASS.
+- ceremony: the montage said it popped; the raw probe said otherwise --
+  gate one drew from 0ms, gate two opened at 150ms, and the unreached
+  gates correctly never animated. The 406px sheet hides a 20px stroke:
+  glyph-level claims are decided on raw frames. PASS, with the rule now
+  proven twice.
