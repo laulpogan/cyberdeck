@@ -147,7 +147,11 @@ export const ORGANISM_FIXTURES = {
         { label: 'SESSION', count: 1, reach: 'the subject in view' },
         { label: 'PROFILE', count: 4, reach: 'workers on this profile' },
         { label: 'HOST', count: 12, reach: 'everything on dellpromax' },
-        { label: 'FLEET', count: 54, reach: 'every host, including the ones dark' },
+        // The widest scope is the one nobody can count: hosts that are dark cannot
+        // be enumerated, so FLEET carries no count and the drawing says UNMEASURED
+        // in FLEET's own row rather than printing the word `undefined`. Held to the
+        // Solari board's blank flap — absence keeps its cell and its place in the row.
+        { label: 'FLEET', count: null, reach: 'every host, including the ones dark' },
       ],
     },
   },

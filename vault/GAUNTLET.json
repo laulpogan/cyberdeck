@@ -283,6 +283,24 @@
       "observed": "not asserted; the gap is the finding and the drawing does not exist yet",
       "notHeld": "An assert cannot fail on a geometry the component never draws. river maps time with px(t) normalised per lane from each lane's own t0 and span, so 'now' resolves to a different x per lane and there is nothing for a cross-lane x assertion to measure; the reference shows one ruler across the whole plate and one playhead over it, which means the fix is a new drawing on an absolute axis rather than a dialect change, and the marker-crossing idiom was already registered as not held for exactly this reason.",
       "watch": "any cross-lane marker, playhead, or 'now' cue added to river — it must land at the same x in every lane, which requires an absolute-time axis the component does not have"
+    },
+    {
+      "id": "atfield-unread-scope-keeps-its-row",
+      "reference": "solari-departure-flap.gif",
+      "component": "atField",
+      "gap": "a scope whose count was never computed prints the word `undefined`, or leaves the readout, where the board holds a blank flap in its cell with its own timing",
+      "referenceFigure": "32 frames over 4.01s, median delay 130.0ms, loop no return to frame zero",
+      "assertKind": "text_contains",
+      "assert": {
+        "kind": "text_contains",
+        "route": "#/component/atField",
+        "values": [
+          "FLEET",
+          "UNMEASURED"
+        ]
+      },
+      "observed": "asserted from the fixture, whose FLEET scope carries no count because hosts that are dark cannot be enumerated",
+      "watch": "the word `undefined` reappearing in the readout, or an unread scope dropping out of the row instead of holding its cell"
     }
   ]
 }

@@ -271,3 +271,37 @@ test('envelope places its position by a number, or refuses to place it', () => {
   assert.match(past, /data-level="1"/, 'clamped extent');
   assert.match(past, /26 OF A 20 CEILING/, 'clamping the ink must not round away the number');
 });
+
+// Quoted against the Solari board: a blank flap keeps its cell, its place between
+// printed neighbours, and its own timing. The defect this replaces was a template
+// interpolating `${scope.count}`, so the ordinary state "nobody counted this scope"
+// printed the word `undefined` in the middle of a reader's picture.
+test('an unread scope keeps its row and says UNMEASURED on its own line', () => {
+  const html = og.atField({ scopes: [
+    { label: 'SESSION', count: 1, reach: 'the subject in view' },
+    { label: 'FLEET', count: null, reach: 'every host, including the ones dark' },
+  ] });
+  assert.doesNotMatch(html, /undefined/,
+    'a scope with no count leaked a programming-language artifact into a reader\'s picture');
+  assert.match(html, /FLEET\s+UNMEASURED/,
+    'the unread count is not drawn on the line that names the scope it belongs to');
+  assert.match(html, /SESSION\s+1/, 'the counted scope stopped being drawn as a count');
+  assert.equal(html.match(/data-scope="/g).length, 2,
+    'a scope whose count is unknown lost its ring — absence is a character, not a deletion');
+});
+
+test('a scope with no reach draws UNMEASURED in the reach column', () => {
+  const html = og.atField({ scopes: [{ label: 'HOST', count: 12 }] });
+  assert.doesNotMatch(html, /undefined/, 'the reach column interpolated an absent string');
+  assert.match(html, /UNMEASURED/);
+});
+
+test('the unread scope declares itself, as a gap and not as a refusal', () => {
+  // Finding #10's rule with a named reference behind it: ink alone cannot be counted by the
+  // honesty rack, and a `data-refusal` would claim the component declined rather than the
+  // world coming up short — the line the first #10 sweep crossed on `coverage`.
+  const html = og.atField({ scopes: [{ label: 'FLEET', count: null, reach: 'every host' }] });
+  assert.match(html, /data-motion="still"/, 'the drawn absence declares nothing');
+  assert.match(html, /data-still-reason="no count was computed for this scope"/);
+  assert.equal(html.match(/data-refusal/g), null, 'a measured gap must not claim a refusal');
+});

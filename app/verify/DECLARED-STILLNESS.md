@@ -21,6 +21,7 @@ attributes a script cannot query are two different claims, and only one of them 
 | `city` | DARK | yes |
 | `garage` | NO PROOF HISTORY | yes |
 | `grid` | UNMEASURED | yes |
+| `atField` | UNMEASURED | yes |
 | `magi` | UNMEASURED | yes |
 | `ice` | NOT REACHED | yes |
 | `dominator` | UNMEASURED | yes |
@@ -29,5 +30,5 @@ attributes a script cannot query are two different claims, and only one of them 
 | `oracle` | UNMEASURED | yes |
 | `channel` | UNATTRIBUTED | yes |
 
-**0 of 21** specimens draw an absence and
+**0 of 22** specimens draw an absence and
 declare nothing: ``.

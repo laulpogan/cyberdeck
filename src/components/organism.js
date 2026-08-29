@@ -528,8 +528,32 @@ export function atField({ scopes, writable = false,
   });
   scopes.forEach((scope, i) => {
     const y = 172 - (scopes.length - 1 - i) * 12;
-    g.push(text(PAD, y, `${scope.label}  ${scope.count}`, { size: 6.5, opacity: '.7' }));
-    g.push(text(W - PAD, y, scope.reach, { size: 6.5, anchor: 'end', opacity: '.5' }));
+    const counted = scope.count != null;
+    const reached = scope.reach != null;
+    const row = [
+      text(PAD, y, `${scope.label}  ${counted ? scope.count : UNMEASURED}`,
+        { size: 6.5, opacity: counted ? '.7' : '.45' }),
+      text(W - PAD, y, reached ? scope.reach : UNMEASURED,
+        { size: 6.5, anchor: 'end', opacity: reached ? '.5' : '.35' }),
+    ].join('');
+    // A scope nobody counted keeps its row. On the departure board a blank flap
+    // still occupies its cell, sits between its printed neighbours, and waits out
+    // its own flip timing: absence is a character, not a deletion. The template used
+    // to interpolate the count straight in, so the ordinary state "nobody counted
+    // this scope" printed the word `undefined` into a reader's picture. Count and
+    // reach each sit in their own space on the line that names them, which is also
+    // the rule that a number may never rest where a neighbour's name can lend it
+    // its own (finding #12).
+    //
+    // The stillness is stamped because the ink is not enough. A reviewer reading the
+    // page sees UNMEASURED; the honesty rack counts a `data-motion="still"` with a
+    // reason, and twelve components had been drawing absences nobody could query.
+    // This is a measured gap, not a refusal: the world came up short, the component
+    // did not decline, so it carries a plain stillness and never a `data-refusal`.
+    g.push(counted && reached ? row
+      : `<g${attrs(still(counted
+        ? 'no reach was reported for this scope'
+        : 'no count was computed for this scope'))}>${row}</g>`);
   });
   return card('at-field', 'AT-field write scope',
     frame(W, H, g.join(''), {
