@@ -33,3 +33,24 @@ Real defects already seen on film:
   displayed minutes must never move backwards or oscillate.
 - crush: 216 animations alive at once — pending verdict on whether each one
   is a measurement.
+
+## Reference vault (scripts/vault-harvest.mjs -> vault/ref/, gitignored)
+
+Built by the search council's union, then verified page by page. Live,
+provenance-recorded sources, each frame hashed and origin-stamped in
+manifest.jsonl:
+- hudsandguis.com — curated diegetic-UI captures by tag. The treasure:
+  the `radar` tag alone returns Alien: Isolation's motion tracker, the
+  exact canon our radar/tracker/gauge components claim.
+- film-grab.com — full-frame film stills. Composition and palette
+  reference only: it grabs every frame, not just UI, so Blade Runner
+  gives a city skyline, not the ESPER deck.
+- scifiinterfaces.com — annotated UI plates (lazy gallery, thin pull so
+  far), and it hosts the MOVING clips we still need.
+
+Gap named honestly: a static frame library captures LOOK, not MOVE. The
+high-quality bar the goal sets ("movie magic real motion") cannot be met
+from stills alone. The next harvest pass targets the motion sources --
+scifiinterfaces' embedded clips, interfaceingame videos, animated-screen
+archives -- and this tool needs a frame-stepper that turns a GIF/clip
+into a labelled strip the way motion-film does for our own pages.
