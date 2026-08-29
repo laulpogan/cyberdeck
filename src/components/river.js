@@ -127,7 +127,7 @@ export function river({ lanes, cite, width = 900, laneHeight = 66,
 // names the series it wanted -- rather than six charts printing the same
 // shrug. A reader learns which recorder to build first.
 
-import { arc, axis, dot, frame, hatched, line, rect, refusalHatched, ring, text } from '../draw.js';
+import { arc, axis, curve, dot, frame, hatched, line, rect, refusalHatched, ring, text } from '../draw.js';
 import { traffic, elapsed, durationWords } from '../marks.js';
 import { card, esc as _esc, W, H } from './card.js';
 
@@ -425,24 +425,74 @@ export const STRIP_LANES = ['STATE', 'OUTPUT', 'PROOF', 'HUMAN'];
  * the retained sample draws as ONE MARK at its own instant and the rest
  * of the strip stays hatched. A flat line drawn from a single sample is
  * the most common chart lie in software, and it reads as stability. */
-export function stripChart({ sample = null, sourceState,
+export function stripChart({ sample = null, samples = null, seriesLane = 'OUTPUT',
+                             sourceState,
                              cite = 'source.snapshot_series(session_id)',
                              lanes = STRIP_LANES }) {
   const lane = 18, gap = 14, top = 24;
   const g = [];
   let y = top;
+  // A retained series is what `curve()` was written for, and it is drawn when a
+  // producer keeps more than the last instant: two points minimum, in time order,
+  // values in the component's 0..1 convention. Below two the primitive returns null
+  // rather than invent a flat line, which is the same judgement this card already
+  // makes in words (`ONE SAMPLE`). Nothing here infers a series from a single sample.
+  const laneIndex = samples && samples.length ? lanes.indexOf(seriesLane) : -1;
+  if (samples && samples.length && laneIndex < 0) {
+    // Silently dropping retained measurements is the sin this whole library was
+    // built against; a lane name that is not on the axis is a caller bug, said loudly.
+    throw new Error(`stripChart: seriesLane "${seriesLane}" is not one of the drawn `
+      + `lanes (${lanes.join(', ')}). The samples would be dropped.`);
+  }
+  const kept = laneIndex >= 0
+    ? samples.filter((p) => p && p.at != null && p.value != null)
+      .slice().sort((a, b) => Number(a.at) - Number(b.at))
+    : [];
+  const drawn = kept.length >= 2;
+  const spanMs = drawn
+    ? Math.max(1, Number(kept[kept.length - 1].at) - Number(kept[0].at)) : 1;
+  const norm = drawn
+    ? kept.map((p) => [
+      (Number(p.at) - Number(kept[0].at)) / spanMs,
+      Math.max(0, Math.min(1, Number(p.value))),
+    ]) : null;
+  // No hatching before the oldest sample: the axis spans exactly what was retained
+  // (the note says so), so a hatch there would claim a period nobody recorded and a
+  // quiet span inside it. Inventing an axis window to make the hatch possible is the
+  // same invention in the other direction.
   lanes.forEach((label, i) => {
     g.push(text(PAD, y - 4, label, { size: 7, opacity: '.8' }));
-    if (i === 0 && sample) {
-      // The retained sample sits at the present edge. Everything left of
-      // it is hatched, not blank: a blank span reads as a quiet period,
-      // and quiet is a measurement.
-      g.push(`<g class="cd-riv-dark">${hatched(PAD, y, SPAN - 8, lane)}</g>`);
+    const seriesHere = Boolean(norm) && i === laneIndex;
+    // One retained instant belongs at the present edge of the lane that holds the
+    // series when there is one -- the last sample *is* the retained sample, and
+    // drawing it on a different lane would say two lanes hold data when one does.
+    const sampleHere = Boolean(sample) && (seriesHere || (!norm && i === 0));
+    if (seriesHere) {
+      // The series travels the axis in the order the samples were taken, and the
+      // lane it travels is named in the cite it carries.
+      // Translated into the lane: `curve` emits its own 0-based coordinates, so an
+      // untranslated series draws across the top of the frame, over every label --
+      // which is what it did before this line was here.
+      g.push(`<g class="cd-riv-series" data-lane="${_esc(seriesLane)}"`
+        + ` transform="translate(${PAD} ${y})"`
+        + `${attrs(trace(true, { cite, order: i, total: lanes.length }))}>`
+        + curve(norm, { width: SPAN - 8, height: lane }) + '</g>');
+    }
+    if (sampleHere) {
+      // The retained sample sits at the present edge. On a lane that holds nothing
+      // else, everything left of it is hatched, not blank: a blank span reads as a
+      // quiet period, and quiet is a measurement. `ONE SAMPLE` is the word for a lane
+      // holding one instant and no series, not for the tail of a retained history.
+      if (!seriesHere) {
+        g.push(`<g class="cd-riv-dark">${hatched(PAD, y, SPAN - 8, lane)}</g>`);
+      }
       g.push(`<g class="cd-riv-sample">`
         + line(PAD + SPAN - 4, y, PAD + SPAN - 4, y + lane, { width: 3 }) + '</g>');
-      g.push(text(PAD + SPAN - 10, y + lane - 5, 'ONE SAMPLE',
-        { size: 7, anchor: 'end' }));
-    } else {
+      if (!seriesHere) {
+        g.push(text(PAD + SPAN - 10, y + lane - 5, 'ONE SAMPLE',
+          { size: 7, anchor: 'end' }));
+      }
+    } else if (!seriesHere) {
       g.push(`<g class="cd-riv-dark">${hatched(PAD, y, SPAN, lane)}</g>`);
       g.push(text(W / 2, y + lane - 5, 'NEVER MEASURED', { size: 7, anchor: 'middle' }));
     }
@@ -460,8 +510,13 @@ export function stripChart({ sample = null, sourceState,
     : '';
   return card('strip', 'Phosphor strip chart',
     frame(W, H, g.join(''), {
-      label: `${lanes.length} lanes on one axis. Only one holds a sample.` })
+      label: drawn
+        ? `${lanes.length} lanes on one axis; ${seriesLane} holds `
+          + `${kept.length} retained samples.`
+        : `${lanes.length} lanes on one axis. Only one holds a sample.` })
     + readout,
-    sample ? { note: 'One sample is not a series.' }
-           : { mark: refusal('no sample was retained') });
+    drawn ? { note: `${kept.length} retained samples on ${seriesLane}, and the lanes `
+        + 'nobody records stay dark. The axis spans what was retained, and nothing wider.' }
+      : sample ? { note: 'One sample is not a series.' }
+        : { mark: refusal('no sample was retained') });
 }

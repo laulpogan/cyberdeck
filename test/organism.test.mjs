@@ -58,7 +58,8 @@ test('the envelope draws no position and no comfortable middle', () => {
   // The one picture this gauge must never make is a needle in a green box.
   const html = og.envelope({});
   assert.match(html, /NO POSITION IS DRAWN/);
-  assert.match(html, /SAFETY BOUNDARY UNSUPPLIED/);
+  assert.match(html, /ECONOMIC, WORKLOAD, SAFETY UNSUPPLIED/,
+    'the missing edges are named, not summarised');
   assert.equal((html.match(/this boundary was never supplied/g) || []).length, 3);
   assert.match(html, /no position was measured to move/);
   assert.doesNotMatch(html, /data-motion="trace"/);

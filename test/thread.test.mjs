@@ -107,9 +107,15 @@ test('a projection is lifted out of the panel, not badged inside it', () => {
     { kind: 'projected', label: 'ETA', value: '~12M', cite: 'derived from turns' }] });
   assert.match(html, /cd-th-overlay/);
   assert.match(html, /a projection is not a reading/);
-  // The observed list carries no stillness of its own -- it is a reading.
+  // The observed list is a reading, so it reveals in payload order and carries no
+  // stillness; the projected lane is refused at its `<ul>`, and since nothing animates
+  // inside a stillness, each of its rows declares that stillness too.
   const canon = html.slice(html.indexOf('cd-th-canon'), html.indexOf('cd-th-overlay'));
-  assert.doesNotMatch(canon, /data-motion/);
+  assert.match(canon, /data-motion="count"/, 'an observed row is revealed in order');
+  assert.doesNotMatch(canon, /data-motion="still"/, 'and nothing measured is refused');
+  const projected = html.slice(html.indexOf('cd-th-overlay'));
+  assert.match(projected, /data-motion="still"/, 'the projection lane declares stillness');
+  assert.doesNotMatch(projected, /data-motion="count"/, 'and does not reveal anything');
 });
 
 test('an empty side of the overlay is drawn, not omitted', () => {

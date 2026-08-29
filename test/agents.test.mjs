@@ -97,11 +97,19 @@ const FRAGMENTS = [
   { label: 'BLOCKED BY', value: 'credential expired', cite: 'state_reason' },
 ];
 
-test('fragments are held apart and compose with nothing', () => {
+test('fragments are held apart, and the refusal sits on the forecast', () => {
   const html = ag.oracle({ fragments: FRAGMENTS });
   assert.match(html, /NO FORECAST IS ASSEMBLED/);
-  assert.equal((html.match(/a fragment composes with nothing/g) || []).length, 4);
   assert.match(html, /no priors exist to forecast from/);
+  // Composition is what the refusal is about, and composition happens in the forecast
+  // band. Stamping every held fragment as a refusal made a ledger of four readings read
+  // as four absences -- and left the bright column of the showcase motionless, which is
+  // finding #9. A fragment that is held is a measurement and reveals in payload order.
+  assert.equal((html.match(/data-motion="count"/g) || []).length,
+    FRAGMENTS.filter((f) => f.value != null).length, 'one reveal per held fragment');
+  assert.equal((html.match(/a fragment composes with nothing/g) || []).length, 0,
+    'the sentence about composition is no longer stamped on the fragments');
+  assert.match(html, /no fragment was held for/, 'an empty slot says so, declared');
   assert.doesNotMatch(html, /data-motion="trace"/);
 });
 
@@ -255,8 +263,13 @@ test('a killmail with a charge record claims the charge it holds', () => {
   } });
   assert.match(priced, /data-priced="1"/);
   assert.match(priced, /4\.10 ISK/);
-  assert.doesNotMatch(priced, /data-refusal|data-still-reason/,
+  assert.doesNotMatch(priced, /no canonical charge record is supplied/,
     'a refusal is stamped only when it is true');
+  assert.doesNotMatch(priced, /data-refusal/, 'and no refusal ink on a priced receipt');
+  // Blank lines on the receipt still declare themselves: finding #10 replaced silence
+  // with `was not recorded`, which is a different claim from the one the line above
+  // forbids -- an absent field, not a denied charge.
+  assert.match(priced, /data-still-reason="MODEL was not recorded"/);
   const unpriced = ag.killmail({ receipt: { title: 'ATTEMPT LOST', fit: {}, damage: {} } });
   assert.match(unpriced, /data-priced="0"/);
   assert.match(unpriced, /data-refusal="1"[^>]*data-still-reason="no canonical charge record is supplied"|data-still-reason="no canonical charge record is supplied"[^>]*data-refusal="1"/,

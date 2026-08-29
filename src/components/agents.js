@@ -277,8 +277,14 @@ export function oracle({ fragments, seam = 'source.outcome_priors(work_id)' }) {
   fragments.forEach((row, i) => {
     const held = row.value !== null && row.value !== undefined;
     const y = 24 + i * 30;
+    // A held fragment is a measurement and arrives in the order the payload carries
+    // it. The refusal this specimen owes is about *composition*, and composition
+    // happens in the forecast band below -- stamping every fragment as a refusal made
+    // the ledger read as four absences when it holds four readings, and the bright
+    // column of the showcase never moved (finding #9).
     g.push(`<g class="cd-ag-fragment" data-held="${held ? 1 : 0}"${
-      attrs(refusal('a fragment composes with nothing'))}>`
+      attrs(held ? count(i, fragments.length)
+        : still(`no fragment was held for ${row.label}`))}>`
       + rect(PAD, y, SPAN, 22, { dashed: !held })
       + text(PAD + 7, y + 9, row.label, { size: 6.5, opacity: '.7' })
       + text(PAD + 7, y + 18, held ? String(row.value) : 'UNMEASURED', { size: 8 })
@@ -428,7 +434,12 @@ export function killmail({ receipt }) {
   }
   const fit = receipt.fit || {};
   const damage = receipt.damage || {};
-  const row = (label, value) => `<li${value ? '' : ' data-unmeasured="1"'}>
+  // The receipt is a record, and a record has an order: the fit is written before the
+  // damage. Lines that hold a value reveal in that order; a line nobody filled in says
+  // so rather than sitting unmarked, which is how a reviewer tells a blank field from a
+  // forgotten one (finding #10).
+  const row = (label, value, i, total) => `<li${value ? '' : ' data-unmeasured="1"'}${
+    attrs(value ? count(i, total) : still(`${label} was not recorded`))}>
     <b>${esc(label)}</b><span>${esc(value || 'UNMEASURED')}</span></li>`;
   // The cost line's refusal is stamped only when it is true. This used to stamp
   // the missing-charge reason on every receipt, so one that does hold a record
@@ -442,11 +453,12 @@ export function killmail({ receipt }) {
       <header><b>${esc(receipt.title || 'ATTEMPT LOST')}</b>
         <code>${esc(receipt.receipt_id || 'UNADDRESSED')}</code></header>
       <h5>FIT</h5><ul>
-        ${row('HARNESS', fit.harness)}${row('MODEL', fit.model)}
-        ${row('PROFILE', fit.profile)}${row('HOST', fit.host)}</ul>
+        ${row('HARNESS', fit.harness, 0, 4)}${row('MODEL', fit.model, 1, 4)}
+        ${row('PROFILE', fit.profile, 2, 4)}${row('HOST', fit.host, 3, 4)}</ul>
       <h5>DAMAGE</h5><ul>
-        ${row('PROOF', damage.proof_state)}${row('TERMINAL EVENT', damage.terminal)}
-        ${row('BLOCKED BY', damage.reason)}</ul>
+        ${row('PROOF', damage.proof_state, 0, 3)}
+        ${row('TERMINAL EVENT', damage.terminal, 1, 3)}
+        ${row('BLOCKED BY', damage.reason, 2, 3)}</ul>
       <h5>COST</h5>
       <p class="cd-ag-cost" data-priced="${priced ? 1 : 0}"${
         attrs(priced ? {} : refusal('no canonical charge record is supplied'))}>

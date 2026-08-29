@@ -327,19 +327,36 @@ export function muthur({ answers }) {
  * is exactly the failure this rule prevents, with a label on it. */
 export function joiOverlay({ rows }) {
   const split = (kind) => (rows || []).filter((r) => r.kind === kind);
-  const render = (list) => (list.length ? list : [null]).map((row) => row
-    ? `<li class="cd-th-row"${row.value == null ? ' data-unmeasured="1"' : ''}>
+  // Observed rows arrive in the order the payload carries them, which is a
+  // measurement of sequence and gets a reveal. A row nobody measured gets a
+  // declared stillness rather than silence, so a review script can tell "nothing
+  // arrived" from "nobody thought to mark it" (finding #10). The projected lane is
+  // refused as a whole -- and nothing animates inside a stillness, so it stays a
+  // lane of declared stillness row by row.
+  const render = (list, lane) => (list.length ? list : [null]).map((row, i) => {
+    // Nothing animates inside a stillness -- the projected lane is refused at its
+    // `<ul>`, so every row in it declares its own stillness rather than smuggling a
+    // reveal under an ancestor that says projections do not move.
+    const mark = lane === 'projected'
+      ? still('a projection is not a reading')
+      : row === null ? still('the lane is empty')
+        : row.value == null ? still(`${row.label} was not measured`)
+          : count(i, list.length);
+    return row
+      ? `<li class="cd-th-row"${row.value == null ? ' data-unmeasured="1"' : ''}`
+        + `${attrs(mark)}>
         <b>${esc(row.label)}</b>
         <span>${esc(row.value == null ? 'UNMEASURED' : row.value)}</span>
         <cite>${esc(row.cite)}</cite></li>`
-    : '<li class="cd-th-row" data-unmeasured="1"><b>NOTHING</b>'
-      + '<span>UNMEASURED</span></li>').join('');
+      : `<li class="cd-th-row" data-unmeasured="1"${attrs(mark)}><b>NOTHING</b>`
+        + '<span>UNMEASURED</span></li>';
+  }).join('');
   return card('joi', 'Joi overlay presence',
     `<div class="cd-th-projection" data-drawing="projection">
       <ul class="cd-th-canon"><li class="cd-th-head">OBSERVED</li>
-        ${render(split('observed'))}</ul>
+        ${render(split('observed'), 'observed')}</ul>
       <ul class="cd-th-overlay"${attrs(still('a projection is not a reading'))}>
-        <li class="cd-th-head">PROJECTED</li>${render(split('projected'))}</ul>
+        <li class="cd-th-head">PROJECTED</li>${render(split('projected'), 'projected')}</ul>
     </div>`,
     { note: 'An overlay is not a reading.' });
 }

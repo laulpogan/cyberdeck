@@ -29,6 +29,30 @@
 /* A declared stillness is not a styling hook -- it exists so the tests and
    the review scripts can see it -- but it does one useful thing: it wins
    over anything that tries to animate it later. */
+/* A level grows out of its own left edge, not out of the middle of the frame.
+ *
+ * Without this, `transform: scaleX(.4)` on a bar authored at x=224 scales about the
+ * centre of the viewBox -- measured in the browser, `chipBudget`'s budget bar ended at
+ * x≈91, a hundred and thirty-three user units left of its own label, and stayed there
+ * because the animation holds its end state. The counters never saw it: they ask
+ * whether something moved, and something moved beautifully. The rule the kind states is
+ * "drawn out to its measured extent", and an extent that ends in the wrong column is
+ * not a measurement, it is a decoration with a number attached.
+ *
+ * `fill-box` makes the reference box the element's own geometry; the origin then sits
+ * on the edge the axis grows from, and the finished bar lands exactly where the same
+ * measurement would have drawn it. Slide and fade are translate/opacity and unaffected.
+ */
+[data-motion="level"], [data-motion="level"] > i {
+  transform-box: fill-box; transform-origin: left center;
+}
+[data-motion="level"][data-level-axis="y"],
+[data-motion="level"][data-level-axis="y"] > i { transform-origin: left top; }
+[data-motion="level"][data-level-axis="slide"],
+[data-motion="level"][data-level-axis="slide"] > i,
+[data-motion="level"][data-level-axis="fade"],
+[data-motion="level"][data-level-axis="fade"] > i { transform-origin: center; }
+
 [data-motion="still"] { animation: none !important; transition: none !important; }
 
 /* The operator asked for no motion, so there is none, and nothing is

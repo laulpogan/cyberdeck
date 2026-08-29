@@ -13,7 +13,7 @@ import { fileURLToPath } from 'node:url';
 import { FIXTURES, FIXTURE_KEYS, brightFor, darkFor, fieldsFor, callFor }
   from '../app/fixtures/index.js';
 import { darkOf, hasValue, addedOrChanged, normalizeField, clone } from '../app/fixtures/project.js';
-import { allComponents } from '../app/src/registry/index.js';
+import { allComponents, componentByKey } from '../app/src/registry/index.js';
 import { resolveModel, emptyEvidenceState } from '../app/src/evidence.js';
 
 const FIXTURE_DIR = fileURLToPath(new URL('../app/fixtures/', import.meta.url));
@@ -187,4 +187,69 @@ test('evidence on means the bright model, byte for byte', () => {
   for (const key of FIXTURE_KEYS) {
     assert.deepEqual(resolveModel(key, emptyEvidenceState()), brightFor(key));
   }
+});
+
+// --------------------------------------------------------------------------
+// Finding #9: a bright model that refuses instead of demonstrating hides the
+// component it is supposed to show. The fixture is the app's responsibility, so the
+// rule belongs to the app's tests. `stripChart` is the case that proved it: the
+// showcase's only over-time instrument drew no line anywhere in this application,
+// because its bright model retained one sample and `draw.js` `curve` had no caller in
+// the chart that is named after a curve.
+const NOT_KINETIC = {
+  twoState: 'a two-state glyph: HTML furniture with no event to place',
+  queueState: 'a queue read-out: a measured empty is a sentence, not a motion',
+  garage: 'a list of parked attempts: rows are records',
+  grid: 'a table of fields: a table is read, not watched',
+  gevulot: 'a visibility contract: a legal state, not an event',
+  dominator: 'a domination chain: three grants beside each other',
+  ladder: 'a priced ladder: rungs are prices, and prices do not move themselves',
+  dossier: 'a dossier: what happened is written down',
+  channel: 'a trust legend: amplitude is drawn, and now says so',
+  standardSheet: 'a legend is not a reading',
+  syncRatio: 'a total is not a rate',
+  redaction: 'a redaction list: the row stays and the mark says what was withheld',
+};
+
+test('every bright model demonstrates its component, or says why it cannot', () => {
+  const MOVING = /data-motion="(arrive|count|level|elapsed|trace|traffic|cycle|decay|intent)"/;
+  const silent = [];
+  for (const entry of allComponents()) {
+    const key = entry.key;
+    const html = entry.fn(brightFor(key));
+    if (MOVING.test(html)) {
+      assert.ok(!NOT_KINETIC[key], `${key}: listed as not kinetic but it does move`);
+      continue;
+    }
+    if (!NOT_KINETIC[key]) silent.push(key);
+  }
+  assert.deepEqual(silent, [],
+    'these bright models show no motion and state no reason for it: ' + silent.join(', '));
+});
+
+test('the strip chart draws a series when one is retained, in the app itself', () => {
+  const html = componentByKey('stripChart').fn(brightFor('stripChart'));
+  assert.match(html, /<polyline/, 'the line exists on the page, not only in the primitive');
+  assert.match(html, /class="cd-riv-series" data-lane="OUTPUT" transform="translate\(/,
+    'inside its own lane -- an untranslated curve draws over every label');
+  assert.match(html, /12 retained samples on OUTPUT/, 'the note counts what it drew');
+  assert.doesNotMatch(html, /ONE SAMPLE/, 'a series is not one sample');
+  const dark = componentByKey('stripChart').fn(darkFor('stripChart'));
+  assert.doesNotMatch(dark, /<polyline/, 'and the switch takes the line away with the data');
+  assert.match(dark, /no sample was retained/, 'saying so, in a refusal');
+});
+
+test('a fixture that fabricates says so where the fabrication lives', () => {
+  // The app has no producer behind `source.snapshot_series(session_id)`. A demo model
+  // is allowed to invent what a producer would send -- once -- but only if the file
+  // admits it, and admits the determinism that keeps captures identical.
+  const src = readFileSync(fileURLToPath(new URL('../app/fixtures/river.js', import.meta.url)),
+    'utf8');
+  assert.match(src, /deterministic/, 'states that the series is computed, not measured');
+  assert.match(src, /Math\.sin/, 'by a named formula');
+  // A *call* to them, not the prose that forbids them -- the comment above the model
+  // says "no Math.random", and an assertion that matched the words would have failed
+  // for the right reason and taught nobody anything.
+  assert.doesNotMatch(src, /Math\.random\s*\(|Date\.now\s*\(/,
+    'and nothing that changes between captures is actually invoked');
 });

@@ -1027,3 +1027,92 @@ and `strands` as unchanged; a positional diff showed the truth immediately — `
 `<td data-unmeasured="1">UNMEASURED</td>` where bright prints `82%`, and `strands` swaps every route
 from `data-motion="trace"` to a stated `still`. A check that asks the wrong question about a string
 finds defects that are not there; the same lesson the drawing instrument learned the hard way.
+
+---
+
+## Finding #9 — closed: the bright column showed refusals, and every `level` bar landed in the wrong column
+
+The bright model is the showcase's demonstration. Twelve of them were mostly absence,
+which means the moving half of the site was reviewed against drawings that never moved.
+`stripChart` had no series to draw, `envelope` had no edges supplied, `joiOverlay`/`thread`
+led with refused lanes, `oracle` stamped every held fragment as a refusal, `killmail` left
+blank lines silent. Each was fixed at the end that was wrong — the component when it could
+not draw what it was given (`stripChart` now draws a `polyline` through the retained
+samples, in the lane it names, and throws if the caller points it at a lane it did not
+draw), and the fixture when the component was right (`envelope` supplies two measured
+limits and leaves the third unpriced; the fixture comment says so).
+
+**A fixture that fabricates must say so, and show its motion.** `stripChart`'s series is
+not a producer's readings; it is written in the fixture from `beforeS(i) + sin(i)`, with
+the sentence "Fabricated here, deterministically" above it, and a test that requires both
+the sentence and the absence of any actual `Math.random()`/`Date.now()` call. That test
+failed on its first run: it matched the *prose* that forbids those calls, so it failed for
+the right reason and taught nothing. Match invocations, not vocabulary.
+
+**Every `level` bar in the library drew its measurement in the wrong place.** Writing the
+series meant measuring where a scaled drawing actually lands, and `chipBudget`'s budget bar
+is authored at `x=224..324`, holds `data-level="0.406"`, and finishes at **x≈91..131**. The
+runtime applies `scaleX(level)`, and with no `transform-box`, an SVG element's transform
+origin is the centre of the *viewBox* — `170`, not `0` — so the bar was scaled about a point
+170 user units to its right and dragged past it. The counters all read clean: something
+moved, and it moved the amount the measurement said. It just arrived 133 units from where
+it was drawn, and stayed there, because the animation keeps its end state. A `level` is the
+kind whose entire claim is an extent, and every one of them was wrong:
+
+```
+cd-fd-budget      authored 772..871 (screen px)   rendered 447..546   drift 325px
+cd-og-wall (0.44) ends where its own left edge is, once anchored
+```
+
+Fix is four rules of CSS — `transform-box: fill-box` with `transform-origin: left center`
+(`left top` on the `y` axis), for the marked element **and the `<i>` fill inside it**: the
+runtime animates `el.querySelector('i') || el`, so a level on a track moves a node that
+carries no attribute of its own, and the chrome's rule bar grew from its centre while every
+counter on the page reported a clean reveal. `prefers-reduced-motion` restates it, because
+the whole purpose of that block is to pin bars at their measurement.
+
+Two new claims in the gate, one of them an instrument fix:
+
+- **A level lands where it was drawn.** Authored edges come from `getBBox()` mapped through
+  the *parent's* `getScreenCTM()` (untransformed), the rendered edges from
+  `getBoundingClientRect()`, tolerance `1.5px + 3% of span`. Sabotage proves it bites: with
+  the anchor rule removed it names `cd-fd-budget` and its 325px drift.
+- **The route's specimen must mount.** The app is a hash router and the landing page carries
+  its own live drawing, so `[data-specimen-view]` resolved on Home and this probe found zero
+  level marks — it passed while measuring nothing. My own first sabotage run used
+  `ROUTES=/component/chipBudget` without the `#`, the app showed Home, and I nearly shipped
+  the claim blind. Now a `/component/<key>` route that does not mount its own specimen is
+  named as a failure, since every drawing claim on that route would be reading a different
+  drawing. Verified: a bogus key fails, a real one passes.
+
+The ratchet is `test/app-fixtures.test.mjs`: a bright model must render a moving mark, or
+be in `NOT_KINETIC` with a reason. It holds two members, both quoted from what the
+components are for — `standardSheet: 'a legend is not a reading'`, `syncRatio: 'a total is
+not a rate'` — and a third, `envelope`, had to be fixed rather than listed.
+
+Five tests were superseded rather than silenced: `agents` fragments (composition is what the
+refusal is about, and composition happens in the forecast band, not on the readings), the
+`killmail` blank-line stillness (an absent field is a different claim from a denied charge),
+`thread`'s observed lane (a reading reveals; the projection is refused at its `<ul>`),
+`organism`'s missing-edge copy (the edges are named, not summarised), and the fixture
+vocabulary test above.
+
+## Finding #11 — open: a `level` has two dialects, and the chrome speaks both at once
+
+The SVG dialect puts the extent **in the transform**: the drawing is authored at full
+extent and `scaleX(level)` is what makes it a measurement. The HTML dialect, in most hosts,
+puts it in CSS width — `.cd-esper-meter i { width: calc(var(--esper-p) * 100%) }` — and the
+animation is only the reveal. Both are reasonable. Speaking them at once is not:
+
+```
+.cd-rule-bar   data-level="0.406"   fill CSS width 597px (= the whole track)
+               rendered 0.189 of the track
+```
+
+`0.189` is neither `0.406` nor `0.406² = 0.165`, so the chrome's rule bar is not simply
+double-encoded either; it is a third thing nobody has read yet. The gate asserts the left
+edge in both dialects and the right edge **only** in the SVG one, with these numbers in the
+comment, because a claim that goes red for a reason the file cannot fix teaches the next
+reader to mute the file. Rule to hold when it is closed: **one measurement, one encoding** —
+either the transform carries the extent or the width does, never both, and whichever carries
+it must be the one the animation ends on.

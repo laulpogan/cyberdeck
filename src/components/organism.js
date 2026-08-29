@@ -18,7 +18,7 @@
 // never supplied -- rather than drawing a comfortable middle.
 
 import { frame, rect, line, dot, hexCell, text, hatched } from '../draw.js';
-import { attrs, count, refusal, still, trace } from '../marks.js';
+import { attrs, count, level, refusal, still, trace } from '../marks.js';
 import { card, esc, W, H , refusalFrame } from './card.js';
 
 const PAD = 12;
@@ -87,23 +87,63 @@ export function stockFlow({ levels = [], rates = [] }) {
  * box there is nothing that could travel toward an edge, and a drifting
  * mark would put the needle back by implication after the geometry went
  * to the trouble of leaving it out. */
-export function envelope({ boundaries = BOUNDARIES, position = null }) {
+export function envelope({ boundaries = BOUNDARIES, position = null,
+                           cite = 'envelope.boundaries[]' }) {
+  if (!boundaries || !boundaries.length) {
+    // A null field is not the default parameter: a caller that said "no boundaries"
+    // gets that stated, rather than the library's own label list quietly standing in
+    // for a producer that described nothing. The drawing keeps its space either way.
+    return card('envelope', 'Safe-envelope gauge',
+      refusalFrame({ word: 'NO ENVELOPE DESCRIBED',
+        cite: 'envelope.boundaries[]',
+        ghost: [{ x: 60, y: 40, w: 220, h: 100 }] }),
+      { mark: refusal('no boundary was described') });
+  }
   const top = 24, box = 108, inset = 22;
   const g = [`<g class="cd-og-space">`
     + rect(PAD + inset, top + inset, SPAN - inset * 2, box - inset * 2) + '</g>'];
-  const wall = (why) => attrs(still(why));
-  const why = 'this boundary was never supplied';
-  g.push(`<g class="cd-og-wall" data-edge="economic"${wall(why)}>`
-    + hatched(PAD + inset - 10, top + inset, 10, box - inset * 2) + '</g>');
-  g.push(`<g class="cd-og-wall" data-edge="workload"${wall(why)}>`
-    + hatched(PAD + SPAN - inset, top + inset, 10, box - inset * 2) + '</g>');
-  g.push(`<g class="cd-og-wall" data-edge="safety"${wall(why)}>`
-    + hatched(PAD + inset, top + box - inset, SPAN - inset * 2, 10) + '</g>');
+  // An edge is data. A fourth element on a boundary row is the measured limit -- the
+  // fraction of its axis where the edge actually sits -- and when it is present the
+  // wall draws to that extent as a solid line instead of a hatch. Until this line
+  // existed every wall was hardcoded `still` and unsupplied, so the gauge could never
+  // show an envelope: the fixture could not have demonstrated it (finding #9). An
+  // edge nobody priced still says so, in the same words, on the same element.
+  const byEdge = Object.fromEntries((boundaries || []).map((row) => [row[0], row]));
+  const limitOf = (key) => {
+    const row = byEdge[key];
+    const limit = row && row.length > 3 ? row[3] : null;
+    return limit === null || limit === undefined || !(Number(limit) >= 0 && Number(limit) <= 1)
+      ? null : Number(limit);
+  };
+  const wall = (key, x, y, w, h, vertical) => {
+    const limit = limitOf(key);
+    if (limit === null) {
+      return `<g class="cd-og-wall" data-edge="${key}" data-supplied="0"`
+        + `${attrs(still('this boundary was never supplied'))}>`
+        + hatched(x, y, w, h) + '</g>';
+    }
+    const extent = level(limit, 1,
+      { measured: true, cite: `${cite}[${key}]`, axis: vertical ? 'y' : 'x' });
+    // The wall grows out to the limit the producer gave: `level` is extent, and an
+    // edge is an extent. Geometry follows the same axis the edge runs on.
+    const drawn = vertical
+      ? line(x + 5, y, x + 5, y + (h * limit), { width: 2 })
+      : line(x, y + 5, x + (w * limit), y + 5, { width: 2 });
+    return `<g class="cd-og-wall" data-edge="${key}" data-supplied="1"${attrs(extent)}>`
+      + drawn + '</g>';
+  };
+  g.push(wall('economic', PAD + inset - 10, top + inset, 10, box - inset * 2, true));
+  g.push(wall('workload', PAD + SPAN - inset, top + inset, 10, box - inset * 2, true));
+  g.push(wall('safety', PAD + inset, top + box - inset, SPAN - inset * 2, 10, false));
   g.push(text(PAD + inset, top + inset - 6, 'ECONOMIC', { size: 7 }));
   g.push(text(PAD + SPAN - inset, top + inset - 6, 'WORKLOAD',
     { size: 7, anchor: 'end' }));
-  g.push(text(W / 2, top + box + 10, 'SAFETY BOUNDARY UNSUPPLIED',
-    { size: 7, anchor: 'middle' }));
+  const unsupplied = ['economic', 'workload', 'safety'].filter((k) => limitOf(k) === null);
+  if (unsupplied.length) {
+    g.push(text(W / 2, top + box + 10,
+      `${unsupplied.map((k) => k.toUpperCase()).join(', ')} UNSUPPLIED`,
+      { size: 7, anchor: 'middle' }));
+  }
   if (position) {
     g.push(`<g class="cd-og-position">${dot(W / 2, top + box / 2, 5)}</g>`);
   } else {
@@ -121,10 +161,17 @@ export function envelope({ boundaries = BOUNDARIES, position = null }) {
   return card('envelope', 'Safe-envelope gauge',
     frame(W, H, g.join(''), {
       extra: position ? '' : attrs(refusal('no position was measured to move')).trim(),
-      label: 'The operating space with all three boundaries hatched and no '
-           + 'position marked.' }),
-    position ? { note: 'A position drawn against three measured edges.' }
-             : { note: 'A comfortable middle is the failure this gauge prevents.' });
+      label: unsupplied.length
+        ? `The operating space with ${unsupplied.length} boundary `
+          + `${unsupplied.length === 1 ? 'edge' : 'edges'} hatched.`
+        : 'The operating space with all three boundaries measured.',
+      extra: position ? '' : attrs(refusal('no position was measured to move')).trim(),
+    }),
+    position ? { note: unsupplied.length
+      ? `A position, drawn against ${3 - unsupplied.length} measured edge `
+        + 'and edges nobody priced.'
+      : 'A position drawn against three measured edges.' }
+      : { note: 'A comfortable middle is the failure this gauge prevents.' });
 }
 
 /** Cargo admission balance -- offered against taken, on a beam that tips.

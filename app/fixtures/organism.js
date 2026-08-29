@@ -22,15 +22,19 @@ export const ORGANISM_FIXTURES = {
 
   envelope: {
     // Rasmussen: a system drifts toward an edge rather than failing at a limit.
-    // All three boundaries here are unsupplied, which is the normal case, and an
-    // envelope with invented edges is worse than no envelope because it looks
-    // safe. The position is the field that would let something travel.
-    fields: ['position'],
+    //
+    // Two edges are priced and one is not, which is what a real quarter looks like --
+    // and until now this model could not have shown anything else, because the
+    // component hardcoded all three walls as unsupplied. An envelope with invented
+    // edges is worse than no envelope, so WORKLOAD stays unpriced and says so; the two
+    // edges the operator did price draw to their measured extent, which is what a gauge
+    // is for. (Finding #9: this bright model was three refusals and a label.)
+    fields: ['position', 'boundaries'],
     model: {
       boundaries: [
-        ['economic', 'ECONOMIC', 'The spend ceiling nobody has priced.'],
-        ['workload', 'WORKLOAD', 'The load the fleet carries before work waits.'],
-        ['safety', 'SAFETY', 'The point past which failures stop being recoverable.'],
+        ['economic', 'ECONOMIC', 'The spend ceiling nobody has priced.', 0.62],
+        ['workload', 'WORKLOAD', 'The load the fleet carries before work waits.', null],
+        ['safety', 'SAFETY', 'The point past which failures stop being recoverable.', 0.44],
       ],
       position: { note: 'fleet aggregate, unmeasured against all three edges' },
     },

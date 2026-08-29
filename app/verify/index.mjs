@@ -327,6 +327,104 @@ for (const route of routes) {
 
       if (consoleProblems.length) bad.push(...consoleProblems.slice(0, 4));
 
+      // Wait for the page to have drawn something before judging it. The app is a hash
+      // router and React mounts the specimen after the chrome, so every drawing claim in
+      // this file used to race the mount -- a level-anchoring probe added to `chipBudget`
+      // found zero level marks because it was looking at the landing page, and a check
+      // that measures nothing reports nothing. Routes with no drawing at all (rules) are
+      // allowed to time out; the claim they owe is made elsewhere.
+      // Wait for *this* route's specimen, not merely for a specimen. The app is a hash
+      // router: the landing page mounts first and carries its own live drawing, so a
+      // wait on `[data-specimen-view]` resolved on the home page and every drawing claim
+      // in this file judged whatever happened to be mounted. A level-anchoring probe
+      // added against `chipBudget` reported zero level marks and passed, which is how a
+      // gate becomes decoration -- the check that measures nothing reports nothing.
+      const routeKey = /^#\/component\/([\w-]+)$/.exec(route)?.[1];
+      const mounted = await page.waitForFunction((key) => (key
+        ? [...document.querySelectorAll('[data-specimen-view]')]
+          .some((n) => n.getAttribute('data-specimen-view') === key)
+        : document.querySelector('.cd-draw, [data-specimen-view]')), routeKey ?? null,
+      { timeout: 6000 }).then(() => true, () => false);
+      if (routeKey && !mounted) {
+        // The route asked for a specimen and the page shows something else. Every
+        // drawing claim below would then measure the wrong page and report a clean
+        // result, so the wrong page is the failure -- named here, once.
+        bad.push(`#${routeKey} never mounted: the page shows no specimen with that name,`
+          + `so every drawing claim on this route would be measuring some other drawing`);
+      }
+      await page.waitForTimeout(200);
+
+      // A `level` bar must END where the measurement says, not merely move. The
+      // counters ask whether something animated, and a scaleX applied about the centre
+      // of the viewBox answers "yes" while landing the bar in another column -- which is
+      // what `chipBudget` did for its whole life: authored at x=224, finishing at x≈91,
+      // and holding there because the animation keeps its end state. Nothing that moves
+      // can be trusted to have arrived, so this measures arrival.
+      const anchored = await page.evaluate(() => {
+        const out = [];
+        document.querySelectorAll('[data-motion="level"]').forEach((el) => {
+          const axis = el.getAttribute('data-level-axis') || 'x';
+          if (axis === 'slide' || axis === 'fade') return;
+          const level = Number(el.getAttribute('data-level'));
+          if (!(level >= 0)) return;
+          // Follow the runtime's own choice of target: a level on a track animates the
+          // fill inside it, and measuring the track instead would compare a box that
+          // never moves against an extent the fill is holding.
+          const target = el.querySelector('i') || el;
+          let authoredLeft;
+          let width;
+          let scaleByLevel;
+          if (typeof target.getBBox === 'function') {
+            // SVG dialect: the extent is *in the transform* -- the drawing is written at
+            // full extent and `scaleX(level)` is what makes it a measurement.
+            const box = target.getBBox();
+            const ctm = target.parentElement.getScreenCTM();
+            if (!ctm) return;
+            authoredLeft = ctm.a * box.x + ctm.c * box.y + ctm.e;
+            width = Math.abs(ctm.a * box.width);
+            scaleByLevel = true;
+          } else {
+            // HTML dialect: the extent is in the CSS width the host already set
+            // (`width: calc(<level> * 100%)`) and the animation only reveals it, so the
+            // fill must land at its own width, not at its width times the level again.
+            const origin = target.offsetParent || target.parentElement;
+            if (!origin) return;
+            authoredLeft = origin.getBoundingClientRect().left + target.offsetLeft;
+            width = target.offsetWidth;
+            scaleByLevel = false;
+          }
+          const r = target.getBoundingClientRect();
+          out.push({
+            name: el.getAttribute('class') || el.tagName,
+            authoredLeft, renderedLeft: r.left,
+            authoredRight: authoredLeft + width * (scaleByLevel ? level : 1),
+            renderedRight: r.right, span: width, level, scaleByLevel,
+          });
+        });
+        return out;
+      });
+      for (const bar of anchored) {
+        // Tolerance scales with the drawing: a specimen fitted to a 390px phone maps
+        // user units to fewer device pixels, and the same one-unit rounding is smaller.
+        const slack = 1.5 + bar.span * 0.03;
+        const leftDrift = Math.abs(bar.renderedLeft - bar.authoredLeft);
+        // The right edge is claimable only in the SVG dialect, where the transform *is*
+        // the extent. In the HTML dialect the host may have put the extent in CSS width,
+        // in the transform, or in both: the chrome's `cd-rule-bar` declares 0.406 and
+        // renders at 0.189 of its track, which is neither -- that arithmetic is finding
+        // #11, recorded and unresolved. A claim that goes red for a reason this file
+        // cannot fix only teaches the next reader to mute the file.
+        const rightMiss = bar.scaleByLevel ? Math.abs(bar.renderedRight - bar.authoredRight) : 0;
+        if (leftDrift > slack || rightMiss > slack) {
+          bad.push(`${bar.name} is a level of ${bar.level} that does not land where it `
+            + `was drawn: authored edge ${Math.round(bar.authoredLeft)}..`
+            + `${Math.round(bar.authoredRight)}, rendered `
+            + `${Math.round(bar.renderedLeft)}..${Math.round(bar.renderedRight)} `
+            + `(drift ${Math.round(leftDrift)}px / ${Math.round(rightMiss)}px) -- `
+            + `an extent that ends in the wrong place is not a measurement`);
+        }
+      }
+
       // —— what the drawing contains: type small enough to be decoration, text
       // outside the box it was drawn in, and marks that never got a movement
       const drawn = await page.evaluate(() => {

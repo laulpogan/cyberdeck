@@ -557,3 +557,20 @@ same pass: **an unlabelled glyph in a known idiom is a claim** — `channel`'s n
 amplitude in the shape of the `traffic` squiggle, so the column now says `SIGNAL NOISE · AMPLITUDE,
 NOT CADENCE`; and **a fixture that cannot reach a state leaves that state unreviewed** — `dominator`
 needed `TERMINATE` in the seam list before the ceremony shape ever appeared on a page.
+
+- **A `level` bar is anchored or it lies.** Without `transform-box: fill-box`, an SVG
+  `scaleX(level)` is applied about the centre of the *viewBox* (170 units, not 0), so the bar
+  finishes to the left of where it was drawn and stays there — every level in the library
+  drew its measurement ~2× off for its whole life, with clean counters throughout. The anchor
+  belongs on the marked element *and* `[data-motion="level"] > i`: the runtime animates
+  `el.querySelector('i') || el`, so the fill inside a track carries no attribute. Restated in
+  `prefers-reduced-motion`, which exists to pin bars at their measurement.
+- **`level` has two dialects and the chrome speaks both.** SVG puts the extent in the
+  transform; HTML hosts put it in CSS width; `cd-rule-bar` declares 0.406, is given the full
+  track as width, and renders 0.189 — finding #11, open. The gate asserts the left edge in
+  both dialects and the right edge only where the transform is the extent.
+- **The gate waits for *its* specimen now.** `[data-specimen-view]` alone resolves on the
+  landing page, because the app is a hash router; drawing claims measured Home while reporting
+  the route's name, and `ROUTES` entries need the `#` (`#/component/x`) or the app renders Home
+  and every drawing claim on that route goes vacuous. A `/component/<key>` route whose specimen
+  never mounts is a failure, not a shrug.
