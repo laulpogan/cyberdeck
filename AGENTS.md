@@ -459,3 +459,31 @@ while the line hue stays, and the pattern def is contract-held, so it is not tou
 `syncRatio`'s ratio band was a thirteenth component refusing by drawing rather than
 declaring — hatched span, the words `NO SERIES RETAINED`, and nothing in the DOM —
 found while doing the ink work, now declared, and its `DECLARED STILL` went 0 → 4.
+
+## A refusal may shrink. It may not grow.
+
+`app/verify/pair-heights.mjs` measures the `[data-specimen-view]` box on both sides of the
+rack's own switch and `app/verify/PAIR-HEIGHTS.md` reports it. The rule is **asymmetric**:
+shrinking is a truthful quantity — `muthur` answers one unasked prompt where four queries
+were, `tape` shows one blank slot because nothing is queued, and padding either out would
+be inventing content — while growing is ink the measurement never claimed, moving
+everything below the card because somebody changed an epistemic state. `scaleCrush` added
+371px and `individuation` 554px before this existed.
+
+Three things that fell out of enforcing it:
+
+- **A refusal inherits the measurement's sizing, not the library's defaults.** `card()`
+  takes `refusalSpan`/`refusalScale`/`refusalCls`, and `refusalFrame` passes them through.
+  The fleet wall is drawn at a fixed pixel size so its hexes stay hexes at 390; refusing it
+  with a fluid 340×200 frame was honest at 1280 and **collapsed under the drawing floor at
+  390** — one fix that manufactured the opposite defect three widths away.
+- **The allowance is the sentence, not a constant.** The first cut allowed 26px (one
+  measured `i.cd-why` line) and then failed `dominator` +28, `ladder` +54 and
+  `contextBurn` +31 for the crime of explaining themselves. The gate now reads each
+  refused specimen's own reason-line height and allows that plus the gap it sits in.
+- **Words the refusal must say are allowed their own line, once.** `ladder` printed the
+  same paragraph — *the producer has not said whether this is permitted; silence is not
+  consent* — under every verb, so a fourteen-rung ladder grew by a paragraph. The sentence
+  is now printed once per card (`SILENCE_IS_NOT_CONSENT`) and the row keeps the short
+  clause; the word `PERMIT UNMEASURED` already carries the fact. Repeating a doctrine
+  sentence per row is not more honest, it is layout with a thesis.

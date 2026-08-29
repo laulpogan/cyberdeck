@@ -103,3 +103,53 @@ export const DRAWING_PROBE = `(selector) => [...document.querySelectorAll('[data
       height: found.reduce((sum, el) => sum + Math.round(el.getBoundingClientRect().height), 0),
     };
   })`;
+
+/** How much a specimen may *grow* when the evidence is removed. A tolerance, not a
+ * ratio: one line of the library's own type plus a hair, which is all the slack a
+ * caption swap accounts for. */
+/** One refusal sentence, and nothing else. `i.cd-why` measures 15.3px of line
+ * (10.56px type) inside a figure that adds ~8px of gap — 23px in the running app, which is
+ * exactly what `gauge` grows by and the reason the allowance is not 0. A refusal is
+ * *required* to print its reason where a note used to be, so the one thing it may add is
+ * the line it is obliged to say. Anything beyond that is ink the measurement never
+ * claimed. Measured off the mandated element rather than picked: `gauge` 23px passes, and
+ * the +371px and +554px hatch posters this rule was written for do not. */
+export const GROWTH_TOLERANCE_PX = 26;
+
+/** The asymmetric half of "keeps its space".
+ *
+ * A refusal may be shorter than the measurement — an unanswered list has one line in
+ * it, and padding it out to four rows would be inventing questions (`muthur` and
+ * `tape` are that case, and both are correct). It may not be *taller*. Ink the
+ * measurement never claimed, drawn in the space the measurement did not use, moves
+ * everything below the card because somebody changed an epistemic state: `scaleCrush`
+ * added 371px and `individuation` 554. Shrinking is a truthful quantity; growing is
+ * the specimen speaking louder when it knows less.
+ *
+ * Measured against the specimen view, not the drawing regions: a text-led card's
+ * picture is smaller than its space, and the space is what the page laid out.
+ */
+export function layoutVerdict(pairs) {
+  const failures = [];
+  for (const pair of pairs) {
+    if (!(pair.measured > 0) || !(pair.refused > 0)) continue;
+    // The allowance is the sentence, not a constant guessed from one specimen. Each
+    // refused specimen reports its own `i.cd-why` height, so a long refusal sentence
+    // that wraps to three lines is paid for by those three lines (plus the gap it sits
+    // in) and nothing else. Measured per specimen rather than globally: the first cut
+    // used one number for the whole library and then failed `dominator` (+28), `ladder`
+    // (+54) and `contextBurn` (+31) for the crime of explaining themselves.
+    const allowance = Math.max(GROWTH_TOLERANCE_PX, (pair.reason || 0) + REASON_GAP_PX);
+    const growth = pair.refused - pair.measured;
+    if (growth > allowance) {
+      failures.push(`${pair.label} grows ${growth}px across the evidence switch `
+        + `(${pair.measured}px measured, ${pair.refused} refused; its refusal sentence is `
+        + `${pair.reason || 0}px and the allowance is ${allowance}px) — a refusal may say less, `
+        + `but may not take space the measurement did not use`);
+    }
+  }
+  return failures;
+}
+
+/** The gap a line sits in inside a card, measured alongside the sentence. */
+export const REASON_GAP_PX = 12;

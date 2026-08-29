@@ -100,8 +100,13 @@ export function scaleCrush({ count: total, bleeding = [], cite = 'fleet.cells' }
     mark: (i) => attrs(count(i, total)) });
   if (!built) {
     return card('crush', 'Fleet-wall scale crush', '',
-      { refusalWord: 'BOARD UNCOUNTED',
-    mark: still('the board was never counted') });
+      // No count means no board, and no board means no right to 340×200 of hatch:
+      // the measured wall is about 118px tall, and the refusal is a band pair about
+      // the same height. Drawing a poster where a board would have been moved the
+      // whole page 371px to say less.
+      { refusalWord: 'BOARD UNCOUNTED', refusalSpan: [W, 48],
+        refusalScale: 2.4, refusalCls: 'cd-draw-fixed',
+        mark: refusal('the board was never counted') });
   }
   return card('crush', 'Fleet-wall scale crush',
     frame(built.width, built.height, built.body,

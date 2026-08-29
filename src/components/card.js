@@ -34,15 +34,19 @@ export const W = 340, H = 200;
  * shape that is missing deserves to be outlined; everything else gets the same honest hole.
  */
 export function refusalFrame({ word = 'UNMEASURED', ghost = [], cite = null,
-                               width = W, height = H } = {}) {
-  const band = 16;
+                               width = W, height = H, scale = null, cls = '' } = {}) {
+  // Bands scale with the space the component was given. A refusal sized to a short
+  // board cannot carry two 16-unit bands and a word, and clipping a band off the top of
+  // a frame is a refusal that no longer fills the thing it refuses.
+  const band = Math.min(16, Math.max(8, Math.round(height / 5)));
+  const inset = Math.min(14, Math.max(4, Math.round(height / 5)));
   const middle = height / 2;
   // Two bands of the library's unmeasured ink bracket the word. A component that supplies its
   // own empty geometry does not need them: the outline of the thing that is missing is already
   // the hatch, and laying ink over it would hide the shape the refusal exists to keep.
   const bands = ghost.length ? [] : [
-    refusalHatched(14, middle - band - 14, width - 28, band),
-    refusalHatched(14, middle + 14, width - 28, band),
+    refusalHatched(14, middle - band - inset, width - 28, band),
+    refusalHatched(14, middle + inset, width - 28, band),
   ];
   const g = [
     ...ghost,
@@ -53,17 +57,29 @@ export function refusalFrame({ word = 'UNMEASURED', ghost = [], cite = null,
     // provenance printed where provenance goes.
     ...(cite ? [text(14, height - 12, cite, { size: 6, opacity: '.55' })] : []),
   ];
+  // `scale`/`cls` are passed through: a measurement drawn at a fixed pixel size (the
+  // fleet wall is, so its hexes stay hexes at 390) has to be refused at a fixed pixel
+  // size too, or the same refusal that is honest at 1280 collapses under the drawing
+  // floor at 390 — which is exactly what a 340×48 band did.
   return frame(width, height, g.join(''),
-    { label: `Refused: ${word} — ${cite || 'no cite supplied'}` });
+    { label: `Refused: ${word} — ${cite || 'no cite supplied'}`, scale, cls });
 }
 
 export function card(key, title, body, { mark = null, note = null, ghost = [],
+  refusalSpan = null, refusalScale = null, refusalCls = '',
                                          refusalWord = null } = {}) {
   const refused = mark && mark['data-motion'] === 'still';
   // An empty body over a refusal is not a drawing, and the refusal still has to hold the
   // space the measurement would have held. Read it off the mark, as everything here is.
   const drawn = refused && !String(body || '').trim()
-    ? refusalFrame({ word: refusalWord || 'UNMEASURED', ghost, cite: mark['data-cite'] })
+    // `refusalSpan` is the space the measurement would have used, where the component
+    // knows it. Without it the frame is the library's default W×H, which is how
+    // `scaleCrush` came to answer a 118px board with 489px of hatch bands: a refusal
+    // that dwarfs the measurement it refuses is the specimen speaking louder when it
+    // knows less.
+    ? refusalFrame({ word: refusalWord || 'UNMEASURED', ghost, cite: mark['data-cite'],
+      scale: refusalScale, cls: refusalCls,
+      ...(refusalSpan ? { width: refusalSpan[0], height: refusalSpan[1] } : {}) })
     : body;
   return `<figure class="cd-card" data-specimen="${key}"${refused ? attrs(mark) : ''}>
   <figcaption class="cd-card-name">${esc(title)}</figcaption>

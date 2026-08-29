@@ -42,6 +42,16 @@ const WORD = {
 const refused = (missing, why, kind = 'absent') =>
   ({ state: 'no_grant', word: WORD.no_grant, missing, why, kind });
 
+/** The sentence this module exists to keep: a producer that has not answered is not a producer
+ * that said no. It is printed **once per card**, not once per row — the row already carries the
+ * word `PERMIT UNMEASURED`, and repeating the paragraph under every verb in a fourteen-rung
+ * ladder made the refused state 54px taller than the measured one. Words the refusal must say
+ * are allowed exactly their own line; a paragraph multiplied by a population is layout, and the
+ * layout of a specimen belongs to the measurement, not to the epistemic state. */
+const SILENCE_IS_NOT_CONSENT = 'The producer has not said whether this is permitted.'
+  + ' Silence is not consent.';
+
+
 /** Which of the three states a control renders in, and why.
  *
  * The ladder stops at the FIRST missing authority. The order is
@@ -80,9 +90,8 @@ export function evaluate(verb, env) {
   if (verb.permit === null || verb.permit === undefined) {
     // "Nobody told us" and "we were told no" are different facts, and
     // collapsing them is how a console starts lying quietly.
-    return refused('PERMIT UNMEASURED',
-      'The producer has not said whether this is permitted. Silence is not '
-      + 'consent.', 'unknown');
+    // One clause on the row — the sentence itself is at the card, once.
+    return refused('PERMIT UNMEASURED', 'The producer has not said.', 'unknown');
   }
   if (verb.permit === false) {
     return refused('PERMIT WITHHELD',
@@ -141,7 +150,7 @@ export function dominator({ verbs, env }) {
   return card('dominator', 'The Dominator control',
     `<div class="cd-grant-stack" data-drawing="grant">${
       graded.map(([verb, grant]) => control(verb, grant)).join('')}</div>`,
-    { note: 'Inert glass names the authority it is missing.' });
+    { note: `Inert glass names the authority it is missing. ${SILENCE_IS_NOT_CONSENT}` });
 }
 
 /** Command ladder -- every verb, priced in authority.
@@ -165,5 +174,5 @@ export function ladder({ verbs, env, label = 'Command ladder' }) {
       <ul>${graded.map(([verb, grant]) =>
         `<li data-grant-state="${esc(grant.state)}">${control(verb, grant)}</li>`).join('')}</ul>
     </div>`,
-    { note: 'The rungs you cannot afford stay on the list.' });
+    { note: `The rungs you cannot afford stay on the list. ${SILENCE_IS_NOT_CONSENT}` });
 }

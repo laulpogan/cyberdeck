@@ -852,6 +852,23 @@ triVision's field and needleField's field of hollow rings still draw their
 in-specimen absence in the gap ink. The vocabulary exists; those sites still have
 to say which of the two facts they mean.
 
+## Finding #3 is closed: the switch no longer moves the page
+
+`app/verify/PAIR-HEIGHTS.md` (from `app/verify/pair-heights.mjs`) measures the specimen box
+on both sides of the rack's own switch for all 51 components. The rule is **asymmetric** —
+a refusal may shrink, it may not grow past the sentence it is obliged to print — and with
+the fixes in, **no specimen grows past its allowance**; three shrink, each for a stated
+truthful reason (`muthur` 414→201, `individuation` 314→157, `tape` 275→146), and the report
+says why rather than hiding them. What it took: `scaleCrush` refused at the board's fixed
+pixel size instead of a fluid poster; `individuation`'s refusal became the *row* it
+replaces rather than a `W×H` frame; `gauge`'s +23 turned out to be its own refusal sentence
+and is allowed by measurement, not by a widened constant; `ladder` stopped repeating a
+paragraph once per verb.
+
+The one rule that was *not* written: "heights equal". `muthur` and `tape` are the
+counter-examples that killed it — reserving the measured height would put blank space where
+an absence is being declared, and a reserved box reads as a quiet measurement.
+
 ### Two probe results that came out *for* the library
 
 The bright model was checked against the dark model for all 51 components. Two render byte-identical

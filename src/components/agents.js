@@ -17,7 +17,7 @@
 
 import { dot, frame, hatched, line, rect, refusalHatched, text } from '../draw.js';
 import { attrs, count, level, refusal, still } from '../marks.js';
-import { card, esc, wrapped, W, H , refusalFrame } from './card.js';
+import { card, esc, refusalFrame, wrapped, W, H } from './card.js';
 
 const PAD = 12;
 const SPAN = W - PAD * 2;
@@ -103,10 +103,24 @@ export function individuation({ profile, siblings,
     // hide the one thing this console actually knows, and the disc is the shape the finding
     // is about: this tank, unaccompanied.
     return card('individuation', 'Tachikoma individuation',
-      refusalFrame({
-        word: 'NO SIBLING OBSERVED',
-        ghost: [`<g transform="translate(30,77)">${disc(profile || {})}</g>`],
-      }),
+      // The measured card is a header and a list of siblings. With none observed the
+      // truth is one row: this tank, and nobody else. So the refusal is drawn as the
+      // row it replaces — the profile's own disc (the one thing observed) and the
+      // word — rather than a 340×200 frame of hatch, which measured 592px against a
+      // 114px measurement and moved the page 554px to say less. The container is kept,
+      // the content is as small as the truth.
+      `<div class="cd-ag-group" data-diverged="0">
+        <header><b>${esc(profile || 'UNNAMED PROFILE')}</b>
+          <span data-measured="0">DIVERGENCE UNMEASURED</span></header>
+        <article class="cd-ag-sibling" data-redacted="0">
+          <span class="cd-ag-arrival"${attrs(refusal('no sibling was observed on this profile'))}>
+            ${disc(profile || {}, 38)}</span>
+          <div class="cd-ag-body">
+            <b>NO SIBLING OBSERVED</b>
+            <span class="cd-ag-ident">the profile is the subject of the question, not a sibling</span>
+            <div class="cd-ag-measures">${measure('TURNS', null)}${measure('TOOLS', null)}</div>
+          </div></article>
+      </div>`,
       { mark: refusal('no sibling was observed on this profile') });
   }
   const burns = siblings.map((s) => s.context_percent)

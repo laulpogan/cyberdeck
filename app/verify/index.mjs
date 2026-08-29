@@ -20,7 +20,7 @@ import { mkdirSync, writeFileSync } from 'node:fs';
 
 import { REGISTRY, allComponents } from '../src/registry/index.js';
 import { UNCONDITIONAL_MARKS } from '../src/undeclared.js';
-import { DRAWING_SELECTOR, DRAWING_PROBE, drawingVerdict } from './drawing.mjs';
+import { DRAWING_SELECTOR, DRAWING_PROBE, drawingVerdict, layoutVerdict } from './drawing.mjs';
 
 const BASE = process.env.BASE || 'http://127.0.0.1:5199/';
 const OUT = process.env.OUT || '/tmp/cyberdeck-gate';
@@ -426,6 +426,11 @@ for (const route of routes) {
           verdict: Number(document.querySelector('[data-honesty="moving-without-evidence"]')?.textContent.trim() ?? -1),
           heights: [...document.querySelectorAll('[data-specimen-view]')]
             .map((n) => Math.round(n.getBoundingClientRect().height)),
+          // What the refusal itself is obliged to print, per specimen: the reason line the
+          // layout allowance is made of. Read here, not guessed in the verdict.
+          reasons: [...document.querySelectorAll('[data-specimen-view]')].map((n) => Math.round(
+            [...n.querySelectorAll('i.cd-why, .cd-why')]
+              .reduce((sum, el) => sum + el.getBoundingClientRect().height, 0))),
           painted: getComputedStyle(document.body).backgroundColor,
         }));
         if (off.verdict !== 0) bad.push(`with evidence absent the verdict reads ${off.verdict}`);
@@ -464,6 +469,19 @@ for (const route of routes) {
         if (lost.length) {
           bad.push(`${lost.length} specimen(s) fail the drawing test when the evidence goes: `
             + lost.slice(0, 4).join('; ') + (lost.length > 4 ? ` and ${lost.length - 4} more` : ''));
+        }
+        // The asymmetric half: a refusal may say less, so it may be shorter — MU/TH/UR's
+        // console with one unasked prompt legitimately halves. It may not be taller: that
+        // is ink the measurement never claimed, and it moves everything below the card
+        // because someone changed an epistemic state. `scaleCrush` did +371px and
+        // `individuation` +554px before the refusal frames were sized to the space.
+        if (off.heights.length === before.specimens.length) {
+          const grew = layoutVerdict(before.specimens.map((spec, i) => ({
+            label: spec.label, measured: spec.h, refused: off.heights[i],
+            reason: off.reasons?.[i] ?? 0,
+          })).filter((pair) => COMPONENT_KEYS.has(pair.label)));
+          if (grew.length) bad.push(grew.slice(0, 3).join('; ')
+            + (grew.length > 3 ? `; and ${grew.length - 3} more` : ''));
         }
         // Only pages that show registry components owe this one. The primitives page
         // is a shape gallery -- seventeen drawings, no measurement anywhere to remove --
