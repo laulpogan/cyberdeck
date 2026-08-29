@@ -1827,3 +1827,39 @@ again (*"did not match /3 REQUESTS WAITING/"*), and the count-missing test goes 
 clear, holding, uncounted, unreached are the four answers that change what an operator does next, and none of them may
 live in hue. `npm test` **315**, gate 5 passes on the telegraph family with `lying=0`, full sweep **261 clean**, both
 sabotages restored with `git diff` showing only the intended change.
+
+## A row that cites a picture and a row that imitates one are different claims, and the file could not tell them apart
+
+Every named demand is now asserted or recorded as unassertable, which meant the closure lived only in prose. Turning that
+into a check surfaced the shape of the problem: comparing `SPECS-FOR.json`'s for-lists against the gauntlet's rows gave
+**28 named components, 13 with a row, 15 without** — and six rows whose cited reference does not name their component at
+all. Four of the six (chipBudget ×2, glassCell, esperDive) are honest borrowings: the *demand* was measured on those
+frames, and no one claims the picture informs that drawing. The sixth was mine: `dispatch-unchanged-rows-hold` asserts
+dispatch against the Solari board, and two commits ago I removed `dispatch` from that board's for-list because its only
+relation was the word "dispatch". Both of those things are true — the slot-geometry invariant really was measured across
+22 observations of that board, and the board does not inform dispatch's drawing — and the format had no way to say so, so
+a corrected attribution looked exactly like drift.
+
+So `GAUNTLET.json` rows now carry `referenceRelation`: **18 `informs`, 6 `origin`**. An `informs` row must appear in that
+record's for-list; an `origin` row must *not*, and must carry an `originClaim` saying how the picture entered (≥160
+characters, and it has to name the for-list relation it is disclaiming). `test/gauntlet.test.mjs` refuses all four ways
+to get this wrong, each proven red individually: demoting `hardCut`'s row to dodge a for-list that does name it, deleting
+a claim, deleting the field, and reducing a claim to `borrowed it` ("11 characters is a shrug, not an argument"). An
+origin row is never coverage, which is now enforced by construction rather than by memory.
+
+Wiring that label into the sheet then found the larger defect. The canvas width was computed from the **specimen** strip
+alone, and a reference frame tiled to the same height is usually wider than a specimen cell — so the strip loop hit the
+right edge and `break`-ed, silently. **`chipBudget-constant-rate` was showing 1 of its 6 reference frames. `glassCell`
+and `stripChart` showed 2 of 6.** Sheets held up as side-by-side motion comparisons were displaying one or two frames of
+the thing being imitated, and nothing said so. Fixed at the cause (width now takes the wider of the two strips) and kept
+as a check: any strip that still drops frames is named in `sheet-index.txt`, and it currently reports none. Labels are
+now cut by `draw.textlength` rather than by a character count, because three header lines had been running off the edge
+mid-word — including the new `ORIGIN ONLY` line, which is the one line on that sheet nobody may be allowed to truncate.
+
+One trap on the way: after the builder crashed mid-run I read `sheet-index.txt` and quoted its contents — written by the
+*previous* run. A generated artifact that survives a crash is a rumour about the current build. `rm` the index before
+regenerating is the habit now, same family as checking that your sabotage reached the build.
+
+Gauntlet unchanged at **24 rows, 22 pass, 2 held, 0 FAIL**; `npm test` **316**; the corrected `chipBudget` sheet is
+5792px wide and shows the install marker crossing all the way across, which is the claim the row has been making about
+constant rate since it was written.

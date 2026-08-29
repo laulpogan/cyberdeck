@@ -82,6 +82,45 @@ test('a `for` name in SPECS-FOR resolves to something a person can render', () =
     + `spec-held components is a coverage claim and it went down`);
 });
 
+test('a row says whether its picture informs the drawing or only bore the demand', () => {
+  // Two different relations used to share one field. `dispatch` came out of the Solari board's
+  // for-list because its only relation to that board was the word "dispatch" — and the row holding
+  // dispatch's slot geometry was still honestly born from measuring that board across 67 seconds. A
+  // row that borrows a measurement and a row that imitates a picture make different claims, and the
+  // file could not say which it was making, so a corrected attribution and an honest row both looked
+  // like drift. Now the row states its relation, and this check keeps the two records consistent.
+  for (const gap of GAUNTLET) {
+    const rel = gap.referenceRelation;
+    assert.ok(rel === 'informs' || rel === 'origin',
+      `${gap.id} carries no referenceRelation — a reader cannot tell whether the cited picture is `
+      + `supposed to inform this drawing or is only where the demand was first measured`);
+    if (!gap.component) {
+      assert.equal(rel, 'informs',
+        `${gap.id} is a route row: there is no drawing to disentangle the citation from, so `
+        + `origin-only filing would hide which route the picture was read for`);
+      continue;
+    }
+    const named = ((SPECS_FOR[gap.reference] || {}).for || []).includes(gap.component);
+    if (rel === 'informs') {
+      assert.ok(named, `${gap.id} claims ${gap.reference} informs ${gap.component}, and that record's `
+        + `for-list does not name it. Either the record does inform this component — then the for-list `
+        + `is incomplete and belongs corrected — or the row is quoting a picture it only borrowed from, `
+        + `and must file itself as origin.`);
+    } else {
+      assert.ok(!named, `${gap.id} is filed as origin-only, but ${gap.reference}'s for-list names `
+        + `${gap.component}: the record does inform the drawing, and a row may not be demoted to `
+        + `origin to dodge the for-list`);
+      const claim = gap.originClaim || '';
+      assert.ok(claim.length >= 160,
+        `${gap.id} is origin-only and owes a sentence saying how the picture entered — `
+        + `${claim.length} characters is a shrug, not an argument`);
+      assert.ok(/for-list|for list|quoted/.test(claim),
+        `${gap.id}'s originClaim has to name the for-list relation it is disclaiming, or the two `
+        + `records drift apart again without anyone noticing`);
+    }
+  }
+});
+
 test('every assert kind is implemented by the tool, not wished for', () => {
   for (const gap of GAUNTLET) {
     if (!gap.assert) {

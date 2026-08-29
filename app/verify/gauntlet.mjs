@@ -286,7 +286,11 @@ for (const gap of GAPS) {
   const route = gap.route || (gap.component ? `#/component/${gap.component}` : null);
   const a = gap.assert || {};
   const page = await browser.newPage({ viewport: { width: 1280, height: 900 } });
+  // The sheet has to be able to tell an informs row from a borrowed one: a reference band drawn
+  // above a specimen reads as "this picture is what this drawing is for", which for a borrowed row
+  // would be a claim the vault explicitly refuses to make.
   const row = { id: gap.id, component: gap.component, route, reference: gap.reference,
+                referenceRelation: gap.referenceRelation || 'informs', originClaim: gap.originClaim,
                 referenceFigure: gap.referenceFigure, heldAs: gap.heldAs, gap: gap.gap,
                 measured: null, verdict: 'held', detail: '' };
   // A row with no assert still gets its pictures. A caution is a thing someone has to look at

@@ -64,10 +64,13 @@ def tile(img, h):
 
 
 def row(canvas, draw, y, frames, label, sub):
+    room = canvas.width - 2 * PAD
+    label, sub = fit(draw, label, room, FONT), fit(draw, sub, room, SMALL)
     x = PAD
     draw.text((x, y), label, font=FONT, fill=(230, 230, 230))
     draw.text((x, y + 19), sub, font=SMALL, fill=(170, 170, 170))
     y += LABEL_H
+    kept = 0
     for im in frames:
         t = tile(im, H)
         if x + t.width > canvas.width - PAD:
@@ -75,7 +78,25 @@ def row(canvas, draw, y, frames, label, sub):
         canvas.paste(t, (x, y))
         draw.rectangle([x, y, x + t.width - 1, y + H - 1], outline=(70, 70, 70))
         x += t.width + 4
-    return y + H + PAD
+        kept += 1
+    return y + H + PAD, kept, len(frames)
+
+
+def fit(draw, text, maxw, font, tail=" …"):
+    """Cut a line where the canvas actually ends.
+
+    A character count is a guess about a font; `textlength` is a measurement of it. Three header
+    lines on this sheet used to run past the right edge and truncate mid-word, which on a sheet
+    whose whole job is a legible claim reads like the claim itself was cut short.
+    """
+    if draw.textlength(text, font=font) <= maxw:
+        return text
+    while text:
+        cut = text[: -(8 if len(text) > 60 else 1)]
+        if draw.textlength(cut + tail, font=font) <= maxw:
+            return cut.rstrip() + tail
+        text = cut
+    return tail
 
 
 def main():
@@ -88,6 +109,9 @@ def main():
     # something nobody re-reads, and `tail -1` hides a skip completely.
     no_frames = []
     no_ref = []
+    # A strip that quietly drops its tail frames understates motion: the reader sees four frames and
+    # believes the row sampled four. The count goes in the index even though the picture fits.
+    thin = []
     for gap in summary["rows"]:
         app_files = [c["file"] for c in gap.get("clips") or []]
         app_files = [f for f in app_files if os.path.exists(f)]
@@ -103,21 +127,49 @@ def main():
             refs = None
             no_ref.append((gap["id"], gap["reference"]))
 
-        width = max(1180, sum(tile(a, H).width + 4 for a in app) + 2 * PAD)
+        # The canvas used to be as wide as the SPECIMEN needed. A reference frame tiled to the same
+        # height is often wider than a specimen cell, so a six-frame reference silently lost four of
+        # its frames to the right edge — a sheet held up as a side-by-side motion comparison while
+        # showing one frame of the thing being imitated. Both strips now get room.
+        app_w = sum(tile(a, H).width + 4 for a in app)
+        ref_w = sum(tile(r, H).width + 4 for r in (refs or []))
+        width = max(1180, app_w + 2 * PAD, ref_w + 2 * PAD)
         height = 2 * (LABEL_H + H + PAD) + 74
         canvas = Image.new("RGB", (width, height), (12, 13, 15))
         draw = ImageDraw.Draw(canvas)
         draw.text((PAD, PAD), f"{gap['id']}   [{gap['verdict']}]", font=FONT, fill=(235, 235, 235))
-        draw.text((PAD, PAD + 21), f"gap: {gap['gap']}", font=SMALL, fill=(200, 170, 110))
+        room = width - 2 * PAD
+        draw.text((PAD, PAD + 21), fit(draw, f"gap: {gap['gap']}", room, SMALL),
+                  font=SMALL, fill=(200, 170, 110))
         y = PAD + 44
+        # An origin row cites the frames where its demand was measured, not a picture that informs
+        # this drawing. On paper the two look identical — a strip of frames over a specimen — so the
+        # label says which claim the sheet is making, in the space the reader's eye is already in.
+        rel = gap.get("referenceRelation") or "informs"
+        if rel == "origin":
+            ref_head = (f"borrowed from — {gap['reference']}   ORIGIN ONLY: these frames are where the "
+                        f"demand was measured; they do not claim to inform this drawing, and the row is "
+                        f"not coverage for {gap.get('component') or gap.get('route')}")
+            claim = gap.get("originClaim") or ""
+            ref_sub = f"why it is here: {claim}"   # measured to the edge below
+        else:
+            ref_head = f"reference — {gap['reference']}"
+            ref_sub = f"quoted figure: {gap['referenceFigure']}"
+        ref_head = fit(draw, ref_head, room, SMALL)
+        ref_sub = fit(draw, ref_sub, room, SMALL)
         if refs:
-            y = row(canvas, draw, y, refs, f"reference — {gap['reference']}",
-                    f"quoted figure: {gap['referenceFigure']}")
+            y, kept_ref, total_ref = row(canvas, draw, y, refs, ref_head, ref_sub)
+            if kept_ref < total_ref:
+                thin.append((gap['id'], 'reference', kept_ref, total_ref))
         else:
             draw.text((PAD, y), f"reference NOT ON DISK: {gap['reference']}", font=SMALL, fill=(220, 120, 120))
             y += 20
-        row(canvas, draw, y, app, f"specimen — {gap.get('component') or gap.get('route')}",
+        y, kept_app, total_app = row(
+            canvas, draw, y, app,
+            f"specimen — {gap.get('component') or gap.get('route')}",
             f"this run: {gap.get('measured') or gap.get('detail') or 'held, not asserted'}")
+        if kept_app < total_app:
+            thin.append((gap['id'], 'specimen', kept_app, total_app))
         out = os.path.join(OUT, f"{gap['id']}.png")
         canvas.save(out)
         print(out)
@@ -135,6 +187,9 @@ def main():
         for gap_id in no_frames:
             f.write(f"# no filmstrip for {gap_id}: its assert kind samples markup across every "
                     "bright model, not motion — the component's frames live in the task-1 filmstrips.\n")
+        for gap_id, kind, kept, total in thin:
+            f.write(f"# {gap_id}'s {kind} strip shows {kept} of {total} sampled frames: the canvas ends "
+                    "before them. Judge motion on the frames shown, or widen the sheet.\n")
         for gap_id, ref in no_ref:
             f.write(f"# {gap_id} was sheeted WITHOUT its reference ({ref} not found on disk): the "
                     "bottom row is an app-only strip and is not a comparison.\n")
