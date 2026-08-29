@@ -17,7 +17,7 @@
 
 import { frame, line, dot, rect, text, hatched } from '../draw.js';
 import { count, level, still, attrs } from '../marks.js';
-import { card, esc, wrapped, W, H } from './card.js';
+import { card, esc, wrapped, W, H , refusalFrame } from './card.js';
 
 const PAD = 12;
 const SPAN = W - PAD * 2;
@@ -98,9 +98,16 @@ const measure = (label, value) => {
 export function individuation({ profile, siblings,
                                 cite = 'telemetry.context_percent' }) {
   if (!siblings || !siblings.length) {
-    return card('individuation', 'Tachikoma individuation', '',
-      { refusalWord: 'NO SIBLING OBSERVED',
-    mark: still('no sibling was observed on this profile') });
+    // The tank, alone. The profile IS observed -- it is the subject of the question -- so the
+    // refusal draws its identity disc and says the rest was not seen. An empty frame would
+    // hide the one thing this console actually knows, and the disc is the shape the finding
+    // is about: this tank, unaccompanied.
+    return card('individuation', 'Tachikoma individuation',
+      refusalFrame({
+        word: 'NO SIBLING OBSERVED',
+        ghost: [`<g transform="translate(30,77)">${disc(profile || {})}</g>`],
+      }),
+      { mark: still('no sibling was observed on this profile') });
   }
   const burns = siblings.map((s) => s.context_percent)
     .filter((v) => v !== null && v !== undefined);
@@ -357,9 +364,22 @@ export function redaction({ workers }) {
  * unpriced, which is what an immutable record is for. */
 export function killmail({ receipt }) {
   if (!receipt) {
-    return card('killmail', 'Killmail receipt', '',
-      { refusalWord: 'NO LOSS RECORDED',
-    mark: still('no attempt was recorded as lost') });
+    // The receipt form, blank. Every slot the producer would fill says so in the same
+    // words a measured receipt uses for one missing field, because a reader who came for
+    // the shape of a killmail should see the shape with nothing in it -- the FIT, the
+    // DAMAGE and the COST panels exist and every line in them is UNMEASURED. That is the
+    // finding; a generic hatched frame would have hidden which fields went missing.
+    const blank = (label) => `<li data-unmeasured="1"><b>${esc(label)}</b>`
+      + '<span>UNMEASURED</span></li>';
+    return card('killmail', 'Killmail receipt',
+      `<div class="cd-ag-receipt" data-drawing="receipt">
+        <header><b>NO LOSS RECORDED</b><code>UNADDRESSED</code></header>
+        <h5>FIT</h5><ul>${['HARNESS', 'MODEL', 'PROFILE', 'HOST'].map(blank).join('')}</ul>
+        <h5>DAMAGE</h5><ul>${['PROOF', 'TERMINAL EVENT', 'BLOCKED BY'].map(blank).join('')}</ul>
+        <h5>COST</h5>
+        <p class="cd-ag-cost" data-priced="0"><b>${esc(UNPRICED)}</b></p>
+      </div>`,
+      { mark: still('no attempt was recorded as lost') });
   }
   const fit = receipt.fit || {};
   const damage = receipt.damage || {};
@@ -367,7 +387,7 @@ export function killmail({ receipt }) {
     <b>${esc(label)}</b><span>${esc(value || 'UNMEASURED')}</span></li>`;
   const priced = receipt.cost && receipt.cost.amount != null;
   return card('killmail', 'Killmail receipt',
-    `<div class="cd-ag-receipt">
+    `<div class="cd-ag-receipt" data-drawing="receipt">
       <header><b>${esc(receipt.title || 'ATTEMPT LOST')}</b>
         <code>${esc(receipt.receipt_id || 'UNADDRESSED')}</code></header>
       <h5>FIT</h5><ul>

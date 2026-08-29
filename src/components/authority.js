@@ -139,7 +139,7 @@ export function dominator({ verbs, env }) {
   }
   const graded = verbs.map((verb) => [verb, evaluate(verb, env)]);
   return card('dominator', 'The Dominator control',
-    `<div class="cd-grant-stack">${
+    `<div class="cd-grant-stack" data-drawing="grant">${
       graded.map(([verb, grant]) => control(verb, grant)).join('')}</div>`,
     { note: 'Inert glass names the authority it is missing.' });
 }
@@ -160,7 +160,7 @@ export function ladder({ verbs, env, label = 'Command ladder' }) {
   // The card already carries the name. Repeating it inside is a second
   // heading for one thing.
   return card('ladder', label,
-    `<div class="cd-ladder">
+    `<div class="cd-ladder" data-drawing="ladder">
       <header><span>${granted} OF ${verbs.length} GRANTED</span></header>
       <ul>${graded.map(([verb, grant]) =>
         `<li data-grant-state="${esc(grant.state)}">${control(verb, grant)}</li>`).join('')}</ul>

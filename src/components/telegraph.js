@@ -266,9 +266,23 @@ export function twoState({ states, doNothing = null }) {
  * as a claim. */
 export function tape({ items, sourceState, cite = 'items[].wait.seconds' }) {
   if (!items || !items.length) {
-    return card('tape', 'The decision tape', '',
-      { refusalWord: 'NOTHING PENDING',
-    mark: still('no decision is waiting on a person') });
+    // One blank slot on the tape, in the tape's own furniture: rank, title, wait. The
+    // rank is a dash rather than a 1 because nothing is ranked, and the wait carries no
+    // clock -- an elapsed counter with nothing elapsed is the ambient loop the rule
+    // forbids, so the word UNMEASURED sits in its slot instead.
+    return card('tape', 'The decision tape',
+      `<div class="cd-tg-tape" data-drawing="tape">
+        <article class="cd-tg-item">
+          <span class="cd-tg-rank">—</span>
+          <span class="cd-tg-title">NOTHING IS WAITING ON A PERSON</span>
+          <span class="cd-tg-wait"><b>UNMEASURED</b></span>
+          <div class="cd-tg-body">
+            <p class="cd-tg-blocker">BLOCKER UNMEASURED</p>
+            <p class="cd-tg-wait-cost">IF YOU WAIT · UNMEASURED — no producer states the cost</p>
+          </div>
+        </article>
+      </div>`,
+      { mark: still('no decision is waiting on a person') });
   }
   const strips = items.map((item, i) => {
     const hot = algedonic(item);
@@ -294,7 +308,7 @@ export function tape({ items, sourceState, cite = 'items[].wait.seconds' }) {
     </article>`;
   });
   return card('tape', 'The decision tape',
-    `<div class="cd-tg-tape">${strips.join('')}</div>`,
+    `<div class="cd-tg-tape" data-drawing="tape">${strips.join('')}</div>`,
     { note: 'Ranked by the order it will hurt, not by arrival.' });
 }
 

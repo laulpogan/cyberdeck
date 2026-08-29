@@ -20,6 +20,7 @@ import { mkdirSync, writeFileSync } from 'node:fs';
 
 import { REGISTRY, allComponents } from '../src/registry/index.js';
 import { UNCONDITIONAL_MARKS } from '../src/undeclared.js';
+import { DRAWING_SELECTOR, DRAWING_PROBE, drawingVerdict } from './drawing.mjs';
 
 const BASE = process.env.BASE || 'http://127.0.0.1:5199/';
 const OUT = process.env.OUT || '/tmp/cyberdeck-gate';
@@ -394,6 +395,12 @@ for (const route of routes) {
       const evidenceSwitch = await page.$('[data-control="evidence"]');
       if (evidenceSwitch && readout.specimens.length) {
         const before = readout;
+        // Where the picture is, before anything is taken away. Measured here because the
+        // click below is the comparison: a specimen view holds the frame, the caption, the
+        // refusal sentence and sometimes a note, so total card height moves for reasons that
+        // have nothing to do with the drawing. See `drawing.mjs` for what this instrument is
+        // for and `negative-control.mjs` for the run that proves it bites.
+        const drawingsOn = await page.evaluate(eval(DRAWING_PROBE), DRAWING_SELECTOR);
         await evidenceSwitch.click();
         await page.waitForTimeout(600);
         const off = await page.evaluate(() => ({
@@ -438,27 +445,26 @@ for (const route of routes) {
               + `(named here: ${allowed.join(', ') || 'nothing'})`);
           }
         }
-        // "A refusal keeps its space" has to be measured *against a refusal*. It was not:
-        // the only height floor in this file ran on the evidence-present page, where
-        // nothing is refused, and the sweep stayed green while twelve components answered
-        // "no measurement" by returning a card with an empty body -- frame and sentence
-        // left standing, drawing area gone. The globe fell from 445px to 15.
+        // "A refusal keeps its space" has to be measured *against a refusal*, and the first
+        // version of this did not: the only height floor in this file ran on the
+        // evidence-present page, where nothing is refused, so the sweep stayed green while
+        // twelve components answered "no measurement" by returning a card with an empty body
+        // -- frame and sentence standing, drawing area gone, the globe 445px down to 15.
         //
-        // The bar is 60% of the height the component held with its evidence, which is
-        // loose enough for a refusal that legitimately reflows its own words and tight
-        // enough that a drawing area cannot vanish: the collapses measured so far land at
-        // 14-20%, and refusals that draw their absence in place measure 100%.
-        if (off.heights && off.heights.length === before.specimens.length) {
-          const lost = before.specimens
-            .map((spec, i) => ({ label: spec.label, was: spec.h, now: off.heights[i] }))
-            .filter((pair) => pair.was > 40 && pair.now < pair.was * 0.6);
-          if (lost.length) {
-            bad.push(`${lost.length} specimen(s) lose their drawing when the evidence goes: `
-              + lost.slice(0, 6).map((pair) => `${pair.label} ${pair.was}px→${pair.now}px`).join(', ')
-              + (lost.length > 6 ? ` … (${lost.length} total)` : ''));
-          }
+        // Its replacement measures the drawing rather than the card, because a ratio cannot
+        // tell a vanished picture from a refusal that is honestly shorter than the presence it
+        // refuses: MU/TH/UR's console with one unasked prompt is not four answered queries, and
+        // asking it to pad out to four would be asking for a lie. Same instrument, sharper
+        // question -- is the picture still there, and is it still drawing-sized?
+        const drawingsOff = await page.evaluate(eval(DRAWING_PROBE), DRAWING_SELECTOR);
+        const byLabel = new Map(drawingsOff.map((d) => [d.label, d]));
+        const lost = drawingVerdict(drawingsOn
+          .filter((d) => byLabel.has(d.label))
+          .map((d) => ({ label: d.label, measured: d, refused: byLabel.get(d.label) })));
+        if (lost.length) {
+          bad.push(`${lost.length} specimen(s) fail the drawing test when the evidence goes: `
+            + lost.slice(0, 4).join('; ') + (lost.length > 4 ? ` and ${lost.length - 4} more` : ''));
         }
-
         // Only pages that show registry components owe this one. The primitives page
         // is a shape gallery -- seventeen drawings, no measurement anywhere to remove --
         // and demanding a refusal from it would be demanding a lie.

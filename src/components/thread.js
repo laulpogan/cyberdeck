@@ -279,7 +279,7 @@ export function muthur({ answers }) {
     // frame: the CRT furniture is the shape this specimen is about, and an SVG hole
     // in its place lost a fifth of the card's height on a narrow screen.
     return card('muthur', 'MU/TH/UR query mode',
-      `<div class="cd-th-crt">
+      `<div class="cd-th-crt" data-drawing="crt">
         <p class="cd-th-crt-head">INTERROGATIVE</p>
         <ol class="cd-th-queries"><li data-answered="0">
           <b><i>&gt;</i>NO QUESTION LIST</b>
@@ -300,7 +300,7 @@ export function muthur({ answers }) {
       <cite>${esc(row.cite)}</cite></li>`;
   });
   return card('muthur', 'MU/TH/UR query mode',
-    `<div class="cd-th-crt">
+    `<div class="cd-th-crt" data-drawing="crt">
       <p class="cd-th-crt-head">INTERROGATIVE</p>
       <ol class="cd-th-queries">${rows.join('')}</ol>
       <p class="cd-th-crt-foot">AWAITING OPERATOR. NO FURTHER ENHANCEMENT.<i
@@ -330,7 +330,7 @@ export function joiOverlay({ rows }) {
     : '<li class="cd-th-row" data-unmeasured="1"><b>NOTHING</b>'
       + '<span>UNMEASURED</span></li>').join('');
   return card('joi', 'Joi overlay presence',
-    `<div class="cd-th-projection">
+    `<div class="cd-th-projection" data-drawing="projection">
       <ul class="cd-th-canon"><li class="cd-th-head">OBSERVED</li>
         ${render(split('observed'))}</ul>
       <ul class="cd-th-overlay"${attrs(still('a projection is not a reading'))}>

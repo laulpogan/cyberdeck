@@ -284,7 +284,7 @@ export function gevulot({ fields, producer = 'configuration.visibility_contracts
   });
   const bare = fields.filter((f) => !f.contract || f.contract === UNCONTRACTED).length;
   return card('gevulot', 'Gevulot visibility contract',
-    `<ul class="cd-dc-gevulot">${rows.join('')}</ul>
+    `<ul class="cd-dc-gevulot" data-drawing="gevulot">${rows.join('')}</ul>
      <p class="cd-dc-ruling"><b>${bare === fields.length ? 'NO CONTRACT PRODUCER'
        : `${bare} OF ${fields.length} UNCONTRACTED`}</b>
        <span>Nothing here is marked public, because no producer has said it is

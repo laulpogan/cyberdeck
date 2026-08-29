@@ -251,7 +251,7 @@ export function garage({ loadouts = [] }) {
   }
   const rows = loadouts.map((item) => {
     const proof = Object.entries(item.proof || {});
-    return `<article class="cd-og-loadout">
+    return `<article class="cd-og-loadout" data-drawing="loadout">
       <header><b>${esc(item.model)}</b><span>${esc(item.harness)}</span>
         <em>${item.count} FITTED</em></header>
       <div class="cd-og-fit">${proof.length
@@ -338,7 +338,7 @@ export function grid({ rows = [], columns = GRID_COLUMNS }) {
       cells.join('')}</tr>`;
   });
   return card('grid', 'Overview grid doctrine',
-    `<div class="cd-og-grid"><table>
+    `<div class="cd-og-grid" data-drawing="grid"><table>
       <thead><tr>${columns.map((c) => `<th scope="col">${esc(c)}</th>`).join('')}</tr></thead>
       <tbody>${body.join('')}</tbody></table></div>`,
     { note: `${rows.length} subjects, no cards.` });
