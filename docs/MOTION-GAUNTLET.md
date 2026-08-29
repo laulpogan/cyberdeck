@@ -202,3 +202,12 @@ caught: the live slot grows from a stub, so a clip taken at mount films
 an empty strip forever (frame the whole viewport for a page that grows
 into itself), and the page's own status text lives outside the slot
 node.
+
+### theme and preference coverage
+--reduced films the whole rack under prefers-reduced-motion: every one of
+the 52 still, the full drawing intact -- zero motion loses nothing, on
+camera not just in tests. --theme light films the whole rack in the day
+theme: the same 17 refuse and the same 35 move; magi reads as designed
+amber-and-ink, not an inversion. Open design note: the radar's phosphor
+trail washes paler on cream than on black -- a light-theme trail tuning
+is a candidate cycle, deliberately not yet paid for.

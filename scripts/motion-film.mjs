@@ -21,7 +21,9 @@ import { startFeed } from './live-feed.mjs';
 import { SPECS } from '../app/registry.js';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
-const FILM_DIR = path.join(ROOT, 'vault', 'film');
+const FILM_DIR = path.join(ROOT, 'vault', 'film',
+  process.argv.includes('--theme') && !process.argv.includes('--theme dark') ? 'light'
+    : process.argv.includes('--reduced') ? 'reduced' : '');
 
 async function resolveChromium() {
   const dirs = [];
@@ -50,6 +52,8 @@ function args() {
   return {
     only: get('--only', '').split(',').filter(Boolean),
     interact: process.argv.includes('--interact'),
+    theme: get('--theme', 'dark'),
+    reduced: process.argv.includes('--reduced'),
   };
 }
 
@@ -119,13 +123,14 @@ const SHEET = async (page, frames, key, span) => {
   }, { frames, key, span });
 };
 
-const { only, interact } = args();
+const { only, interact, theme, reduced } = args();
 fs.mkdirSync(FILM_DIR, { recursive: true });
 
 const chromium = await resolveChromium();
 const { server, port } = await startFeed();
 const browser = await chromium.launch();
-const ctx = await browser.newContext({ viewport: { width: 1320, height: 1500 }, deviceScaleFactor: 1 });
+const ctx = await browser.newContext({ viewport: { width: 1320, height: 1500 }, deviceScaleFactor: 1,
+  ...(reduced ? { reducedMotion: 'reduce' } : {}) });
 await ctx.addInitScript(() => {
   const P = { maxAnims: 0, h1: null, h2: null };
   window.__cdProbe = P;
@@ -149,7 +154,7 @@ const sheet = await browser.newPage();
 // page below mounts fresh already in dark — frame zero is frame zero.
 await page.goto(`http://127.0.0.1:${port}/app/index.html`, { waitUntil: 'load' });
 await page.waitForSelector('[data-theme-choice="dark"]');
-await page.click('[data-theme-choice="dark"]');
+await page.click(`[data-theme-choice="${theme}"]`);
 await page.waitForTimeout(300);
 
 const keys = only.length ? only : (interact ? ARRIVAL_KEYS : Object.keys(SPECS));
@@ -302,4 +307,11 @@ for (const r of report) {
 const dead = report.filter((r) => r.movable !== 0 && (r.anims ?? -1) <= 0 && !r.dom
   && r.deltaPct <= 0.2 && (r.clocks ?? 0) === 0);
 console.log(`\n${report.length} filmed -> ${path.relative(process.cwd(), FILM_DIR)}/`);
-console.log(dead.length ? `DEAD: ${dead.map((r) => r.key).join(', ')}` : 'every component moves');
+if (reduced) {
+  // Under prefers-reduced-motion, stillness is the contract: a MOVING
+  // row here is a violation, and the stills are the pass.
+  console.log(dead.length === report.length ? 'reduced-motion: every component still, as contracted'
+    : `REDUCED-MOTION VIOLATIONS: ${report.filter((r) => !dead.includes(r)).map((r) => r.key).join(', ')}`);
+} else {
+  console.log(dead.length ? `DEAD: ${dead.map((r) => r.key).join(', ')}` : 'every component moves');
+}
