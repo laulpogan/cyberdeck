@@ -198,8 +198,24 @@ export function radar({ contacts, pollElapsed = null, pollPeriod = null,
   [28, 52, 76].forEach((r) => g.push(ring(cx, cy, r, { width: 1, extra: 'opacity=".45"' })));
   const sweep = cycle(pollElapsed, pollPeriod, sourceState, { cite });
   const sweeping = sweep['data-motion'] === 'cycle';
+  // The leading edge sits exactly at 0 rad so a contact lights when the
+  // rotation reaches its bearing -- the ping angle is the bearing, no
+  // offset to keep straight. Behind the edge the phosphor decays through
+  // slices, which is what makes a rotating line read as a sweep instead
+  // of a wiper: the trail says where the measurement has already been.
+  const TRAIL = [[-0.12, '.15'], [-0.26, '.11'], [-0.42, '.075'],
+    [-0.58, '.05'], [-0.74, '.03'], [-0.9, '.015']];
+  let sweepMark = '';
+  if (sweeping) {
+    let edge = -0.05;
+    sweepMark += wedge(cx, cy, 76, -0.05, 0, { opacity: '.38' });
+    for (const [back, op] of TRAIL) {
+      sweepMark += wedge(cx, cy, 76, back, edge, { opacity: op });
+      edge = back;
+    }
+  }
   g.push(`<g class="cd-fd-sweep"${attrs(sweep)}>`
-    + (sweeping ? wedge(cx, cy, 76, -0.5, 0.35, { opacity: '.14' })
+    + (sweeping ? sweepMark
                 : text(cx, cy - 86, 'NO SWEEP', { size: 8, anchor: 'middle' }))
     + '</g>');
   (contacts || []).forEach((c, i) => {
@@ -208,7 +224,13 @@ export function radar({ contacts, pollElapsed = null, pollPeriod = null,
     // the centre, which would read as the freshest thing on the screen.
     if (c.age_seconds === null || c.age_seconds === undefined) return;
     const r = 28 + Math.min(1, c.age_seconds / (c.window || 60)) * 48;
-    g.push(`<g class="cd-fd-contact" data-band="${c.band || 'fresh'}"`
+    const deg = (c.bearing * 180 / Math.PI) % 360;
+    // The angle the sweep must reach to re-measure this contact. The
+    // runtime hangs the ping on it: a blip flashes as the edge crosses it
+    // and decays until the next pass, so a contact's brightness IS the
+    // time since it was last seen -- the dial's own freshness readout.
+    const angle = Number.isFinite(deg) ? ` data-sweep-angle="${(((deg % 360) + 360) % 360).toFixed(2)}"` : '';
+    g.push(`<g class="cd-fd-contact" data-band="${c.band || 'fresh'}"${angle}`
       + `${attrs(count(i, contacts.length))}>`
       + dot(cx + r * Math.cos(c.bearing), cy + r * Math.sin(c.bearing), 3.4) + '</g>');
   });

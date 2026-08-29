@@ -96,6 +96,23 @@ test('a contact with no measured age is off-scope, not at the centre', () => {
   assert.match(html, /1 contacts have no measured age/);
 });
 
+test('a swept contact declares the angle the sweep must reach', () => {
+  // The ping's evidence is the sweep's: the component states the angle,
+  // the runtime lights the blip when the edge arrives, and a blip's
+  // brightness is the time since it was last measured.
+  const html = f.radar({ pollElapsed: 1, pollPeriod: 10, sourceState: 'live',
+    contacts: [{ age_seconds: 5, bearing: Math.PI / 2 },
+      { age_seconds: 9, bearing: -Math.PI }] });
+  assert.match(html, /data-sweep-angle="90\.00"/);
+  assert.match(html, /data-sweep-angle="180\.00"/);
+});
+
+test('an unmeasurable bearing declares no angle, so it cannot ping', () => {
+  const html = f.radar({ pollElapsed: 1, pollPeriod: 10, sourceState: 'live',
+    contacts: [{ age_seconds: 5, bearing: NaN }] });
+  assert.equal((html.match(/data-sweep-angle/g) || []).length, 0);
+});
+
 test('a worker with no constraint gets a hollow ring, not a bearing', () => {
   const html = f.needleField({ workers: [
     { bearing: 0.9 }, { bearing: null }, { bearing: -1.2, hot: true }] });

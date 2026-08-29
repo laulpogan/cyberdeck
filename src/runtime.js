@@ -127,7 +127,6 @@
       // sweep an operator watches is the poll they are waiting for --
       // which is the one thing a radar drawn as a still picture cannot
       // say. Same clock, same refusals, different geometry.
-      var from = spent * 360;
       // view-box, not fill-box. The origin the caller gives is a point in
       // the drawing's own coordinate system -- the dial's centre -- and
       // fill-box would have measured it against the wedge's bounding box
@@ -142,14 +141,35 @@
       el.style.transformOrigin = origin
         ? origin.split(/\s+/).map(function (n) { return n + 'px'; }).join(' ')
         : 'center';
-      var first = play(el, { rotate: [from + 'deg', '360deg'] },
-        { duration: period * (1 - spent), easing: 'linear' });
-      if (first && first.finished && first.finished.then) {
-        first.finished.then(function () {
-          play(el, { rotate: ['0deg', '360deg'] },
-            { duration: period, easing: 'linear', repeat: Infinity });
-        }, function () {});
+      // Contacts light as the leading edge crosses their bearing and
+      // decay while they wait for the next pass: a blip's brightness is
+      // the time since it was last measured. The evidence is the sweep's,
+      // which is why the ping hangs off data-sweep-angle rather than a
+      // mark of its own. Chained laps rather than one repeat loop: each
+      // lap re-schedules the flashes against its own start, and a repeat
+      // animation cannot tell anyone where in the lap it just woke up.
+      var pings = el.parentElement
+        ? [].slice.call(el.parentElement.querySelectorAll('[data-sweep-angle]'))
+        : [];
+      function pingLap(startDeg, lapSec) {
+        for (var p = 0; p < pings.length; p++) {
+          var at = parseFloat(pings[p].getAttribute('data-sweep-angle'));
+          if (!(at >= 0)) continue;
+          var frac = (((at - startDeg) % 360) + 360) % 360 / 360;
+          play(pings[p], { opacity: [1, 0.35] },
+            { duration: lapSec * 0.55, delay: lapSec * frac,
+              easing: 'cubic-bezier(.12,.72,.3,1)' });
+        }
       }
+      function lap(startDeg, lapSec) {
+        pingLap(startDeg, lapSec);
+        var a = play(el, { rotate: [startDeg + 'deg', '360deg'] },
+          { duration: lapSec, easing: 'linear' });
+        if (a && a.finished && a.finished.then) {
+          a.finished.then(function () { lap(0, period); }, function () {});
+        }
+      }
+      lap(spent * 360, period * (1 - spent));
       return;
     }
     var bar = el.querySelector('i') || el;

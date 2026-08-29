@@ -67,3 +67,20 @@ menu fades; the Overwatch callout. A component's target and its execution
 now sit in the same view: vault/motion/<game>/<clip>.png next to
 vault/film/<component>.png. The gauntlet's loop:
 steep a reference clip, film ours, read both, fix the numbers, re-shoot.
+
+## Cycles
+
+### radar -- cycle 1 -- judged against vault/ref/fui-radar (Isolation tracker)
+The still film had a uniform wedge and constant blips: a wiper, not a
+tracker. Isolation's grammar is the phosphor trail (the sweep says where
+the measurement has already been) and blips that flare as the leading
+edge crosses them and decay while they wait -- a blip's brightness IS the
+time since it was last measured. Both built: a seven-slice fading wedge
+with a bright leading sliver (field.js), and chained laps that re-schedule
+each ping against its own start, firing at `data-sweep-angle` (runtime.js).
+The film caught a real geometry bug on the first re-shoot -- descending
+slice args made the arc sweep the long way and draw a whole lens -- fixed,
+and the second re-shoot reads right. Delta 2.2% -> 17%; 176/176 including
+radar's byte-identity gate under the new ping machinery (remembered styles
+survive a settle mid-flash). Open: trail opacity is honest but thin next
+to Isolation's phosphor; art-direction pass later.
