@@ -6515,6 +6515,32 @@
       "captionOnPage": "what the eye is expected to check: a handheld scan app: a camera viewfinder with a reticle and the instruction to point at a barcode, a card that says the code was found and data is being retrieved, then an item-added card naming the product and its price, while a cart badge goes from 26 to 27",
       "cameraDrift": true,
       "cameraDriftNote": "Handheld phone footage: the viewfinder is a moving camera on a shop shelf, so travel and amplitude in SPECS.md are largely the operator's hand. The UI's own facts — which states exist, what each one says, whether a wait carries a bar — are read with the eye off the frames, which is what this file is quoted for."
+    },
+    "magi-probe.gif": {
+      "file": "raw/magi-probe.gif",
+      "seed": "youtube",
+      "kind": "gif",
+      "bytes": 1378353,
+      "frames": 80,
+      "requestedFrames": 80,
+      "frameDelayCs": [
+        13
+      ],
+      "loopSeconds": 10,
+      "sha1": "d5c08dab65a85d9e",
+      "mediaUrl": "https://www.youtube.com/watch?v=oLJoIZ3jQhE",
+      "sourcePage": "https://www.youtube.com/watch?v=oLJoIZ3jQhE",
+      "status": "unmarked",
+      "work": "commentary video quoting Neon Genesis Evangelion (1995)",
+      "segment": {
+        "startSeconds": 66,
+        "seconds": 10,
+        "sourceSeconds": 237.6,
+        "sourceDims": "1280x720",
+        "fps": 8,
+        "derivedGifWidth": 320
+      },
+      "captionOnPage": "what the eye is expected to check: whether the MAGI decision display holds the frame long enough to read a vote"
     }
   }
 }

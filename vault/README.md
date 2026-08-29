@@ -21,6 +21,42 @@ MAX_PER_PAGE=4 SEED=motion-tracker node vault/acquire.mjs    # one seed
 python3 vault/mark.py && python3 vault/sheet.py              # measure, then look
 ```
 
+## The films, not the GIF hosts
+
+`acquire.mjs` reaches image hosts, and `COVERAGE.md` records what that costs: seventeen
+components sit in the tier "search candidates only" with **zero verified files between them** —
+`magi`, `dominator`, `ladder`, `collar`, `syncRatio`, `joiOverlay`, `scanOverlay`, `triVision`,
+`ice`, `individuation`, `redaction`, `oracle`, `gauge`, `glassCell`, `keycard`, `dispatch`,
+`needleField`. A moving diegetic interface is not on a GIF host. It is in the film.
+
+`youtube.mjs` makes the one hop `clip.mjs` refused. That refusal was real — `curl` gets
+`HTTP 403` from youtube.com — but it was a rule about `curl`, so this negotiates the page with
+`yt-dlp` and then hands the file to `clip.mjs`, which still owns every measurement and every
+manifest record.
+
+```sh
+node vault/youtube.mjs URL='https://www.youtube.com/watch?v=ID' SLUG=magi
+# -> fetches once, caches under raw/.src/, prints a contact sheet across the WHOLE film
+
+node vault/youtube.mjs URL='...' SLUG=magi START=214 DUR=12 WORK='...' SHOWS='...'
+# -> hands the cached file to clip.mjs
+```
+
+**The scan is not optional and the tool will not skip it.** Without `START` it refuses to derive
+anything and prints the sheet instead, because a window chosen off a video's title is the drift
+this vault exists to stop. Version matters too: `yt-dlp 2026.06.09` returned `HTTP 403` on the
+media while reading metadata fine — a stale extractor looks exactly like a hard refusal.
+Upgrading to `2026.08.19` fixed it, so check the version before believing a 403.
+
+The first run earned its keep by rejecting something. The archive's must-watch list names a MAGI
+video; the scan showed 45 of 48 frames are a presenter talking to camera, and the clip showed the
+decision panel holding about 2.5 seconds as a static cut. A still of the panel, not its motion —
+refused and recorded in `EYEBALL.json` rather than quietly dropped, because the next person to
+find that link should find the reason beside it.
+
+Downloads are private reference copies for design study. They land under `raw/`, which is
+gitignored, and nothing derived from them ships.
+
 A real browser is not optional fussiness: Tenor answers `curl` with a Cloudflare challenge and
 GifCities renders with scripts, so a script that never scrolls sees four images where a person
 sees two hundred. A vault whose "images" are 300-byte challenge pages is worse than no vault.

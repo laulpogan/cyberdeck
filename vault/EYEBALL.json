@@ -197,6 +197,13 @@
   "sheet": "/tmp/eye-q/all/sheet-01.png",
   "shows": "Eight sampled frames of near-black: a small block of green text at top left, scattered dots, and then the whole thing tears into angular shards. Nothing is legible enough to quote a duration or an entry order from, so th"
  },
+ "raw/magi-probe.gif": {
+  "contentVerified": false,
+  "eyeballedBy": "agent-eye(claude-opus-5)",
+  "framesViewed": "80 frames, the whole 66s+10s window at 8 fps, on the clip.mjs strip",
+  "sheet": "/tmp/magi-probe-sheet.png",
+  "shows": "66s+10s of a commentary video, not a source scene: 47 of 80 frames are a presenter to camera, the MAGI decision panel holds frames 48-68 (~2.5s) as a static cut with no element moving, then cuts to a character shot. A still of the panel, not its motion — nothing here answers duration, easing or loop period."
+ },
  "raw/motion-tracker--blob.gifcities.org_gifcities_25G2DJC3DOO6R72EAGURMGNK5YW7FRZC.gif": {
   "contentVerified": true,
   "eyeballedBy": "agent-eye(qwen/dot-backbone)",

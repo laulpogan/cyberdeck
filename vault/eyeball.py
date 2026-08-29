@@ -34,7 +34,11 @@ SEED = os.environ.get("SEED")
 PER_SHEET = int(os.environ.get("ROWS", "5"))
 TILE_W, TILE_H, COPIES = 168, 126, 8
 LABEL_W = 300
-EYE = "agent-eye(qwen/dot-backbone)"
+# Whoever actually looked. The default is the backbone that read the first nine sheets, and it
+# stayed correct only for as long as one actor did the looking. A second model reading a sheet
+# and writing that default would be the exact substitution this file was rewritten to stop --
+# the mark would name eyes that never saw the frames. So the actor is an input.
+EYE = os.environ.get("EYE", "agent-eye(qwen/dot-backbone)")
 
 
 def font(size=13):
@@ -133,7 +137,12 @@ def main():
                 "contentVerified": verdict.strip().lower().startswith("y"),
                 "shows": (shows or verdict).strip()[:600] or "no description recorded",
                 "eyeballedBy": EYE,
-                "framesViewed": f"{COPIES} frames sampled across the file's own timeline",
+                # What was actually in front of the eyes. The default describes eyeball.py's
+                # own sheet; a mark made off a clip.mjs strip saw a different number, and
+                # writing 8 there would misreport the evidence the verdict rests on.
+                "framesViewed": os.environ.get(
+                    "FRAMES_VIEWED",
+                    f"{COPIES} frames sampled across the file's own timeline"),
                 "sheet": os.environ.get("SHEET", "see OUT dir"),
             }
         json.dump(marks, open(marks_path, "w"), indent=1, ensure_ascii=False, sort_keys=True)
