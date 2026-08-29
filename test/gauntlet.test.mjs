@@ -63,8 +63,16 @@ test('every quoted figure is the figure vault/SPECS.md measured', () => {
 test('every assert kind is implemented by the tool, not wished for', () => {
   for (const gap of GAUNTLET) {
     if (!gap.assert) {
-      assert.ok(gap.heldAs === 'caution' || gap.heldAs === 'counter-example',
-        `${gap.id} asserts nothing but is held as "${gap.heldAs}" — only cautions may be unasserted`);
+      // A row may go unasserted for exactly two reasons: it is a caution/counter-example (an
+      // appearance lesson, not a rate), or the ASSERTION LANGUAGE CANNOT SAY IT — which is the
+      // case `tape-sweeps-a-drawn-strip` was registered under, because no mark kind translates a
+      // marker along an axis and a fake assert would turn a real capability gap into a green
+      // light. The second door stays shut unless the reason is long enough to be a real reason.
+      const stated = typeof gap.notHeld === 'string' && gap.notHeld.length >= 80;
+      assert.ok(gap.heldAs === 'caution' || gap.heldAs === 'counter-example' || stated,
+        `${gap.id} asserts nothing, is held as "${gap.heldAs}", and carries no reason of 80+ `
+        + `characters saying why the tool cannot assert it — an unasserted row that shrugs is a `
+        + `pass pretending to be a gap`);
       continue;
     }
     assert.ok(TOOL.includes(`a.kind === '${gap.assert.kind}'`),
