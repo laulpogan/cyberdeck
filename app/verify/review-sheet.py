@@ -49,6 +49,10 @@ def pick(frames, count):
     """Spread `count` samples across a strip's own frame list."""
     if not frames or count <= 0:
         return []
+    if count == 1:
+        # The last frame of a strip is the one that shows what the specimen settled into --
+        # and for the refused strip, whether anything was left at all.
+        return [frames[-1]]
     if len(frames) <= count:
         return frames
     return [frames[round(i * (len(frames) - 1) / (count - 1))] for i in range(count)]

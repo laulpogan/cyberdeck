@@ -1,0 +1,830 @@
+# Motion readings, one per component
+
+Read off the frames captured by `app/verify/filmstrip.mjs` (this pass: `/tmp/film4`, re-captured
+after the refusal and evidence fixes landed), laid out six components to an image by
+`app/verify/review-sheet.py` (`/tmp/rs4/group-NN-*.png`, 9 sheets, 51 rows). Every row is: the
+entrance at 0ms, mid-entrance and end, the loop at its start and its end, and the last frame after
+the rack's evidence switch was clicked — with the mark inventory read from the DOM, the height on
+both sides of the switch, and the frame-change counts beside the name.
+
+The question each reading answers is the one the rule poses: **does what moves measure
+something?** A specimen that moves because a number arrived is fine and gets said briefly. A
+specimen whose motion is decoration, or whose drawing is dead while something is still marked, or
+whose stillness is drawn in the visual language of "live", is named with the defect and where it
+is. Where a row looks dead at card scale but the DOM says `moving=1`, that is said too — a
+measurement nobody can see is a measurement nobody acts on.
+
+Numbers quoted are from the capture: `changed` counts differ from the old pass wherever the
+library changed underneath, and those differences are recorded in
+[`FILMSTRIP.md`](FILMSTRIP.md), not here.
+
+## The Field
+
+### `admission` — Cargo admission balance
+
+**Measured:** 8 of 17 entrance frames changed, 2 of 12 loop, height 571px held. The right-hand
+stack of unit bars grows across the entrance; the tilted beam and the two totals — `OFFERED 14`,
+`TAKEN 9` — are identical in the frame at 0ms and the frame at 883ms.
+**Refused:** 0 of 13 frames changed. The card draws its own absence — two hatch bands and
+`UNMEASURED OFFERED · UNMEASURED TAKEN` — and keeps its 571px.
+
+**Does the motion measure something? Partly, and not the finding.** The tally arriving is a
+measurement-shaped motion: units entered one at a time and the drawing says so. But the specimen
+is a *balance*, and the balance never moves — the beam sits at its angle from the first frame, so
+the reader watches a bar chart fill while the thing the component exists to show (14 against 9,
+one side heavier) is a static claim. Two defects, both the same shape as `gauge`'s:
+
+- The numbers are painted before the evidence arrives. `OFFERED 14` is complete at 0ms while the
+  bars are still arriving. A counter that finishes before the count it counts is a caption.
+- The beam should be the `level` — it is the visual sum of offered against taken — and it has no
+  mark. Give the beam a `level`/`decay` driven by the same measured pair, so the balance *settles*
+  as the units arrive, and the arrival motion and the finding become one event instead of two.
+
+### `atField` — AT-field write scope
+
+**Measured:** 8 of 17 changed, 2 of 12, `trace` marked, 571px held. What moves is a single hairline
+tick near the centre and a small dash that shifts between the loop frames. The four concentric
+rings (`FLEET / HOST / MODEL / PROBE`) and the section rules do not move.
+**Refused:** 0 of 13; the drawing becomes two hatch bands around `NO REACH COMPUTED`, space kept.
+
+**Does the motion measure something? Yes, and it is invisible.** The rings not animating is
+correct: a scope is a claim about authority, not a quantity that travels — and it is the right
+reading of the reference idiom, where the field boundary is drawn once. The defect is that the
+only motion in the specimen is a hairline and a dash, which at card scale (the tile is 250px of a
+571px drawing) is a sub-pixel event. The DOM reports `moving`, the eye reports nothing. Two things
+to fix, in order of value:
+
+- The trace has no visible endpoint. A ring being *crossed* is the finding — the subject sitting
+  inside `PROBE` but outside `MODEL` is why the hexagons are drawn at all — so the trace should
+  run from the centre out to the ring the measurement reaches, and stop at it, which is `trace`
+  doing its job on a measured extent rather than on a decorative tick.
+- The right-hand paragraph sits at ~6px in the drawing. It is the second-tiniest type in the
+  library after the keycard labels; it should be card copy, not specimen ink.
+
+### `bypass` — Agrippan bypass
+
+**Measured:** 5 of 17 changed, 1 of 12, `trace`, 571px held. A red arc grows from the `QUEUE` rail
+across the four pass boxes to a dot at the right margin — the curve is partial at 443ms and whole
+by 883ms, and the terminal dot appears with the completion.
+**Refused:** 0 of 13. The arc stays drawn and nothing animates, which is the correct refusal: a
+bypass that was taken is a fact about the past, not a thing that keeps happening.
+
+**Does the motion measure something? Yes — this is the row that shows what the rule is aiming
+at.** The arc travels because a pass actually went through, the travel is the whole story, and it
+ends. `ALGEDONIC · PASSES NONE OF THESE` beneath it states what the arc is *not* (the library's
+algedonic claim — nothing may be snoozed), so the motion cannot be read as an alarm. Two notes:
+
+- The entrance ends and the loop is silent, which is honest (nothing is queued in the fixture).
+  If the fixture ever carries a live queue, this row needs a `cycle`/`traffic` with a measured
+  period, and only then.
+- Small but real: the terminal dot is 3px at design scale and vanishes at 390px. The thing that
+  says "and this one is *past*" should not be the first thing the narrow layout erases.
+
+### `ceremony` — Acceptance ceremony
+
+**Measured:** 6 of 17 changed, 1 of 12, `still` and `trace`, 571px held. A marker advances along
+the `STAGE → CONDITION → ASK → CONFIRM` rail, arriving at `ASK`; the `ABOUT WINDOW 16s` rule and
+the state list below it are fixed.
+**Refused:** 0 of 13, `NO CEREMONY DEFINED` drawn in its own space.
+
+**Does the motion measure something? Yes for the marker; one thing is wrong about the window.**
+The rail is a state machine and the marker sits at the state the measurement reports — a state
+advance is exactly the kind of thing that should be animated, and it is. But `ABOUT WINDOW 16s`
+is drawn as an active interval with no `cycle` or `traffic` mark on it, and the loop is silent: the
+drawing claims a countdown that nothing counts down on the page. Either it is a measured window —
+then it gets `cycle(spent, period, sourceState)` and refuses on overrun like every other countdown
+in the library — or the words become `WINDOW UNMEASURED`. As drawn it is a progress bar with no
+progress and no producer, which is the chrome the rule exists to keep out.
+
+### `channel` — Channel state
+
+**Measured:** 0 of 17 changed, 0 of 12, **no marks at all**, 234px held and refused.
+**Refused:** 0 of 13, and — correctly — nothing changes, because with its evidence present this
+specimen does nothing either.
+
+**Does the motion measure something? There is no motion, and that is not the defect.** The defect
+is the small orange waveform at the right of the state block. It is drawn in the library's own
+"signal" idiom, the same visual language `traffic` uses, and it is inert: nothing measured drives
+it, and nothing marks it. A reader is trained by every other specimen to read a squiggle as
+"something is happening out there", so a motionless one is a false indicator wearing the costume of
+an honest one. Either the channel's own liveness is measured and arrives as a `traffic` period —
+then the squiggle earns its place and animates — or it becomes stated absence: a flat rule and the
+word `NO CARRIER`. This is the same category as the drawn-refusers who write `UNMEASURED` as ink:
+say what is not there, in ink.
+
+### `chipBudget` — HUD chip budget
+
+**Measured:** 8 of 17 changed, 2 of 12, `count` and `level`, 571px held. At 0ms only the outline
+chip and the total `26 / 64` exist; by 443ms the five chips (`FLEET BAR 12/6` … `WALLS 4/6`) and
+the bracket are there, and by 883ms nothing further moves.
+**Refused:** 0 of 13, `NO INVENTORY` drawn, space kept.
+
+**Does the motion measure something? The arrival does; the finding is painted.** Two of the three
+quantities on this card exist before their evidence arrives: the ceiling `64`, the total `26`, and
+the `OVER BUDGET` verdict are complete in the frame where the chips have not yet been drawn. And
+each chip's `x/6` bar is already at its value in the first frame it appears in — the `level` marks
+are on the elements but no level is seen travelling, because the parts arrive *and complete* in the
+same sampled window.
+
+The specimen is about a sum exceeding a ceiling. Let the sum be the thing that moves: the total
+climbing as the parts are counted, and the `OVER BUDGET` word arriving when the sum passes the
+ceiling — then the entrance *is* the argument. As it stands, the argument is stated at frame one
+and the animation is footsteps behind it.
+
+## The Instrument Rack
+
+### `city` — Placement map
+
+**Measured:** 8 of 17 changed, 2 of 12, `count`, 571px held. The five placement columns
+(`delCartogra`, `hermes`, `skelta`, `warp-02`, `rex`) stack green blocks from the baseline as the
+count arrives; two columns stay outlined in magenta dashes with a `0` beneath.
+**Refused:** 0 of 13. All five columns keep their outlines and labels, and the whole row becomes
+the dashed outline with zero counts — the refusal keeps the five-column shape rather than a
+sentence.
+
+**Does the motion measure something? Yes.** Blocks stacking as placements are counted is a
+measurement and looks like one. The defect is an ink collision, and it is the first sighting of
+the cross-cutting problem this pass keeps finding:
+
+- **The same glyph means "not reached" and "no data at all."** Magenta dashes say *this column has
+  no placements* inside a measured specimen; the very same dashes say *the library holds no
+  measurement here* in the refusal frame. So `skelta` at zero and the entire map refused are the
+  same picture, and a reader cannot tell a sparse board from a blind one — which is precisely the
+  distinction the honesty bar exists to keep. Measured absence and refused absence need different
+  inks, and the choice belongs to the token layer (`--cd-signal-warn` versus a refusal token), not
+  to whichever component drew first.
+
+### `collar` — Servitude collar
+
+**Measured:** 5 of 17 changed, 1 of 12, `elapsed` and `trace`, 585px held. The dial reads
+`2H 36M ELAPSED` inside a dashed ring; the ring's completed arc grows, and the
+`CAT-GRADUATION-30` band beside it is a `trace`.
+**Refused:** 0 of 13. The dial keeps its circle in dashed magenta around the word `UNMEASURED`, the
+graduation band becomes a hatch band, and the 585px is kept.
+
+**Does the motion measure something? Yes, and the eye cannot see it — the defect this branch was
+opened to look at.** Elapsed time is a real quantity with a real producer, and the ring's arc is
+honest. But at `2h 36m`, the arc advances a tenth of one degree per second: across a nine-second
+capture the words change once and the ring moves by a fraction of a pixel. The component is not
+wrong; it is *unwitnessed*. The dial should carry the unit the eye can resolve — minute ticks
+lifting as they pass, or the graduation band doing the counting — and the hours belong in the
+caption. A measurement nobody can perceive is functionally indistinguishable from decoration, and
+that is a claim about the reader, not about the data.
+
+### `contextBurn` — Context burn
+
+**Measured:** 5 of 17 changed, 1 of 12, `level`, 571px held. A bordered context field with
+scattered tokens and `82% BURNED` at the foot; between the sampled frames individual tokens change
+state.
+**Refused:** 0 of 13, `CONTEXT UNMEASURED` in hatch bands, space kept.
+
+**Does the motion measure something? Yes but barely, and the finding is painted.** Tokens switching
+state as context is consumed is the right motion, and it is the honest shape of a burn: it happens
+one item at a time. Two problems. The percentage is complete in the frame where no token has
+switched yet — the same order-of-reversal as `admission` and `chipBudget`. And the individual
+switch is a token going from one dark ink to another dark ink at ~3px: the level mark is on the
+element and the change is below the threshold of the room. A burn should darken its field as a
+field — the aggregate visible at a glance, the individual tokens as detail — and the `level` should
+be on that aggregate.
+
+### `coverage` — Coverage against unobserved
+
+**Measured:** 8 of 17 changed, 2 of 12, `count` and `trace`, 571px held. Routes fan out from the
+`MPS local` node; at 0ms there is a stub, by 443ms the fan is complete. The hatched
+`UNRAIDED territory · no flight authorised` panel is drawn beside it, and remains.
+**Refused:** 0 of 13, `NO SWEEP OBSERVED` in the hatched panel, space kept.
+
+**Does the motion measure something? Yes.** The routes were flown, so they draw; the ground nobody
+authorised stays hatched; the two inks never trade places. This is the doctrine drawn correctly,
+and it is the second row on this sheet that shows what the rule buys. The one weakness: all routes
+arrive inside a single sampled window, so the ordering — which is what a survey *is* — is invisible.
+A `traffic` period measured from the sweep's own cadence would make the fan arrive in the order it
+was flown; that number exists in the fixture and is currently unused.
+
+### `dispatch` — Manifest dispatch
+
+**Measured:** 8 of 17 changed, 2 of 12, `count` and `still`, 571px held. Three manifest rails
+(`NARNASS`, `PURUL`, `ARIST`, `IDENTITY` as stages) with nodes that fill as stages are reached; the
+foot line reads `1 OF 3 MANIFESTS COMPLETE` and one rail runs dashed red.
+**Refused:** 0 of 13. The rails keep their stage geometry with hollow nodes, and the count line
+becomes `0 OF 3 MANIFESTS COMPLETE`.
+
+**Does the motion measure something? Yes — a stage advance is the cleanest thing a state machine
+can animate.** Two notes, one of them the ink collision again. The dashed magenta refusal rails and
+the dashed red not-complete rail are near-neighbours in meaning; when the switch is thrown, the
+measured "this manifest is incomplete" and the refused "no manifest data exists" collapse into one
+picture, exactly as on `city`. And `0 OF 3 MANIFESTS COMPLETE` is a computed sentence about data
+the card has just declared it does not hold — a refusal that keeps a *count* is claiming it counted
+nothing. It should read `NO MANIFESTS RETAINED` or similar: absence stated, not arithmetic performed
+on absence.
+
+### `dominator` — Domination authority
+
+**Measured:** 0 of 17 changed, 0 of 12, **no marks**, 268px held.
+**Refusal** 0 of 13 and byte-similar: the console (AWAIT ASSET / TERMINATE / PROVE EXISTENCE) is
+text, and its refusal — `UNATTRIBUTED` — is already drawn as ink in the body.
+
+**Does the motion measure something? Nothing moves, correctly:** a domination chain is a legal
+state, not an event, and the one real absence (no attribution) is already written as the word
+`UNATTRIBUTED` rather than a spinner. What to change is not motion but affordance: the three action
+rows are drawn as bordered boxes, which is the library's *button* idiom — the same border the rack
+switch and the theme buttons carry — and they do nothing when pressed. In a specimen whose whole
+subject is an authority that only acts on presentation, a fake button is a lie about what the
+interface will do. Square corners plus no hover, or a `PENDING PRESENTATION` word, and the idiom
+stops promising.
+
+## The Organism
+
+### `dossier` — Identity dossier
+
+**Measured:** 0 of 17 changed, 0 of 12, **no marks**, 177px held. **Refused:** 0 of 13, same pixels —
+the refusal (`NO PROOF HISTORY`) is already drawn as ink in the body, and the disc that carries the
+identity stays.
+
+Correct stillness: a dossier is a record of what was proven, and there is nothing here that
+travels. What the row shows is the *good* version of the drawn-refuser pattern — the absence has a
+word on the drawing and the drawing keeps its 177px. The gap is the same one every other
+drawn-refuser has: no `data-motion="still"` anywhere, so `DECLARED STILL` counts this row as zero
+and a review script cannot tell it from a component that forgot.
+
+### `envelope` — Demand envelope
+
+**Measured:** 0 of 17 changed, 0 of 12, `still`, 571px held. The envelope trapezoid is drawn with a
+filled dot at the plotted position, and `SAFETY BOUNDARY UNSUPPLIED` in red beneath.
+**Refused:** 0 of 13 — the trapezoid stays, the word `NO POSITION IS DRAWN` goes inside it, and the
+ECONOMICS and WORLD-LAW columns become hatch bands. Space kept.
+
+**Does the motion measure something? Nothing moves, and one thing should.** The envelope's shape is
+a claim about a boundary, and it is right that it does not animate — but the *dot* is a plotted
+position with a time attached, and this library has a mark for exactly that: `arrive(t, sourceState)`.
+A position that arrives at a time is the whole reason the trapezoid is drawn; showing it as already
+there loses the only measurement-shaped event the specimen contains. Give the plotted dot an
+`arrive` and refuse it to a stated absence when the stamp is missing, and this row goes from a
+correctly dead drawing to the cheapest real motion in the family.
+
+### `esperDive` — Evidence dive levels
+
+**Measured:** 8 of 17 changed, 2 of 12, `count` and `trace`, 571px held. Four level boxes
+(`SUBJECT → MAIN ITEM → ARTIFACT PATCH → ARTIFACT CONTEXT`) fill in order, the fourth staying
+hatched, with the proof path and `NO FURTHER RESOLUTION` below.
+**Refused:** 0 of 13; the levels become hatch bands around `NO DEPTH MEASURED`.
+
+**Does the motion measure something? Yes — the clearest on this sheet.** A dive *is* an order, and
+the frames show the order: each level's interior appears only after the one above it. The ink
+collision returns for the third time: the hatched "not reached" level and the hatched "no depth
+measured" refusal are drawn with the same bands, so a dive that stopped at level three and a dive
+with no data look alike at a glance. Same fix as `city` and `dispatch`, and by now the pattern is
+not per-component — see *The ink problem* below.
+
+### `garage` — Assembly garage
+
+**Measured:** 0 of 17 changed, 0 of 12, **no marks**, 219px held. **Refused:** 0 of 13, same pixels;
+its refusal (`NO PROOF HISTORY`) is ink inside the loadout.
+
+Correct stillness for a loadout: what is assembled is a fact, and a fact does not shimmer. Two
+follows. Like `dossier`, the refusal is drawn but undeclared, so the honesty counters read this
+row as unmarked. And the row heights inside the loadout are the tightest in the library at 10px
+with ~7px type: legible at 1280 and 390, but the specimen has no way to say *"there are eleven
+more rows and you are seeing four"* — an assembly whose history is longer than its frame has to be
+truncated somewhere, and truncation without a mark is how a short list gets read as a complete one.
+
+### `gauge` — Suit integrity
+
+**Measured:** 6 of 17 changed, 1 of 12, `level`, **196px measured → 219px refused**. The arc fills
+and the segment spine lights; the `43/60` label is complete in the 0ms frame.
+**Refused:** 0 of 13, `UNMEASURED` in the dial's place.
+
+**Does the motion measure something? Yes, and it is the row that taught the rule.** Integrity
+draining as a spine of discrete segments, against an arc that only moves with a measurement, is
+the library's best argument. The defects are two: the ratio `43/60` is stated before the arc has
+filled (the caption-and-its-echo order bug again), and this capture makes a new one measurable —
+**the refusal is 23px taller than the measurement.** Nothing violates the floor, but throwing the
+rack switch moves everything below the card by 23px, which is a reflow caused by an epistemic
+state. A refusal may be shorter or longer than a measurement, but not *differently sized*: the
+drawing area belongs to the specimen, not to whichever state it is in. Same layout wobble to check
+across every row in this file.
+
+### `gevulot` — Gevulot visibility contract
+
+**Measured:** 0 of 17 changed, 0 of 12, **no marks**, 223px held. **Refused:** 0 of 13, same pixels;
+`UNATTRIBUTED` is drawn in red inside the contract block.
+
+Correct stillness, correct refusal-as-ink, same two gaps as `garage` and `dossier`: undeclared, and
+a text block whose overflow is unstated. One more, specific here: this contract is about *what may
+be seen*, and the one visible affordance in the block reads like a control. A specimen about
+visibility that cannot be seen through should not offer something that looks pressable.
+
+## The ink problem, three sightings on one sheet
+
+`city`, `dispatch` and `esperDive` all draw "this element has no measurement" with the same dashed
+magenta / hatch treatment the card uses when the *whole specimen* is refused. Inside a measured
+specimen that glyph means *not reached, not flown, not drilled*; in a refusal it means *the library
+holds nothing*. Those are opposite claims — one is a fact about the world, the other a fact about
+the data source — and the same pixels carry both, so a sparse board and a blind board are one
+picture. The fix is one token pair (`--cd-refusal-*` distinct from the in-measurement absence ink)
+and a check that the two never share a stroke; it belongs in the token layer, not in whichever
+component noticed first.
+
+### `glassCell` — Glass review cell
+
+**Measured:** 8 of 17 changed, 2 of 12, `still` and `trace`, 571px held. A subject pane, a dashed
+reviewer pane, a dashed sightline between them, and a small filled exchange crossing it — at 0ms it
+is at the subject edge, at 443ms it is mid-way.
+**Refused:** 0 of 13, and the 571px is kept.
+
+**Does the motion measure something? Yes, and the split is exactly right.** The sightline is now a
+declared stillness — a rule about who may look is not a quantity that travels — and the thing that
+does move is the exchange, which is an event that happened. That is the discipline the branch was
+meant to install, visible in one row. Two weaknesses: `PASSES 3 — BLOCKS 2` is complete at 0ms
+while the first exchange has not crossed yet, and the crossing dot is ~4px, so the one honest
+motion in the specimen is also the hardest thing on the card to see.
+
+### `globe` — Hologlobe table
+
+**Measured:** 16 of 17 changed, **11 of 12 loop**, `count`, `still`, `trace`, `traffic`, 445px held.
+The mesh turns and route arcs surface at different places in different frames — an arc near the
+north in the mid-entrance frame, a different one low-left four seconds in.
+**Refused:** 0 of 13, **and the specimen still measures 445px**, the fix holding under a re-capture.
+
+**Does the motion measure something? Yes — this is the library's argument in one row.** The mesh
+turns on a stated frame convention with a stated period, the pins hold, and the routes appear
+because they were flown. What is still weak is the part the component's own doc makes its claim:
+the great-circle routing. At card scale the arcs read as short curve fragments and the endpoints are
+2–3px, so the drawing says "a route exists" where the argument is "a straight line on a flat map is
+the lie". The arcs need to be the loudest ink on the specimen, and the pins that carry a measured
+`count` need to be bigger than the mesh they sit on.
+
+### `grid` — Overview grid
+
+**Measured:** 0 of 17 changed, 0 of 12, **no marks**, 168px held. **Refused:** 0 of 13, same pixels —
+its refusal is the word `UNMEASURED` drawn into the matrix rather than an empty table.
+
+A channel × time availability matrix is a snapshot of commitments, and a snapshot does not shimmer —
+correct stillness. What the row shows is the missed motion: every cell is a state, and a state that
+*changes* is an event worth marking (`traffic` on the row, `cycle` on the window). The fixture holds
+a window and a cadence; nothing on the card uses either, so the matrix reads as a printed table.
+The declared-stillness gap applies here too: drawn refusal, no `data-motion="still"`.
+
+### `hardCut` — Hard cut
+
+**Measured:** 8 of 17 changed, 2 of 12, `count` and `trace`, 571px held. Five boot stages fill in
+sequence, then the red rule and the change line; the counters at the right (`ATTMOST LAST 4 / 17m`)
+move with the stack.
+**Refused:** 0 of 13. A hatch band around `CHANGE SET UNMEASURED`, the log line marked
+`DIFFERENT UNMEASURED LINE`, `NOTHING BEYOND RULE TOLD` below, and the 571px kept.
+
+**Does the motion measure something? Yes, and it is the idiom the whole vault is about.** This is
+the fake-OS boot: stages are *entered*, one at a time, and the cut between states is a cut — no
+tween, no shimmer. The counter at the right moving with the stack is what makes it a measurement
+rather than a loading animation. Small sharpening available: the red rule that *is* the cut is
+static ink, so the moment of cutting is carried only by the log line swapping — one frame of a
+discrete jump, which is correct, but the eye lands there late. Widening the rule at the instant the
+last stage lands would make the specimen's own thesis visible without adding a single decorative
+millisecond.
+
+### `ice` — Intrusion countermeasure walls
+
+**Measured:** 7 of 17 changed, 1 of 12, `still` and `trace`, 571px held. Nested wall frames, green
+outside, red dashed inside, with a shell inside them; a trace crosses as the frames complete.
+**Refused:** 0 of 13, space kept — everything goes dashed magenta and the foot line reads
+`0 WALLS NOT REACHED`.
+
+**Does the motion measure something? Yes.** A wall is a barrier and the trace crossing one is the
+event; the nested geometry is a claim about depth, correctly still. Two defects, and the second is
+the same bug for the fourth time. `2 WALLS NOT REACHED` becomes `0 WALLS NOT REACHED` under refusal:
+a specimen with no wall data reports that *zero walls were not reached*, which is a positive claim
+about a world it has just disclaimed — same arithmetic-on-absence as `dispatch`. And the unreached
+walls inside a measurement are drawn with the same dashed magenta as refused walls, so the third
+sighting of the ink problem is now a pattern with a name.
+
+### `individuation` — Individuation marks
+
+**Measured:** 8 of 17 changed, 2 of 12, `count`, `level`, `still`, **314px measured → 571px refused**.
+Sibling rows and a disc at the left; the disc appears mid-entrance.
+**Refused:** 0 of 13 — the disc is drawn beside `NO SIBLING OBSERVED`.
+
+**Does the motion measure something? The rows arrive as counted siblings, yes.** The finding here is
+layout, not motion: the refusal is **257px taller than the measurement**, because the refusal draws a
+full `W×H` frame *in addition to* the card body instead of inside the space the measurement used.
+Throwing the rack switch moves the whole page below the card. `gauge` did the same thing at 23px;
+here it is most visible. The floor catches collapse; nothing catches inflation, and both are the
+same offence — the drawing area belongs to the specimen, not to whichever epistemic state it is in.
+The gate should pair heights as strictly as it pairs drawing kinds: for card specimens the drawing
+area is fixed by contract, so equal heights on both sides of the switch is not a preference but the
+definition of keeping your space.
+
+### `joiOverlay` — JOI overlay
+
+**Measured:** 0 of 17 changed, 0 of 12, `still`, 220px held. **Refused:** 0 of 13, same pixels.
+
+A projection status is a state, and this one is stated rather than animated — correct. The row is
+worth two lines because it is the cheapest example of the pattern the pass keeps hitting: the
+absence is honest ink inside the drawing and there is no `data-motion="still"` on anything, so the
+counters cannot see a refusal that is being made deliberately.
+
+### `keycard` — Access keycard rack
+
+**Measured:** 7 of 17 changed, 1 of 12, `still` and `trace`, 571px held. Six sleeves in a rack; the
+cards slide out of them across the entrance — one at 443ms, more by 883ms — and one sleeve is
+outlined in red, the withheld card.
+**Refused:** 0 of 13, space kept; the rack becomes dashed empty sleeves above a red count line.
+
+**Does the motion measure something? Yes.** A card being pulled is an access event, the sleeves that
+stay closed say which doors were not turned, and the sequence — which card, in what order — is the
+record. The defects are the standing two. The withheld card is drawn in red dashes and the whole
+rack refused is drawn in red dashes: the ink of *denied* and the ink of *unknown* are the same
+pixels for the fifth time in nine sheets. And the foot line is an `N of M` count; under refusal it
+has to keep reporting a number, and a number about nothing is the arithmetic-on-absence bug again —
+`0 turned` and `nobody asked` must not share a sentence.
+
+### `killmail` — Killmail receipt
+
+**Measured:** 0 of 17 changed, 0 of 12, `still`, **308px → 296px refused**. A receipt: FIT, DAMAGE,
+COST and the salvage rows, with the unpriced cost line in red.
+**Refused:** 0 of 13 — the same receipt form with `UNMEASURED` in every slot and `UNPRICED` under
+COST. No frame changes.
+
+Correct: nothing about a loss is in motion, and the receipt shape carries the refusal, which is why
+this row now reads as *a killmail with nothing on it* rather than as an error. One layout note in
+the same family as `gauge` and `individuation`: the refusal is 12px shorter than the receipt it
+refuses, so the switch nudges the page. Small, but it is the same offence and the same fix.
+
+### `ladder` — Command ladder
+
+**Measured:** 0 of 17 changed, 0 of 12, **no marks**, 352px held. **Refused:** 0 of 13, same pixels;
+the refusal is the drawn `NO PROOF HISTORY` and the row that says who was skipped.
+
+A promotion ladder is a record of who was passed over, and it should not move. Two observations that
+generalise across the text specimens. At 352px it does not fill its drawing area even when
+measured, so the family's card heights vary by content — which is fine for the rack and means the
+height pairing rule has to be stated against the *drawing area*, not the whole card. And like every
+text specimen in this file, the refusal is drawn and undeclared.
+
+### `loopDeviation` — Loop deviation
+
+**Measured:** 8 of 17 changed, 2 of 12, `still` and `trace`, 571px held. An `EXPECTED` rail with its
+four scheduled marks above an `ACTUAL` rail whose events arrive and advance; two hatched
+`NO REFERENCE TRACK` bands, and `NO DELTA IS COMPUTED` in red.
+**Refused:** 0 of 13 — hatch bands and `NO EVENTS RETAINED`, space kept.
+
+**Does the motion measure something? Yes — and this is the best *nested* refusal in the library.**
+The events arriving are a measurement, so they move; the comparison against the loop's period is
+refused *inside the measured state*, because the reference track is missing, and the drawing says so
+where the missing thing would have been. That is exactly the distinction the honesty bar is for: one
+number is known, the ratio it would have formed is not. Only flaw: the two hatched bands read the
+same as the refused state, sighting number six.
+
+### `magi` — MAGI deliberation
+
+**Measured:** 6 of 17 changed, 1 of 12, `still` and `trace`, 571px held. Three hexagon cores —
+`SALIUS` cyan, `BESSEL` magenta, `ANKIASER` dim and dashed — with verdict words and dashed links;
+across the entrance the cores resolve their verdicts in order.
+**Refused:** 0 of 13; the verdicts become `UNMEASURED`, the agreement line reads
+`AGREEMENT UNMEASURED` over `0 of 3 ... UNMEASURED`, space kept.
+
+**Does the motion measure something? Yes.** A verdict arriving after a vote is the reason the
+idiom exists — the three cores deliberate in a stated order, the reference vault says so, and the
+frames agree. `AGREEMENT UNMEASURED` inside the measured card is another good nested refusal: the
+cores answered, and what they agreed on is the thing not held. Both standing defects are here too:
+the not-consulted core is dashed in the same ink as a refused core, and the count line performs
+arithmetic on the absence.
+
+### `mfd` — Twin MFD deck
+
+**Measured:** 7 of 17 changed, 1 of 12, `trace`, 571px held. Two pane bezels, a readout each, and
+`SWITCHED SEPARATELY` between them; the trace wipes the pane rule as it resolves.
+**Refused:** 0 of 13 — the deck keeps both bezels and the `PANE A / PANE B` labels, and prints
+`ONE PANE SHORT` in the space the missing producer would have filled.
+
+**Does the motion measure something? Yes.** A readout resolving under a trace is a value arriving
+from a producer, and the deck's claim — that the two panes are switched separately — is carried by
+the trace having an `order` and a `total`. The finding is about the number in the pane. The fixture
+renders `04:12:33` at 12px in the place an operator reads a running value; nothing about it says
+*captured* — no elapsed, no age, no "as of". A frozen time in a clock format is read as a running
+clock, and the library has a whole doctrine against that confusion for the river's polls. A
+timestamp should be drawn like a timestamp.
+
+### `muthur` — MU/TH/UR console
+
+**Measured:** 8 of 17 changed, 2 of 12, `count`, 414px. **Refused:** 0 of 13, and the console keeps
+its frame — one unasked prompt where four answered queries were, `NOTHING ASKED OF THIS CONSOLE`,
+201px.
+
+**Does the motion measure something? Yes:** answers landing on a query list is a counted arrival.
+This row is the one that *shapes* the layout rule the previous readings asked for. The refusal is
+half the measured height and that is right — an unanswered list has one line in it, and drawing
+four prompts to preserve the pixel count would be inventing questions. What must be preserved is the
+*container*: the console frame, its bezels and its caption stay, and the drawing-kind check is what
+proves it. So the rule is not "heights equal"; it is **the same drawing area, with as little in it
+as the truth requires** — which is what distinguishes this row from `individuation`, where a whole
+extra frame was added on top of the body.
+
+### `needleField` — Needle field
+
+**Measured:** **14 of 17 changed**, 2 of 12, `count`, 571px held. The busiest row in the library. The
+field starts flat and dim at 0ms and rises needle by needle through the entrance, one needle amber
+against a field of green.
+**Refused:** 0 of 13 — the whole field becomes dashed magenta marks, space kept.
+
+**Does the motion measure something? Yes, and this is what a measurement looks like at speed.** Each
+needle is one discrete value, they arrive in the order the readings arrived, and the loop is nearly
+silent (2 of 12) because a needle that has settled holds. The amber outlier is the finding, and it
+is one needle among forty — the specimen is honest about proportion, which is more than most dashboards
+manage. Nothing to fix in the motion; the only note is that the dashed refusal is a *field* of dashes,
+which reads as static noise rather than as "forty needles have no reading", and that is the ink
+problem again at its most repetitive.
+
+### `oracle` — Fragment oracle
+
+**Measured:** 0 of 17 changed, 0 of 12, `still`, 571px held. `1 of 5 exhausted`, fragment boxes with
+`credential expiry  3s`, and hatched bands beneath for what is not held.
+**Refused:** 0 of 13 — the fragments become dashed outlines and the bands hatch harder.
+
+**Does the motion measure something? Nothing moves, and one string on the card promises that
+something should.** `credential expiry 3s` is drawn as a live countdown in the same format the
+library uses for measured windows, and it has no `cycle` and no `traffic`: nothing on the page
+counts it down, and if the credential really expires in three seconds a static `3s` is a lie one
+frame after it is drawn. This is `ceremony`'s `ABOUT WINDOW 16s` defect for the second time, and it
+is the second-most-dangerous thing found in this pass after a moving-without-evidence counter: a
+number that implies a timer is a claim about the future. Either it gets `cycle(spent, period,
+sourceState)` and refuses on overrun, or it becomes an absolute timestamp, drawn as one.
+
+### `oscillation` — Oscillation detector
+
+**Measured:** 16 of 17 changed, **11 of 12 loop**, `still`, `trace`, `traffic`, 453px held. Ticks run
+along a rail under a dashed `THRESHOLD 3` rule, with three hatched `UNMEASURED` bands below for the
+state, phase and period nobody retained.
+**Refused:** 0 of 13 — hatching over the whole specimen, `NO CADENCE RETAINED`, space kept.
+
+**Does the motion measure something? Yes, and the row is the library's best single argument.** The
+ticks are arrival times that exist, so they move; the period does not exist, so the band above them
+stays hatched *while the ticks keep running*. Motion and refusal on one card, neither pretending
+about the other — this is what the honesty bar is trying to show. Two small notes: the ticks are ~3px
+wide, so the loudest honest motion in the library is drawn in the thinnest ink; and the still
+threshold rule is right to be still, but a threshold with no ticks crossing it looks decorative,
+which is a fixture problem, not a drawing problem.
+
+### `queueState` — Request queue state
+
+**Measured:** 0 of 17 changed, 0 of 12, **no marks**, 571px held — `NO REQUEST NEEDS AN OPERATOR`,
+the board measured, and `OPEN 0` at the foot.
+**Refusal:** 0 of 13 — the board becomes a dashed outline reading `REQUEST QUEUE UNMEASURED`, and
+the count at the foot is a dashed `—`, **not a zero**.
+
+**Does the motion measure something? No motion, correct — and this row is the model for the bug
+four other rows have.** A measured empty board prints `OPEN 0`; a refused board prints an em dash
+where the number would be. `dispatch`, `ice`, `magi` and `keycard` all keep an `N of M` sentence
+alive across the switch and end up reporting a number about nothing. `queueState` is proof that the
+correct pattern costs nothing, so those four are choices, not constraints.
+
+### `radar` — Proximity radar
+
+**Measured:** 16 of 17 changed, **11 of 12 loop**, `count`, `cycle`, `still`, 571px held. The wedge
+turns and blips are present at different brightnesses in different frames.
+**Refused:** 0 of 13. The plate keeps its rings, the caption becomes `NO SWEEP`, the
+`inner ring fresh / outer ring stale` legend stays (it is a claim about the *rings*, not a
+measurement), and `1 OFF-SCOPE — UNMEASURED` keeps its hatching. Space kept.
+
+**Does the motion measure something? The sweep does; the contacts do not, and that is the named
+gap.** The loop is real (11 of 12 frames differ) because `cycle` carries a measured period, and a
+turning wedge is a measurement of time. What is wrong is the part the reference vault settles: in
+M513-3 a contact firms *as the sweep crosses it* and then decays, and the library's own `radar.js`
+doc says the whole point is "where the sweep left them". In these frames a blip is bright at 443ms
+and bright at 883ms with no relation to where the wedge is. A contact whose brightness is unrelated
+to the sweep is decoration wearing a measurement's costume — the fix is already designed (brightness
+= a decay on `now − last_pass(contact)`, stamped `traffic`/`decay` so it can be refused) and it is
+the single highest-value motion edit left on this branch.
+
+### `redaction` — Redaction bar
+
+**Measured:** 0 of 17 changed, 0 of 12, **no marks**, 247px held. **Refused:** 0 of 13, same pixels.
+
+A redaction bar is a statement about withheld content, and it is drawn as ink. Correct stillness;
+the drawn-refuser declaration gap applies (the `DARK` word is on the page and no `data-motion="still"`
+anywhere), and there is nothing here that should move: content is either withheld or it is not.
+
+### `river` — Attempt river
+
+**Measured:** 10 of 17 changed, **10 of 12 loop**, `count`, `decay`, `still`, `trace`, 222px held.
+Attempt ticks along a rail, and a **red segment at the right where the next poll was due and did not
+land**.
+**Refused:** 0 of 13 — `NO ATTEMPTS RETAINED` in the rail's place, space kept.
+
+**Does the motion measure something? Yes — and this row contains the library's best-designed
+behaviour.** A tick is an attempt that happened; the red segment is `cycle` refusing on overrun
+rather than wrapping, which is the difference between an instrument and a spinner, and it is visible
+here as ink at the exact place a reader looks when something is late. The weakness is scale: at 222px
+the ticks are ~2px and the labels are ~6px, so the finding (the red overrun) is the only thing a
+reader takes in from across the room, and the count of attempts — which is what makes the overrun
+legible as lateness rather than as a gap — is the part nobody can read.
+
+### `scaleCrush` — Scale crush
+
+**Measured:** 16 of 17 changed, 3 of 12, `count`, **199px → 571px refused**. A hex board of fleet
+cells filling in cell by cell, with red cells among the green.
+**Refused:** 0 of 13 — two hatch bands around `BOARD UNCOUNTED`.
+
+**Does the motion measure something? Yes.** Cells arriving as the board is counted, and a red cell
+meaning a specific loss, is a measurement; the loop is quiet because a counted board holds. The
+layout defect is the biggest one found: the refusal is **372px taller** than the board it refuses
+(199 → 571), because the refusal draws a full `W×H` band pair into a card whose measurement occupies
+a third of that area. Same offence as `individuation`, three times the size. The fix is mechanical —
+the refusal frame should be sized to the drawing area the measurement used — and the gate should make
+it impossible to ship again.
+
+### `scanOverlay` — Subject overlay
+
+**Measured:** 8 of 17 changed, 2 of 12, `arrive` and `trace`, 571px held. A hexagon resolving
+`LOCK / ARM / HOLD / ARM`, dashed links out to `IDENTITY`, `AUTHORITY` and `FAILURE`, and
+`Credential expired mid-run` in red.
+**Refused:** 0 of 13 — the hexagon dims and the columns read `NOT READ`.
+
+**Does the motion measure something? The mark says an order and the drawing ignores it.** The trace
+is stamped with `order` and `total`, and a scan that resolves identity, then authority, then failure
+in sequence is exactly the thing the mark is for. But in the 0ms frame `0-unacent · hermes · delFromex`
+and `RETRY — NO GRANT` are already printed: everything the scan is supposed to *reveal* is there
+before the scan has moved. So the animation is a hexagon doing calisthenics next to a form that
+already answered. Order the reveals to the trace that claims them — a column is blank ink until its
+`order` passes — and the specimen says what it thinks it says. The red `Credential expired mid-run`
+inside the measured card is another correct nested refusal.
+
+### `standardSheet` — Standard glyph sheet
+
+**Measured:** 0 of 17 changed, 0 of 12, `still`, 571px held. Six glyphs with their words: `MONOTONE`,
+`BLOCKED`, `NEEDS YOU`, `UNMEASURED`, `LANCED`, `DRAINED`. **Refused:** 0 of 13, same pixels.
+
+Nothing should move on a legend and nothing does. This row matters for a different reason: the sheet
+already draws a dashed magenta circle for `UNMEASURED`, which means the library has *one* glyph for
+absence and is using it for two opposite claims — the ink problem in eight of nine sheets. The fix
+belongs here: the sheet defines the vocabulary, so a refusal needs its own glyph on this card before
+`city`, `dispatch`, `ice`, `magi`, `keycard`, `loopDeviation` and `needleField` can be asked to use
+it. It is a one-token change with seven call sites, and the sheet is the place a reader learns it.
+
+## The Telegraph
+
+### `stockFlow` — Stock and flow
+
+**Measured:** 8 of 17 changed, 2 of 12, `count` and `still`, 331px held. A station table with counts
+arriving per row. **Refused:** 0 of 13 — the count column becomes `UNMEASURED` and the 331px holds.
+
+**Does the motion measure something? The counts do; the flow does not.** This is the component whose
+doc admits it has no stream mark, and the frames confirm it: quantities appear, and nothing travels
+from one station to the next. A table titled *flow* that never shows movement along the line is a
+claim the drawing does not support — and the fix is not decoration: a route with a measured transit
+time gets a `traffic` period and the arrival at the far end gets an `arrive`, which is what makes it
+flow rather than inventory.
+
+### `strands` — Delivery strands
+
+**Measured:** 8 of 17 changed, 2 of 12, `still` and `trace`, 571px held. Routes draw between stations
+as thick green arcs, arriving one at a time.
+**Refused:** 0 of 13 — every arc becomes a thin dashed magenta line and the event count disappears
+from the foot.
+
+**Does the motion measure something? Yes** — an arc drawing itself is a delivery that happened, in
+the order it happened. The refusal is verified in the markup rather than inferred from the picture:
+the route group goes from `data-delivered="1" data-motion="trace" data-index="0" data-total="4"` to
+`data-delivered="0" data-motion="still" data-still-reason="nothing travelled this path"`. One defect:
+the refusal *deletes the count* instead of marking it, which is the collapse pattern in miniature —
+the count line is a drawing region and it has no `data-drawing` stamp, so the instrument cannot see
+it go.
+
+### `stripChart` — Phosphor strip chart
+
+**Measured:** 0 of 17 changed, **4 of 12 loop** (all late — the `elapsed` interval re-painting),
+`elapsed`, 585→571px. What is drawn is four hatched bands reading `ONE SAMPLE` and `NEVER MEASURED`
+under a `NO WAVE` tag.
+**Refused:** 0 of 13 — the bands hatch and the caption changes.
+
+**Does the motion measure something? No, and the reason is the showcase, not the component.** The
+library's only over-time instrument never draws a line anywhere in this app, because the bright
+fixture gives it one sample and no series. Every other row in this file that refuses *inside* a
+measured card is doing something honest; here the bright model is itself the refusal, so the two
+columns on screen are nearly the same picture and a reader never sees what the component is for.
+Fix is in `app/fixtures/telegraph.js`: the bright model needs a real series (it is a demo fixture,
+fabricating it is legitimate and stating it is required), and this is the general lesson — a fixture
+whose bright column is mostly absence hides the component it is supposed to demonstrate.
+
+### `syncRatio` — Insertion sync
+
+**Measured:** 0 of 17 changed, 0 of 12, **`still` only**, 571px held. Three hatched lane bands
+(`NO PRODUCER`, `NO SERIES RETAINED`), a `SYNC UNMEASURED` verdict, and one green marker at the
+present instant.
+**Refused:** 0 of 13, byte-identical — the honest consequence of the mark fix that landed earlier on
+this branch, when the axis went from `trace(true)` to a declared stillness.
+
+Correct as drawn: with no series the ratio cannot be computed, and the drawing says so in three
+places. Same fixture problem as `stripChart` though, and worth naming once for both: the bright model
+carries no series, so the component is only ever seen refusing. `oscillation` proves the alternative
+— a measured arrival stream *plus* a refused period, on one card.
+
+### `tape` — Decision tape
+
+**Measured:** 8 of 17 changed, 2 of 12, `count`, `elapsed`, `intent`, 275px held. Tape items arrive
+and the open item's clock runs. **Refused:** 0 of 13 — one blank slot in the tape frame, 146px.
+
+**Does the motion measure something? Yes,** and the height drop is the legitimate kind. The container
+is kept — the tape frame is stamped as a drawing region and survives — and the content inside it is
+as short as the truth: nothing is queued, so one slot is what an empty queue looks like. This is the
+counter-example that stopped the "heights must be equal" rule from being written, and `gauge` and
+`individuation` are the two that showed why some pairing rule is still needed.
+
+### `tapeSplice` — Tape splice
+
+**Measured:** 7 of 17 changed, 2 of 12, `still` and `trace`, 571px held. A reel timeline —
+`NO TAPE | A1 | A2 | A3 | GAP | B4` — with a red notch at the seam, `1 EVENTS` at the foot and
+`THE SEAM IS DRAWN`. **Refused:** 0 of 13 — `ONE REEL, NO SPLICE` in hatch bands.
+
+**Does the motion measure something? Yes.** The unreels before the splice are drawn as *gaps* rather
+than omitted, which is the library's `NO PROOF HISTORY` doctrine done properly: the absence has a
+position on the timeline. Two nits: `1 EVENTS` is a plural applied to one, the kind of thing a reader
+notices and then distrusts; and the event count vanishes under refusal instead of becoming a marked
+absence.
+
+## The Watch
+
+### `tracker` — Bearing tracker
+
+**Measured:** 16 of 17 changed, **11 of 12 loop**, `trace` and `traffic`, 571px held. Bearing rings
+expand from a contact under a `TICK 2S` cadence, with `1H 30M CONTACT WAIT` stated beside them.
+**Refused:** 0 of 13 — `NO CONTACT`, `CONTACT WAIT IS UNMEASURED`, `NO CADENCE`, the rings kept as
+dashed arcs and the 571px held.
+
+**Does the motion measure something? Yes — this is `radar`'s fix already built, in the same library.**
+The rings redraw on a stated period, which is what `traffic` means, and the wait is a separate
+measured quantity rather than an animation. The refusal even names `NO CADENCE` separately from
+`NO CONTACT`, which is the distinction `radar` is missing. If the radar redesign is going to borrow
+anything from the vault, it should first borrow this.
+
+### `triVision` — TrisonVision tabs
+
+**Measured:** 8 of 17 changed, 2 of 12, `count`, 571px held. Three mode tabs (`HEALTH / COST /
+AUTHORITY`), a field of hexes filling, one amber, one dashed.
+**Refused:** 0 of 13 — the tabs dim, the hex field is replaced by `UNMEASURED` in hatch.
+
+**Does the motion measure something? Yes for the hexes, and the tabs are right to sit still.** A mode
+change is operator-caused; an interface that switches your optic for you while the tab glows is the
+chrome the rule is about. Nothing on this card moves without a measurement, and the tab that would
+move on a real switch would be stamped `intent()` by the operator's own hand. One weakness carried
+from the ink family: the dashed hex inside the measured field and the refused field use the same
+stroke — sighting number seven.
+
+### `twoState` — Two-state choice
+
+**Measured:** 0 of 17 changed, 0 of 12, **no marks**, 571px held. `RETRY` and `TERMINATE` as outlined
+choices, `MOTHER IS PRESELECTED`, and the green-ruled line about the counter staying where it is.
+**Refused:** 0 of 13 — an `UNDECIDED` hatch band replaces the rule.
+
+Correct stillness: a choice is not an animation, and the preselection is stated in words rather than
+implied by a glow. Worth noting against `dominator`'s fake buttons: here the bordered boxes are
+*choices in the specimen's own argument*, with the sentence `IF YOU CHOOSE MOTHER` under them — the
+difference between an affordance drawn honestly and one drawn decoratively is whether the drawing
+says who acts.
+
+# What the 51 rows add up to
+
+Ordered by how much they cost to fix and how much they were hiding.
+
+1. **Radar's contacts are not tied to the sweep** (`radar`). One row, named, and the fix is in this
+   library already (`tracker`'s `traffic` on a stated cadence). Highest value: it is the specimen the
+   vault is thickest with references for.
+2. **The same ink means "not reached" and "no measurement" — seven sightings** (`city`, `dispatch`,
+   `esperDive`, `ice`, `keycard`, `loopDeviation`, `triVision`, plus the dashed field of `needleField`).
+   One token pair plus a glyph on `standardSheet`, which is where the vocabulary is defined, then
+   seven call sites.
+3. **Refusals that change the page height** (`scaleCrush` +372px, `individuation` +257px, `gauge` +23,
+   `killmail` −12). The container must be kept, not the count: `muthur` and `tape` show a refusal
+   legitimately halving its content and staying honest, so the rule is *same drawing area, as little
+   in it as the truth requires*, checked against the drawing box rather than the card.
+4. **Counts kept across the switch** (`dispatch` `0 OF 3 MANIFESTS COMPLETE`, `ice` `0 WALLS NOT
+   REACHED`, `magi` `0 of 3 …`, `keycard`). A refusal that reports a number is arithmetic on absence.
+   `queueState` already prints `—` where its count would be: the correct pattern exists in the
+   library and costs nothing.
+5. **Phantom countdowns** (`ceremony` `ABOUT WINDOW 16s`, `oracle` `credential expiry 3s`). A number
+   in a timer format with no `cycle` and nothing counting it down. Either measured or absolute.
+6. **Findings painted before the evidence arrives** (`admission`, `chipBudget`, `contextBurn`,
+   `glassCell`, `gauge`, `scanOverlay`). The number is complete in the frame where nothing has
+   arrived yet; the sum, the balance, the verdict should be the last thing drawn, because then the
+   entrance is the argument instead of a footnote to it.
+7. **Order claimed and not honoured** (`scanOverlay`: `order`/`total` on the trace while every column
+   is filled at 0ms). One of the cheapest real fixes here.
+8. **Motionless things drawn in the costume of live things** (`channel`'s inert orange waveform,
+   `dominator`'s fake buttons, `gauge`'s refusal being taller than its measurement). Say what is not
+   there, in ink — which is the rule the twelve drawn-refusers already follow.
+9. **Fixtures that refuse instead of demonstrating** (`stripChart` `ONE SAMPLE`, `syncRatio` `NO
+   SERIES`). The showcase never shows these two components working, because their bright models hold
+   almost nothing. Bright models are the app's responsibility.
+10. **Honest stillness, drawn but undeclared** (`dossier`, `garage`, `grid`, `gevulot`, `ladder`,
+    `redaction`, `joiOverlay`, `twoState`…). `DECLARED STILL` reads 0 over a deliberate refusal, which
+    is why the twelve are already in `FILMSTRIP.md`.
+
+### Two probe results that came out *for* the library
+
+The bright model was checked against the dark model for all 51 components. Two render byte-identical
+— `standardSheet` and `channel` — and both declare **no** evidence fields, so the fixture contract
+holds: every component that declares a measurement visibly changes when it is removed. The first
+version of that probe used string membership to ask "did this word disappear", and reported `grid`
+and `strands` as unchanged; a positional diff showed the truth immediately — `grid` prints
+`<td data-unmeasured="1">UNMEASURED</td>` where bright prints `82%`, and `strands` swaps every route
+from `data-motion="trace"` to a stated `still`. A check that asks the wrong question about a string
+finds defects that are not there; the same lesson the drawing instrument learned the hard way.

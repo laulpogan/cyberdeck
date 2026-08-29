@@ -66,6 +66,11 @@ row that reads "never moves" can be told apart from a row that reads "refused to
 | `triVision` | 8/17 | 10 | 2/12 | 0/13 | 0/2 | 571px | 571px | count |
 | `twoState` | 0/17 | 0 | 0/12 | 0/13 | 0/2 | 571px | 571px | — — never moves |
 
+> **This file is the measurement; [`MOTION-READINGS.md`](MOTION-READINGS.md) is the eye.** Every
+> component now has a written reading there, taken from six-to-an-image sheets
+> (`app/verify/review-sheet.py`). Where the two disagree, the reading is newer and the table here is
+> the capture it was read from.
+
 ## 1. Almost everything moves once and then stops — and for most of them that is correct
 
 46 of 51 fall silent inside the loop window. Only five keep moving: `globe` (11 of 12 loop
