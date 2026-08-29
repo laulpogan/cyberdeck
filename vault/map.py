@@ -79,8 +79,18 @@ MAP = {
 }
 
 
+def eyeball_marks():
+    """Per-file judgements of the *frames*. Absent means nobody looked, which is not the same as
+    verified — a motion spec may quote only files marked `contentVerified: true` here."""
+    path = os.path.join(HERE, "EYEBALL.json")
+    if not os.path.exists(path):
+        return {}
+    return json.load(open(path))
+
+
 def main():
     manifest = json.load(open(os.path.join(HERE, "MANIFEST.json")))["files"]
+    marks = eyeball_marks()
     by_seed = defaultdict(list)
     for record in manifest.values():
         by_seed[record["seed"]].append(record)
@@ -92,12 +102,14 @@ def main():
              "explicit statement of what the vault cannot yet show. Reading *how* a reference moves",
              "is a person's job, done against `vault/sheet.py` output.",
              "",
-             "| component | reference seed | why that reference | files | median loop | status mix |",
-             "| --- | --- | --- | --- | --- | --- |"]
+             "| component | reference seed | why that reference | files | verified frames | median loop | status mix |",
+             "| --- | --- | --- | --- | --- | --- | --- |"]
     unmapped = []
     for component, (seed, why) in sorted(MAP.items()):
         files = by_seed.get(seed, [])
         usable = [f for f in files if f.get("status") == "reference"]
+        seen = [f for f in files if marks.get(f["file"], {}).get("contentVerified")]
+        refuted = [f for f in files if marks.get(f["file"], {}).get("contentVerified") is False]
         lookalike = [f for f in files if f.get("status") == "look-alike"]
         loops = [f["loopSeconds"] for f in usable if f.get("loopSeconds")]
         moving = sum(1 for f in usable if (f.get("frames") or 0) > 1)
@@ -108,7 +120,7 @@ def main():
             unmapped.append(component)
             mix = f"**{mix}**" if seed == "none" else f"{mix} — no usable reference"
         lines.append(f"| `{component}` | {seed} | {why} | {len(files) if seed != 'none' else 0} "
-                     f"| {median} | {mix} |")
+                     f"| {len(seen)} seen, {len(refuted)} refuted | {median} | {mix} |")
 
     still_haul = sum(1 for r in manifest.values() if r.get("status") == "reference"
                       and (r.get("frames") or 0) <= 1)
