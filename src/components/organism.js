@@ -118,9 +118,15 @@ export function envelope({ boundaries = BOUNDARIES, position = null,
   const wall = (key, x, y, w, h, vertical) => {
     const limit = limitOf(key);
     if (limit === null) {
+      // The F-16 HUD prints `xxx` INSIDE the field when a value cannot be had. It does not
+      // delete the field, and it does not leave the crew to infer a gap from a missing digit.
+      // Same rule: the hatched strip IS the edge nobody priced, and the strip says so, rather
+      // than trusting a caption centred under the box to be read as this strip's sentence.
       return `<g class="cd-og-wall" data-edge="${key}" data-supplied="0"`
         + `${attrs(still('this boundary was never supplied'))}>`
-        + hatched(x, y, w, h) + '</g>';
+        + hatched(x, y, w, h) + '</g>'
+        + text(vertical ? x - 5 : x + w / 2, vertical ? y + h / 2 : y - 4,
+            'XXX', { size: 7, anchor: vertical ? 'end' : 'middle' });
     }
     const extent = level(limit, 1,
       { measured: true, cite: `${cite}[${key}]`, axis: vertical ? 'y' : 'x' });
@@ -129,15 +135,31 @@ export function envelope({ boundaries = BOUNDARIES, position = null,
     const drawn = vertical
       ? line(x + 5, y, x + 5, y + (h * limit), { width: 2 })
       : line(x, y + 5, x + (w * limit), y + 5, { width: 2 });
+    // The value belongs with the wall's NAME, not at the tip of its bar. Placed at the tip --
+    // where the arithmetic put it first -- `0.70` landed a few pixels under the demand bar and
+    // read as that bar's number, which is a different measurement of a different thing. A
+    // number that can be borrowed by the neighbour beside it is not labelling anything.
     return `<g class="cd-og-wall" data-edge="${key}" data-supplied="1"${attrs(extent)}>`
       + drawn + '</g>';
+  };
+  // `xxx` for the wall that has no value, so its NAME never reads as a priced limit either.
+  const valueOf = (key) => {
+    const limit = limitOf(key);
+    return limit === null ? '' : ` ${limit.toFixed(2)}`;
   };
   g.push(wall('economic', PAD + inset - 10, top + inset, 10, box - inset * 2, true));
   g.push(wall('workload', PAD + SPAN - inset, top + inset, 10, box - inset * 2, true));
   g.push(wall('safety', PAD + inset, top + box - inset, SPAN - inset * 2, 10, false));
-  g.push(text(PAD + inset, top + inset - 6, 'ECONOMIC', { size: 7 }));
-  g.push(text(PAD + SPAN - inset, top + inset - 6, 'WORKLOAD',
+  g.push(text(PAD + inset, top + inset - 6, `ECONOMIC${valueOf('economic')}`, { size: 7 }));
+  g.push(text(PAD + SPAN - inset, top + inset - 6, `WORKLOAD${valueOf('workload')}`,
     { size: 7, anchor: 'end' }));
+  // The name sits by its wall, the value does not: `SAFETY 0.44` first went one line above the
+  // boundary rows, where it read as ECONOMIC's number -- the same borrowing the `0.70` at the
+  // bar's tip committed. Values live in the rows below, on the same line as the name they
+  // belong to. The name still needs to exist here, because without it the bottom wall is a
+  // stroke the same weight as the box's own frame, and a limit drawn like furniture is
+  // furniture.
+  g.push(text(PAD + inset, top + box - inset - 8, 'SAFETY', { size: 7 }));
   // Derived from the caller's list, not the library's default three: a producer that
   // described four edges was told it had described three, and one it invented as a fifth
   // was never counted as priced at all.
@@ -195,7 +217,11 @@ export function envelope({ boundaries = BOUNDARIES, position = null,
   }
   boundaries.forEach(([key, label, reason], i) => {
     const y = 152 + i * 16;
-    g.push(text(PAD, y, label, { size: 7, opacity: '.8' }));
+    // One line per edge: its name, its measured limit or `XXX`, and what it means. The value
+    // cannot be read by the wrong neighbour when there is exactly one name in sight of it.
+    const limit = limitOf(key);
+    g.push(text(PAD, y, `${label}${limit === null ? ' XXX' : ` ${limit.toFixed(2)}`}`,
+      { size: 7, opacity: '.8' }));
     g.push(text(PAD + 64, y, reason, { size: 6.5, opacity: '.55' }));
   });
   return card('envelope', 'Safe-envelope gauge',
@@ -216,7 +242,11 @@ export function envelope({ boundaries = BOUNDARIES, position = null,
         + `${priced === 1 ? 'edge' : 'edges'} and ${unsupplied.length} nobody priced.`
       : `A position drawn against ${priced} measured edges.`}${
       // And the fraction answers to a number, or there is no fraction on the page.
-      demand === null ? '' : ` The position sits at ${fmt(used)} of a ${fmt(ceiling)} ceiling.` }` }
+      demand === null ? '' : ` The position sits at ${fmt(used)} of a ${fmt(ceiling)} ceiling.`}${
+      // The edges print their fractions and nothing hands them a unit. Say it once, in the
+      // sentence the reader is already reading, rather than letting `0.70` borrow a unit from
+      // the ceiling beside it -- a different axis and a different measurement.
+      priced === 0 ? '' : ' Edges are fractions of their own axis; no unit was supplied.' }` }
       : { note: 'A comfortable middle is the failure this gauge prevents.' });
 }
 

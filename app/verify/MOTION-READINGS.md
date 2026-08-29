@@ -1176,23 +1176,48 @@ and 10+22 graphite, which is the same 26, so the number and the picture agree.
   stated absence and needs no second source. The rule was sabotaged back to the old string
   and names the row, so it bites.
 
-## Finding #12 — open, two things the screen showed and this pass did not fix
+## Finding #12 — half closed: the envelope answers to its numbers now, `joiOverlay` still has its tick
 
-- **`envelope`'s extents are unlabelled as to their referent, and its refusal sits in a
-  measured edge's space.** The priced edges draw as short bars at the box's left and bottom
-  (0.62 and 0.44 of their own authored length — arithmetically right, the gate says so), and
-  nothing on screen says 0.62 *of what*. Meanwhile `WORKLOAD UNSUPPLIED` is stamped across
-  the middle of the operating space, so the hatch on the right reads as an empty region
-  rather than an edge nobody priced. An envelope is a box whose edges *are* the limits;
-  redesigning that is a change to the drawing's grammar, and there is no reference in the
-  vault for it (task 3's spec half is still blocked), so it is written down rather than
-  guessed at.
-- **`joiOverlay` draws a corner tick outside the band it ornaments.** A `+` lands at the
-  observed lane's left edge with nothing adjacent to it, while the projection band's own
-  corners are inside its dashes. Cosmetic, and the kind of thing a screenshot at 518px wide
-  makes easy to miss, so it is named with its specimen rather than smoothed over.
+### Closed: an envelope whose limits carry their own numbers
 
----
+The finding said two things, and one of them was a misreading. `WORKLOAD UNSUPPLIED` is not stamped
+across the middle of the operating space — it sits centred *below* the box, at y=142 — which is only
+discoverable by looking, and it is the reason the second half of this entry stayed unfixed for so
+long: the diagnosis pointed at a collision that does not exist. What is true is weaker and still
+matters: the aggregate caption is nobody's claim about *this* strip, and the box's limits carried no
+numbers at all, so the hatch read as a region rather than as an edge nobody priced.
+
+The F-16 HUD is quoted for exactly this: it never draws a value without the limit it is read against
+(`R 7.630` over `AL 500`), and where a value cannot be had it prints `xxx` **inside the field**
+rather than deleting the field. The gauge now does both:
+
+- the priced walls print their fraction beside their own name — `ECONOMIC 0.70`, `WORKLOAD` — and
+  `SAFETY` gets a name at all, which it never had: its bar was a stroke the same weight as the box's
+  frame, so it read as furniture;
+- the unpriced wall prints `XXX` beside its hatch, in the field's own space;
+- each boundary row under the box carries name, value and meaning on one line
+  (`WORKLOAD XXX  The load the fleet carries before work waits.`);
+- the note states the referent once, because the fractions have no unit and must not borrow one from
+  the ceiling printed next to them: *Edges are fractions of their own axis; no unit was supplied.*
+
+It took three placements to get this right, and the two failures are the transferable part. First the
+number went at the **tip of the bar**, `0.70` a few pixels under the demand line — and it read as the
+demand's number. Then it went in a label **one line above the boundary rows**, `SAFETY 0.44` directly
+over `ECONOMIC` — and it read as ECONOMIC's number. Both times the arithmetic was correct and the
+placement lied. The rule that closes it: **a number must sit on the same line as its name, or inside
+its own glyph's space.** Anything else is available to the neighbour.
+
+Still observed and accepted: `XXX` and `12.4 OF A 20 CEILING` are on adjacent lines at the right edge
+— crowded at 340 units wide, distinguishable, and the strip is the nearer thing to the `XXX`.
+
+Verified on the rendered page at 1280, both themes, plus the family route's refusal column: 9 gate
+passes, `npm test` 273.
+
+### Still open: `joiOverlay` draws a corner tick outside the band it ornaments
+
+A `+` lands at the observed lane's left edge with nothing adjacent to it, while the projection band's
+own corners are inside its dashes. Cosmetic, and the kind of thing a screenshot at 518px wide makes
+easy to miss, so it stays named with its specimen rather than smoothed over.
 
 ## Finding #10 — closed: one vocabulary for an absence
 
