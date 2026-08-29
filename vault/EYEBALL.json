@@ -1,4 +1,11 @@
 {
+ "raw/atc-radar-pease.gif": {
+  "contentVerified": false,
+  "eyeballedBy": "agent-eye(qwen/dot-backbone)",
+  "framesViewed": "8 frames sampled across the file's own timeline",
+  "sheet": "see OUT dir",
+  "shows": "Five frames of a rotating radar ANTENNA on a hill outside Crawley — a camera pointed at the structure against a blue sky and trees. No display, no readout, no interface anywhere in the frame. The title said radar and the file showed the thing that emits it."
+ },
  "raw/cyberpunk-hud--media.tenor.com_gdhPO38XjlUAAAAM_urith-set.gif.gif": {
   "contentVerified": true,
   "eyeballedBy": "agent-eye(qwen/dot-backbone)",
@@ -316,6 +323,13 @@
   "sheetNote": "The /tmp path names the strip set the eyes were on at the time of the mark; sheets are regenerated artifacts and are not in git. Re-run `python3 vault/eyeball.py SEED=<seed>` to reproduce the strip for this file.",
   "shows": "Cinematic game footage — armoured figures in a dark industrial set, blue emissive trim. A scene, not a diegetic interface: no spine bar, no mode readout, no objective marker."
  },
+ "raw/scope-envelope-violin.gif": {
+  "contentVerified": true,
+  "eyeballedBy": "agent-eye(qwen/dot-backbone)",
+  "framesViewed": "8 frames sampled across the file's own timeline",
+  "sheet": "see OUT dir",
+  "shows": "A screen recording of an audio editor, frame-filling: two named tracks (violin_pizz above, Piano below) with drawn waveforms, a time ruler across the top, and a playhead that travels left to right across the whole width while a selection block holds behind it. The violin track decays fast into a long low tail; the piano track holds longer then dies. Everything on screen is a measurement of sound — the shapes ARE the data — and the only motion is the playhead moving over it."
+ },
  "raw/spinner--media.tenor.com_5VlkKDNwp5sAAAA1_blade-runner-2049-mariette.webp.webp": {
   "contentVerified": false,
   "eyeballedBy": "agent-eye(qwen/dot-backbone)",
@@ -378,6 +392,13 @@
   "framesViewed": "8 frames sampled across the file's own timeline",
   "sheet": "/tmp/eye-q/all/sheet-02.png",
   "shows": "QUOTE FOR trace and arrive, not for the seed: a starship under warp with a bright marker travelling a line that extends behind it, 5.2s loop. It is a visual-effects shot of a vehicle, not the console the seed asks for — but the motion is the exact idiom of a trace: the route is drawn as the head of it travels, and nothing else in the frame moves."
+ },
+ "raw/sweep-hearing-range.gif": {
+  "contentVerified": true,
+  "eyeballedBy": "agent-eye(qwen/dot-backbone)",
+  "framesViewed": "8 frames sampled across the file's own timeline",
+  "sheet": "see OUT dir",
+  "shows": "A generated signal filling the frame: a yellow waveform on black whose oscillation rate climbs monotonically from a few cycles across the frame to a solid band, with the amplitude ramping in at the left edge and a soft vertical gradient above and below. There is NO interface furniture in this file at all — no frame, no label, no readout, no ruler — so it can be evidence about one thing only: how a measured frequency change looks when it is the thing being swept."
  },
  "raw/tron-disc--blob.gifcities.org_gifcities_23DTI5FGHJKRGLTR46HJVX3IBIE2U4G3.gif": {
   "contentVerified": false,

@@ -85,5 +85,20 @@
       "elapsed"
     ],
     "reading": "A limit that acts, drawn by people who had to fly the thing. FLYUP arrives when the measured closure violates the limit, holds exactly as long as the violation lasts, and is gone the moment it is not; beside it the limit itself is printed (AL 500) with the live value above it, so the cue names the number it is protecting — `envelope`'s 0.62 has to answer to a limit like that or it means nothing. The tapes are the extent idiom `tape` is missing: the graduations scroll and the boxed current value is pinned, so the reading is the MOVEMENT of the scale and the position is the number. Where a value cannot be had the display prints xxx in the field rather than deleting it, and the masked block at lower left keeps its space with every neighbour still laid out — the same refusal the library writes, from the outside. The clock (17:26:17 → 17:26:29) and the countdown counter are the only unambiguous `elapsed` in the frame: both keep counting and neither animates."
+  },
+  "scope-envelope-violin.gif": {
+    "for": [
+      "tape",
+      "stripChart",
+      "decay"
+    ],
+    "reading": "An audio editor: the waveform IS the measurement, the playhead is the only motion, and the motion is a position reading across an axis that is already fully drawn. That is the idiom `tape` and `stripChart` need and do not have — a series that exists as ink along a named lane while a marker crosses it, not a line that grows into being. Note what does NOT move: the ruler, the track labels, the selection block, the waveform behind the head. And note the violin track's shape: a fast attack, a long low tail, which is what a `decay` looks like when it is measured rather than eased."
+  },
+  "sweep-hearing-range.gif": {
+    "for": [
+      "oscillation",
+      "muthur"
+    ],
+    "reading": "A frequency sweep: oscillation rate climbs monotonically and the amplitude ramps in, with no interface furniture anywhere in the file. It is honest to use it only for what it shows — a rate that changes because a measured frequency changes, and an attack that arrives over a fraction of the window rather than all of it. It cannot license anything about frames, labels or readouts, because it has none. Recorded here so the next reader does not mistake a plot of a signal for an interface."
   }
 }

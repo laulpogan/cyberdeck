@@ -197,6 +197,28 @@
           "The position sits at 12.4 of a 20 ceiling."
         ]
       }
+    },
+    {
+      "id": "stripchart-series-is-drawn-ink",
+      "component": "stripChart",
+      "reference": "scope-envelope-violin.gif",
+      "referenceFigure": "measured: 48 frames over 8.0s, no bright marker crosses the frame",
+      "heldAs": "model",
+      "gap": "In the audio editor the waveform exists as ink along a named lane and the ONLY thing that moves is a marker crossing an axis already fully drawn — ruler, labels and selection block hold still. A component that grows its own series into being is animating the data instead of reading it, so the library's series must arrive and then hold.",
+      "assert": {
+        "kind": "no_residual_motion",
+        "selector": "[data-motion='trace']",
+        "afterMs": 1500
+      }
+    },
+    {
+      "id": "tape-sweeps-a-drawn-strip",
+      "component": "tape",
+      "reference": "scope-envelope-violin.gif",
+      "referenceFigure": "measured: 48 frames over 8.0s, motion amplitude (max difference from frame zero): 5.4",
+      "heldAs": "model",
+      "gap": "The audio editor's whole idiom is a marker crossing a strip that is ALREADY ink: the waveform, the ruler, the track labels and the selection block hold still and one hairline travels. `tape` has no such marker — it stamps `count`, `elapsed`, `still` and one refusal, and nothing translates along its axis. The five mark kinds that exist cannot express it: `trace` reveals a shape, `count` reveals by index, `cycle` addresses a clock, `level` is an extent from an anchor. Building it means a kind that moves a marker along an axis, which is a library change, not a showcase change.",
+      "notHeld": "no mark kind translates a marker along an axis; the reference names a capability the library does not have, and inventing an assert for it would be a green light on a component that does not move"
     }
   ]
 }

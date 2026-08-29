@@ -670,3 +670,19 @@ Two number-hygiene lessons, both from files written in the same hour: the frame 
 GIF must be **counted out of the file** (the tool first wrote `DUR × FPS` = 96 into a record for a
 file it believed held fewer), and a cap on what gets measured is not a property of the file —
 `spec.py` measures the first 80 frames, so its line now says `first 80 of 96 frames measured`.
+
+## The bright-ink instrument is blind to a light theme, and that is not a finding about the file
+
+`vault/spec.py` finds the moving marker by looking for **bright, saturated** ink that changes
+position. The audio-editor reference (`raw/scope-envelope-violin.gif`) is a light grey window with
+a dark hairline playhead, so the instrument reports `travel of the bright head: N/A — no bright
+marker crosses the frame` while the eye watched that playhead cross the whole frame in eight
+seconds. An `N/A` from that column is a statement about the instrument's contrast assumption, not
+evidence that nothing moved. The eye remains the gate; the instrument's job is the rate and the
+extent *when it can see the thing*. Do not "fix" the N/A by lowering the saturation threshold until
+a dark-on-light file is the one being measured, and never quote a column the instrument marked N/A
+as if it had measured something — `test/gauntlet.test.mjs` refuses a `referenceFigure` fragment the
+file did not print, N/A included.
+
+And a noun search returns the thing, not the screen: Commons `radar` gave a camera pointed at a
+rotating antenna on a hill. Search for the **display** (`oscilloscope`, `HUD`, `monitor screen`).

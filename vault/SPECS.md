@@ -29,6 +29,8 @@ no extent, and saying so is the point.
 | `fake-os-loaders--blob.gifcities.org_gifc…` | `rules page` | Counter-example: the ellipsis that grows to three dots and cycles. Measured travel 0.043 of a frame -- the only quantity on screen is the dot count, and it says nothing about anything. |
 | `cyberpunk-hud--media.tenor.com_gdhPO38Xj…` | `dossier`, `rules page` | Full-frame game interface: nameplates and segmented health bars ride above a squad, a selection ring breathes on the chosen unit, and a party panel opens at the right with a grid of portrait cells. Two readings, one on each side of the library's rule. The panel arrives over a field that KEEPS RUNNING — health changes, contacts move — which is why an arriving record set is honest there; `dossier` answers "which exact thing am I about to command" from facts already true at read time, so it has no live field, and its stillness is the same rule seen from the other side. The breathing ring is an ambient pulse with no quantity behind it: the selection idiom this app may not put in its chrome, which makes the file a counter-example as well as a map of the idiom. |
 | `f16-hud-gcas.gif…` | `envelope`, `tape`, `elapsed` | A limit that acts, drawn by people who had to fly the thing. FLYUP arrives when the measured closure violates the limit, holds exactly as long as the violation lasts, and is gone the moment it is not; beside it the limit itself is printed (AL 500) with the live value above it, so the cue names the number it is protecting — `envelope`'s 0.62 has to answer to a limit like that or it means nothing. The tapes are the extent idiom `tape` is missing: the graduations scroll and the boxed current value is pinned, so the reading is the MOVEMENT of the scale and the position is the number. Where a value cannot be had the display prints xxx in the field rather than deleting it, and the masked block at lower left keeps its space with every neighbour still laid out — the same refusal the library writes, from the outside. The clock (17:26:17 → 17:26:29) and the countdown counter are the only unambiguous `elapsed` in the frame: both keep counting and neither animates. |
+| `scope-envelope-violin.gif…` | `tape`, `stripChart`, `decay` | An audio editor: the waveform IS the measurement, the playhead is the only motion, and the motion is a position reading across an axis that is already fully drawn. That is the idiom `tape` and `stripChart` need and do not have — a series that exists as ink along a named lane while a marker crosses it, not a line that grows into being. Note what does NOT move: the ruler, the track labels, the selection block, the waveform behind the head. And note the violin track's shape: a fast attack, a long low tail, which is what a `decay` looks like when it is measured rather than eased. |
+| `sweep-hearing-range.gif…` | `oscillation`, `muthur` | A frequency sweep: oscillation rate climbs monotonically and the amplitude ramps in, with no interface furniture anywhere in the file. It is honest to use it only for what it shows — a rate that changes because a measured frequency changes, and an attack that arrives over a fraction of the window rather than all of it. It cannot license anything about frames, labels or readouts, because it has none. Recorded here so the next reader does not mistake a plot of a signal for an interface. |
 
 The rows underneath are measured out of the files; the table above is the
 judgement step and is meant to be disagreed with.
@@ -153,6 +155,17 @@ judgement step and is meant to be disagreed with.
 - travel of the bright head: 0.305 of the frame crossed, 0.7 of the way along at half the duration — back-loaded, not monotone (it comes back)
 - motion amplitude (max difference from frame zero): 11.88
 
+## `scope-envelope-violin.gif`
+
+- seed: `direct-clips`  ·  source: https://upload.wikimedia.org/wikipedia/commons/7/7c/Envelope_comparison_between_violin_pizz_and_piano.webm
+- eye: A screen recording of an audio editor, frame-filling: two named tracks (violin_pizz above, Piano below) with drawn waveforms, a time ruler across the top, and a playhead that travels left to right across the whole width while a selection block holds behind it. The violin track decays fast into a long low tail; the piano track holds longer then dies. Everything on screen is a measurement of sound — the shapes ARE the data — and the only motion is the playhead moving over it.
+- measured: 48 frames over 8.0s, median delay 170.0ms, loop no return to frame zero
+- first change by cell (4x3, index = frame): `[37, 37, 37, 37, 37, 37, 37, 37, 30, 30, 30, 37]`
+- cells that never move: 0 of 12
+- extent (area of one saturated ink): 0.04 of its final extent present at half the duration — front-loaded (ease-out)
+- travel of the bright head: `N/A` — no bright marker crosses the frame
+- motion amplitude (max difference from frame zero): 5.4
+
 ## `spinner-console--blob.gifcities.org_gifcities_2EABIEZLK7C7RZMCFOOHZKIPRAPVWALH.gif`
 
 - seed: `spinner-console`  ·  source: https://blob.gifcities.org/gifcities/2EABIEZLK7C7RZMCFOOHZKIPRAPVWALH.gif
@@ -163,6 +176,17 @@ judgement step and is meant to be disagreed with.
 - extent (area of one saturated ink): `N/A` — the ink does not grow; see travel
 - travel of the bright head: 0.766 of the frame crossed, 1.0 of the way along at half the duration — back-loaded, not monotone (it comes back)
 - motion amplitude (max difference from frame zero): 25.5
+
+## `sweep-hearing-range.gif`
+
+- seed: `direct-clips`  ·  source: https://upload.wikimedia.org/wikipedia/commons/7/70/Fequency_sweep_of_the_human_hearing_range_%2820_to_20k_Hz%29_visualization.webm
+- eye: A generated signal filling the frame: a yellow waveform on black whose oscillation rate climbs monotonically from a few cycles across the frame to a solid band, with the amplitude ramping in at the left edge and a soft vertical gradient above and below. There is NO interface furniture in this file at all — no frame, no label, no readout, no ruler — so it can be evidence about one thing only: how a measured frequency change looks when it is the thing being swept.
+- measured: 50 frames over 10.0s, median delay 200.0ms, loop no return to frame zero
+- first change by cell (4x3, index = frame): `[4, None, None, None, 1, 1, 1, 1, 1, 1, 2, 5]`
+- cells that never move: 0 of 12
+- extent (area of one saturated ink): `N/A` — the ink does not grow; see travel
+- travel of the bright head: 0.33 of the frame crossed, 0.49 of the way along at half the duration — constant rate, not monotone (it comes back)
+- motion amplitude (max difference from frame zero): 21.76
 
 ## `tron-disc--blob.gifcities.org_gifcities_2AWYSNBQH7E3JQPMI2B5UNXXOTV7UDLB.gif`
 
