@@ -166,7 +166,12 @@ export function admission({ offered = null, taken = null, status = null,
     g.push(text(px, py - 22, label, { size: 7, anchor: 'middle' }));
     g.push(text(px, py - 9, String(n), { size: 13, anchor: 'middle' }));
   });
-  g.push(`<g class="cd-og-gap" data-any="${gap ? 1 : 0}">`
+  // The balance is derived from both pans, so it takes the slot one past the last
+  // crate: `offered + taken` measured manifests, and this line is item
+  // `offered + taken + 1`. Five crates not admitted used to be painted in the first
+  // frame, over empty beams.
+  g.push(`<g class="cd-og-gap" data-any="${gap ? 1 : 0}"`
+    + `${attrs(count(offered + taken, offered + taken + 1))}>`
     + text(cx, 168, `${gap} NOT ADMITTED`, { size: 9.5, anchor: 'middle' })
     + '</g>');
   // Top right, clear of the pan labels, which sit near the left edge when

@@ -506,3 +506,25 @@ outline of a turned door. Denominators are measured populations — `dispatch` k
 
 When auditing a refusal, read the fixture's declared substitutions before the component. A
 substitution that names a *result* is the bug, and every downstream count will look correct.
+
+## Premises, then conclusion.
+
+A figure computed from other figures enters the page **after** every figure it was computed from:
+`count(n, n + 1)`, or `level(..., { order: n, total: n + 1 })` for a bar. The runtime turns
+`data-index`/`data-total` into `span * (index / total)` with `span` non-decreasing in `total`, so the
+slot one past the end of the population is guaranteed to start last. `test/reveal-order.test.mjs`
+asserts the two premises rather than a duplicated timing formula, and the delays were read out of
+`getComputedTiming()` on the running app (`admission` 414ms against inputs at 150ms).
+
+Three ways this went wrong while being implemented, all of them worth remembering:
+
+- **The population is what the figure summarises, not what is nearest in the code.** `dispatch`
+  summarises parts *across* workers: `count(workers.length, ...)` put the summary in the middle of
+  the chain of parts it stands for. Multiply both dimensions.
+- **A reveal that outlives its evidence is motion without evidence.** `glassCell`'s tally kept
+  `count(2, 3)` in the dark model because its `blocked` pane holds *standing refusals*, not readings.
+  The honesty gate named the element. Any mark that animates must be justified by data the evidence
+  switch can actually remove; when it cannot, the mark refuses.
+- **A read of one measurement is not a conclusion.** `gauge`'s number and its arc are one
+  measurement, so delaying the number would be a transition invented to look like reasoning. The
+  rule is about derived figures; do not extend it to single-source labels.

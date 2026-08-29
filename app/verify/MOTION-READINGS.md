@@ -898,6 +898,47 @@ the letters said one thing and the colour said the opposite, which is a green ch
 unchecked row one size up. It carries the refusal ink now. The green sequence rail under the
 labels stays green on purpose — the order of the doors *is* measured, only their states aren't.
 
+## Finding #6 is closed: the entrance is now the argument
+
+Six specimens painted the conclusion in frame 0 while its evidence was still fading in — a balance,
+a tally, a total already on the glass above rows that had not arrived. That is not decoration; it
+makes the entrance a footnote to a verdict instead of the argument for it.
+
+The rule: **a figure computed from other figures takes the reveal slot one past the end of the
+population it is computed from** — `count(n, n + 1)`, or `level(..., { order: n, total: n + 1 })`
+when it is a bar. `level` grew optional `data-index`/`data-total` and the runtime's `levelled` now
+shares the delay formula `counted` and `traced` already used, so ordering one kind does not mean
+downgrading it to a fade. Seven sites carry it: `admission`'s balance, `chipBudget`'s bar,
+`glassCell`'s tally, `magi`'s contribution line, `keycard`'s and `ice`'s door/wall tallies, and
+`dispatch`'s manifest line.
+
+Verified where the claim actually lives — the running app, `getComputedTiming().delay`:
+
+    admission   derived 414ms  inputs max 150ms   chipBudget  derived 150ms  inputs max 144ms
+    glassCell   derived 150ms  inputs max 120ms   magi        derived 135ms  inputs max  60ms
+    keycard     derived 154ms  inputs max  90ms   ice         derived 150ms  inputs max  72ms
+    dispatch    derived 216ms  inputs max 135ms
+
+`test/reveal-order.test.mjs` holds the rule without duplicating the timing formula (the runtime
+computes `span * index/total` with `span` non-decreasing in `total`, so asserting ratio-greater and
+denominator-greater forces the conclusion without a second implementation). Paused at `currentTime
+= 0`, the derived lines are simply absent: no `5 NOT ADMITTED` over empty beams, no `PASSES 3 ·
+BLOCKS 2` over sightlines still drawing.
+
+Two things the gates caught that the plan did not anticipate. `dispatch` was first given
+`count(workers.length, workers.length + 1)` — the last **part** on the panel sits at index 3 of 4,
+so the summary of two workers landed *mid-chain*: its population is parts-across-workers, and the
+reveal test refused the mistake. And `glassCell`'s new tally kept counting in the dark model, where
+`blocked` survives because those rows are the cell's standing refusals rather than readings; the
+honesty gate named it — `still marked count@cd-dc-tally with every measurement removed` — and the
+reveal is now claimed only when a passage actually happened. Motion that outlives its evidence is
+the sin this app was built to make noisy.
+
+Two specimens were **removed from the finding rather than fixed**: `gauge` and `contextBurn` show a
+final number while their arc or grain animates, but that number is not a summary — it is the same
+single measurement the arc's extent is drawn from. A read of one measurement is not a conclusion
+with missing premises, and delaying it would be a transition invented to look like reasoning.
+
 ## Finding #5 is closed — and the readings file was the defect half the time
 
 Read again against the running app rather than the filmstrip, half of finding #5 did not exist. The

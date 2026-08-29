@@ -173,8 +173,12 @@ export function chipBudget({ chips, ceiling, cite = 'hud.channel_budget' }) {
           { size: 8, anchor: 'end', opacity: c.on ? null : '.55' })
       + '</g>');
   });
+  // The budget is the sum of the chips above it, so it enters one slot past the last
+  // chip -- the total arriving before the parts it totals made the entrance a
+  // conclusion with no premises.
   const budget = level(priced ? spent : null, ceiling,
-    { measured: priced && typeof ceiling === 'number', cite });
+    { measured: priced && typeof ceiling === 'number', cite,
+      order: chips.length, total: chips.length + 1 });
   g.push(text(224, 30, 'BUDGET', { size: 7, opacity: '.7' }));
   g.push(text(224, 58, priced ? `${spent} / ${ceiling}` : 'UNPRICED', { size: 18 }));
   g.push(`<g class="cd-fd-budget"${attrs(budget)}>`

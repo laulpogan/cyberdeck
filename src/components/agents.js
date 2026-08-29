@@ -228,11 +228,23 @@ export function dispatch({ workers }) {
   // session ids are measured (the population is real), so the honest line names both:
   // how many can be scored, and how many cannot.
   const scored = workers.filter((w) => PARTS.some(([, k]) => w[k] != null)).length;
-  g.push(text(PAD, H - 22, scored === 0
-    ? `MANIFEST STATE UNMEASURED · ${workers.length} SESSIONS LISTED`
-    : `${ready} OF ${scored} MANIFESTS COMPLETE`
-      + (scored < workers.length ? ` · ${workers.length - scored} UNREPORTED` : ''),
-    { size: 8, weight: '600' }));
+  // The count position only when a manifest actually came in complete: the panel
+  // refuses to animate a part past a missing one, and a summary that counted up over
+  // a panel where nothing completed would imply the dispatch got further than it did.
+  g.push(`<g class="cd-ag-manifests"${attrs(scored === 0
+    ? refusal('no worker reported a manifest')
+    : ready === 0
+      ? still('no manifest came in complete, so nothing in this panel counts up')
+      // The population this line summarises is parts *across* workers -- the reveal
+      // slot has to sit past the last *part*, or the summary would land in the middle
+      // of the chain it is standing for. `workers.length` alone put it earlier than
+      // the last fitted dot on the panel, which the reveal-order test now refuses.
+      : count(workers.length * PARTS.length, workers.length * PARTS.length + 1))}>`
+    + text(PAD, H - 22, scored === 0
+      ? `MANIFEST STATE UNMEASURED · ${workers.length} SESSIONS LISTED`
+      : `${ready} OF ${scored} MANIFESTS COMPLETE`
+        + (scored < workers.length ? ` · ${workers.length - scored} UNREPORTED` : ''),
+      { size: 8, weight: '600' }) + '</g>');
   g.push(text(PAD, H - 10, 'no part is ever defaulted',
     { size: 6.5, opacity: '.6' }));
   return card('dispatch', 'Suit-up dispatch',

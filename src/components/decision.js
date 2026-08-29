@@ -77,12 +77,15 @@ export function magi({ seats, collapsedState = null,
   // the bench was never asked: the dark model nulls the standings, so nothing
   // distinguishes "declined" from "never polled". Count the seats that answered,
   // and when none did, say that instead of a number that reads like a result.
-  g.push(text(PAD, 182, seated === 0
-    ? `NO PRODUCER STANDING RECORDED · ${seats.length} SEATS`
-    : `${spoke} of ${seated} producers contributed`
-      + (seated < seats.length ? ` · ${seats.length - seated} UNRECORDED` : '')
-      + ` to ${String(collapsedState || 'UNMEASURED').toUpperCase()}`,
-    { size: 6.5, opacity: '.6' }));
+  g.push(`<g class="cd-dc-tally"${attrs(seated === 0
+    ? refusal('no producer recorded a standing')
+    : count(seats.length, seats.length + 1))}>`
+    + text(PAD, 182, seated === 0
+      ? `NO PRODUCER STANDING RECORDED · ${seats.length} SEATS`
+      : `${spoke} of ${seated} producers contributed`
+        + (seated < seats.length ? ` · ${seats.length - seated} UNRECORDED` : '')
+        + ` to ${String(collapsedState || 'UNMEASURED').toUpperCase()}`,
+      { size: 6.5, opacity: '.6' }) + '</g>');
   g.push(text(PAD, 193, cite, { size: 6, opacity: '.45' }));
   return card('magi', 'MAGI dissent panel',
     frame(W, H, g.join(''), {
@@ -141,8 +144,21 @@ export function glassCell({ passed = [], blocked = [],
     + line(W - PAD - 8, top + height - 8, pane + 6, top + height - 8, { width: 1.2 })
     + text(W - PAD - 12, top + height - 12, 'SEES',
         { size: 6.5, anchor: 'end' }) + '</g>');
-  g.push(text(PAD, 154, `PASSES ${passed.length}  ·  BLOCKS ${blocked.length}`,
-    { size: 8, weight: '600' }));
+  // Premises then conclusion: the tally is derived from the sightlines above it, so
+  // it enters in the slot after the last one rather than with the panel.
+  // And the count is only claimed when there is a tally to count: with the panes
+  // empty, `count(0, 1)` would still be a *reveal* over nothing, which is the gate's
+  // phrase -- motion with no evidence. An empty cell refuses instead.
+  // And the reveal is claimed only when there is a *sighting* to sequence. The
+  // blocked pane lists what the cell refuses as a matter of construction -- those rows
+  // survive a source that has gone quiet, because they are not readings. A tally that
+  // animated over zero passages would be an arrival sequence with no arrivals, which is
+  // the honesty gate's exact complaint.
+  g.push(`<g class="cd-dc-tally"${attrs(passed.length === 0
+    ? refusal('nothing passed this cell, so the tally is not a count of arrivals')
+    : count(passed.length, passed.length + 1))}>`
+    + text(PAD, 154, `PASSES ${passed.length}  ·  BLOCKS ${blocked.length}`,
+        { size: 8, weight: '600' }) + '</g>');
   g.push(wrapped(PAD, 168, asymmetry, 62, { size: 6.5, opacity: '.6' }, 9));
   return card('glass', 'Glass-cell review',
     frame(W, H, g.join(''), {
@@ -238,7 +254,9 @@ export function keycard({ doors, unstamped = 0 }) {
   // group saying `6 UNREPORTED` beside it — the same absence stated twice in two inks,
   // which reads as two facts. The separate group exists only to carry the *other* ink
   // when both kinds are on the panel.
-  g.push(`<g class="cd-dc-untested" data-any="${untried ? 1 : 0}">`
+  g.push(`<g class="cd-dc-untested" data-any="${untried ? 1 : 0}"`
+    + (reportedDoors === 0 ? attrs(refusal('no door state was reported'))
+      : attrs(count(doors.length, doors.length + 1))) + `>`
     + text(PAD, 165, unsaid === doors.length
       ? `${doors.length} STATE${doors.length === 1 ? '' : 'S'} UNREPORTED`
       : `${untried} not reached`, { size: 6.5 }) + '</g>');
@@ -318,8 +336,8 @@ export function ice({ walls }) {
   // absence's ink is on it. The mark carries the claim; CSS keys on `[data-refusal]`.
   const unreportedAll = unsaid === walls.length;
   g.push(`<g class="cd-dc-untested" data-any="${untested ? 1 : 0}"`
-    + (unreportedAll ? attrs(refusal('no wall state was reported')) : '')
-    + `>`
+    + (unreportedAll ? attrs(refusal('no wall state was reported'))
+      : attrs(count(walls.length, walls.length + 1))) + `>`
     + text(PAD, 192, unreportedAll
         ? 'WALL STATES UNREPORTED'
         : untested === 0 ? `${unsaid} WALL STATES UNREPORTED`

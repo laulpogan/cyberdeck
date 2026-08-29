@@ -84,10 +84,19 @@ export function count(index, total) {
  * is a second opinion waiting to disagree with the first. An unmeasured
  * quantity does not grow to zero: a bar at zero and a bar nobody filled
  * in must never look alike, and motion is the loudest way to confuse them. */
-export function level(value, ceiling, { measured, cite }) {
+export function level(value, ceiling, { measured, cite, order = null, total = null }) {
   if (!measured || value == null || !ceiling) return still('quantity was not measured');
   const fraction = Math.max(0, Math.min(1, Number(value) / Number(ceiling)));
-  return { 'data-motion': 'level', 'data-level': num(fraction), 'data-cite': cite };
+  const mark = { 'data-motion': 'level', 'data-level': num(fraction), 'data-cite': cite };
+  // `order`/`total` are optional and only present when the caller places the bar in
+  // the reveal sequence -- a figure computed from other figures passes the position
+  // one slot past its last input, so the bar arrives after the evidence it summarises
+  // rather than in the same frame as the panel. Omitted, behaviour is unchanged.
+  if (order != null && total) {
+    mark['data-index'] = String(Math.trunc(order));
+    mark['data-total'] = String(Math.trunc(total));
+  }
+  return mark;
 }
 
 /** The shared duration formatter. The runtime renders these too, and two

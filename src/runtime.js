@@ -356,8 +356,21 @@
   // It scales rather than resizing, and it scales from zero to the
   // rendered extent -- never past it and never to a rounder number --
   // so the end of the animation and the static render are the same frame.
+  // The reveal order `counted` and `traced` already use, shared. A figure computed
+  // from other figures is placed one slot past the last input it summarises, so the
+  // entrance reads premises-then-conclusion instead of the conclusion arriving with
+  // the page. An element that passes no index still starts at zero, so nothing that
+  // is not a conclusion changes behaviour.
+  function enterDelay(el) {
+    var index = parseInt(el.getAttribute('data-index'), 10) || 0;
+    var total = parseInt(el.getAttribute('data-total'), 10) || 1;
+    var span = Math.max(T.enter * 0.6, Math.min(T.step * total, T.enter * 2));
+    return (span * (index / Math.max(total, 1))) / 1000;
+  }
+
   function levelled(el) {
     var bar = el.querySelector('i') || el;
+    var delay = enterDelay(el);
     var axis = el.getAttribute('data-level-axis') || 'x';
     if (axis === 'slide') {
       // Some measurements are a position rather than an extent: the burn
@@ -367,7 +380,7 @@
       // nothing.
       var level = parseFloat(el.getAttribute('data-level')) || 0;
       play(bar, { transform: ['translateX(' + (-100 * level) + '%)', 'none'] },
-        { duration: T.enter / 1000, easing: 'ease-out' });
+        { duration: T.enter / 1000, easing: 'ease-out', delay: delay });
       return;
     }
     if (axis === 'fade') {
@@ -376,7 +389,7 @@
       // much is gone" is the grain arriving at the density Python already
       // computed from the percentage -- not a bar drawn next to it.
       play(bar, { opacity: [0, 1] },
-        { duration: T.enter / 1000, easing: 'ease-out' });
+        { duration: T.enter / 1000, easing: 'ease-out', delay: delay });
       return;
     }
     // To the measured extent, named -- not to `none`. `none` is the
@@ -388,7 +401,7 @@
     if (!(level >= 0)) level = 1;
     var fn = axis === 'y' ? 'scaleY' : 'scaleX';
     play(bar, { transform: [fn + '(0)', fn + '(' + level + ')'] },
-      { duration: T.enter / 1000, easing: 'ease-out' });
+      { duration: T.enter / 1000, easing: 'ease-out', delay: delay });
   }
 
   var HANDLERS = {
