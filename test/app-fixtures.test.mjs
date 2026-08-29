@@ -253,3 +253,28 @@ test('a fixture that fabricates says so where the fabrication lives', () => {
   assert.doesNotMatch(src, /Math\.random\s*\(|Date\.now\s*\(/,
     'and nothing that changes between captures is actually invoked');
 });
+
+test('a fixture that prints a transition cites the two things it is between', () => {
+  // `dellpromax → spark-02` sat under `cite: 'fleet.placement'` -- one field. A drift, a
+  // splice, a promotion is a difference, and a difference needs both ends. The component
+  // prints what it is given, so this lie can only live in the fixture, which is where the
+  // rule has to bite. Walked over rendered models, not source: fixture rows wrap.
+  const TRANSITION = /[→]|<-|\bdrift\b|\bsplice[sd]?\b|\brevised\b|\bwas\s/;
+  const offenders = [];
+  const walk = (node, where, key) => {
+    if (Array.isArray(node)) return node.forEach((n, i) => walk(n, `${where}[${i}]`, key));
+    if (!node || typeof node !== 'object') return;
+    const value = typeof node.value === 'string' ? node.value : '';
+    // A transition word that is negated in its own sentence states an absence, and an
+    // absence needs no second source -- `drift unmeasured` is the honest row, and the one
+    // this rule replaced was `dellpromax → spark-02` under a one-field cite.
+    if (value && TRANSITION.test(value) && !/unmeasured|not recorded|no \w|unknown/i.test(value)) {
+      const cite = String(node.cite || node.cites || '');
+      // Two ends means two sources in the cite, or a plural path that carries a series.
+      if (!/,|\+/.test(cite)) offenders.push(`${key} ${where}: "${value}" cites ${cite || '(nothing)'}`);
+    }
+    for (const [k, v] of Object.entries(node)) walk(v, `${where}.${k}`, key);
+  };
+  for (const { key } of allComponents()) walk(brightFor(key), key, key);
+  assert.deepEqual(offenders, [], 'transition words carried by a single-source cite');
+});

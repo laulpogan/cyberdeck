@@ -56,7 +56,13 @@ export const AGENTS_FIXTURES = {
       fragments: [
         { label: 'ATTEMPT', value: '5 of 5 exhausted', cite: 'sessions[].attempt' },
         { label: 'SAME BLOCKER', value: 'credential expiry · 3×', cite: 'sessions[].state_reason' },
-        { label: 'HOST DRIFT', value: 'dellpromax → spark-02', cite: 'fleet.placement' },
+        // Drift is a difference between two placements, and this row cites one field.
+        // An arrow drawn from a single measurement is finding #4's arithmetic on absence
+        // wearing prose: the host on the far end was never retained. One placement is what
+        // the cite holds, so that is what the row says, and the drift it cannot support is
+        // stated rather than drawn.
+        { label: 'HOST PLACEMENT', value: 'dellpromax · drift unmeasured',
+          cite: 'fleet.placement' },
         { label: 'LAST SUCCESS ON THIS WORK', value: null, cite: 'source.work_history(work_id)' },
       ],
     },

@@ -222,3 +222,23 @@ test('no organism component hides moving marks inside a stillness', () => {
   ];
   for (const html of cases) assert.equal(nesting(html), 0);
 });
+
+const words = (html) => html.replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ');
+
+test("the envelope counts the caller's boundaries, and the noun agrees with the number", () => {
+  // "2 measured edge" was on screen because the sentence carried a plural-free noun and
+  // a three copied from the library's default list. Both halves are one measurement: the
+  // count is the caller's, and the noun follows it.
+  const sentence = (list) => words(og.envelope({ boundaries: list, position: { note: 'n' } }))
+    .match(/A position[^.]*\./)?.[0];
+  const rows = (limits) => [['economic', 'ECONOMIC', 'r', limits[0]],
+    ['workload', 'WORKLOAD', 'r', limits[1]], ['safety', 'SAFETY', 'r', limits[2]]];
+  assert.equal(sentence(rows([0.62, null, 0.44])),
+    'A position, drawn against 2 measured edges and 1 nobody priced.');
+  assert.equal(sentence(rows([0.62, 0.5, 0.44])), 'A position drawn against 3 measured edges.');
+  assert.equal(sentence([...rows([0.62, 0.5, 0.44]), ['heat', 'HEAT', 'r', null]]),
+    'A position, drawn against 3 measured edges and 1 nobody priced.',
+    "a fourth boundary from the caller is counted, not folded into the library's three");
+  assert.equal((words(og.envelope({ boundaries: rows([0.62, null, 0.44]), position: { note: 'n' } }))
+    .match(/\b\d+ measured edge(?!s)/g) || []).length, 0, 'no number disagrees with its noun');
+});

@@ -138,7 +138,11 @@ export function envelope({ boundaries = BOUNDARIES, position = null,
   g.push(text(PAD + inset, top + inset - 6, 'ECONOMIC', { size: 7 }));
   g.push(text(PAD + SPAN - inset, top + inset - 6, 'WORKLOAD',
     { size: 7, anchor: 'end' }));
-  const unsupplied = ['economic', 'workload', 'safety'].filter((k) => limitOf(k) === null);
+  // Derived from the caller's list, not the library's default three: a producer that
+  // described four edges was told it had described three, and one it invented as a fifth
+  // was never counted as priced at all.
+  const unsupplied = boundaries.map(([key]) => key).filter((k) => limitOf(k) === null);
+  const priced = boundaries.length - unsupplied.length;
   if (unsupplied.length) {
     g.push(text(W / 2, top + box + 10,
       `${unsupplied.map((k) => k.toUpperCase()).join(', ')} UNSUPPLIED`,
@@ -161,16 +165,20 @@ export function envelope({ boundaries = BOUNDARIES, position = null,
   return card('envelope', 'Safe-envelope gauge',
     frame(W, H, g.join(''), {
       extra: position ? '' : attrs(refusal('no position was measured to move')).trim(),
+      // The count is the caller's, not a constant: three was the library's default list,
+      // and a producer that described four edges was being described as having three.
       label: unsupplied.length
         ? `The operating space with ${unsupplied.length} boundary `
           + `${unsupplied.length === 1 ? 'edge' : 'edges'} hatched.`
-        : 'The operating space with all three boundaries measured.',
-      extra: position ? '' : attrs(refusal('no position was measured to move')).trim(),
+        : `The operating space with all ${boundaries.length} boundaries measured.`,
     }),
     position ? { note: unsupplied.length
-      ? `A position, drawn against ${3 - unsupplied.length} measured edge `
-        + 'and edges nobody priced.'
-      : 'A position drawn against three measured edges.' }
+      // "2 measured edge" was the sentence on screen. A number that disagrees with the
+      // noun next to it reads as generated, and generated is what the fixture warnings
+      // exist to make impossible: count and noun are the same measurement.
+      ? `A position, drawn against ${priced} measured `
+        + `${priced === 1 ? 'edge' : 'edges'} and ${unsupplied.length} nobody priced.`
+      : `A position drawn against ${priced} measured edges.` }
       : { note: 'A comfortable middle is the failure this gauge prevents.' });
 }
 

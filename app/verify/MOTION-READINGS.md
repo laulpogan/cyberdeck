@@ -1116,3 +1116,47 @@ comment, because a claim that goes red for a reason the file cannot fix teaches 
 reader to mute the file. Rule to hold when it is closed: **one measurement, one encoding** —
 either the transform carries the extent or the width does, never both, and whichever carries
 it must be the one the animation ends on.
+
+---
+
+## Closed on the screen, not in the source (after #9)
+
+Four of the rebuilt specimens were looked at, and three said something the code did not
+say. `stripChart`'s series was checked against the render rather than trusted from the
+formula: 12 points, `y = height - value*height`, first point `0,9` for value `0.5`, the whole
+`polyline` inside the lane it names — correct, and my reading of a downscaled screenshot
+("32.4% against a point at 21.8") was wrong, which is why numbers get probed.
+`chipBudget`'s budget bar now sits under `26 / 64` filled to 40.6% of its track, anchored at
+its own left edge: the visible proof of the anchor fix. The five chips spend 12+8+6 = 26 lit
+and 10+22 graphite, which is the same 26, so the number and the picture agree.
+
+- **`envelope` wrote "2 measured edge".** Count and noun disagreed on screen, and the count
+  was a `3` copied from the library's default boundary list — so a caller that described
+  four edges was described back as having three. Both now come from the caller's list. Test
+  added in `test/organism.test.mjs`, including the four-boundary case and a check that no
+  `N measured edge` survives.
+- **`oracle` printed a drift it did not measure.** `HOST DRIFT / dellpromax → spark-02`
+  under `cite: 'fleet.placement'` — one field. A drift is the difference between two
+  placements, so the far end of that arrow was invented, which is finding #4's arithmetic on
+  absence wearing prose. The row is now `HOST PLACEMENT / dellpromax · drift unmeasured`:
+  what the cite holds, plus what it cannot support, in ink. A rule came out of it
+  (`test/app-fixtures.test.mjs`): a fixture that prints a transition — arrow, drift, splice,
+  revision — must cite both ends, and a transition word *negated in its own sentence* is a
+  stated absence and needs no second source. The rule was sabotaged back to the old string
+  and names the row, so it bites.
+
+## Finding #12 — open, two things the screen showed and this pass did not fix
+
+- **`envelope`'s extents are unlabelled as to their referent, and its refusal sits in a
+  measured edge's space.** The priced edges draw as short bars at the box's left and bottom
+  (0.62 and 0.44 of their own authored length — arithmetically right, the gate says so), and
+  nothing on screen says 0.62 *of what*. Meanwhile `WORKLOAD UNSUPPLIED` is stamped across
+  the middle of the operating space, so the hatch on the right reads as an empty region
+  rather than an edge nobody priced. An envelope is a box whose edges *are* the limits;
+  redesigning that is a change to the drawing's grammar, and there is no reference in the
+  vault for it (task 3's spec half is still blocked), so it is written down rather than
+  guessed at.
+- **`joiOverlay` draws a corner tick outside the band it ornaments.** A `+` lands at the
+  observed lane's left edge with nothing adjacent to it, while the projection band's own
+  corners are inside its dashes. Cosmetic, and the kind of thing a screenshot at 518px wide
+  makes easy to miss, so it is named with its specimen rather than smoothed over.

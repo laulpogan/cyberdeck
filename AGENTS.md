@@ -574,3 +574,13 @@ needed `TERMINATE` in the seam list before the ceremony shape ever appeared on a
   the route's name, and `ROUTES` entries need the `#` (`#/component/x`) or the app renders Home
   and every drawing claim on that route goes vacuous. A `/component/<key>` route whose specimen
   never mounts is a failure, not a shrug.
+
+- **A transition word needs both ends.** `dellpromax → spark-02` under one field's cite said
+  drift when nothing measured a change; the rule (in `test/app-fixtures.test.mjs`) is that a
+  printed arrow/drift/splice cites two sources, unless the same sentence negates it —
+  `drift unmeasured` is a statement of absence, which is the house style and needs nothing.
+- **Counts and nouns are one measurement, and the count belongs to the caller.** The
+  envelope's note hardcoded both a plural-free noun and the library's default three, so a
+  producer with four boundaries was described as having three. Interpolated copy is derived
+  data: pluralise from the same number, and take the total from the argument, never from a
+  constant in the component.
