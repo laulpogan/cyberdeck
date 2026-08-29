@@ -174,6 +174,27 @@ test('app browser pass', { skip }, async (t) => {
       // data-* inputs the runtime reads, so drift fails this gate.
       const ctx = await browser.newContext();
       const { page, noise } = await openPage(ctx);
+      // Record the pings at creation, not by sampling the live animation
+      // list: a finished ping commits its final opacity and disappears
+      // from getAnimations(), so a loaded machine that delayed the read
+      // past the first decay would see a false absence.
+      await page.addInitScript(() => {
+        window.__pings = [];
+        const orig = Element.prototype.animate;
+        Element.prototype.animate = function (kf, opts) {
+          const handle = orig.call(this, kf, opts);
+          if (kf && kf.opacity !== undefined && this.tagName === 'circle') {
+            const g = this.closest('[data-sweep-angle]');
+            if (g) {
+              window.__pings.push({
+                at: Number(g.getAttribute('data-sweep-angle')),
+                delay: opts.delay, duration: opts.duration,
+              });
+            }
+          }
+          return handle;
+        };
+      });
       await page.goto(base + '#/component/radar');
       await page.waitForSelector('.cd-fd-contact[data-sweep-angle] circle');
       const sync = await page.evaluate(() => {
@@ -182,26 +203,18 @@ test('app browser pass', { skip }, async (t) => {
         // data-period is in seconds; the Web Animations surface speaks ms.
         const period = parseFloat(sweep.getAttribute('data-period')) * 1000;
         const startDeg = parseFloat(sweep.getAttribute('data-spent')) * 360;
-        const pings = [...document.querySelectorAll('[data-sweep-angle]')]
-          .map((g) => {
-            const circle = g.querySelector('circle') || g;
-            const anim = circle.getAnimations()
-              .find((a) => a.effect && a.effect.target === circle);
-            return {
-              at: parseFloat(g.getAttribute('data-sweep-angle')),
-              delay: anim ? anim.effect.getTiming().delay : null,
-              duration: anim ? anim.effect.getTiming().duration : null,
-            };
-          });
-        return { period, startDeg, pings };
+        const angles = new Set([...document.querySelectorAll('[data-sweep-angle]')]
+          .map((g) => Number(g.getAttribute('data-sweep-angle'))));
+        return { period, startDeg, angles: [...angles], pings: window.__pings };
       });
       assert.equal(sync.error, undefined, sync.error);
       assert.ok(sync.pings.length >= 5, `only ${sync.pings.length} blips scheduled`);
-      for (const ping of sync.pings) {
-        assert.ok(ping.delay !== null, `blip at ${ping.at}deg has no ping animation`);
-        const frac = (((ping.at - sync.startDeg) % 360) + 360) % 360 / 360;
+      for (const want of sync.angles) {
+        const ping = sync.pings.find((p) => p.at === want);
+        assert.ok(ping, `blip at ${want}deg was never scheduled`);
+        const frac = (((want - sync.startDeg) % 360) + 360) % 360 / 360;
         assert.ok(Math.abs(ping.delay - sync.period * frac) < 2,
-          `blip at ${ping.at}deg fades at ${ping.delay}ms, sweep reaches it at `
+          `blip at ${want}deg fades at ${ping.delay}ms, sweep reaches it at `
           + `${sync.period * frac}ms -- ${Math.abs(ping.delay - sync.period * frac).toFixed(0)}ms off the line`);
         assert.ok(Math.abs(ping.duration - sync.period * 0.55) < 2,
           'the blip decay is not measured against the poll period');
