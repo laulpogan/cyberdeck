@@ -487,3 +487,22 @@ Three things that fell out of enforcing it:
   is now printed once per card (`SILENCE_IS_NOT_CONSENT`) and the row keeps the short
   clause; the word `PERMIT UNMEASURED` already carries the fact. Repeating a doctrine
   sentence per row is not more honest, it is layout with a thesis.
+
+## An unreported state is not a state. Check the fixtures too.
+
+Finding #4 lived in `app/fixtures/decision.js`, not in a component: the declared *absence* for
+`keycard`/`ice` was `{ path: 'doors[].state', value: 'not_reached' }`. A declared absence has to
+be the thing that is actually missing — `unknown` — because `not_reached` is a **verdict** the
+sequence earns (a held-shut door behind it). With the substitution in place the dark model
+printed `5 WALLS NOT REACHED` and the component dutifully summed a fate for three walls nobody
+reported. `magi` and `dispatch` did the same arithmetic in code: `0 of 3 producers contributed`
+for a bench never polled, `0 OF 3 MANIFESTS COMPLETE` for sessions nobody reported on.
+
+The rule the four now share: **count what was reported, name the rest, and when nothing was
+reported say that instead of dividing.** `UNREPORTED` gets refusal ink (nobody said ≠ something
+stopped us — the `authority.js` doctrine), its own count, and its own *shape*: dotted, not the
+outline of a turned door. Denominators are measured populations — `dispatch` keeps
+`· 3 SESSIONS LISTED`, because the session ids really are there.
+
+When auditing a refusal, read the fixture's declared substitutions before the component. A
+substitution that names a *result* is the bug, and every downstream count will look correct.

@@ -869,6 +869,32 @@ The one rule that was *not* written: "heights equal". `muthur` and `tape` are th
 counter-examples that killed it — reserving the measured height would put blank space where
 an absence is being declared, and a reserved box reads as a quiet measurement.
 
+## Finding #4 is closed: nothing counts what nobody reported
+
+Four specimens did arithmetic on absence. The mechanism was not in the components but in the
+fixtures: `app/fixtures/decision.js` declared the *absence* of a door or wall state as
+`state: 'not_reached'`. That is not absence, it is a fate — a wall the sequence stopped short
+of, which is a fact a halt earns. So the dark model reported five walls as untried, and the
+component summed them into `5 WALLS NOT REACHED`, and the same shape gave `0 of 3 producers
+contributed` for a bench nobody polled and `0 OF 3 MANIFESTS COMPLETE` for three sessions
+nobody reported on.
+
+Now: an unreported state keeps its own word (`UNREPORTED`), its own ink (refusal — nobody said
+is not the same fact as something stopped us), its own shape (dotted, not the outline of a
+turned door), and its own count. The denominators count what was reported: `1 NOT REACHED · 1
+UNREPORTED`, `1 of 2 producers contributed · 1 UNRECORDED`, `1 OF 2 MANIFESTS COMPLETE · 1
+UNREPORTED`. When nothing was reported the line says so instead of dividing: `TURN UNMEASURED`,
+`WALL STATES UNREPORTED`, `NO PRODUCER STANDING RECORDED · 3 SEATS`, `MANIFEST STATE UNMEASURED
+· 3 SESSIONS LISTED` — the population is kept because the session ids really are measured.
+
+Two smaller things fell out. The absence was first printed **twice**, once as `6 states
+unreported` and again beside it as `6 UNREPORTED` — one absence in two inks reads as two facts,
+so the separate group exists only to carry a second ink when both kinds share a panel. And the
+loudest line on the refused panel, `TURN UNMEASURED`, was rendered in the healthy data green:
+the letters said one thing and the colour said the opposite, which is a green checkmark on an
+unchecked row one size up. It carries the refusal ink now. The green sequence rail under the
+labels stays green on purpose — the order of the doors *is* measured, only their states aren't.
+
 ### Two probe results that came out *for* the library
 
 The bright model was checked against the dark model for all 51 components. Two render byte-identical

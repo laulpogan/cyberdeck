@@ -67,14 +67,21 @@ export function magi({ seats, collapsedState = null,
       + '</g>');
   });
   const spoke = seats.filter((s) => s.standing === 'spoke').length;
+  const seated = seats.filter((s) => s.standing != null && s.standing !== '').length;
   // The seats' standings are drawn; what the bench agreed on is not, and until
   // now both facts shared one ink with the unmeasured gaps. The agreement is a
   // refusal — nothing recorded it — so it takes the refusal mark.
   g.push(`<g class="cd-dc-agreement"${attrs(refusal('no agreement was recorded across the bench'))}>`
     + text(PAD, 170, 'AGREEMENT UNMEASURED', { size: 9, weight: '600' }) + '</g>');
-  g.push(text(PAD, 182,
-    `${spoke} of ${seats.length} producers contributed to `
-    + String(collapsedState || 'UNMEASURED').toUpperCase(),
+  // `0 of 3 producers contributed` is a verdict about three silent benches, and
+  // the bench was never asked: the dark model nulls the standings, so nothing
+  // distinguishes "declined" from "never polled". Count the seats that answered,
+  // and when none did, say that instead of a number that reads like a result.
+  g.push(text(PAD, 182, seated === 0
+    ? `NO PRODUCER STANDING RECORDED · ${seats.length} SEATS`
+    : `${spoke} of ${seated} producers contributed`
+      + (seated < seats.length ? ` · ${seats.length - seated} UNRECORDED` : '')
+      + ` to ${String(collapsedState || 'UNMEASURED').toUpperCase()}`,
     { size: 6.5, opacity: '.6' }));
   g.push(text(PAD, 193, cite, { size: 6, opacity: '.45' }));
   return card('magi', 'MAGI dissent panel',
@@ -158,6 +165,16 @@ export const DOORS = [
 
 const DOOR_WORD = { open: 'TURNED', shut: 'HELD SHUT', not_reached: 'NOT REACHED' };
 
+/** The states a source can actually report. Anything else — `null`, `''`,
+ * `'unknown'`, a word from a future schema — is **not** a door nobody reached.
+ * It is nobody having said. `NOT REACHED` is a fact the sequence earns: a held-
+ * shut door behind it, a halt that was seen. Defaulting an unreported state into
+ * it is arithmetic on absence, and it made `keycard` report six doors as untried
+ * the moment the state field went away, then count them in the same breath.
+ * Unreported keeps its own state, its own refusal ink, and its own count. */
+const REPORTED_STATE = new Set(['open', 'shut', 'not_reached']);
+const isReported = (state) => REPORTED_STATE.has(state);
+
 /** Keycard access trace -- a door, an instant, a card.
  *
  * Authority is not a property, it is a sequence of doors. A list of doors
@@ -178,9 +195,16 @@ export function keycard({ doors, unstamped = 0 }) {
   doors.forEach((door, i) => {
     const x = PAD + i * slot + 2;
     const w = slot - 6;
+    const reported = isReported(door.state);
     g.push(`<g class="cd-dc-door" data-state="${esc(door.state)}"`
-      + `${attrs(trace(door.state !== 'not_reached', { cite: 'doors[].state', order: i, total: doors.length }))}>`
-      + rect(x, top, w, height - 14, { dashed: door.state === 'not_reached',
+      + `${attrs(reported
+        ? trace(door.state !== 'not_reached', { cite: 'doors[].state', order: i, total: doors.length })
+        : refusal(`no state was reported for ${door.label}`))}>`
+      // Dashed for the unreported too: a door nobody reported must not have the same
+      // outline as a door that was turned. The hue says which kind of absence it is;
+      // the stroke says absence at all, and a distinction that lives only in colour is
+      // gone in monochrome.
+      + rect(x, top, w, height - 14, { dashed: door.state === 'not_reached' || !reported,
           width: door.state === 'shut' ? 2 : 1 })
       // A turned door is drawn OPEN: the leaf swung back against the
       // frame. That is a different shape, not a green tint.
@@ -194,10 +218,36 @@ export function keycard({ doors, unstamped = 0 }) {
   });
   const shut = doors.findIndex((d) => d.state === 'shut');
   const untried = doors.filter((d) => d.state === 'not_reached').length;
-  g.push(text(PAD, 152, shut >= 0 ? `HELD AT ${doors[shut].label}` : 'EVERY DOOR TURNED',
-    { size: 8, weight: '600' }));
+  const unsaid = doors.length - doors.filter((d) => isReported(d.state)).length;
+  // `EVERY DOOR TURNED` on a panel where nobody reported a state is a claim of
+  // full passage drawn on silence. It takes the count of reported doors.
+  const reportedDoors = doors.length - unsaid;
+  const turnLine = shut >= 0 ? `HELD AT ${doors[shut].label}`
+    : reportedDoors === 0 ? 'TURN UNMEASURED'
+      : unsaid > 0 ? `EVERY DOOR MEASURED TURNED · ${unsaid} UNREPORTED`
+        : 'EVERY DOOR TURNED';
+  // The header is the loudest word on the panel, so it carries the ink of the claim
+  // it makes. `TURN UNMEASURED` printed in the healthy data colour said "measured"
+  // at a glance while the letters said the opposite — the same defect as a green
+  // checkmark on an unchecked row, one size up.
+  g.push(reportedDoors === 0
+    ? `<g class="cd-dc-turn"${attrs(refusal('no door state was reported'))}>`
+      + text(PAD, 152, turnLine, { size: 8, weight: '600' }) + '</g>'
+    : text(PAD, 152, turnLine, { size: 8, weight: '600' }));
+  // One count, one place. The first cut printed `6 states unreported` and then a second
+  // group saying `6 UNREPORTED` beside it — the same absence stated twice in two inks,
+  // which reads as two facts. The separate group exists only to carry the *other* ink
+  // when both kinds are on the panel.
   g.push(`<g class="cd-dc-untested" data-any="${untried ? 1 : 0}">`
-    + text(PAD, 165, `${untried} not reached`, { size: 6.5 }) + '</g>');
+    + text(PAD, 165, unsaid === doors.length
+      ? `${doors.length} STATE${doors.length === 1 ? '' : 'S'} UNREPORTED`
+      : `${untried} not reached`, { size: 6.5 }) + '</g>');
+  if (unsaid > 0 && unsaid < doors.length) {
+    // Its own group, its own ink: an unreported state is a refusal (nobody said),
+    // a not-reached door is a measurement (something stopped the sequence).
+    g.push(`<g class="cd-dc-unsaid"${attrs(refusal('these doors carry no reported state'))}>`
+      + text(PAD + 96, 165, `${unsaid} UNREPORTED`, { size: 6.5 }) + '</g>');
+  }
   if (unstamped) {
     g.push(`<g class="cd-dc-unstamped"${attrs(refusal('these events carry no instant'))}>`
       + text(PAD, 184, `UNORDERABLE · ${unstamped} EVENT${unstamped === 1 ? '' : 'S'} CARRY NO INSTANT`,
@@ -221,6 +271,10 @@ export function keycard({ doors, unstamped = 0 }) {
  * its own state, drawn in the cannot-see colour, because it is a thing
  * nobody knows.
  *
+ * An unreported state is a third thing, and it is not `NOT REACHED`: that word is
+ * earned by a halt that was seen. Silence gets `UNREPORTED` and its own count, so a
+ * panel nobody polled cannot be read as a depth that was climbed and failed.
+ *
  * Indented rows say the layers are ordered. They do not say you are
  * standing outside the first one and cannot see past it. Nested
  * rectangles receding into the panel do. */
@@ -239,10 +293,13 @@ export function ice({ walls }) {
   const g = [];
   walls.forEach((wall, i) => {
     const inset = 5 + i * step;
+    const reported = isReported(wall.state);
     g.push(`<g class="cd-dc-wall" data-state="${esc(wall.state)}"`
-      + `${attrs(trace(wall.state !== 'not_reached', { cite: 'walls[].state', order: i, total: walls.length }))}>`
+      + `${attrs(reported
+        ? trace(wall.state !== 'not_reached', { cite: 'walls[].state', order: i, total: walls.length })
+        : refusal(`no state was reported for ${wall.label}`))}>`
       + rect(PAD + inset, 8 + inset, SPAN - inset * 2, height - inset * 2, {
-          dashed: wall.state === 'not_reached',
+          dashed: wall.state === 'not_reached' || !reported,
           width: wall.state === 'shut' ? 2 : 1,
           extra: `opacity="${Math.max(.28, 1 - i * .16).toFixed(2)}"` })
       + '</g>');
@@ -251,11 +308,31 @@ export function ice({ walls }) {
           { size: 6, opacity: Math.max(.4, 1 - i * .14).toFixed(2) }) + '</g>');
   });
   const untested = walls.filter((w) => w.state === 'not_reached').length;
+  // `5 WALLS NOT REACHED` was drawn the instant the state fields went away, which
+  // reports a depth climbed and failed on the strength of nobody having said
+  // anything. Count what was reported; name the rest, in its own ink.
+  const unsaid = walls.length - walls.filter((w) => isReported(w.state)).length;
   // The count of things nobody knows wears the colour of things nobody
   // knows. In the measured-and-well green it read as a result.
-  g.push(`<g class="cd-dc-untested" data-any="${untested ? 1 : 0}">`
-    + text(PAD, 192, `${untested} WALL${untested === 1 ? '' : 'S'} NOT REACHED`,
+  // Same rule at ICE: the biggest line on the panel states an absence, so the
+  // absence's ink is on it. The mark carries the claim; CSS keys on `[data-refusal]`.
+  const unreportedAll = unsaid === walls.length;
+  g.push(`<g class="cd-dc-untested" data-any="${untested ? 1 : 0}"`
+    + (unreportedAll ? attrs(refusal('no wall state was reported')) : '')
+    + `>`
+    + text(PAD, 192, unreportedAll
+        ? 'WALL STATES UNREPORTED'
+        : untested === 0 ? `${unsaid} WALL STATES UNREPORTED`
+          : unsaid > 0
+            ? `${untested} NOT REACHED · ${unsaid} UNREPORTED`
+            : `${untested} WALL${untested === 1 ? '' : 'S'} NOT REACHED`,
         { size: 8, weight: '600' }) + '</g>');
+  if (unsaid > 0 && unsaid < walls.length) {
+    // Its own ink, its own number: a wall nobody reported is a refusal, a wall
+    // the sequence stopped short of is a measurement.
+    g.push(`<g class="cd-dc-unsaid"${attrs(refusal('these walls carry no reported state'))}>`
+      + text(PAD, 203, `${unsaid} UNREPORTED`, { size: 6.5 }) + '</g>');
+  }
   return card('ice', 'ICE / countermeasure walls',
     frame(W, H, g.join(''), {
       label: 'Each layer is drawn behind the one in front of it. The wall '

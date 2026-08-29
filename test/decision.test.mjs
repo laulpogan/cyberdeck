@@ -235,3 +235,56 @@ test('no decision component hides moving marks inside a stillness', () => {
   ];
   for (const html of cases) assert.equal(nesting(html), 0);
 });
+
+// --------------------------------------------------------------------------
+// Finding #4: arithmetic on absence. `ice`/`keycard`/`magi` reported a *result*
+// about things nobody reported at all -- `5 WALLS NOT REACHED` and `0 of 3 producers
+// contributed` on a panel where every state field was simply absent. A state that
+// was never said keeps its own word, its own ink, and its own count.
+
+const UNKNOWN_WALLS = ['EFFECTIVE MODE', 'OPERATOR IDENTITY', 'COMMAND ADAPTER'].map((label) => ({
+  label, state: 'unknown',
+}));
+
+test('a wall state nobody reported is not a wall you failed to reach', () => {
+  const h = d.ice({ walls: UNKNOWN_WALLS });
+  assert.match(h, /WALL STATES UNREPORTED/, 'silence gets its own words');
+  assert.doesNotMatch(h, /NOT REACHED/, 'and not a fate the sequence never saw');
+  assert.match(h, /data-motion="still"[^>]*data-refusal="1"/, 'in refusal ink: nobody said');
+  const mixed = d.ice({ walls: [
+    { label: 'EFFECTIVE MODE', state: 'open' },
+    { label: 'OPERATOR IDENTITY', state: 'not_reached' },
+    { label: 'COMMAND ADAPTER', state: 'unknown' },
+  ] });
+  assert.match(mixed, /1 NOT REACHED · 1 UNREPORTED/, 'the two counts are kept apart');
+  assert.match(mixed, /NOT REACHED/, 'and the measured one is still drawn -- non-vacuous');
+});
+
+test('an unreported door cannot animate, and never claims the run was made', () => {
+  const h = d.keycard({ doors: UNKNOWN_WALLS.map((w) => ({ label: w.label, state: 'unknown' })),
+    unstamped: null });
+  assert.doesNotMatch(h, /data-motion="trace"/, 'a state nobody said does not arrive');
+  assert.match(h, /TURN UNMEASURED/, 'so the header says the turn was never measured');
+  assert.match(h, /data-refusal="1"/, 'and the doors carry the refusal');
+  assert.equal((h.match(/UNREPORTED/g) || []).length, 1,
+    'the absence is stated once -- twice in two inks reads as two facts');
+  const real = d.keycard({ doors: [
+    { label: 'A', state: 'open' }, { label: 'B', state: 'shut' },
+    { label: 'C', state: 'unknown' },
+  ], unstamped: null });
+  assert.match(real, /HELD AT B/, 'a reported halt is still read as a halt');
+  assert.match(real, /data-motion="trace"/, 'and reported doors still animate');
+});
+
+test('an unanswered bench is not a bench that voted no', () => {
+  const seats = ['SALUD', 'KANPAI', 'HARNESS'].map((label) => ({ label, standing: null }));
+  const h = d.magi({ collapsedState: null, cite: 'source.per_producer_verdicts()', seats });
+  assert.match(h, /NO PRODUCER STANDING RECORDED/, 'the absence is the finding');
+  assert.doesNotMatch(h, /0 of 3/, 'no number reads as a verdict about silence');
+  const answered = d.magi({ collapsedState: 'needs_human', cite: 'c', seats: [
+    { label: 'SALUD', standing: 'spoke' }, { label: 'KANPAI', standing: null },
+    { label: 'HARNESS', standing: 'silent' },
+  ] });
+  assert.match(answered, /1 of 2 producers contributed/, 'the denominator counts answers');
+  assert.match(answered, /· 1 UNRECORDED/, 'and the missing seat is named, not divided in');
+});

@@ -262,3 +262,22 @@ test('a killmail with a charge record claims the charge it holds', () => {
   assert.match(unpriced, /data-refusal="1"[^>]*data-still-reason="no canonical charge record is supplied"|data-still-reason="no canonical charge record is supplied"[^>]*data-refusal="1"/,
     'the unpriced receipt still refuses, in the refusal ink');
 });
+
+// Finding #4, same shape: `0 OF 3 MANIFESTS COMPLETE` reported three failures on the
+// strength of nobody having said anything about the three sessions. The population is
+// measured (the session ids are there); the completion state is not.
+test('an unreported manifest is not a failed manifest', () => {
+  const silent = ag.dispatch({ workers: ['ses-1', 'ses-2'].map((session_id) => ({
+    session_id, harness: null, model: null, host: null, did: null,
+  })) });
+  assert.match(silent, /MANIFEST STATE UNMEASURED · 2 SESSIONS LISTED/,
+    'the measured population is kept, the verdict is not');
+  assert.doesNotMatch(silent, /OF 2 MANIFESTS/, 'no fraction scores what was never sent');
+  const partial = ag.dispatch({ workers: [
+    { session_id: 'ses-1', harness: 'pi', model: 'q', host: 'dell', did: 'did:1' },
+    { session_id: 'ses-2', harness: null, model: null, host: null, did: null },
+    { session_id: 'ses-3', harness: 'codex', model: null, host: 'spark', did: null },
+  ] });
+  assert.match(partial, /1 OF 2 MANIFESTS COMPLETE · 1 UNREPORTED/,
+    'the denominator counts manifests that were reported on');
+});

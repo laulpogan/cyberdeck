@@ -40,7 +40,10 @@ export const DECISION_FIXTURES = {
     // and every door past it is dashed because nobody tried it. An event with no
     // timestamp is drawn UNSTAMPED and loud, because a trace whose order cannot
     // be established is a list.
-    fields: [{ path: 'doors[].state', value: 'not_reached' }, 'unstamped'],
+    // An unreported door state is NOT `not_reached`. That word is earned by a halt
+    // the sequence saw; substituting it here would have the showcase report six
+    // doors as untried on the strength of nobody having said anything (finding #4).
+    fields: [{ path: 'doors[].state', value: 'unknown' }, 'unstamped'],
     model: {
       unstamped: 3,
       doors: [
@@ -58,7 +61,7 @@ export const DECISION_FIXTURES = {
     // The layers past the one that stopped you are not layers you beat. Every
     // check after the first missing grant is UNTESTED, and a console that paints
     // those rows green or grey is wrong twice: not reached is its own state.
-    fields: [{ path: 'walls[].state', value: 'not_reached' }],
+    fields: [{ path: 'walls[].state', value: 'unknown' }],
     model: {
       walls: [
         { label: 'EFFECTIVE MODE', state: 'open' },

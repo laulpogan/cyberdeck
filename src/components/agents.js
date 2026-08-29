@@ -223,7 +223,15 @@ export function dispatch({ workers }) {
   });
   const ready = workers.filter((w) => PARTS.every(([, k]) =>
     Boolean(w[k]) && w[k] !== WITHHELD)).length;
-  g.push(text(PAD, H - 22, `${ready} OF ${workers.length} MANIFESTS COMPLETE`,
+  // A manifest with no parts reported is not a manifest that came up empty -- it is a
+  // manifest nobody reported on, and `0 OF 3 COMPLETE` reads as three failures. The
+  // session ids are measured (the population is real), so the honest line names both:
+  // how many can be scored, and how many cannot.
+  const scored = workers.filter((w) => PARTS.some(([, k]) => w[k] != null)).length;
+  g.push(text(PAD, H - 22, scored === 0
+    ? `MANIFEST STATE UNMEASURED · ${workers.length} SESSIONS LISTED`
+    : `${ready} OF ${scored} MANIFESTS COMPLETE`
+      + (scored < workers.length ? ` · ${workers.length - scored} UNREPORTED` : ''),
     { size: 8, weight: '600' }));
   g.push(text(PAD, H - 10, 'no part is ever defaulted',
     { size: 6.5, opacity: '.6' }));
