@@ -1,4 +1,11 @@
 {
+ "raw/cyberpunk-hud--media.tenor.com_gdhPO38XjlUAAAAM_urith-set.gif.gif": {
+  "contentVerified": true,
+  "eyeballedBy": "agent-eye(qwen/dot-backbone)",
+  "framesViewed": "8 frames sampled across the file's own timeline",
+  "sheet": "/tmp/eye-next/all/sheet-01.png",
+  "shows": "Full-frame isometric game interface: floating nameplates and segmented health bars above a squad, a green selection ring on the chosen unit, and a parchment party panel opening at the right edge with a grid of portrait cells and stat columns. The interface fills the frame and moves: the panel arrives over a field that keeps running, and one contact is singled out by a ring that breathes."
+ },
  "raw/cyberpunk-hud--media.tenor.com_pHWIUKxe8fQAAAA1_iori-iori-kof.webp.webp": {
   "contentVerified": false,
   "correction": "First pass gave this row the warp-ship sentence, which belongs to the spinner-console file one row above. Corrected on re-reading the strip; the mistake is left on the record because an eye that cannot be wrong cannot be checked.",
@@ -34,6 +41,20 @@
   "framesViewed": "8 frames sampled across the file's own timeline",
   "sheet": "/tmp/eye-q/all/sheet-01.png",
   "shows": "QUOTE FOR level and for trace on a named track: a green bar filling a track from the left edge to the right, terminal glyphs parked at both ends and never moving. The only thing that travels is the extent. Ink moves exactly as far as the measurement goes, at a rate that reads constant, and everything that is furniture holds still."
+ },
+ "raw/fake-os-loaders--media.tenor.com_qSiv7MdS0FsAAAA1_onregion-nintendo.webp.webp": {
+  "contentVerified": false,
+  "eyeballedBy": "agent-eye(qwen/dot-backbone)",
+  "framesViewed": "8 frames sampled across the file's own timeline",
+  "sheet": "/tmp/eye-next/all/sheet-01.png",
+  "shows": "A site logo turning: \"ON REGION 64\" over a rotating isometric maze drawn in green and blue. The whole motion is a rotation and a hue change; no extent, no clock, no quantity."
+ },
+ "raw/fake-os-loaders--media.tenor.com_qSiv7MdS0FsAAAAM_onregion-nintendo.gif.gif": {
+  "contentVerified": false,
+  "eyeballedBy": "agent-eye(qwen/dot-backbone)",
+  "framesViewed": "8 frames sampled across the file's own timeline",
+  "sheet": "/tmp/eye-next/all/sheet-01.png",
+  "shows": "The same rotating \"ON REGION 64\" maze as row 6, shorter loop. Logo rotation and palette change."
  },
  "raw/generic-hud--media.tenor.com_WFyfaURWOOkAAAAm_agenturleben-agencylife.webp.webp": {
   "contentVerified": false,
@@ -243,12 +264,26 @@
   "shows": "Tenor meme: a Dr. Wily cartoon character dancing — no scope, no sweep, no contact",
   "stripped": true
  },
+ "raw/rig--blob.gifcities.org_gifcities_2GZNWJ32BURZCJ7XKWTLILI6SHH7KAUA.gif": {
+  "contentVerified": false,
+  "eyeballedBy": "agent-eye(qwen/dot-backbone)",
+  "framesViewed": "8 frames sampled across the file's own timeline",
+  "sheet": "/tmp/eye-next/all/sheet-01.png",
+  "shows": "Two Stormtroopers in a Star Wars fan film shooting each other at close range; red and yellow impact sparks fly from the hits. No screen, no interface, no measured quantity — a character shot tagged `rig` because a search said motion tracker."
+ },
  "raw/rig--blob.gifcities.org_gifcities_2RO5SN3IFIDBUAFOOVBDCFJ7J6V4DRXR.gif": {
   "contentVerified": true,
   "eyeballedBy": "agent-eye(qwen/dot-backbone)",
   "framesViewed": "8 frames sampled across the file's own timeline",
   "sheet": "/tmp/eye-q/all/sheet-03.png",
   "shows": "QUOTE FOR radar, city and grid: an orange survey grid on black with fixed corner labels, a marker travelling across the cells, and a magenta region lighting up somewhere inside it on a 3.0s loop. The grid and its labels are furniture and never move; only the contact and the lit region change — the split this library keeps having to relearn."
+ },
+ "raw/rig--blob.gifcities.org_gifcities_3KDIF74K3ZG7TLDTLKWOGBQT4ED5RYH3.gif": {
+  "contentVerified": false,
+  "eyeballedBy": "agent-eye(qwen/dot-backbone)",
+  "framesViewed": "8 frames sampled across the file's own timeline",
+  "sheet": "/tmp/eye-next/all/sheet-01.png",
+  "shows": "A web banner cycling \"HELLS SOCIETY / click here! / www.hellssociety.org / FAMILY\" between red, orange, purple, blue and cyan on a 12.0s loop. Held as a caution if ever quoted: the frames differ by hue alone, the one distinction this library refuses to carry in colour."
  },
  "raw/rig--media.tenor.com_96lpvkE5Sb4AAAA1_srcspaceship-spaceship.webp.webp": {
   "contentVerified": false,
@@ -288,12 +323,47 @@
   "sheet": "/tmp/eye-q/all/sheet-01.png",
   "shows": "A face lit amber against black, turning its head. The seed is named for the vehicle and its HUD; the harvest returned the character. No overlay, no reticle, no panel — the 5.3s loop is a head turn."
  },
+ "raw/spinner--media.tenor.com_6NmYhocrNjMAAAA1_blade-runner-tyrell-corporation.webp.webp": {
+  "contentVerified": false,
+  "eyeballedBy": "agent-eye(qwen/dot-backbone)",
+  "framesViewed": "8 frames sampled across the file's own timeline",
+  "sheet": "/tmp/eye-next/all/sheet-01.png",
+  "shows": "The same dark lamp-lit corridor as row 4, 144 frames of a set with a floor reflection. Largest file in its seed and least like an interface."
+ },
+ "raw/spinner--media.tenor.com_6NmYhocrNjMAAAAM_blade-runner-tyrell-corporation.gif.gif": {
+  "contentVerified": false,
+  "eyeballedBy": "agent-eye(qwen/dot-backbone)",
+  "framesViewed": "8 frames sampled across the file's own timeline",
+  "sheet": "/tmp/eye-next/all/sheet-01.png",
+  "shows": "A dark corridor with a lamp at the end, a Blade Runner set. A few frames add a faint reflection on the floor. No interface anywhere in the frame."
+ },
+ "raw/spinner--media.tenor.com_XlewEhGOuQgAAAA1_peni-parker-penny-parker.webp.webp": {
+  "contentVerified": false,
+  "eyeballedBy": "agent-eye(qwen/dot-backbone)",
+  "framesViewed": "8 frames sampled across the file's own timeline",
+  "sheet": "/tmp/eye-next/all/sheet-01.png",
+  "shows": "A cartoon girl at a fairground stand with a subtitle reading \"I M DISPATCHING A ROLLER COASTER\". The word dispatching is the only reason this is near the seed; the picture is a character, not a panel."
+ },
  "raw/spinner--media.tenor.com_XlewEhGOuQgAAAAM_peni-parker-penny-parker.gif.gif": {
   "contentVerified": false,
   "eyeballedBy": "agent-eye(qwen/dot-backbone)",
   "framesViewed": "8 frames sampled across the file's own timeline",
   "sheet": "/tmp/eye-q/all/sheet-03.png",
   "shows": "Red-tinted animation of a girl at an arcade counter with the subtitle I'M DISPATCHING A ROLLER COASTER. A scene with burned-in subtitles; the only frame in the vault that says dispatching is somebody else's caption."
+ },
+ "raw/spinner--media.tenor.com_xVmzWI7ZoVwAAAAM_joi-blade-runner.gif.gif": {
+  "contentVerified": false,
+  "eyeballedBy": "agent-eye(qwen/dot-backbone)",
+  "framesViewed": "8 frames sampled across the file's own timeline",
+  "sheet": "/tmp/eye-next/all/sheet-01.png",
+  "shows": "A pink hologram of a woman (Joi, Blade Runner 2049) walking in magenta light. A character render with volumetric fog; the overlay interface this seed was hunting for is not in the frame."
+ },
+ "raw/spinner-console--blob.gifcities.org_gifcities_2CVXBIKAGKLDNI3KJ5X6XTH4BSVLQGXJ.gif": {
+  "contentVerified": false,
+  "eyeballedBy": "agent-eye(qwen/dot-backbone)",
+  "framesViewed": "8 frames sampled across the file's own timeline",
+  "sheet": "/tmp/eye-next/all/sheet-01.png",
+  "shows": "A webring banner: \"Trilogy-1010\" in blue blackletter over a wireframe terrain, the text fading and the terrain flickering on a 4.4s loop. A site decoration."
  },
  "raw/spinner-console--blob.gifcities.org_gifcities_2EABIEZLK7C7RZMCFOOHZKIPRAPVWALH.gif": {
   "contentVerified": true,
@@ -302,11 +372,25 @@
   "sheet": "/tmp/eye-q/all/sheet-02.png",
   "shows": "QUOTE FOR trace and arrive, not for the seed: a starship under warp with a bright marker travelling a line that extends behind it, 5.2s loop. It is a visual-effects shot of a vehicle, not the console the seed asks for — but the motion is the exact idiom of a trace: the route is drawn as the head of it travels, and nothing else in the frame moves."
  },
+ "raw/tron-disc--blob.gifcities.org_gifcities_23DTI5FGHJKRGLTR46HJVX3IBIE2U4G3.gif": {
+  "contentVerified": false,
+  "eyeballedBy": "agent-eye(qwen/dot-backbone)",
+  "framesViewed": "8 frames sampled across the file's own timeline",
+  "sheet": "/tmp/eye-next/all/sheet-01.png",
+  "shows": "A cyan wireframe of stacked towers assembling next to the text \"SX6 / flash Site\" on black: a GeoCities intro animation for a site. Ink on a dark ground, and it moves for the same reason a logo moves."
+ },
  "raw/tron-disc--blob.gifcities.org_gifcities_2AWYSNBQH7E3JQPMI2B5UNXXOTV7UDLB.gif": {
   "contentVerified": true,
   "eyeballedBy": "agent-eye(qwen/dot-backbone)",
   "framesViewed": "8 frames sampled across the file's own timeline",
   "sheet": "/tmp/eye-q/all/sheet-03.png",
   "shows": "QUOTE FOR trace and strands: a magenta circuit grid on black where a bright segment travels a path and the trail it leaves stays drawn, 5.0s loop. The grid is furniture, one ink carries the travel, and the history of the path is the picture — which is what a trace is for."
+ },
+ "raw/tron-disc--blob.gifcities.org_gifcities_2BPQ3WZLWCZPZXYBVM2SFYGAK5KV5B4U.gif": {
+  "contentVerified": false,
+  "eyeballedBy": "agent-eye(qwen/dot-backbone)",
+  "framesViewed": "8 frames sampled across the file's own timeline",
+  "sheet": "/tmp/eye-next/all/sheet-01.png",
+  "shows": "A man materialising inside a yellow perspective grid — a digitisation visual effect on a person, wireframe resolving to flesh. The grid is scenery, not an instrument: no label, no readout, nothing that reports."
  }
 }

@@ -125,9 +125,9 @@
       "id": "globe-hue-caution",
       "component": "globe",
       "reference": "hologlobe--blob.gifcities.org_gifcities_2442E47OQDW3JQT5LC2S3S2O6QNUVCEW.gif",
-      "referenceFigure": "`N/A` \u2014 no bright marker crosses the frame, motion amplitude (max difference from frame zero): 31.15",
+      "referenceFigure": "`N/A` — no bright marker crosses the frame, motion amplitude (max difference from frame zero): 31.15",
       "heldAs": "caution",
-      "gap": "a motion carried only in hue vanishes in monochrome \u2014 shown on the sheet, asserted by test/affordance.test.mjs and the shape rule, not by a frame count"
+      "gap": "a motion carried only in hue vanishes in monochrome — shown on the sheet, asserted by test/affordance.test.mjs and the shape rule, not by a frame count"
     },
     {
       "id": "rules-forbidden-idioms",
@@ -156,6 +156,17 @@
       "assert": {
         "kind": "chrome_still",
         "route": "#/rules"
+      }
+    },
+    {
+      "id": "dossier-does-not-breathe",
+      "component": "dossier",
+      "reference": "cyberpunk-hud--media.tenor.com_gdhPO38XjlUAAAAM_urith-set.gif.gif",
+      "referenceFigure": "0.756 of the frame crossed, 0.6 of the way along at half the duration, not monotone (it comes back), cells that never move: 1 of 12",
+      "heldAs": "model",
+      "gap": "the verified panel arrives over a field that keeps running — 11 of its 12 cells change and a contact crosses the frame. `dossier` answers \"which exact thing am I about to command\" from facts already true at read time, so it has no running field and must hold perfectly still: the reference is what makes the stated reason visible rather than merely stated",
+      "assert": {
+        "kind": "no_motion"
       }
     }
   ]

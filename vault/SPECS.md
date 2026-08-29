@@ -27,9 +27,21 @@ no extent, and saying so is the point.
 | `motion-tracker--blob.gifcities.org_gifci…` | `admission` | Front-loaded tilt (0.93 of the way by half duration, then it holds): a beam tips fast and the load corrects. admission draws exactly this and should not ease in. |
 | `fake-os-loaders--blob.gifcities.org_gifc…` | `rules page` | Counter-example, not model: a word rotating 360 degrees and a dot orbiting it, 2.4s loop. Nothing measured, everything moving -- the exact idiom the chrome rule forbids, which makes it the picture to put next to the rule. |
 | `fake-os-loaders--blob.gifcities.org_gifc…` | `rules page` | Counter-example: the ellipsis that grows to three dots and cycles. Measured travel 0.043 of a frame -- the only quantity on screen is the dot count, and it says nothing about anything. |
+| `cyberpunk-hud--media.tenor.com_gdhPO38Xj…` | `dossier`, `rules page` | Full-frame game interface: nameplates and segmented health bars ride above a squad, a selection ring breathes on the chosen unit, and a party panel opens at the right with a grid of portrait cells. Two readings, one on each side of the library's rule. The panel arrives over a field that KEEPS RUNNING — health changes, contacts move — which is why an arriving record set is honest there; `dossier` answers "which exact thing am I about to command" from facts already true at read time, so it has no live field, and its stillness is the same rule seen from the other side. The breathing ring is an ambient pulse with no quantity behind it: the selection idiom this app may not put in its chrome, which makes the file a counter-example as well as a map of the idiom. |
 
 The rows underneath are measured out of the files; the table above is the
 judgement step and is meant to be disagreed with.
+## `cyberpunk-hud--media.tenor.com_gdhPO38XjlUAAAAM_urith-set.gif.gif`
+
+- seed: `cyberpunk-hud`  ·  source: https://media.tenor.com/gdhPO38XjlUAAAAM/urith-set.gif
+- eye: Full-frame isometric game interface: floating nameplates and segmented health bars above a squad, a green selection ring on the chosen unit, and a parchment party panel opening at the right edge with a grid of portrait cells and stat columns. The interface fills the frame and moves: the panel arrives over a field that keeps running, and one contact is singled out by a ring that breathes.
+- measured: 53 frames over 5.3s, median delay 100.0ms, loop no return to frame zero
+- first change by cell (4x3, index = frame): `[None, 1, 7, 10, 44, 1, 1, 19, 44, 34, 34, 34]`
+- cells that never move: 1 of 12
+- extent (area of one saturated ink): `N/A` — the ink does not grow; see travel
+- travel of the bright head: 0.756 of the frame crossed, 0.6 of the way along at half the duration — constant rate, not monotone (it comes back)
+- motion amplitude (max difference from frame zero): 27.68
+
 ## `fake-os-loaders--blob.gifcities.org_gifcities_2S4N3JQ6GIQGIKRNQ6CX4AAHKS6DQHE6.gif`
 
 - seed: `fake-os-loaders`  ·  source: https://blob.gifcities.org/gifcities/2S4N3JQ6GIQGIKRNQ6CX4AAHKS6DQHE6.gif

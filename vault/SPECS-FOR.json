@@ -7,43 +7,75 @@
     "usually because it is a counter-example for the rules page rather than a model."
   ],
   "fake-os-loaders--blob.gifcities.org_gifcities_36SZVJ74JXC6QPNLGBGDNMW26HNU7TFW.gif": {
-    "for": ["level", "trace"],
+    "for": [
+      "level",
+      "trace"
+    ],
     "reading": "A marker crosses a named lane at a constant rate (0.70 of the frame travelled, 0.46 of the way at half duration) while the ends and the ground never move (4 of 12 grid cells dead). The library's level should read the same way: extent first, furniture still."
   },
   "spinner-console--blob.gifcities.org_gifcities_2EABIEZLK7C7RZMCFOOHZKIPRAPVWALH.gif": {
-    "for": ["trace", "arrive"],
+    "for": [
+      "trace",
+      "arrive"
+    ],
     "reading": "The head reaches its far end early (1.0 of the way by half duration) and what remains is the drawn route. A trace that eases out and then holds is a thing that arrived; one that keeps moving has not."
   },
   "tron-disc--blob.gifcities.org_gifcities_2AWYSNBQH7E3JQPMI2B5UNXXOTV7UDLB.gif": {
-    "for": ["trace", "strands"],
+    "for": [
+      "trace",
+      "strands"
+    ],
     "reading": "One ink travels and the trail it leaves stays drawn (1.22 frame-widths covered, mild back-loading). The history of the path is the picture, which is what a trace is for and what a shimmer is not."
   },
   "rig--blob.gifcities.org_gifcities_2RO5SN3IFIDBUAFOOVBDCFJ7J6V4DRXR.gif": {
-    "for": ["radar", "city", "grid"],
+    "for": [
+      "radar",
+      "city",
+      "grid"
+    ],
     "reading": "A survey grid with fixed corner labels in which only the contact and a lit region change. The furniture-versus-contact split the library keeps relearning is the whole of this reference."
   },
   "hologlobe--blob.gifcities.org_gifcities_2CW2JW7CEZP4FXCUBBNI2EPWDDLXQQOI.gif": {
-    "for": ["globe"],
+    "for": [
+      "globe"
+    ],
     "reading": "Mesh over land, monochrome, constant rotation, no return to frame zero inside the sampled window. No pins and no labels: the rotation carries the whole claim, so the pin paint in globe has to survive the kill switch on its own merits."
   },
   "hologlobe--blob.gifcities.org_gifcities_2BDK66BWLK42ADEG52TMSEUEDO6IZDTX.gif": {
-    "for": ["globe"],
+    "for": [
+      "globe"
+    ],
     "reading": "Rendered Earth, 0.37 of the frame crossed at a constant rate over 4.2s. The rate is the spec: a hologlobe that accelerates is a graphic, one that is constant is an instrument."
   },
   "hologlobe--blob.gifcities.org_gifcities_2442E47OQDW3JQT5LC2S3S2O6QNUVCEW.gif": {
-    "for": ["globe"],
+    "for": [
+      "globe"
+    ],
     "reading": "Hue cycle with no measured travel at all -- the instrument and the eye agree independently that nothing moves but the palette. Held as the caution against colour-only distinctions."
   },
   "motion-tracker--blob.gifcities.org_gifcities_25G2DJC3DOO6R72EAGURMGNK5YW7FRZC.gif": {
-    "for": ["admission"],
+    "for": [
+      "admission"
+    ],
     "reading": "Front-loaded tilt (0.93 of the way by half duration, then it holds): a beam tips fast and the load corrects. admission draws exactly this and should not ease in."
   },
   "fake-os-loaders--blob.gifcities.org_gifcities_2S4N3JQ6GIQGIKRNQ6CX4AAHKS6DQHE6.gif": {
-    "for": ["rules page"],
+    "for": [
+      "rules page"
+    ],
     "reading": "Counter-example, not model: a word rotating 360 degrees and a dot orbiting it, 2.4s loop. Nothing measured, everything moving -- the exact idiom the chrome rule forbids, which makes it the picture to put next to the rule."
   },
   "fake-os-loaders--blob.gifcities.org_gifcities_34C5WYILX3AL74KKP36H6JB75QTVKCUD.gif": {
-    "for": ["rules page"],
+    "for": [
+      "rules page"
+    ],
     "reading": "Counter-example: the ellipsis that grows to three dots and cycles. Measured travel 0.043 of a frame -- the only quantity on screen is the dot count, and it says nothing about anything."
+  },
+  "cyberpunk-hud--media.tenor.com_gdhPO38XjlUAAAAM_urith-set.gif.gif": {
+    "for": [
+      "dossier",
+      "rules page"
+    ],
+    "reading": "Full-frame game interface: nameplates and segmented health bars ride above a squad, a selection ring breathes on the chosen unit, and a party panel opens at the right with a grid of portrait cells. Two readings, one on each side of the library's rule. The panel arrives over a field that KEEPS RUNNING — health changes, contacts move — which is why an arriving record set is honest there; `dossier` answers \"which exact thing am I about to command\" from facts already true at read time, so it has no live field, and its stillness is the same rule seen from the other side. The breathing ring is an ambient pulse with no quantity behind it: the selection idiom this app may not put in its chrome, which makes the file a counter-example as well as a map of the idiom."
   }
 }

@@ -120,6 +120,15 @@ function recorder(cfg) {
       window.__rec.frames.push({
         t,
         clock,
+        // In-specimen motion, counted separately from the page's. `no_motion` asserts a specimen
+        // never moves; a page-wide count would fail the moment anything else on the route moved,
+        // and the honest fix for that failure would be the wrong one.
+        // `subtree: true` is not optional. `Element.getAnimations()` defaults to the element
+        // alone, which for a specimen container means its own animations — none — and the check
+        // passed over a radar with three contacts sweeping. A default that reads "still" from a
+        // moving thing is the worst kind of instrument.
+        inSpecimen: view && view.getAnimations ? view.getAnimations({ subtree: true }).length : 0,
+        markup: view ? view.innerHTML.length : 0,
         nSel, nFurn: furniture.length, nCont: contacts.length,
         anims: doc.getAnimations ? doc.getAnimations().length : 0,
         el: tracked.map((el) => ({
@@ -266,7 +275,7 @@ for (const gap of GAPS) {
         selector: a.selector || null,
         furniture: a.furniture || null,
         contacts: a.contacts || null,
-        gridCells: a.kind === 'dead_cells',
+        gridCells: a.kind === 'dead_cells' || a.kind === 'no_motion',
         wantTranslate: a.kind === 'turn_period',
         scopeSpecimen: !!gap.component,
       });
@@ -564,6 +573,24 @@ for (const gap of GAPS) {
             ? `the pin's travel is not a clean turn (R² ${fit.r2.toFixed(2)}) — the rate is being varied`
             : `the turn takes ${Math.round(fit.periodMs / 1000)}s against the ${declared}s the mark declares — `
               + 'a hologlobe that accelerates is a graphic';
+        }
+      } else if (a.kind === 'no_motion') {
+        const framesSeen = frames.filter((f) => f.inSpecimen !== undefined);
+        const peak = framesSeen.reduce((n, f) => Math.max(n, f.inSpecimen), 0);
+        const markup = framesSeen.length ? framesSeen[framesSeen.length - 1].markup : 0;
+        row.measured = `${peak} animation(s) inside the specimen across ${framesSeen.length} sampled `
+          + `frames (${markup} chars of markup drawn)`;
+        row.verdict = markup < 200 || framesSeen.length < 20 ? 'FAIL'
+          : peak === 0 ? 'pass' : 'FAIL';
+        if (row.verdict === 'FAIL' && markup < 200) {
+          row.detail = 'the specimen drew almost nothing (' + markup + ' chars) — a check that '
+            + 'nothing moved passes trivially over an empty page, so it does not pass here';
+        } else if (row.verdict === 'FAIL' && framesSeen.length < 20) {
+          row.detail = `only ${framesSeen.length} frames sampled — "it never moved" needs a window`;
+        } else if (row.verdict === 'FAIL') {
+          row.detail = `the specimen moved ${peak} time(s): its reference is a panel arriving over `
+            + 'a field that keeps RUNNING, and this component has no running field — its rows are '
+            + 'facts already true at read time, so motion here is decoration wearing a record';
         }
       } else if (a.kind === 'text_contains') {
         const text = await page.evaluate(() => document.body.innerText);

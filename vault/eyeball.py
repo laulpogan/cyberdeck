@@ -92,8 +92,14 @@ def main():
     argv = sys.argv[1:]
     if argv and argv[0] == "MARK":
         index = {}
-        if os.path.exists(os.path.join(OUT_DIR, SEED or "all", "index.json")):
-            index = json.load(open(os.path.join(OUT_DIR, SEED or "all", "index.json")))
+        index_path = os.path.join(OUT_DIR, SEED or "all", "index.json")
+        if os.path.exists(index_path):
+            index = json.load(open(index_path))
+        # A row number is only meaningful against the sheets that printed it. One run marked
+        # twelve rows against a stale `index.json` left in a previous OUT directory, and the
+        # descriptions landed on eleven files nobody had looked at — one of them as `verified`,
+        # which is a fabricated provenance wearing a real tool default. So a row-addressed mark
+        # has to name the sheet it was read off, and that sheet has to be beside the index.
         for spec in argv[1:]:
             # '<raw/path>=yes|what the frames show', or '#7=yes|...' addressed by sheet row.
             path, _, rest = spec.partition("=")
@@ -102,6 +108,17 @@ def main():
                 # assigning it here shadowed that name for the whole of `main`, so the
                 # sheet-building path died on an unbound local.
                 row_key = path.strip().lstrip("#")
+                named_sheet = os.environ.get("SHEET")
+                if not named_sheet:
+                    sys.exit("MARK refused: a row number is only meaningful against a named "
+                             "sheet. Pass SHEET=/path/to/sheet-NN.png so the mark records what "
+                             "was in front of the eye, and so a stale index in another OUT "
+                             "directory cannot be mistaken for the one you read.")
+                if os.path.dirname(os.path.abspath(named_sheet)) != os.path.dirname(index_path):
+                    sys.exit("MARK refused: SHEET names %s, but the row index resolved against "
+                             "%s. Those are different batches — mark by raw path, or point OUT "
+                             "at the directory that made the sheet."
+                             % (os.path.abspath(named_sheet), index_path))
                 if row_key not in index:
                     sys.exit("MARK refused: no row " + row_key + " in the sheet index — "
                              "address a row that exists.")

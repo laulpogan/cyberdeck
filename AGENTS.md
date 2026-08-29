@@ -623,3 +623,26 @@ sampling window; and the endpoints of a travel must be read from the whole captu
 engine fills its keyframes backwards and the frames before and after an animation carry its start
 and rest. Fitting a sinusoid over less than ~1.5 turns is degenerate — the turn is now **timed at
 phase crossings**, which also reports the constancy the reference is quoted for.
+
+## Two ways an instrument can read "still" off a moving thing
+
+- **`Element.getAnimations()` defaults to `{ subtree: false }`.** A gauntlet check written as
+  `view.getAnimations().length` reported 0 animations inside a specimen while three of its contacts
+  were sweeping — it was counting only animations attached to the container itself. Pass
+  `{ subtree: true }`, and sabotage any stillness check by pointing it at something that moves.
+- **A row number is only meaningful beside the sheet that printed it.** One eye pass marked twelve
+  rows against an `index.json` left in a previous `OUT` directory: eleven descriptions landed on
+  files nobody had looked at and one of them was written as `contentVerified: true`. `vault/eyeball.py MARK`
+  now refuses a row-addressed mark unless `SHEET` names a file in the same directory as the index it
+  resolved, and the repair (`git checkout vault/EYEBALL.json`, re-mark by raw path) is cheap only
+  because the marks are one JSON file. Mark by path when in doubt; the path is checked against
+  `MANIFEST.json` and the row is not.
+
+The yield of the eye pass is worth stating as a number: **12 of 114 ranked moving files** survive
+it. The twelve newest produced **one** usable interface — a full-frame game UI — and the other
+eleven were stormtroopers, a cartoon stand, two Blade Runner corridors, a digitised man, three site
+logos, a webring banner, a banner that changes by hue alone, and a character hologram. GIF hosts
+index characters and site decoration; the diegetic interface is not what the harvest reaches. The
+one file that passed is what makes `dossier`'s stillness *visible*: the panel in it arrives over a
+field where 11 of 12 cells keep changing, and `dossier` has no running field, so `gauntlet.json`
+now asserts that it does not breathe.
