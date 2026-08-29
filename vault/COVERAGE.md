@@ -72,15 +72,15 @@ _(none — every verified file has had its reading written down)_
 
 ## Nothing at all (12)
 
-- `scaleCrush`
-- `chipBudget`
-- `standardSheet`
-- `tapeSplice`
-- `loopDeviation`
-- `bypass`
-- `ceremony`
-- `twoState`
-- `contextBurn`
-- `garage`
-- `gevulot`
-- `channel`
+- `scaleCrush` — a fleet wall cascading is only ever filmed from OUTSIDE the screen — B-roll of a control room, a drone pass over monitors — and step 3 asks for the wall's own durations and stagger. No freely licensed capture of a dashboard rendering hundreds of cells has turned up.
+- `chipBudget` — a per-channel HUD budget is a readout nobody has filmed. The one real motion nearby (an install bar crossing at a constant rate) is quoted for the claim it does support; the rest of this plate stays unverified rather than decorated.
+- `standardSheet` — it is a legend by its own claim. Nothing in the world is a moving image of a legend, and the closest candidate — a TV test pattern — was refused on the drawing test in writing.
+- `tapeSplice` — bought (14.4 MB, 88.7 s) and refused on the drawing test: the footage shows the mechanism, and the display never faces the camera.
+- `loopDeviation` — needs an instrument drawing measured travel against an expected path. Avionics and flight-sim footage show the needle; none shows the reference trace it deviates from — and a deviation measured against an assumed loop measures the assumption.
+- `bypass` — an algedonic escalation is an organisation's routing rule wearing a UI. Annunciator and SCADA alarm footage lives behind logins and in vendor marketing, not under a licence this vault can hold.
+- `ceremony` — a staged acceptance with an abort window is a procedure a system runs; no interface films itself waiting to commit.
+- `twoState` — the nearest moving image was a level-crossing signal, refused on the drawing test: the two states are on a lamppost, not on a screen, and the component is a commit control.
+- `contextBurn` — a working area closing in from the edges is a memory-pressure visualisation nobody publishes. Terminal footage shows text scrolling, never a viewport shrinking.
+- `garage` — assembly plus proof history per model. Factory footage shows the assembly; the record of who proved it is paperwork, and the component draws the paperwork.
+- `gevulot` — the subject is a visibility contract — a document ABOUT a surface. There is no screen to film, which is exactly the finding the plate prints.
+- `channel` — a trust scale of source classes is a legend, like standardSheet. Film-UI stills of chatter screens carry no classes and no attribution rule to read off them.

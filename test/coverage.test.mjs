@@ -6,11 +6,11 @@
 // whichever was nearest to hand. This test makes the widest one agree with the registry.
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { readFileSync } from 'node:fs';
+import { readFileSync, writeFileSync } from 'node:fs';
 import { execFileSync } from 'node:child_process';
 import { fileURLToPath } from 'node:url';
 
-import { coverage } from '../vault/coverage.mjs';
+import { coverage, NO_REFERENCE_REASON } from '../vault/coverage.mjs';
 
 const here = (f) => fileURLToPath(new URL(f, import.meta.url));
 
@@ -63,6 +63,62 @@ test('the committed report says what the live derivation says', () => {
     'COVERAGE.md names another registry size than the registry has');
   assert.match(written, new RegExp(`buildable against a reference \\| ${tiers.spec.length} \\|`),
     `COVERAGE.md's spec-held row says another count than SPECS-FOR yields (${tiers.spec.length})`);
+});
+
+test('a component with no reference owes a reason, not a bare name', () => {
+  // Twelve components have nothing, and the number alone reads as laziness — so the next agent either
+  // burns a round rediscovering the ceiling or dismisses it. Each name carries the class of artefact
+  // that would have to exist for the entry to move, which keeps "the search was not exhaustive"
+  // falsifiable: go and find that thing. A shrug fails the length floor; an absent entry fails outright.
+  const { tiers } = coverage();
+  const missing = tiers.none.filter((k) => !NO_REFERENCE_REASON[k]).sort();
+  assert.deepEqual(missing, [], `${missing.join(', ') || 'every'} bottom-tier component has to say why no `
+    + `moving image of it is available — otherwise the ceiling is a mood, not a finding`);
+  const thin = Object.entries(NO_REFERENCE_REASON)
+    .filter(([, why]) => why.trim().length < 80).map(([k]) => k).sort();
+  assert.deepEqual(thin, [], `${thin.join(', ')} named too little to check against a search: name the artefact `
+    + `class that would have to exist`);
+});
+
+test('--check can go red on provenance that moves no count', () => {
+  // The checker used to verify one thing: that the tiers sum to the registry. That is true while the
+  // report's provenance rots — a component held by two files loses one quotation, every count holds, and
+  // the line a reviewer reads still credits a record that no longer names it. So the data is doctored in
+  // exactly that count-neutral way: a component is removed from ONE of the two files that hold it.
+  const file = here('../vault/SPECS-FOR.json');
+  const original = readFileSync(file, 'utf8');
+  const record = JSON.parse(original);
+  const { tiers } = coverage();
+  const multi = tiers.spec.find((r) => r.files.length > 1);
+  if (!multi) {
+    // No multi-holder component means the drift class cannot exist today; say so rather than
+    // silently passing a test that did nothing.
+    assert.ok(true, 'no component is held by two verified files, so count-neutral drift has no host yet');
+    return;
+  }
+  const holder = record[multi.files[0]];
+  assert.ok(holder, `${multi.files[0]} is credited in the tiers but is not a SPECS-FOR record`);
+  holder.for = holder.for.filter((k) => k !== multi.key);
+  try {
+    writeFileSync(file, JSON.stringify(record, null, 2) + '\n');
+    let failed = false;
+    let said = '';
+    try {
+      execFileSync('node', [here('../vault/coverage.mjs'), '--check'],
+        { encoding: 'utf8', stdio: 'pipe' });
+    } catch (err) {
+      failed = true;
+      said = `${err.stdout || ''}${err.stderr || ''}`;
+    }
+    assert.ok(failed, `--check accepted a vault that stopped naming ${multi.key} in ${multi.files[0]} while `
+      + `COVERAGE.md still credits that file with it. Counts held, provenance did not, and nothing noticed.`);
+    assert.match(said, new RegExp(multi.key),
+      `the checker went red without naming the component whose provenance moved: ${said.slice(0, 240)}`);
+  } finally {
+    writeFileSync(file, original);
+  }
+  const again = execFileSync('node', [here('../vault/coverage.mjs'), '--check'], { encoding: 'utf8' });
+  assert.match(again, /coverage tiers add up/, 'the restored tree must go green again, or the doctoring leaked');
 });
 
 test('the checker runs as a command, not only as an import', () => {

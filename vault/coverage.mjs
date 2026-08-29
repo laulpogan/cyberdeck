@@ -15,11 +15,32 @@
  *   node vault/coverage.mjs          # writes vault/COVERAGE.md and prints the one-line truth
  *   node vault/coverage.mjs --check  # exits 1 if the tiers stop adding up to the registry
  */
-import { readFileSync, writeFileSync } from 'node:fs';
+import { existsSync, readFileSync, writeFileSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 import { join } from 'node:path';
 
 import { COMPONENT_KEYS } from '../app/src/registry/index.js';
+
+/** Why each bottom-tier component has no reference, written down rather than remembered.
+ * A count of 12 with no argument next to it reads as laziness, and the next agent either re-burns a
+ * search round rediscovering the same ceiling or believes the number is arbitrary. Each reason names
+ * the arteclass that would have to exist, so "we did not exhaust the search" is falsifiable: find that
+ * thing, and the entry moves. "test/coverage.test.mjs" refuses a bottom-tier name without a reason.
+ */
+export const NO_REFERENCE_REASON = {
+  "scaleCrush": "a fleet wall cascading is only ever filmed from OUTSIDE the screen — B-roll of a control room, a drone pass over monitors — and step 3 asks for the wall's own durations and stagger. No freely licensed capture of a dashboard rendering hundreds of cells has turned up.",
+  "chipBudget": "a per-channel HUD budget is a readout nobody has filmed. The one real motion nearby (an install bar crossing at a constant rate) is quoted for the claim it does support; the rest of this plate stays unverified rather than decorated.",
+  "standardSheet": "it is a legend by its own claim. Nothing in the world is a moving image of a legend, and the closest candidate — a TV test pattern — was refused on the drawing test in writing.",
+  "tapeSplice": "bought (14.4 MB, 88.7 s) and refused on the drawing test: the footage shows the mechanism, and the display never faces the camera.",
+  "loopDeviation": "needs an instrument drawing measured travel against an expected path. Avionics and flight-sim footage show the needle; none shows the reference trace it deviates from — and a deviation measured against an assumed loop measures the assumption.",
+  "bypass": "an algedonic escalation is an organisation's routing rule wearing a UI. Annunciator and SCADA alarm footage lives behind logins and in vendor marketing, not under a licence this vault can hold.",
+  "ceremony": "a staged acceptance with an abort window is a procedure a system runs; no interface films itself waiting to commit.",
+  "twoState": "the nearest moving image was a level-crossing signal, refused on the drawing test: the two states are on a lamppost, not on a screen, and the component is a commit control.",
+  "contextBurn": "a working area closing in from the edges is a memory-pressure visualisation nobody publishes. Terminal footage shows text scrolling, never a viewport shrinking.",
+  "garage": "assembly plus proof history per model. Factory footage shows the assembly; the record of who proved it is paperwork, and the component draws the paperwork.",
+  "gevulot": "the subject is a visibility contract — a document ABOUT a surface. There is no screen to film, which is exactly the finding the plate prints.",
+  "channel": "a trust scale of source classes is a legend, like standardSheet. Film-UI stills of chatter screens carry no classes and no attribution rule to read off them."
+};
 
 const HERE = fileURLToPath(new URL('.', import.meta.url));
 const SPECS_FOR = JSON.parse(readFileSync(join(HERE, 'SPECS-FOR.json'), 'utf8'));
@@ -97,6 +118,37 @@ if (process.argv.slice(2).includes('--check')) {
     process.exit(1);
   }
   if (!tiers.spec.length) { console.error('no component is quoted in SPECS-FOR; coverage is zero'); process.exit(1); }
+  // The tier sum is the weakest claim available: it stays true while the provenance lines rot, because a
+  // component quoted by two files can lose one of those quotations and every count holds. The report
+  // states which files hold each spec-held component, so compare the structure a human actually reads.
+  const reportPath = join(HERE, 'COVERAGE.md');
+  if (!existsSync(reportPath)) {
+    console.error('COVERAGE.md is missing — run `node vault/coverage.mjs` to write it, then --check again');
+    process.exit(1);
+  }
+  const written = readFileSync(reportPath, 'utf8');
+  const section = written.split(/^## /m).find((b) => b.startsWith('Spec-held')) || '';
+  const stated = new Map([...section.matchAll(/^- `([^`]+)` ← (.*)$/gm)].map((m) => [m[1],
+    m[2].split(',').map((f) => f.trim().replace(/^`|`$/g, '')).filter(Boolean).sort()]));
+  const derived = new Map(tiers.spec.map((r) => [r.key, [...r.files].sort()]));
+  const drift = [];
+  for (const [key, files] of derived) {
+    const have = stated.get(key);
+    if (!have) drift.push(`${key}: held by ${files.join(', ')}, absent from the report`);
+    else if (have.join('|') !== files.join('|')) {
+      drift.push(`${key}: the report says ${have.join(', ')}; SPECS-FOR now says ${files.join(', ')}`);
+    }
+  }
+  for (const key of stated.keys()) {
+    if (!derived.has(key)) drift.push(`${key}: the report calls it spec-held and SPECS-FOR no longer quotes it`);
+  }
+  if (drift.length) {
+    console.error(`COVERAGE.md disagrees with vault/SPECS-FOR.json on ${drift.length} provenance line(s):`);
+    for (const d of drift.slice(0, 8)) console.error(`  ${d}`);
+    if (drift.length > 8) console.error(`  … and ${drift.length - 8} more`);
+    console.error('run `node vault/coverage.mjs` to rewrite the report, then read what moved before you accept it');
+    process.exit(1);
+  }
   console.log(`coverage tiers add up: ${tiers.spec.length} spec-held + ${tiers.verifiedOnly.length} verified-unquoted `
     + `+ ${tiers.candidates.length} search candidates only + ${tiers.none.length} with nothing = ${total}`);
   process.exit(0);
@@ -142,9 +194,24 @@ const lines = [
   '',
   `## Nothing at all (${tiers.none.length})`,
   '',
-  ...tiers.none.map((k) => `- \`${k}\``),
+  ...tiers.none.map((k) => {
+    const why = NO_REFERENCE_REASON[k];
+    return why ? `- \`${k}\` — ${why}`
+      : `- \`${k}\` — **(no reason written: this entry of the ceiling is not argued for)**`;
+  }),
   '',
 ];
+
+
+
+/** Why each bottom-tier component has no reference, written down rather than remembered.
+ *
+ * A bare count of twelve reads as laziness, and the next agent either burns a search round rediscovering
+ * the same ceiling or decides the number is arbitrary. Each reason names the class of artefact that would
+ * have to exist for the entry to move, so "the search was not exhausted" stays falsifiable: go and find
+ * that thing. test/coverage.test.mjs refuses a bottom-tier name with no reason, so the argument cannot
+ * rot when the tier changes.
+ */
 writeFileSync(join(HERE, 'COVERAGE.md'), lines.join('\n'));
 console.log(`${tiers.spec.length} of ${total} spec-held · ${tiers.verifiedOnly.length} verified unquoted `
   + `· ${tiers.candidates.length} candidates only · ${tiers.none.length} with nothing — COVERAGE.md`);
