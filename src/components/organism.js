@@ -279,7 +279,9 @@ export function city({ hosts = [] }) {
               { fill: 'currentColor', width: 0 }) + '</g>');
       });
     } else {
-      g.push(`<g class="cd-og-dark">`
+      // `DARK` is the honest picture of a host with nothing on it, and the mark is what
+      // keeps it from reading as a drawing that failed to render.
+      g.push(`<g class="cd-og-dark"${attrs(refusal('no placement was recorded on this host'))}>`
         + rect(x, floor - TOWER_BASE, width, TOWER_BASE, { dashed: true })
         + text(x + width / 2, floor - 4, 'DARK', { size: 7, anchor: 'middle' })
         + '</g>');
@@ -317,7 +319,8 @@ export function garage({ loadouts = [] }) {
       <div class="cd-og-fit">${proof.length
         ? proof.map(([key, n]) =>
             `<span data-proof="${esc(String(key).toLowerCase())}">${esc(key)} <i>${n}</i></span>`).join('')
-        : `<span data-proof="unmeasured">NO PROOF HISTORY</span>`}</div>
+        : `<span data-proof="unmeasured"${
+          attrs(refusal('no proof history was retained for this assembly'))}>NO PROOF HISTORY</span>`}</div>
     </article>`;
   });
   return card('garage', 'Garage assembly', rows.join(''),
@@ -391,7 +394,10 @@ export function grid({ rows = [], columns = GRID_COLUMNS }) {
     const cells = columns.map((key) => {
       const value = row[key.toLowerCase()];
       const unknown = value === null || value === undefined || value === '';
-      return `<td${unknown ? ' data-unmeasured="1"' : ''}>${
+      // Both dialects, deliberately: `data-unmeasured` says what this cell is to anyone
+      // who knows the attribute, and the mark says it in the one vocabulary the honesty
+      // rack counts. A private dialect alone leaves `DECLARED STILL` at 0 over a refusal.
+      return `<td${unknown ? ' data-unmeasured="1"' + attrs(refusal('the producer sent no value for this cell')) : ''}>${
         esc(unknown ? UNMEASURED : value)}</td>`;
     });
     return `<tr data-state="${esc(String(row.state || '').toLowerCase())}">${

@@ -35,7 +35,8 @@
     "verify:roundtrip": "node app/verify/roundtrip.mjs",
     "verify:pair": "node app/verify/pair-heights.mjs OUT=app/verify/PAIR-HEIGHTS.md",
     "verify:clock": "node app/verify/sweep-clock.mjs",
-    "verify:control": "node app/verify/negative-control.mjs"
+    "verify:control": "node app/verify/negative-control.mjs",
+    "verify:stillness": "node app/verify/declared-stillness.mjs"
   },
   "keywords": [
     "cyberpunk",

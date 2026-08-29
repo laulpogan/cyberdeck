@@ -1160,3 +1160,53 @@ and 10+22 graphite, which is the same 26, so the number and the picture agree.
   observed lane's left edge with nothing adjacent to it, while the projection band's own
   corners are inside its dashes. Cosmetic, and the kind of thing a screenshot at 518px wide
   makes easy to miss, so it is named with its specimen rather than smoothed over.
+
+---
+
+## Finding #10 — closed: one vocabulary for an absence
+
+Twelve components refused by drawing — `DARK`, `UNMEASURED`, `NO PROOF HISTORY`,
+`UNATTRIBUTED` in ink, nothing in the DOM. The reader saw the truth; the rack read
+`DECLARED STILL = 0`, and a script could not tell "we declined on purpose" from "we forgot".
+Rather than fix the remembered list, the instrument was written first
+(`app/verify/declared-stillness.mjs`, output `DECLARED-STILLNESS.md`), and the true picture
+was not the remembered one: **21** specimens draw a word from the absence vocabulary; **5**
+declared nothing at all (`coverage`, `stripChart`, `tracker`, `tape`, `city`); **5** more
+declared in a dialect of their own invention — `data-unmeasured`, `data-proof`,
+`data-claim` — which a reviewer who knows the name can query and the rack cannot count
+(`garage`, `grid`, `dominator`, `ladder`, `channel`).
+
+The instrument's first run reported two offenders it could not name, and both were its own
+defects: it case-folded the whole specimen, so `atField` was convicted for its fixture's
+prose (`every host, including the ones dark`) and `mfd` for text it never draws. A drawn
+absence is set in caps by the component that draws it; matching prose for state words
+invents defects. That case is now a comment in the file, and a case-sensitive exact-word test.
+
+**The rule the finding turns on: one vocabulary.** A private attribute is not wrong — it is
+specific, it reads well in a diff, and it stayed. What was missing is a mark beside it,
+because the mark is the thing the honesty rack counts. Stamps went on all ten sites, each
+reason naming the field that is absent (`no placement was recorded on this host`, `the
+producer sent no value for this cell`, `no producer states a ping per decision`, `no cadence
+was measured for this trust class`, `no sample was retained on ${lane}`).
+
+**The sweep crossed a line and an existing test caught it.** The first pass stamped
+`refusal` over coverage's dark territory, and `test/marks.test.mjs` — written for the #2 ink
+split, holding that coverage must not claim a refusal over a *measured* gap — went red. The
+survey says nothing was flown there, which is a measurement of a kind, so coverage declares a
+plain `still('the survey reports nothing flown here')` with its 45° hatch and dashed edge, and
+carries no `data-refusal`. That distinction is now asserted in both files: a gate written for
+one finding protects the other one.
+
+The positive measurement, read off the running app at 1280 — the counter the finding says is
+stuck at zero, on the ten pages that were silent:
+
+```
+channel 0→1   city 0→2   coverage 0→1   dominator 0→2   garage 0→1
+grid    0→5   ladder 0→2 stripChart 0→3 tape    0→2   tracker  0→1
+```
+
+`test/declared-stillness.test.mjs` holds it: no drawn absence may be undeclared or
+private-dialect-only, with non-vacuity assertions underneath (an empty vocabulary would make
+the first claim pass over a silent library), and the coverage case pinned to `still` rather
+than `refusal`. `NO CADENCE` and `NO CONTACT` joined the vocabulary because the tracker prints
+them — the list is grown from what the library draws, never from what seems plausible.

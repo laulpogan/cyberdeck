@@ -358,6 +358,16 @@ Things the fixtures turned up, all of them in the library rather than the app:
   word in the registry as `refusalText`, and the fixture test asserts the word is
   really on screen. The `standardSheet` in the same role *does* stamp, which is
   what makes the other twelve read as a gap rather than a choice.
+- **Finding #10 is closed: an absence speaks in one vocabulary.**
+  `app/verify/declared-stillness.mjs` renders every bright model, matches the absence words
+  the library actually prints, and asks whether the same specimen declares it in the
+  DOM. Ten sites were silent or private-only (`data-unmeasured`, `data-proof`,
+  `data-claim` — queryable by anyone who knows the name, uncountable by the rack); each kept
+  its flag and gained a mark beside it. Two things to remember: match drawn words
+  case-sensitively (the first run convicted `atField` for its fixture's prose "the ones
+  dark"), and a *measured* gap takes a plain `still`, never a `refusal` — coverage crossed
+  that line and `test/marks.test.mjs`, written for the ink split, caught it.
+  `test/declared-stillness.test.mjs` holds the rule with non-vacuity assertions under it.
 - **`atField` prints the word `undefined`** for a scope with no count: the label is
   built by `${scope.label}  ${scope.count}` with no `UNMEASURED` branch, which is
   the one state in that file that does not have one.

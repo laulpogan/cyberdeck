@@ -116,7 +116,10 @@ export function evaluate(verb, env) {
 export function control(verb, grant) {
   const wait = verb.expectedWait
     ? `<span class="cd-grant-wait">${esc(verb.expectedWait)}</span>`
-    : '<span class="cd-grant-wait" data-unmeasured="1">WAIT UNMEASURED</span>';
+    // The rung is priced in authority and unpriced in time, and both dialects say it: the
+    // flag for whoever reads the source, the mark for whoever counts the page.
+    : `<span class="cd-grant-wait" data-unmeasured="1"${
+        attrs(refusal('the producer has not said what this verb costs in time'))}>WAIT UNMEASURED</span>`;
   const body = `<span class="cd-grant-label">${esc(verb.label)}</span>`
     + `<span class="cd-grant-word">${esc(grant.word)}</span>${wait}`;
   const shell = grant.state === 'granted'

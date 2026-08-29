@@ -493,8 +493,12 @@ export function stripChart({ sample = null, samples = null, seriesLane = 'OUTPUT
           { size: 7, anchor: 'end' }));
       }
     } else if (!seriesHere) {
-      g.push(`<g class="cd-riv-dark">${hatched(PAD, y, SPAN, lane)}</g>`);
-      g.push(text(W / 2, y + lane - 5, 'NEVER MEASURED', { size: 7, anchor: 'middle' }));
+      // The lane is not quiet; nobody records it. Ink says so, and the mark says it in the
+      // vocabulary a review can count, so `NEVER MEASURED` cannot be confused with a lane
+      // whose drawing was never written.
+      g.push(`<g${attrs(refusal(`no sample was retained on ${label}`))}>`
+        + `<g class="cd-riv-dark">${hatched(PAD, y, SPAN, lane)}</g>`
+        + text(W / 2, y + lane - 5, 'NEVER MEASURED', { size: 7, anchor: 'middle' }) + '</g>');
     }
     y += lane + gap;
   });

@@ -78,7 +78,7 @@ export function tracker({ oldestWaitSeconds = null, sourceState,
   if (oldest === null) {
     // The refusal and the band that carries it wear the same colour, so a
     // reader does not have to work out which of the two is the reading.
-    g.push('<g class="cd-tg-nocontact">'
+    g.push(`<g class="cd-tg-nocontact"${attrs(refusal('no decision in this ledger was timed'))}>`
       + arc(cx, cy, 100, Math.PI * 1.15, Math.PI * 1.85, { dashed: true })
       + text(PAD, 34, 'NO CONTACT', { size: 12 })
       + text(PAD, 48, 'EVERY WAIT IS UNMEASURED', { size: 7, opacity: '.75' })
@@ -97,11 +97,13 @@ export function tracker({ oldestWaitSeconds = null, sourceState,
     g.push(text(PAD, 48, 'OLDEST WAIT', { size: 7, opacity: '.75' }));
   }
   g.push(tick ? text(PAD, 64, `TICK ${tick}S`, { size: 8 })
-              : `<g class="cd-tg-nocontact">${text(PAD, 64, 'NO CADENCE', { size: 8 })}</g>`);
+              : `<g class="cd-tg-nocontact"${attrs(refusal('no producer states a poll cadence'))}>`
+                + text(PAD, 64, 'NO CADENCE', { size: 8 }) + '</g>');
   // The one thing this instrument will not do. Named on the drawing so a
-  // reader cannot mistake its absence for an oversight.
-  g.push(text(PAD, H - 6, 'PER-DECISION PING UNMEASURED',
-    { size: 7, opacity: '.55' }));
+  // reader cannot mistake its absence for an oversight -- and marked, so a review script
+  // reading the DOM learns it too rather than only the one reading the picture.
+  g.push(`<g${attrs(refusal('no producer states a ping per decision'))}>`
+    + text(PAD, H - 6, 'PER-DECISION PING UNMEASURED', { size: 7, opacity: '.55' }) + '</g>');
   return card('tracker', 'Motion-tracker cadence',
     frame(W, H, g.join(''), {
       label: 'The oldest measured wait drawn as a contact on a sweep. The '
@@ -303,8 +305,8 @@ export function tape({ items, sourceState, cite = 'items[].wait.seconds' }) {
           <span class="cd-tg-title">NOTHING IS WAITING ON A PERSON</span>
           <span class="cd-tg-wait"><b>UNMEASURED</b></span>
           <div class="cd-tg-body">
-            <p class="cd-tg-blocker">BLOCKER UNMEASURED</p>
-            <p class="cd-tg-wait-cost">IF YOU WAIT · UNMEASURED — no producer states the cost</p>
+            <p class="cd-tg-blocker"${attrs(refusal('the tape is empty, so no blocker was reported'))}>BLOCKER UNMEASURED</p>
+            <p class="cd-tg-wait-cost"${attrs(refusal('no producer states the cost of waiting'))}>IF YOU WAIT · UNMEASURED — no producer states the cost</p>
           </div>
         </article>
       </div>`,
@@ -327,8 +329,9 @@ export function tape({ items, sourceState, cite = 'items[].wait.seconds' }) {
         <span class="cd-tg-shutter" aria-hidden="true"></span>
       </button>
       <div class="cd-tg-body"${open ? '' : ' hidden'}>
-        <p class="cd-tg-blocker">${esc(item.blocker || 'BLOCKER UNMEASURED')}</p>
-        <p class="cd-tg-wait-cost">IF YOU WAIT · ${
+        <p class="cd-tg-blocker"${item.blocker ? '' : attrs(refusal('the run reports no blocker'))}>${
+          esc(item.blocker || 'BLOCKER UNMEASURED')}</p>
+        <p class="cd-tg-wait-cost"${item.if_you_wait ? '' : attrs(refusal('no producer states the cost of waiting'))}>IF YOU WAIT · ${
           esc(item.if_you_wait || 'UNMEASURED — no producer states the cost')}</p>
       </div>
     </article>`;

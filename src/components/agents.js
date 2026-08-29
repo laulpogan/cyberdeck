@@ -360,7 +360,10 @@ export function channel({ classes = TRUST }) {
     `<header class="cd-ag-trusts-head"><span>TRUST CLASS</span>
        <span>SIGNAL NOISE · AMPLITUDE, NOT CADENCE</span></header>
      <ul class="cd-ag-trusts">${classes.map(([name, noise, why]) =>
-      `<li data-noise="${noise}"${NOISE[name] === 3 ? ' data-claim="unattributed"' : ''}>`
+      // Amplitude is drawn, cadence is not, and the row says which it is in the
+      // vocabulary the rack counts -- not only in an attribute of its own invention.
+      `<li data-noise="${noise}"${NOISE[name] === 3
+        ? ' data-claim="unattributed"' + attrs(refusal('no cadence was measured for this trust class')) : ''}>`
       + `<b>${esc(name)}</b>${trace(name)}
         <span>${esc(why)}</span></li>`).join('')}</ul>`,
     { note: 'Nothing may present an inference at the weight of an observation.' });

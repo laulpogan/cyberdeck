@@ -148,7 +148,11 @@ export function coverage({ contours, dark, endpoints = [], cite = 'coverage.obse
       + dot(e.x, e.y, 4) + text(e.x + 10, e.y + 3, e.id, { size: 8 }) + '</g>');
   });
   if (dark) {
-    g.push('<g class="cd-fd-dark">'
+    // Declared, and in the right dialect: this ground is a *measured* gap -- the survey
+    // says nothing was flown here -- so it takes a plain stillness, the 45° hatch and the
+    // dashed edge, and pointedly not `data-refusal`. `test/marks.test.mjs` holds that line,
+    // and it caught this stamp for crossing it.
+    g.push(`<g class="cd-fd-dark"${attrs(still('the survey reports nothing flown here'))}>`
       + rect(206, 22, 118, 152, { width: 1, dashed: true })
       + hatched(206, 22, 118, 152)
       + text(265, 92, 'UNMEASURED', { size: 9, anchor: 'middle' })
