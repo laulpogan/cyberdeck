@@ -36,7 +36,22 @@ const CLIPS = [
   { game: 'overwatch', note: 'match report top-player callout', url: 'https://interfaceingame.com/wp-content/uploads/overwatch/overwatch-match-top-player.mp4' },
 ];
 
-const FRAMES = 6;
+const FRAMES = 8;
+
+// Screen-motion scenes pulled for reference study (short excerpts,
+// steeped into strips; the mp4 itself never enters the vault -- only
+// timestamped stills and provenance). Steep several windows per clip:
+// the UI-dense window is picked by eye afterwards, and strips that show
+// no interface are deleted, not kept as filler.
+const SCENES = [
+  { file: '/tmp/esper.mp4', tag: 'esper-scene', origin: 'https://www.youtube.com/watch?v=qHepKd38pr0',
+    note: 'Blade Runner: ESPER enhancement dive', windows: [[20, 100], [80, 80]] },
+  { file: '/tmp/thermoptic.mp4', tag: 'ghost-in-the-shell', origin: 'https://www.youtube.com/watch?v=wixWLShOock',
+    note: 'Ghost in the Shell 1995: thermo-optic cam HUD', windows: [[15, 100], [80, 55]] },
+  { file: '/tmp/magi.mp4', tag: 'magi-scene', origin: 'https://www.youtube.com/watch?v=t9Lb2__oCdM',
+    note: 'Evangelion: the MAGI system program screen', windows: [[0, 20]] },
+];
+
 const CELL_H = 200;
 
 function hasFfmpeg() {
@@ -100,6 +115,34 @@ for (const clip of CLIPS) {
   } catch (e) {
     failed++;
     console.log(`FAIL ${clip.note}: ${String(e.message).split('\n')[0].slice(0, 100)}`);
+  }
+}
+for (const sc of SCENES) {
+  if (!fs.existsSync(sc.file)) { console.log(`missing ${sc.file}`); continue; }
+  const dir = path.join(MOTION, sc.tag);
+  fs.mkdirSync(dir, { recursive: true });
+  for (const [start, len] of sc.windows) {
+    const step = (len - 1) / (FRAMES - 1);
+    const files = [];
+    for (let i = 0; i < FRAMES; i++) {
+      const t = (start + i * step).toFixed(2);
+      const out = path.join('/tmp', `${sc.tag}-${t}s.png`);
+      run(['-y', '-ss', t, '-i', sc.file, '-vf', `scale=-2:${CELL_H}`, '-frames:v', '1', out]);
+      files.push(out);
+    }
+    const strip = path.join(dir, `${sc.tag}-${start}s.png`);
+    execFileSync('montage', [...files, '-tile', `${FRAMES}x1`, '-geometry', '+2+2',
+      '-background', '#000', '-fill', '#ffb000', '-label', '%t',
+      '-font', '/System/Library/Fonts/Supplemental/Andale Mono.ttf', '-pointsize', '12', strip]);
+    fs.appendFileSync(MANIFEST, `${JSON.stringify({
+      game: sc.tag, note: `${sc.note} -- window ${start}s+${len}s`,
+      strip: path.relative(ROOT, strip), origin: sc.origin, frames: FRAMES,
+      sha: crypto.createHash('sha256').update(fs.readFileSync(strip)).digest('hex'),
+      at: new Date().toISOString(),
+    })}\n`);
+    made++;
+    files.forEach((f) => fs.rmSync(f, { force: true }));
+    console.log(`${sc.tag.padEnd(20)} window ${start}s+${len}s -> ${path.basename(strip)}`);
   }
 }
 console.log(`\nmotion vault: +${made} strips, ${skipped} dup/skip, ${failed} fail -> ${path.relative(process.cwd(), MOTION)}/`);
