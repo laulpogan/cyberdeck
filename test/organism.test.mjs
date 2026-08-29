@@ -242,3 +242,32 @@ test("the envelope counts the caller's boundaries, and the noun agrees with the 
   assert.equal((words(og.envelope({ boundaries: rows([0.62, null, 0.44]), position: { note: 'n' } }))
     .match(/\b\d+ measured edge(?!s)/g) || []).length, 0, 'no number disagrees with its noun');
 });
+
+// ---------------------------------------------------------------- position needs a number
+
+// The F-16 HUD reference (`vault/raw/f16-hud-gcas.gif`) prints the live value and the limit it is
+// read against side by side (`R 7.630` over `AL 500`), and the cue sits where those two numbers
+// put it. Before that file was in the vault this component drew a dot at the exact centre of the
+// space for ANY position object — including one whose own note said "unmeasured against all three
+// edges" — which is an absence rendered as a comfortable middle. These three states are the fix.
+test('envelope places its position by a number, or refuses to place it', () => {
+  const model = { boundaries: [['economic', 'ECONOMIC', 'spend', 0.7]], position: { used: 12.4, ceiling: 20 } };
+  const html = og.envelope(model);
+  const x = Number(html.match(/data-level="0\.62"[^>]*><line[^>]*x2="([\d.]+)"/)[1]);
+  assert.ok(x > 150 && x < 260, `0.62 of the track must land on the track, not at x=${x}`);
+  assert.match(html, /12\.4 OF A 20 CEILING/, 'the extent must say what it is a fraction of');
+  // One priced edge in this model, so the demand is the second thing revealed and the second
+  // of two. The extent is derived FROM the edges, so it may not claim to come before them.
+  assert.match(html, /data-index="1" data-total="2"/, 'the demand is derived after the priced edges');
+
+  const unmeasured = og.envelope({ ...model, position: { note: 'fleet aggregate, unmeasured' } });
+  assert.ok(!unmeasured.includes('cd-og-position'),
+    'a position with no number was drawn at the centre of the space; the centre is a claim');
+  assert.match(unmeasured, /NO POSITION IS DRAWN/);
+  assert.match(unmeasured, /fleet aggregate, unmeasured/, 'the refusal speaks in the caller\'s words');
+
+  const past = og.envelope({ ...model, position: { used: 26, ceiling: 20 } });
+  assert.match(past, /PAST THE CEILING/, 'past the ceiling the drawing clamps and says so');
+  assert.match(past, /data-level="1"/, 'clamped extent');
+  assert.match(past, /26 OF A 20 CEILING/, 'clamping the ink must not round away the number');
+});

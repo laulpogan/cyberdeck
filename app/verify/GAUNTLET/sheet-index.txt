@@ -1,4 +1,4 @@
- pass  admission-front-loaded           0.91 of the travel done at half the animation's duration (travel 19.48, animation 300ms)
+ pass  admission-front-loaded           0.93 of the travel done at half the animation's duration (travel 19.48, animation 300ms)
  pass  admission-holds                  0 animation(s) on 1 element(s) 1500ms after the entrance
  pass  chipBudget-constant-rate         0.65 of the travel done at half the animation's duration (travel 145.29, animation 300ms)
  pass  chipBudget-furniture-still       7 of 12 cells never moved (5 carried something)
@@ -10,4 +10,5 @@
  pass  rules-forbidden-idioms           all 2 figure(s) on screen
  pass  rules-chrome-still               0 animation(s) outside the specimens, sampled 90 times
  pass  dossier-does-not-breathe         0 animation(s) inside the specimen across 200 sampled frames (1028 chars of markup drawn)
- pass  envelope-limit-holds             0 animation(s) on 2 element(s) 1500ms after the entrance
+ pass  envelope-limit-holds             0 animation(s) on 3 element(s) 1500ms after the entrance
+ pass  envelope-limit-named             all 2 figure(s) on screen

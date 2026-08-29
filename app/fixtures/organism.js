@@ -32,11 +32,21 @@ export const ORGANISM_FIXTURES = {
     fields: ['position', 'boundaries'],
     model: {
       boundaries: [
-        ['economic', 'ECONOMIC', 'The spend ceiling nobody has priced.', 0.62],
+        // 0.62 became 0.70 so the wall and the position cannot land on the same pixel: two
+        // 0.62s in one drawing read as one measurement, and they are not the same measurement.
+        ['economic', 'ECONOMIC', 'The spend ceiling nobody has priced.', 0.70],
         ['workload', 'WORKLOAD', 'The load the fleet carries before work waits.', null],
         ['safety', 'SAFETY', 'The point past which failures stop being recoverable.', 0.44],
       ],
-      position: { note: 'fleet aggregate, unmeasured against all three edges' },
+      // The position now carries the two numbers the HUD prints side by side — the live value
+      // and the limit it is read against — because a dot with no numbers under it was being
+      // drawn at the centre of the space, which is a placement the fixture never measured.
+      // `12.4 / 20` is the same figure as the extent, in the other direction.
+      position: {
+        used: 12.4, ceiling: 20, unit: 'aircraft-hours in the quarter',
+        cite: 'fleet.demand / fleet.ceiling',
+        note: 'fleet aggregate, unmeasured against all three edges',
+      },
     },
   },
 

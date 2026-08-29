@@ -181,6 +181,22 @@
         "selector": "[data-motion='level']",
         "afterMs": 1500
       }
+    },
+    {
+      "id": "envelope-limit-named",
+      "component": "envelope",
+      "reference": "f16-hud-gcas.gif",
+      "referenceFigure": "motion amplitude (max difference from frame zero): 40.69, travel of the bright head: 0.605 of the frame crossed",
+      "heldAs": "model",
+      "gap": "Finding #12's homeless fraction. On the HUD the live value (`R 7.630`, read off the sheet at 0.605 of the frame crossed) sits directly above the limit it is read against (`AL 500`), so a fraction is never drawn without the number it is a fraction of. The gauge may not either: the position is placed by used/ceiling and prints both, and an unmeasured position is not drawn at the centre of the space at all.",
+      "assert": {
+        "kind": "text_contains",
+        "route": "#/component/envelope",
+        "values": [
+          "12.4 OF A 20 CEILING",
+          "The position sits at 12.4 of a 20 ceiling."
+        ]
+      }
     }
   ]
 }

@@ -148,13 +148,49 @@ export function envelope({ boundaries = BOUNDARIES, position = null,
       `${unsupplied.map((k) => k.toUpperCase()).join(', ')} UNSUPPLIED`,
       { size: 7, anchor: 'middle' }));
   }
-  if (position) {
-    g.push(`<g class="cd-og-position">${dot(W / 2, top + box / 2, 5)}</g>`);
+  // A position is a PLACE, and the only thing allowed to put it there is a measurement.
+  // The F-16 HUD (`vault/raw/f16-hud-gcas.gif`) prints the live value — `R 7.630` — beside the
+  // limit it is read against — `AL 500` — and the cue sits where those two numbers say it
+  // sits. Until now this component drew a dot at the exact centre of the space whenever a
+  // position object existed AT ALL, including one whose own note read "unmeasured against all
+  // three edges": an absence rendered as a comfortable middle, in the one gauge whose subject
+  // is that a comfortable middle is the failure it prevents. Finding #12 asked what a drawn
+  // fraction was a fraction of. The answer has to be on the drawing.
+  const ceiling = position && Number(position.ceiling) > 0 ? Number(position.ceiling) : null;
+  const used = position && Number.isFinite(Number(position.used)) ? Number(position.used) : null;
+  const demand = ceiling !== null && used !== null ? used / ceiling : null;
+  const fmt = (n) => (Number.isInteger(n) ? String(n) : n.toFixed(1));
+  if (demand !== null) {
+    const track = SPAN - inset * 2;
+    const frac = Math.min(Math.max(demand, 0), 1);
+    const x = PAD + inset + track * frac;
+    // Bar and number are one measurement, revealed in order: the extent is `used / ceiling`
+    // and `order` says which came before which. Past the ceiling the DRAWING clamps, because
+    // there is no ink outside the box, and the ink says that rather than hiding it.
+    const extent = level(frac, 1, {
+      measured: true, order: priced, total: priced + 1,
+      cite: position.cite || `${cite}.used / ${cite}.ceiling`,
+    });
+    g.push(`<g class="cd-og-demand"${attrs(extent)}>`
+      + line(PAD + inset, top + box / 2, x, top + box / 2, { width: 2 }) + '</g>');
+    g.push(`<g class="cd-og-position">${dot(x, top + box / 2, 5)}</g>`);
+    g.push(text(x, top + box / 2 - 10, `${fmt(used)} OF A ${fmt(ceiling)} CEILING`,
+      { size: 7, anchor: frac > 0.72 ? 'end' : 'start' }));
+    if (demand > 1) {
+      g.push(text(W / 2, top + box / 2 + 16, 'PAST THE CEILING — DRAWN CLAMPED HERE',
+        { size: 7, anchor: 'middle' }));
+    }
   } else {
     g.push(`<g class="cd-og-nodot">`
       + text(W / 2, top + box / 2, 'NO POSITION IS DRAWN',
           { size: 9, anchor: 'middle' })
-      + text(W / 2, top + box / 2 + 12, 'no boundary was supplied',
+      // A caller that handed over a position object and no numbers used to be told 'no
+      // boundary was supplied', which is a sentence about a different field. Say what is
+      // actually missing, in the caller's own words when it had any.
+      + text(W / 2, top + box / 2 + 12,
+          position
+            ? String(position.note || 'the position carries no number to place it by')
+            : 'no boundary was supplied',
           { size: 6.5, anchor: 'middle', opacity: '.75' }) + '</g>');
   }
   boundaries.forEach(([key, label, reason], i) => {
@@ -172,13 +208,15 @@ export function envelope({ boundaries = BOUNDARIES, position = null,
           + `${unsupplied.length === 1 ? 'edge' : 'edges'} hatched.`
         : `The operating space with all ${boundaries.length} boundaries measured.`,
     }),
-    position ? { note: unsupplied.length
+    position ? { note: `${unsupplied.length
       // "2 measured edge" was the sentence on screen. A number that disagrees with the
       // noun next to it reads as generated, and generated is what the fixture warnings
       // exist to make impossible: count and noun are the same measurement.
       ? `A position, drawn against ${priced} measured `
         + `${priced === 1 ? 'edge' : 'edges'} and ${unsupplied.length} nobody priced.`
-      : `A position drawn against ${priced} measured edges.` }
+      : `A position drawn against ${priced} measured edges.`}${
+      // And the fraction answers to a number, or there is no fraction on the page.
+      demand === null ? '' : ` The position sits at ${fmt(used)} of a ${fmt(ceiling)} ceiling.` }` }
       : { note: 'A comfortable middle is the failure this gauge prevents.' });
 }
 
