@@ -132,3 +132,15 @@ window (viewfinder codes, progressive enhancement to the face) is the
 canonical study for the esper component -- it confirms the frame-by-frame
 materialise we shipped; image-processing blur-to-sharp stays out of
 scope, we draw frames of data, not pixels.
+
+### batch: gauge, muthur, globe, city, tape -- cycle 1 -- all PASS as drawn
+- gauge: the arc is drawn once, as a measurement, and holds. No sweep theatre.
+- muthur: terminal lines boot in a count cascade -- a boot sequence that
+  boots. No tempo is claimed beyond the drawing's own arrival.
+- globe: the rotation is the one ambient loop, and it answers to
+  traffic() on the source's own refresh_ms -- a live refresh turns it, a
+  stale feed stops it. Blips ping on arrival, not orbit for looks.
+- city: blocks stack up like a skyline rising; the unmeasured block
+  stays dark, reserved by refusal.
+- tape: transcript lays down line by line like a recorded call, no
+  fake transport theatre, no VU meter invented from silence.
