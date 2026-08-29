@@ -59,10 +59,18 @@ export function mfd({ panes }) {
       + corners(x, 30, w, 108) + '</g>');
     g.push(text(x + 4, 24, pane.label, { size: 7, opacity: '.75' }));
     if (pane.value) {
+      // The numbers arrive on the deck's count -- A, B, then the detail
+      // lines behind them -- while the rule under each readout traces as
+      // the measured thing it is. A readout that appears whole says the
+      // data teleported onto the glass; the cascade says the deck was
+      // filled, which is what a twin MFD being written actually looks
+      // like from the flight deck.
+      g.push(`<g${attrs(count(side, 2))}>`
+        + text(x + 10, 62, pane.value, { size: 12 }) + '</g>');
       g.push(`<g class="cd-th-read"${attrs(trace(true, { cite: pane.cite, order: side, total: 2 }))}>`
-        + text(x + 10, 62, pane.value, { size: 12 })
         + line(x + 10, 72, x + w - 10, 72, { width: 1 }) + '</g>');
-      g.push(text(x + 10, 88, pane.detail || '', { size: 6.5, opacity: '.6' }));
+      g.push(`<g${attrs(count(side + 2, 4))}>`
+        + text(x + 10, 88, pane.detail || '', { size: 6.5, opacity: '.6' }) + '</g>');
     } else {
       // The dark face. It names which producer went dark, which is a fact
       // worth having, and it is never the other pane's readout.

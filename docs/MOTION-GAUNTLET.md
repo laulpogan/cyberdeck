@@ -84,3 +84,12 @@ and the second re-shoot reads right. Delta 2.2% -> 17%; 176/176 including
 radar's byte-identity gate under the new ping machinery (remembered styles
 survive a settle mid-flash). Open: trail opacity is honest but thin next
 to Isolation's phosphor; art-direction pass later.
+
+### mfd -- cycle 1 -- judged against vault/motion/the-division-2 (tab bloom,
+sequenced reveal)
+Our deck appeared whole except two underlines: readouts teleporting onto
+glass. Division's grammar is content arriving in sequence, so the twin
+deck now fills itself: values on the deck's count (A, then B), detail
+lines behind them, while each rule stays a trace of its own measured
+arrival. Re-shoot confirms the cascade -- pane B's number lands roughly
+a beat after A's, details land last.
