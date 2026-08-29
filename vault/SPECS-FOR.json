@@ -1,0 +1,49 @@
+{
+  "_about": [
+    "Which component each verified vault file is quoted for, and what the reading of it says to do.",
+    "Hand-written on purpose: this is the judgement step, and it is the part a reader should be able",
+    "to disagree with in a diff. vault/eyeball.py decides what a picture shows; this says which",
+    "specimen it is evidence about. A verified file absent from here is quoted for nothing --",
+    "usually because it is a counter-example for the rules page rather than a model."
+  ],
+  "fake-os-loaders--blob.gifcities.org_gifcities_36SZVJ74JXC6QPNLGBGDNMW26HNU7TFW.gif": {
+    "for": ["level", "trace"],
+    "reading": "A marker crosses a named lane at a constant rate (0.70 of the frame travelled, 0.46 of the way at half duration) while the ends and the ground never move (4 of 12 grid cells dead). The library's level should read the same way: extent first, furniture still."
+  },
+  "spinner-console--blob.gifcities.org_gifcities_2EABIEZLK7C7RZMCFOOHZKIPRAPVWALH.gif": {
+    "for": ["trace", "arrive"],
+    "reading": "The head reaches its far end early (1.0 of the way by half duration) and what remains is the drawn route. A trace that eases out and then holds is a thing that arrived; one that keeps moving has not."
+  },
+  "tron-disc--blob.gifcities.org_gifcities_2AWYSNBQH7E3JQPMI2B5UNXXOTV7UDLB.gif": {
+    "for": ["trace", "strands"],
+    "reading": "One ink travels and the trail it leaves stays drawn (1.22 frame-widths covered, mild back-loading). The history of the path is the picture, which is what a trace is for and what a shimmer is not."
+  },
+  "rig--blob.gifcities.org_gifcities_2RO5SN3IFIDBUAFOOVBDCFJ7J6V4DRXR.gif": {
+    "for": ["radar", "city", "grid"],
+    "reading": "A survey grid with fixed corner labels in which only the contact and a lit region change. The furniture-versus-contact split the library keeps relearning is the whole of this reference."
+  },
+  "hologlobe--blob.gifcities.org_gifcities_2CW2JW7CEZP4FXCUBBNI2EPWDDLXQQOI.gif": {
+    "for": ["globe"],
+    "reading": "Mesh over land, monochrome, constant rotation, no return to frame zero inside the sampled window. No pins and no labels: the rotation carries the whole claim, so the pin paint in globe has to survive the kill switch on its own merits."
+  },
+  "hologlobe--blob.gifcities.org_gifcities_2BDK66BWLK42ADEG52TMSEUEDO6IZDTX.gif": {
+    "for": ["globe"],
+    "reading": "Rendered Earth, 0.37 of the frame crossed at a constant rate over 4.2s. The rate is the spec: a hologlobe that accelerates is a graphic, one that is constant is an instrument."
+  },
+  "hologlobe--blob.gifcities.org_gifcities_2442E47OQDW3JQT5LC2S3S2O6QNUVCEW.gif": {
+    "for": ["globe"],
+    "reading": "Hue cycle with no measured travel at all -- the instrument and the eye agree independently that nothing moves but the palette. Held as the caution against colour-only distinctions."
+  },
+  "motion-tracker--blob.gifcities.org_gifcities_25G2DJC3DOO6R72EAGURMGNK5YW7FRZC.gif": {
+    "for": ["admission"],
+    "reading": "Front-loaded tilt (0.93 of the way by half duration, then it holds): a beam tips fast and the load corrects. admission draws exactly this and should not ease in."
+  },
+  "fake-os-loaders--blob.gifcities.org_gifcities_2S4N3JQ6GIQGIKRNQ6CX4AAHKS6DQHE6.gif": {
+    "for": ["rules page"],
+    "reading": "Counter-example, not model: a word rotating 360 degrees and a dot orbiting it, 2.4s loop. Nothing measured, everything moving -- the exact idiom the chrome rule forbids, which makes it the picture to put next to the rule."
+  },
+  "fake-os-loaders--blob.gifcities.org_gifcities_34C5WYILX3AL74KKP36H6JB75QTVKCUD.gif": {
+    "for": ["rules page"],
+    "reading": "Counter-example: the ellipsis that grows to three dots and cycles. Measured travel 0.043 of a frame -- the only quantity on screen is the dot count, and it says nothing about anything."
+  }
+}

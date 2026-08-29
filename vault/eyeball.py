@@ -1,102 +1,193 @@
 #!/usr/bin/env python3
-"""Put the moving vault files in front of eyes, and record what the eyes said.
+"""Put the vault's moving files in front of eyes, and record what those eyes said.
 
-`vault/mark.py` decides `reference` / `look-alike` / `drift` from *text*: the tag on the page, the
-caption, the anchor's title, the search the host was given. Text is what an automated harvest can
-see, and text turned out not to be enough. The three largest moving files under the flagship seed
-`motion-tracker` carry `work: Aliens` in the manifest, and their frames are a Mega Man cartoon, a
-man falling over in a hallway, and a woman holding a fan to her face with the caption "I'M YOUR
-BIGGEST FAN". Every duration statistic in the vault is measured honestly off those files — and a
+`vault/mark.py` decides `reference` / `look-alike` / `drift` from *text*: the tag on the page,
+the caption, the anchor's title, the search the host was given. Text is what an automated
+harvest can see, and text turned out not to be enough. The three largest moving files under
+the flagship seed `motion-tracker` carry `work: Aliens` in the manifest, and their frames are a
+Mega Man cartoon, a man falling over in a hallway, and a woman holding a kitchen fan to her
+face. Every duration statistic in the vault was measured honestly off those files — and a
 100ms median delay on a fan is not a statement about sci-fi interfaces.
 
-This tool is the missing stage. For one seed's moving files it writes an eight-frame strip per
-file (sampled across that file's own decoded timeline, the same way `mark.py` counts frames), and
-a checklist where a person records what the frames actually show. Until a file is marked
-`yes, this is the prop`, it may not be quoted in a motion spec, and `MAPPING.md` says so.
+This is the missing stage. For each seed it writes sheets: one row per file, eight frames
+sampled across that file's own decoded timeline, next to a label carrying the seed, the frame
+count, the loop, and how the haul thought it was relevant. Then the mark says what the frames
+actually show, and until a file carries that mark it may not be quoted in a motion spec.
 
-    python3 vault/eyeball.py SEED=motion-tracker        # strips + checklist rows
-    python3 vault/eyeball.py                            # every seed with moving files
+**Provenance of a mark is part of the mark.** The first nine rows recorded `eyeballedBy:
+"person"`, which was a tool default and not true: an agent looked at the strips. A file whose
+whole job is to say how a picture became trustworthy may not carry a guess about who looked at
+it, so the actor is written explicitly, and the sheet the eyes were on is named.
 
-Marks go in `vault/EYEBALL.json` as `{"<raw path>": {"contentVerified": true, "shows": "..."}}`.
+    python3 vault/eyeball.py SEED=magi                     # sheets + checklist for one seed
+    python3 vault/eyeball.py                               # every seed with moving files
+    python3 vault/eyeball.py MARK 'raw/x.gif=yes|no=what the frames show'   # record a verdict
 """
-import glob
 import json
 import os
-import subprocess
-from PIL import Image
+import sys
+from PIL import Image, ImageDraw, ImageFont
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 OUT_DIR = os.environ.get("OUT", "/tmp/eyeball")
 SEED = os.environ.get("SEED")
-TILE_W, TILE_H, COPIES = 200, 150, 8
+PER_SHEET = int(os.environ.get("ROWS", "5"))
+TILE_W, TILE_H, COPIES = 168, 126, 8
+LABEL_W = 300
+EYE = "agent-eye(qwen/dot-backbone)"
 
 
-def strip(path, dest):
-    """Eight frames spread across the GIF's own frame list, coalesced so partial frames compose."""
-    work = dest[:-4]
-    subprocess.run(["magick", path, "-coalesce", "+adjoin", f"{work}-%04d.png"],
-                   check=True, stderr=subprocess.DEVNULL)
-    frames = sorted(glob.glob(f"{work}-*.png"))
-    if not frames:
-        return None
-    picks = [frames[round(i * (len(frames) - 1) / (COPIES - 1))] for i in range(COPIES)]
-    sheet = Image.new("RGB", (TILE_W * COPIES, TILE_H), (8, 8, 8))
-    for index, frame in enumerate(picks):
-        tile = Image.open(frame).convert("RGB")
-        tile.thumbnail((TILE_W - 4, TILE_H - 4))
-        sheet.paste(tile, (index * TILE_W + 2, 2))
-    sheet.save(dest)
-    for frame in frames:
-        os.remove(frame)
-    return sheet.size
+def font(size=13):
+    for name in ("DejaVuSans-Bold.ttf", "Helvetica.ttc", "Arial.ttf"):
+        try:
+            return ImageFont.truetype(name, size)
+        except OSError:
+            continue
+    return ImageFont.load_default()
+
+
+def frames_of(path, limit=400):
+    """The GIF's own frames, coalesced by the decoder. Falls back to one frame for a still."""
+    try:
+        im = Image.open(path)
+    except OSError:
+        return []
+    out = []
+    try:
+        index = 0
+        while index < limit:
+            im.seek(index)
+            out.append(im.convert("RGB"))
+            index += 1
+    except EOFError:
+        pass
+    return out
+
+
+def row(record, sheet_index):
+    """One file: label block then eight frames across its own timeline."""
+    frames = frames_of(os.path.join(HERE, record["file"]))
+    height = TILE_H + 44
+    sheet = Image.new("RGB", (LABEL_W + TILE_W * COPIES, height), (12, 12, 14))
+    draw = ImageDraw.Draw(sheet)
+    picks = [frames[round(i * (len(frames) - 1) / (COPIES - 1))] for i in range(COPIES)] \
+        if len(frames) >= COPIES else frames
+    label = (f"#{sheet_index} {os.path.basename(record['file'])[:34]}\n"
+             f"seed {record['seed']}  frames {record.get('frames')}\n"
+             f"loop {'%.1fs' % record['loopSeconds'] if record.get('loopSeconds') else 'none'}"
+             f"  {record['status']}\n{record.get('caption', '')[:44]}")
+    draw.multiline_text((8, 8), label, fill=(222, 226, 228), font=font(12), spacing=4)
+    for i, tile in enumerate(picks):
+        tile = tile.copy()
+        tile.thumbnail((TILE_W - 6, TILE_H - 6))
+        sheet.paste(tile, (LABEL_W + i * TILE_W + 3, 6))
+    return sheet
 
 
 def main():
     manifest = json.load(open(os.path.join(HERE, "MANIFEST.json")))["files"]
     marks_path = os.path.join(HERE, "EYEBALL.json")
-    marks = {}
-    if os.path.exists(marks_path):
-        marks = json.load(open(marks_path))
+    marks = json.load(open(marks_path)) if os.path.exists(marks_path) else {}
+
+    argv = sys.argv[1:]
+    if argv and argv[0] == "MARK":
+        index = {}
+        if os.path.exists(os.path.join(OUT_DIR, SEED or "all", "index.json")):
+            index = json.load(open(os.path.join(OUT_DIR, SEED or "all", "index.json")))
+        for spec in argv[1:]:
+            # '<raw/path>=yes|what the frames show', or '#7=yes|...' addressed by sheet row.
+            path, _, rest = spec.partition("=")
+            if path.strip().startswith("#"):
+                # `row_key`, not `row`: `row` is the name of the strip-drawing function, and
+                # assigning it here shadowed that name for the whole of `main`, so the
+                # sheet-building path died on an unbound local.
+                row_key = path.strip().lstrip("#")
+                if row_key not in index:
+                    sys.exit("MARK refused: no row " + row_key + " in the sheet index — "
+                             "address a row that exists.")
+                path = index[row_key]
+            verdict, _, shows = rest.partition("|")
+            known = {r["file"] for r in manifest.values()}
+            if path.strip() not in known:
+                sys.exit("MARK refused: " + repr(path.strip()) + " is not a file in "
+                         "MANIFEST.json. A mark on a path that does not exist is invisible to "
+                         "every checklist, which is worse than no mark at all.")
+            marks[path.strip()] = {
+                "contentVerified": verdict.strip().lower().startswith("y"),
+                "shows": (shows or verdict).strip()[:600] or "no description recorded",
+                "eyeballedBy": EYE,
+                "framesViewed": f"{COPIES} frames sampled across the file's own timeline",
+                "sheet": os.environ.get("SHEET", "see OUT dir"),
+            }
+        json.dump(marks, open(marks_path, "w"), indent=1, ensure_ascii=False, sort_keys=True)
+        print(f"{len(marks)} marks on disk.")
+        return
 
     moving = [r for r in manifest.values()
               if (r.get("frames") or 0) > 1 and r.get("status") != "unmarked"]
     if SEED:
         moving = [r for r in moving if r["seed"] == SEED]
-    moving.sort(key=lambda r: (r["seed"], -r["frames"]))
+    moving.sort(key=lambda r: (r["seed"], -int(r.get("frames") or 0)))
 
-    checked = 0
+    # `QUEUE` re-orders the not-yet-seen files by how much of the frame looks like an
+    # interface (vault/rank.py): flat colour fields, dark ground, saturated ink in motion.
+    # It is a queue for the eye, never a verdict -- only a mark below lets a file into a spec.
+    queue = os.environ.get("QUEUE")
+    if queue:
+        rank = json.load(open(os.path.join(HERE, "RANK.json")))
+        by_file = {r["file"]: r for r in moving}
+        moving = [by_file[r["file"]] for r in rank
+                  if r["file"] in by_file and r["file"] not in marks]
+        if queue.isdigit():
+            moving = moving[:int(queue)]
+
+    os.makedirs(os.path.join(OUT_DIR, SEED or "all"), exist_ok=True)
+    # A row-number index, written beside the sheets. Sheet labels are necessarily truncated and
+    # a truncated hash invites a guess -- three marks in this vault were written against hashes
+    # that had been filled in rather than copied, and described files that do not exist. With
+    # the index, a mark is addressed by row and resolved to a real path by the tool.
+    index_path = os.path.join(OUT_DIR, SEED or "all", "index.json")
+    json.dump({str(i + 1): record["file"] for i, record in enumerate(moving)},
+              open(index_path, "w"), indent=1)
+    written = []
+    for start in range(0, len(moving), PER_SHEET):
+        block = moving[start:start + PER_SHEET]
+        rows = [row(record, start + i + 1) for i, record in enumerate(block)]
+        gap = Image.new("RGB", (rows[0].width, 6), (40, 40, 44))
+        stacked = Image.new("RGB", (rows[0].width, sum(r.height for r in rows) + 6 * len(rows)),
+                            (12, 12, 14))
+        y = 0
+        for r in rows:
+            stacked.paste(r, (0, y))
+            y += r.height + 6
+        dest = os.path.join(OUT_DIR, SEED or "all", f"sheet-{start // PER_SHEET + 1:02d}.png")
+        stacked.save(dest)
+        written.append(dest)
+
     lines = ["# Eyeball log", "",
-             "One row per moving file that a motion spec might quote. `marked` is a person's",
-             "judgement about the *frames*, recorded in `EYEBALL.json`; nothing else here is",
-             "text-derived and therefore nothing else here is trustworthy about a picture.",
+             "One row per moving file that a motion spec might quote. `marked` is what an eye",
+             "(agent or person, named in `EYEBALL.json`) said about the *frames*. Nothing else",
+             "here is text-derived, and nothing text-derived is trustworthy about a picture.",
              "",
              "| seed | file | frames | loop | status | marked | shows |",
              "| --- | --- | --- | --- | --- | --- | --- |"]
+    checked = 0
     for record in moving:
         rel = record["file"]
-        seed_dir = os.path.join(OUT_DIR, record["seed"])
-        os.makedirs(seed_dir, exist_ok=True)
-        dest = os.path.join(seed_dir, os.path.basename(rel) + ".png")
-        made = None
-        if not os.path.exists(dest):
-            try:
-                made = strip(os.path.join(HERE, rel), dest)
-            except (subprocess.CalledProcessError, FileNotFoundError, OSError):
-                made = None
         mark = marks.get(rel, {})
-        verified = {True: "**yes**", False: "no"}.get(mark.get("contentVerified"), "☐")
-        loop = f"{record['loopSeconds']:.1f}s" if record.get("loopSeconds") else "—"
-        lines.append(f"| {record['seed']} | `{os.path.basename(rel)[:44]}` | {record['frames']} "
-                     f"| {loop} | {record['status']} | {verified} "
-                     f"| {mark.get('shows') or '_awaiting eyes_'} |")
         if mark.get("contentVerified") is not None:
             checked += 1
-
+        loop = f"{record['loopSeconds']:.1f}s" if record.get("loopSeconds") else "—"
+        verified = {True: "**yes**", False: "no"}.get(mark.get("contentVerified"), "☐")
+        lines.append(f"| {record['seed']} | `{os.path.basename(rel)[:40]}` | {record['frames']} "
+                     f"| {loop} | {record['status']} | {verified} "
+                     f"| {(mark.get('shows') or '_awaiting eyes_')[:70]} |")
     open(os.path.join(HERE, "EYEBALL.md"), "w").write("\n".join(lines) + "\n")
-    if not os.path.exists(marks_path):
-        json.dump(marks, open(marks_path, "w"), indent=1)
-    print(f"{len(moving)} moving files stripped into {OUT_DIR}; "
-          f"{checked} carry a person's judgement, {len(moving) - checked} do not.")
+
+    print(f"{len(moving)} moving files; {checked} carry an eye's judgement, "
+          f"{len(moving) - checked} do not.")
+    for path in written:
+        print("  sheet:", path)
 
 
 main()

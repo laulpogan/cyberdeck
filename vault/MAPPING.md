@@ -94,3 +94,66 @@ every file before a number is taken from it.
 Vault status counts: 87 drift, 39 look-alike, 147 reference.
 
 Re-run after every acquisition and after any change to the component list: `python3 vault/map.py`.
+
+---
+
+## The eye pass, and what it unblocked
+
+`MAPPING.md` was written from text, and said plainly that text could not be trusted about
+pictures. It has now been read against pictures: **37 of the 131 moving files put in front of
+an eye** (`python3 vault/eyeball.py`, strips of eight frames sampled across each file's own
+timeline), **11 verified**, and the specs measured off those 11 are in `vault/SPECS.md`.
+
+The yield is the finding. Of the seeds whose subjects have the most famous interfaces in the
+genre, essentially none produced a usable reference, and the reason is structural: a GIF host
+indexes *works and characters*, because that is what people search. What each seed actually
+returned:
+
+| seed | wanted | largest moving files actually show |
+| --- | --- | --- |
+| `motion-tracker` | Aliens motion tracker | a Mega Man cartoon, a man falling down, a kitchen fan, a balance-beam physics sim |
+| `rig` | Dead Space RIG spine | a spaceship under engine glow; cinematic footage of armoured figures |
+| `insertion-sync` | Evangelion insertion interface | a person in a white room; a snowy road with the words `sync` / `done.` stamped on it |
+| `spinner`, `spinner-console` | Blade Runner 2049 spinner HUD | an amber-lit face, and separately a starship under warp |
+| `gits-optic` | Ghost in the Shell optic overlay | two schoolgirls reading a magazine; a character over a static painted skyline |
+| `cyberpunk-hud` | Cyberpunk 2077 overlay | a figure crawling a tunnel under a glitch filter, watermarked |
+| `magi` | MAGI display | one file of illegible green text tearing into shards; nothing quotable |
+
+Verified and quotable instead: three globes, a survey grid with a travelling contact, a warp
+trail, a circuit trail, a progress-marker on a lane, and a balance beam. Two fake-OS loaders
+are verified as **counter-examples** — a rotating word and a cycling ellipsis, both with no
+quantity anywhere — which is what the rules page needed and did not have.
+
+**The rule this writes for future acquisition: a reference must be a frame where the screen
+fills the frame.** Name the interface, not the work; prefer prop renders, studio art pages and
+UI-in-film archives over clip sites; and let no text-derived relevance reach a spec without an
+eye's mark on it. `vault/mark.py` still sorts by caption and tag, and it is still the least
+trustworthy layer in the vault.
+
+Three instruments came out of doing it, all in `vault/`:
+
+- `eyeball.py` — strips, checklist, and the marks. Marks are addressed by sheet row against a
+  written index and the tool refuses any path that is not in `MANIFEST.json`, because three
+  marks had been written against hashes filled in from truncated sheet labels: descriptions of
+  pictures attached to files that do not exist. Those marks have been moved to the rows actually
+  looked at and carry a `correction` note; one more was attached to the wrong row and is
+  corrected on the record too.
+- `rank.py` — a queue for the eye, scored off the pixels (flat colour fields, dark ground,
+  saturated ink in motion, a middle band of coverage). It decides nothing: 114 unseen files, and
+  the eye still marks every one that gets quoted.
+- `spec.py` — durations from the GIF's own delays, entry order and dead cells from a 4×3 grid,
+  the travel of the changed-pixel centroid, and a loop only when the picture genuinely returns.
+  Its component table is `SPECS-FOR.json`, hand-written, and it refuses to render a file no eye
+  verified.
+
+`spec.py` measured the wrong thing twice before it measured the right thing. The first measure
+was an area of saturated ink and reported 1176 pixels constant across the whole progress bar —
+the *track* is green ink and the thing that travels is a bright head along it. The bright
+centroid then found the two white terminal glyphs parked at the ends and called the centre
+still. The centroid of the pixels that **changed** is what tracks a marker past its own
+furniture, and it corroborates the eye from the other direction: the hue-cycled globe returns
+`no travel`, which is the same claim the eye made from the strips.
+
+**Still uneyeballed: 94 moving files.** No verified reference exists for `magi`, `syncRatio`,
+`esperDive`, `dossier`, `mfd`, `triVision`, `dispatch`, `chipBudget`, and everything MAPPING
+listed as having no reference still has none.

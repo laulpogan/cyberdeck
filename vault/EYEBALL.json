@@ -1,80 +1,312 @@
 {
- "raw/motion-tracker--blob.gifcities.org_gifcities_25G2DJC3DOO6R72EAGURMGNK5YW7FRZC.gif": {
+ "raw/cyberpunk-hud--media.tenor.com_pHWIUKxe8fQAAAA1_iori-iori-kof.webp.webp": {
   "contentVerified": false,
-  "eyeballedBy": "person",
-  "frames": [
-   1,
-   2,
-   3
-  ],
-  "shows": "see strip \u2014 not a motion tracker"
+  "correction": "First pass gave this row the warp-ship sentence, which belongs to the spinner-console file one row above. Corrected on re-reading the strip; the mistake is left on the record because an eye that cannot be wrong cannot be checked.",
+  "eyeballedBy": "agent-eye(qwen/dot-backbone)",
+  "framesViewed": "8 frames sampled across the file's own timeline",
+  "sheet": "/tmp/eye-q/all/sheet-02.png",
+  "shows": "The same purple-tinted tunnel crawl as the 29-frame file, at 67 frames: a figure, pink glitch blocks, a Kliencer watermark. No interface."
+ },
+ "raw/cyberpunk-hud--media.tenor.com_pHWIUKxe8fQAAAAM_iori-iori-kof.gif.gif": {
+  "contentVerified": false,
+  "eyeballedBy": "agent-eye(qwen/dot-backbone)",
+  "framesViewed": "8 frames sampled across the file's own timeline",
+  "sheet": "/tmp/eye-q/all/sheet-02.png",
+  "shows": "Purple-tinted footage of a figure crawling through a tunnel with pink glitch blocks, watermarked Kliencer. A scene with a glitch filter, not an instrument."
+ },
+ "raw/fake-os-loaders--blob.gifcities.org_gifcities_2S4N3JQ6GIQGIKRNQ6CX4AAHKS6DQHE6.gif": {
+  "contentVerified": true,
+  "eyeballedBy": "agent-eye(qwen/dot-backbone)",
+  "framesViewed": "8 frames sampled across the file's own timeline",
+  "sheet": "/tmp/eye-q/all/sheet-03.png",
+  "shows": "QUOTE FOR the rules page, as the forbidden idiom rather than as a model: a white card where the word LOADING rotates through 360 degrees while a yellow dot orbits it, 2.4s loop. Relevance to its seed is correct — it is a fake-OS loader — and it is exactly what this app may not put in its chrome: the picture changes and no quantity moved."
+ },
+ "raw/fake-os-loaders--blob.gifcities.org_gifcities_34C5WYILX3AL74KKP36H6JB75QTVKCUD.gif": {
+  "contentVerified": true,
+  "eyeballedBy": "agent-eye(qwen/dot-backbone)",
+  "framesViewed": "8 frames sampled across the file's own timeline",
+  "sheet": "/tmp/eye-q/all/sheet-01.png",
+  "shows": "QUOTE FOR the rules page: the word loading on black with one, two, then three dots appended and the count cycling back. Verified as the idiom it is, and it is the idiom this app forbids in its own chrome — nothing was measured, the picture changes anyway, and the only quantity on screen is the dot count. The counter-example the rules page can point at."
+ },
+ "raw/fake-os-loaders--blob.gifcities.org_gifcities_36SZVJ74JXC6QPNLGBGDNMW26HNU7TFW.gif": {
+  "contentVerified": true,
+  "eyeballedBy": "agent-eye(qwen/dot-backbone)",
+  "framesViewed": "8 frames sampled across the file's own timeline",
+  "sheet": "/tmp/eye-q/all/sheet-01.png",
+  "shows": "QUOTE FOR level and for trace on a named track: a green bar filling a track from the left edge to the right, terminal glyphs parked at both ends and never moving. The only thing that travels is the extent. Ink moves exactly as far as the measurement goes, at a rate that reads constant, and everything that is furniture holds still."
+ },
+ "raw/generic-hud--media.tenor.com_WFyfaURWOOkAAAAm_agenturleben-agencylife.webp.webp": {
+  "contentVerified": false,
+  "eyeballedBy": "agent-eye(qwen/dot-backbone)",
+  "framesViewed": "8 frames sampled across the file's own timeline",
+  "sheet": "/tmp/eye-q/all/sheet-03.png",
+  "shows": "A pixel drawing that alternates between a face in a grille and a boot — the boots-and-a-face joke, 20 frames. No instrument in it."
+ },
+ "raw/gits-optic--edia.tenor.com_MC6C3rHwL_YAAAA1_ghost-in-the-shell-kokaku-kidotai.webp.webp": {
+  "contentVerified": false,
+  "eyeballedBy": "agent-eye(qwen/dot-backbone)",
+  "framesViewed": "8 frames sampled across the file's own timeline",
+  "sheet": "/tmp/eyeball/all/sheet-08.png",
+  "sheetNote": "The /tmp path names the strip set the eyes were on at the time of the mark; sheets are regenerated artifacts and are not in git. Re-run `python3 vault/eyeball.py SEED=<seed>` to reproduce the strip for this file.",
+  "shows": "A character in profile against a painted skyline of vertical data columns. The skyline does not move; the character does. Useful as a negative: the data-city backdrop in this idiom is static paint, not an animated readou"
+ },
+ "raw/gits-optic--media.tenor.com_MC6C3rHwL_YAAAAM_ghost-in-the-shell-kokaku-kidotai.gif.gif": {
+  "contentVerified": false,
+  "eyeballedBy": "agent-eye(qwen/dot-backbone)",
+  "framesViewed": "8 frames sampled across the file's own timeline",
+  "sheet": "/tmp/eyeball/all/sheet-08.png",
+  "sheetNote": "The /tmp path names the strip set the eyes were on at the time of the mark; sheets are regenerated artifacts and are not in git. Re-run `python3 vault/eyeball.py SEED=<seed>` to reproduce the strip for this file.",
+  "shows": "Same clip, gif copy: character animation over a static data-column skyline."
+ },
+ "raw/gits-optic--media.tenor.com_wn2h7OIneRwAAAAM_ghost-in-the-shell-anime-girl.gif.gif": {
+  "contentVerified": false,
+  "eyeballedBy": "agent-eye(qwen/dot-backbone)",
+  "framesViewed": "8 frames sampled across the file's own timeline",
+  "sheet": "/tmp/eyeball/all/sheet-08.png",
+  "sheetNote": "The /tmp path names the strip set the eyes were on at the time of the mark; sheets are regenerated artifacts and are not in git. Re-run `python3 vault/eyeball.py SEED=<seed>` to reproduce the strip for this file.",
+  "shows": "Two schoolgirls reading a magazine with sparkle effects. No interface of any kind; the seed tag is the only thing connecting it to an optic."
+ },
+ "raw/hologlobe--blob.gifcities.org_gifcities_2442E47OQDW3JQT5LC2S3S2O6QNUVCEW.gif": {
+  "contentVerified": true,
+  "eyeballedBy": "agent-eye(qwen/dot-backbone)",
+  "framesViewed": "8 frames sampled across the file's own timeline",
+  "sheet": "/tmp/eyeball/all/sheet-08.png",
+  "sheetNote": "The /tmp path names the strip set the eyes were on at the time of the mark; sheets are regenerated artifacts and are not in git. Re-run `python3 vault/eyeball.py SEED=<seed>` to reproduce the strip for this file.",
+  "shows": "QUOTE FOR globe, as a caution: the real Hologlobe globe, a small pixelated Earth on an 8.0s loop whose continents re-tint through a palette cycle (yellow-violet, green, teal, blue, magenta, orange) while the disc itself stays put. The motion is hue rotation, the weakest kind — a distinction carried only in hue vanishes in monochrome, which is the library rule this reference illustrates from the wrong side."
+ },
+ "raw/hologlobe--blob.gifcities.org_gifcities_2BDK66BWLK42ADEG52TMSEUEDO6IZDTX.gif": {
+  "contentVerified": true,
+  "eyeballedBy": "agent-eye(qwen/dot-backbone)",
+  "framesViewed": "8 frames sampled across the file's own timeline",
+  "sheet": "/tmp/eyeball/all/sheet-08.png",
+  "sheetNote": "The /tmp path names the strip set the eyes were on at the time of the mark; sheets are regenerated artifacts and are not in git. Re-run `python3 vault/eyeball.py SEED=<seed>` to reproduce the strip for this file.",
+  "shows": "A rendered Earth on a 4.2s loop, continents travelling across the disc: genuine rotation, no pins, no labels, nothing else moving. This is the clean spec source for the hologlobe table."
+ },
+ "raw/hologlobe--blob.gifcities.org_gifcities_2CW2JW7CEZP4FXCUBBNI2EPWDDLXQQOI.gif": {
+  "contentVerified": true,
+  "correction": "correction: this description was first written against a hash read off a truncated sheet label, which was an invented path. Moved to the file the strip actually showed (row of the same sheet order), and the mistake is left on the record. ",
+  "eyeballedBy": "agent-eye(qwen/dot-backbone)",
+  "framesViewed": "8 frames sampled across the file's own timeline",
+  "sheet": "/tmp/eyeball/all/sheet-09.png",
+  "sheetNote": "The /tmp path names the strip set the eyes were on at the time of the mark; sheets are regenerated artifacts and are not in git. Re-run `python3 vault/eyeball.py SEED=<seed>` to reproduce the strip for this file.",
+  "shows": "QUOTE FOR globe — the best globe reference in the vault: a monochrome wireframe Earth, latitude and longitude mesh over a land mask, rotating on a 3.6s loop with no pins, no labels, no colour. This is the library drawing idiom: mesh plus land plus a constant rotation rate, and it stays legible in one ink."
+ },
+ "raw/hologlobe--blob.gifcities.org_gifcities_2G7G3GP4GP3RV32POQJ44BXNGQF2HQE5.gif": {
+  "contentVerified": true,
+  "correction": "correction: this description was first written against a hash read off a truncated sheet label, which was an invented path. Moved to the file the strip actually showed (row of the same sheet order), and the mistake is left on the record. ",
+  "eyeballedBy": "agent-eye(qwen/dot-backbone)",
+  "framesViewed": "8 frames sampled across the file's own timeline",
+  "sheet": "/tmp/eyeball/all/sheet-09.png",
+  "sheetNote": "The /tmp path names the strip set the eyes were on at the time of the mark; sheets are regenerated artifacts and are not in git. Re-run `python3 vault/eyeball.py SEED=<seed>` to reproduce the strip for this file.",
+  "shows": "QUOTE FOR globe, weak: a rotating Earth repainted through a saturated rainbow palette on a 2.6s loop — rotation plus hue cycle, the same disc as the 8s Hologlobe file at a shorter period."
+ },
+ "raw/insertion-sync--blob.gifcities.org_gifcities_24JLZWYQLJHG4W2VMUXRGCMI3NB5MWY4.gif": {
+  "contentVerified": false,
+  "eyeballedBy": "agent-eye(qwen/dot-backbone)",
+  "framesViewed": "8 frames sampled across the file's own timeline",
+  "sheet": "/tmp/eye-q/all/sheet-01.png",
+  "shows": "A yellow ANSYNC wordmark with a star, jittering and briefly dropping to a single block. An animated logo, not an instrument; the motion is jitter applied to type."
+ },
+ "raw/insertion-sync--blob.gifcities.org_gifcities_2V66PE7Q3CTXL77X7FUG3VRUCXWWWMZS.gif": {
+  "contentVerified": false,
+  "eyeballedBy": "agent-eye(qwen/dot-backbone)",
+  "framesViewed": "8 frames sampled across the file's own timeline",
+  "sheet": "/tmp/eye-q/all/sheet-02.png",
+  "shows": "End-credit titles crawling on black in cyan and green (Star Trek the Next Generation, a producer credit). Type moving over black; no interface."
+ },
+ "raw/insertion-sync--media.tenor.com_H2iWMCqaaBsAAAA1_sync-done.webp.webp": {
+  "contentVerified": false,
+  "correction": "correction: written first against a hash guessed from a truncated sheet label, which named no file on disk. Moved to the row of that sheet order actually looked at; verdict unchanged, because all three are rejections — no reference was ever quoted from an invented path. ",
+  "eyeballedBy": "agent-eye(qwen/dot-backbone)",
+  "framesViewed": "8 frames sampled across the file's own timeline",
+  "sheet": "/tmp/eyeball/all/sheet-09.png",
+  "sheetNote": "The /tmp path names the strip set the eyes were on at the time of the mark; sheets are regenerated artifacts and are not in git. Re-run `python3 vault/eyeball.py SEED=<seed>` to reproduce the strip for this file.",
+  "shows": "A snowy road, a truck, a body thrown, with the words sync and then done. stamped over the frame. Not an interface; the only transferable idea is that the state word is the last thing to arrive and the only thing that sta"
+ },
+ "raw/insertion-sync--media.tenor.com_OqdnW132Vu0AAAA1_jack-stauber-pull-the-plug.webp.webp": {
+  "contentVerified": false,
+  "correction": "correction: written first against a hash guessed from a truncated sheet label, which named no file on disk. Moved to the row of that sheet order actually looked at; verdict unchanged, because all three are rejections — no reference was ever quoted from an invented path. ",
+  "eyeballedBy": "agent-eye(qwen/dot-backbone)",
+  "framesViewed": "8 frames sampled across the file's own timeline",
+  "sheet": "/tmp/eyeball/all/sheet-09.png",
+  "sheetNote": "The /tmp path names the strip set the eyes were on at the time of the mark; sheets are regenerated artifacts and are not in git. Re-run `python3 vault/eyeball.py SEED=<seed>` to reproduce the strip for this file.",
+  "shows": "Live-action figures in a white room with mannequin forms; one frame of dot-noise. No interface, no readout, no gauge. The harvest keyed on the work and the scene, not on a screen."
+ },
+ "raw/insertion-sync--media.tenor.com_OqdnW132Vu0AAAAM_jack-stauber-pull-the-plug.gif.gif": {
+  "contentVerified": false,
+  "correction": "correction: written first against a hash guessed from a truncated sheet label, which named no file on disk. Moved to the row of that sheet order actually looked at; verdict unchanged, because all three are rejections — no reference was ever quoted from an invented path. ",
+  "eyeballedBy": "agent-eye(qwen/dot-backbone)",
+  "framesViewed": "8 frames sampled across the file's own timeline",
+  "sheet": "/tmp/eyeball/all/sheet-09.png",
+  "sheetNote": "The /tmp path names the strip set the eyes were on at the time of the mark; sheets are regenerated artifacts and are not in git. Re-run `python3 vault/eyeball.py SEED=<seed>` to reproduce the strip for this file.",
+  "shows": "Same white-room clip as the 140-frame file, gif copy: character footage, no interface."
+ },
+ "raw/magi--media.tenor.com_KSXNrJisSu0AAAAM_glitching-error.gif": {
+  "contentVerified": false,
+  "eyeballedBy": "agent-eye(qwen/dot-backbone)",
+  "framesViewed": "8 frames sampled across the file's own timeline",
+  "sheet": "/tmp/eye-q/all/sheet-01.png",
+  "shows": "Eight sampled frames of near-black: a small block of green text at top left, scattered dots, and then the whole thing tears into angular shards. Nothing is legible enough to quote a duration or an entry order from, so th"
+ },
+ "raw/motion-tracker--blob.gifcities.org_gifcities_25G2DJC3DOO6R72EAGURMGNK5YW7FRZC.gif": {
+  "contentVerified": true,
+  "eyeballedBy": "agent-eye(qwen/dot-backbone)",
+  "framesViewed": "8 frames sampled across the file's own timeline",
+  "sheet": "/tmp/eyeball/all/sheet-19.png",
+  "sheetNote": "The /tmp path names the strip set the eyes were on at the time of the mark; sheets are regenerated artifacts and are not in git. Re-run `python3 vault/eyeball.py SEED=<seed>` to reproduce the strip for this file.",
+  "shows": "QUOTE FOR admission, not for radar: seed says motion-tracker and the picture says otherwise — a block figure standing on a plank that tips under it, arms swinging to hold the balance, on an 8.0s loop. That is a balance beam finding its centre, which is what admission draws (offered against taken on a beam that tips), so the file is quoted for that component."
  },
  "raw/motion-tracker--blob.gifcities.org_gifcities_2DQVWLWVHZ3GFDWKELVNUPQK4Q2554PN.gif": {
   "contentVerified": false,
-  "eyeballedBy": "person",
+  "eyeballedBy": "agent-eye(qwen/dot-backbone)",
   "frames": [
    1,
    2,
    3
   ],
-  "shows": "see strip \u2014 not a motion tracker"
+  "framesViewed": "8-frame strip sampled across the file timeline",
+  "note": "Recorded 2026-08-29: the field defaulted to \"person\" in the tool, and no person looked. Corrected rather than left, because this file exists to carry provenance.",
+  "sheetNote": "The /tmp path names the strip set the eyes were on at the time of the mark; sheets are regenerated artifacts and are not in git. Re-run `python3 vault/eyeball.py SEED=<seed>` to reproduce the strip for this file.",
+  "shows": "see strip — not a motion tracker"
  },
  "raw/motion-tracker--blob.gifcities.org_gifcities_2EABTUACDLIOLENESGNT52SRNSJEOKE5.gif": {
   "contentVerified": false,
-  "eyeballedBy": "person",
-  "shows": "GifCities clip: a man walking a corridor and falling over \u2014 no interface at all",
+  "eyeballedBy": "agent-eye(qwen/dot-backbone)",
+  "framesViewed": "8-frame strip sampled across the file timeline",
+  "note": "Recorded 2026-08-29: the field defaulted to \"person\" in the tool, and no person looked. Corrected rather than left, because this file exists to carry provenance.",
+  "sheetNote": "The /tmp path names the strip set the eyes were on at the time of the mark; sheets are regenerated artifacts and are not in git. Re-run `python3 vault/eyeball.py SEED=<seed>` to reproduce the strip for this file.",
+  "shows": "GifCities clip: a man walking a corridor and falling over — no interface at all",
   "stripped": true
  },
  "raw/motion-tracker--blob.gifcities.org_gifcities_2GZNWJ32BURZCJ7XKWTLILI6SHH7KAUA.gif": {
   "contentVerified": false,
-  "eyeballedBy": "person",
-  "frames": [
-   1,
-   2,
-   3
-  ],
-  "shows": "see strip \u2014 not a motion tracker"
+  "eyeballedBy": "agent-eye(qwen/dot-backbone)",
+  "framesViewed": "8 frames sampled across the file's own timeline",
+  "sheet": "/tmp/eyeball/all/sheet-19.png",
+  "sheetNote": "The /tmp path names the strip set the eyes were on at the time of the mark; sheets are regenerated artifacts and are not in git. Re-run `python3 vault/eyeball.py SEED=<seed>` to reproduce the strip for this file.",
+  "shows": "Two rendered figures in armour facing each other across a particle burst on black. Something explodes; nothing is measured. No sweep, no contact, no ring."
  },
  "raw/motion-tracker--media.tenor.com_lMPAk68tF2wAAAA1_below-deck-im-your-biggest-fan.webp.webp": {
   "contentVerified": false,
-  "eyeballedBy": "person",
+  "eyeballedBy": "agent-eye(qwen/dot-backbone)",
   "frames": [
    1,
    2,
    3
   ],
-  "shows": "see strip \u2014 not a motion tracker"
+  "framesViewed": "8-frame strip sampled across the file timeline",
+  "note": "Recorded 2026-08-29: the field defaulted to \"person\" in the tool, and no person looked. Corrected rather than left, because this file exists to carry provenance.",
+  "sheetNote": "The /tmp path names the strip set the eyes were on at the time of the mark; sheets are regenerated artifacts and are not in git. Re-run `python3 vault/eyeball.py SEED=<seed>` to reproduce the strip for this file.",
+  "shows": "see strip — not a motion tracker"
  },
  "raw/motion-tracker--media.tenor.com_lMPAk68tF2wAAAAM_below-deck-im-your-biggest-fan.gif.gif": {
   "contentVerified": false,
-  "eyeballedBy": "person",
+  "eyeballedBy": "agent-eye(qwen/dot-backbone)",
+  "framesViewed": "8-frame strip sampled across the file timeline",
+  "note": "Recorded 2026-08-29: the field defaulted to \"person\" in the tool, and no person looked. Corrected rather than left, because this file exists to carry provenance.",
+  "sheetNote": "The /tmp path names the strip set the eyes were on at the time of the mark; sheets are regenerated artifacts and are not in git. Re-run `python3 vault/eyeball.py SEED=<seed>` to reproduce the strip for this file.",
   "shows": "Tenor meme: a person holding a kitchen fan in front of their face, captioned I'M YOUR BIGGEST FAN",
   "stripped": true
  },
  "raw/motion-tracker--media.tenor.com_qcahlSOkDFcAAAAm_cybersecurity-art-mule-yong.webp.webp": {
   "contentVerified": false,
-  "eyeballedBy": "person",
+  "eyeballedBy": "agent-eye(qwen/dot-backbone)",
   "frames": [
    1,
    2,
    3
   ],
-  "shows": "see strip \u2014 not a motion tracker"
+  "framesViewed": "8-frame strip sampled across the file timeline",
+  "note": "Recorded 2026-08-29: the field defaulted to \"person\" in the tool, and no person looked. Corrected rather than left, because this file exists to carry provenance.",
+  "sheetNote": "The /tmp path names the strip set the eyes were on at the time of the mark; sheets are regenerated artifacts and are not in git. Re-run `python3 vault/eyeball.py SEED=<seed>` to reproduce the strip for this file.",
+  "shows": "see strip — not a motion tracker"
  },
  "raw/motion-tracker--media.tenor.com_vHCkBrnEpkkAAAA1_movie-film-cinema-theater.webp.webp": {
   "contentVerified": false,
-  "eyeballedBy": "person",
+  "eyeballedBy": "agent-eye(qwen/dot-backbone)",
   "frames": [
    1,
    2,
    3
   ],
-  "shows": "see strip \u2014 not a motion tracker"
+  "framesViewed": "8-frame strip sampled across the file timeline",
+  "note": "Recorded 2026-08-29: the field defaulted to \"person\" in the tool, and no person looked. Corrected rather than left, because this file exists to carry provenance.",
+  "sheetNote": "The /tmp path names the strip set the eyes were on at the time of the mark; sheets are regenerated artifacts and are not in git. Re-run `python3 vault/eyeball.py SEED=<seed>` to reproduce the strip for this file.",
+  "shows": "see strip — not a motion tracker"
  },
  "raw/motion-tracker--media.tenor.com_vHCkBrnEpkkAAAAM_movie-film-cinema-theater.gif.gif": {
   "contentVerified": false,
-  "eyeballedBy": "person",
-  "shows": "Tenor meme: a Dr. Wily cartoon character dancing \u2014 no scope, no sweep, no contact",
+  "eyeballedBy": "agent-eye(qwen/dot-backbone)",
+  "framesViewed": "8-frame strip sampled across the file timeline",
+  "note": "Recorded 2026-08-29: the field defaulted to \"person\" in the tool, and no person looked. Corrected rather than left, because this file exists to carry provenance.",
+  "sheetNote": "The /tmp path names the strip set the eyes were on at the time of the mark; sheets are regenerated artifacts and are not in git. Re-run `python3 vault/eyeball.py SEED=<seed>` to reproduce the strip for this file.",
+  "shows": "Tenor meme: a Dr. Wily cartoon character dancing — no scope, no sweep, no contact",
   "stripped": true
+ },
+ "raw/rig--blob.gifcities.org_gifcities_2RO5SN3IFIDBUAFOOVBDCFJ7J6V4DRXR.gif": {
+  "contentVerified": true,
+  "eyeballedBy": "agent-eye(qwen/dot-backbone)",
+  "framesViewed": "8 frames sampled across the file's own timeline",
+  "sheet": "/tmp/eye-q/all/sheet-03.png",
+  "shows": "QUOTE FOR radar, city and grid: an orange survey grid on black with fixed corner labels, a marker travelling across the cells, and a magenta region lighting up somewhere inside it on a 3.0s loop. The grid and its labels are furniture and never move; only the contact and the lit region change — the split this library keeps having to relearn."
+ },
+ "raw/rig--media.tenor.com_96lpvkE5Sb4AAAA1_srcspaceship-spaceship.webp.webp": {
+  "contentVerified": false,
+  "eyeballedBy": "agent-eye(qwen/dot-backbone)",
+  "framesViewed": "8 frames sampled across the file's own timeline",
+  "sheet": "/tmp/eyeball/all/sheet-19.png",
+  "sheetNote": "The /tmp path names the strip set the eyes were on at the time of the mark; sheets are regenerated artifacts and are not in git. Re-run `python3 vault/eyeball.py SEED=<seed>` to reproduce the strip for this file.",
+  "shows": "A spaceship under engine glow on starfield. Caption in the filename says it plainly (srcspaceship): a ship, not the RIG spine. Dead Space spine HUD is not in this file."
+ },
+ "raw/rig--media.tenor.com_96lpvkE5Sb4AAAAM_srcspaceship-spaceship.gif.gif": {
+  "contentVerified": false,
+  "eyeballedBy": "agent-eye(qwen/dot-backbone)",
+  "framesViewed": "8 frames sampled across the file's own timeline",
+  "sheet": "/tmp/eyeball/all/sheet-19.png",
+  "sheetNote": "The /tmp path names the strip set the eyes were on at the time of the mark; sheets are regenerated artifacts and are not in git. Re-run `python3 vault/eyeball.py SEED=<seed>` to reproduce the strip for this file.",
+  "shows": "The same spaceship clip as the webp copy, 5.6s loop: a ship flying, no interface."
+ },
+ "raw/rig--media.tenor.com_ITRBPx5QvF8AAAA1_67.webp.webp": {
+  "contentVerified": false,
+  "eyeballedBy": "agent-eye(qwen/dot-backbone)",
+  "framesViewed": "8 frames sampled across the file's own timeline",
+  "sheet": "/tmp/eyeball/all/sheet-19.png",
+  "sheetNote": "The /tmp path names the strip set the eyes were on at the time of the mark; sheets are regenerated artifacts and are not in git. Re-run `python3 vault/eyeball.py SEED=<seed>` to reproduce the strip for this file.",
+  "shows": "Cinematic game footage — armoured figures in a dark industrial set, blue emissive trim. A scene, not a diegetic interface: no spine bar, no mode readout, no objective marker."
+ },
+ "raw/spinner--media.tenor.com_5VlkKDNwp5sAAAA1_blade-runner-2049-mariette.webp.webp": {
+  "contentVerified": false,
+  "eyeballedBy": "agent-eye(qwen/dot-backbone)",
+  "framesViewed": "8 frames sampled across the file's own timeline",
+  "sheet": "/tmp/eye-q/all/sheet-02.png",
+  "shows": "The same amber-lit face as the 53-frame file, 104 frames of head turn. Seed named the vehicle and its HUD; the host returned the actress."
+ },
+ "raw/spinner--media.tenor.com_5VlkKDNwp5sAAAAM_blade-runner-2049-mariette.gif.gif": {
+  "contentVerified": false,
+  "eyeballedBy": "agent-eye(qwen/dot-backbone)",
+  "framesViewed": "8 frames sampled across the file's own timeline",
+  "sheet": "/tmp/eye-q/all/sheet-01.png",
+  "shows": "A face lit amber against black, turning its head. The seed is named for the vehicle and its HUD; the harvest returned the character. No overlay, no reticle, no panel — the 5.3s loop is a head turn."
+ },
+ "raw/spinner--media.tenor.com_XlewEhGOuQgAAAAM_peni-parker-penny-parker.gif.gif": {
+  "contentVerified": false,
+  "eyeballedBy": "agent-eye(qwen/dot-backbone)",
+  "framesViewed": "8 frames sampled across the file's own timeline",
+  "sheet": "/tmp/eye-q/all/sheet-03.png",
+  "shows": "Red-tinted animation of a girl at an arcade counter with the subtitle I'M DISPATCHING A ROLLER COASTER. A scene with burned-in subtitles; the only frame in the vault that says dispatching is somebody else's caption."
+ },
+ "raw/spinner-console--blob.gifcities.org_gifcities_2EABIEZLK7C7RZMCFOOHZKIPRAPVWALH.gif": {
+  "contentVerified": true,
+  "eyeballedBy": "agent-eye(qwen/dot-backbone)",
+  "framesViewed": "8 frames sampled across the file's own timeline",
+  "sheet": "/tmp/eye-q/all/sheet-02.png",
+  "shows": "QUOTE FOR trace and arrive, not for the seed: a starship under warp with a bright marker travelling a line that extends behind it, 5.2s loop. It is a visual-effects shot of a vehicle, not the console the seed asks for — but the motion is the exact idiom of a trace: the route is drawn as the head of it travels, and nothing else in the frame moves."
+ },
+ "raw/tron-disc--blob.gifcities.org_gifcities_2AWYSNBQH7E3JQPMI2B5UNXXOTV7UDLB.gif": {
+  "contentVerified": true,
+  "eyeballedBy": "agent-eye(qwen/dot-backbone)",
+  "framesViewed": "8 frames sampled across the file's own timeline",
+  "sheet": "/tmp/eye-q/all/sheet-03.png",
+  "shows": "QUOTE FOR trace and strands: a magenta circuit grid on black where a bright segment travels a path and the trail it leaves stays drawn, 5.0s loop. The grid is furniture, one ink carries the travel, and the history of the path is the picture — which is what a trace is for."
  }
 }

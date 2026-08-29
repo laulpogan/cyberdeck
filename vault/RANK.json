@@ -1,0 +1,1142 @@
+[
+ {
+  "file": "raw/fake-os-loaders--blob.gifcities.org_gifcities_36SZVJ74JXC6QPNLGBGDNMW26HNU7TFW.gif",
+  "seed": "fake-os-loaders",
+  "frames": 49,
+  "flatness": 0.756,
+  "ground": 0.0,
+  "hotMotion": 0.313,
+  "coverage": 0.0096,
+  "score": 0.6754
+ },
+ {
+  "file": "raw/magi--media.tenor.com_KSXNrJisSu0AAAAM_glitching-error.gif",
+  "seed": "magi",
+  "frames": 32,
+  "flatness": 0.793,
+  "ground": 0.001,
+  "hotMotion": 0.09,
+  "coverage": 0.1532,
+  "score": 0.6726
+ },
+ {
+  "file": "raw/fake-os-loaders--blob.gifcities.org_gifcities_34C5WYILX3AL74KKP36H6JB75QTVKCUD.gif",
+  "seed": "fake-os-loaders",
+  "frames": 6,
+  "flatness": 0.781,
+  "ground": 0.0,
+  "hotMotion": 0.0,
+  "coverage": 0.1134,
+  "score": 0.6591
+ },
+ {
+  "file": "raw/spinner--media.tenor.com_5VlkKDNwp5sAAAAM_blade-runner-2049-mariette.gif.gif",
+  "seed": "spinner",
+  "frames": 53,
+  "flatness": 0.618,
+  "ground": 0.081,
+  "hotMotion": 0.503,
+  "coverage": 0.2012,
+  "score": 0.6438
+ },
+ {
+  "file": "raw/insertion-sync--blob.gifcities.org_gifcities_24JLZWYQLJHG4W2VMUXRGCMI3NB5MWY4.gif",
+  "seed": "insertion-sync",
+  "frames": 6,
+  "flatness": 0.801,
+  "ground": 0.055,
+  "hotMotion": 0.526,
+  "coverage": 0.482,
+  "score": 0.6257
+ },
+ {
+  "file": "raw/cyberpunk-hud--media.tenor.com_pHWIUKxe8fQAAAAM_iori-iori-kof.gif.gif",
+  "seed": "cyberpunk-hud",
+  "frames": 29,
+  "flatness": 0.604,
+  "ground": 0.014,
+  "hotMotion": 0.15,
+  "coverage": 0.1476,
+  "score": 0.6086
+ },
+ {
+  "file": "raw/spinner--media.tenor.com_5VlkKDNwp5sAAAA1_blade-runner-2049-mariette.webp.webp",
+  "seed": "spinner",
+  "frames": 104,
+  "flatness": 0.546,
+  "ground": 0.083,
+  "hotMotion": 0.487,
+  "coverage": 0.2167,
+  "score": 0.6023
+ },
+ {
+  "file": "raw/spinner-console--blob.gifcities.org_gifcities_2EABIEZLK7C7RZMCFOOHZKIPRAPVWALH.gif",
+  "seed": "spinner-console",
+  "frames": 14,
+  "flatness": 0.651,
+  "ground": 0.006,
+  "hotMotion": 0.039,
+  "coverage": 0.1583,
+  "score": 0.5981
+ },
+ {
+  "file": "raw/cyberpunk-hud--media.tenor.com_pHWIUKxe8fQAAAA1_iori-iori-kof.webp.webp",
+  "seed": "cyberpunk-hud",
+  "frames": 67,
+  "flatness": 0.55,
+  "ground": 0.018,
+  "hotMotion": 0.138,
+  "coverage": 0.1577,
+  "score": 0.5771
+ },
+ {
+  "file": "raw/insertion-sync--blob.gifcities.org_gifcities_2V66PE7Q3CTXL77X7FUG3VRUCXWWWMZS.gif",
+  "seed": "insertion-sync",
+  "frames": 11,
+  "flatness": 0.539,
+  "ground": 0.003,
+  "hotMotion": 0.174,
+  "coverage": 0.1812,
+  "score": 0.5771
+ },
+ {
+  "file": "raw/fake-os-loaders--blob.gifcities.org_gifcities_2S4N3JQ6GIQGIKRNQ6CX4AAHKS6DQHE6.gif",
+  "seed": "fake-os-loaders",
+  "frames": 30,
+  "flatness": 0.821,
+  "ground": 0.998,
+  "hotMotion": 0.381,
+  "coverage": 0.1073,
+  "score": 0.5673
+ },
+ {
+  "file": "raw/rig--blob.gifcities.org_gifcities_2RO5SN3IFIDBUAFOOVBDCFJ7J6V4DRXR.gif",
+  "seed": "rig",
+  "frames": 15,
+  "flatness": 0.601,
+  "ground": 0.028,
+  "hotMotion": 0.096,
+  "coverage": 0.2114,
+  "score": 0.5554
+ },
+ {
+  "file": "raw/spinner--media.tenor.com_XlewEhGOuQgAAAAM_peni-parker-penny-parker.gif.gif",
+  "seed": "spinner",
+  "frames": 24,
+  "flatness": 0.415,
+  "ground": 0.121,
+  "hotMotion": 0.374,
+  "coverage": 0.15,
+  "score": 0.5369
+ },
+ {
+  "file": "raw/generic-hud--media.tenor.com_WFyfaURWOOkAAAAm_agenturleben-agencylife.webp.webp",
+  "seed": "generic-hud",
+  "frames": 20,
+  "flatness": 0.643,
+  "ground": 0.0,
+  "hotMotion": 0.0,
+  "coverage": 0.2729,
+  "score": 0.5308
+ },
+ {
+  "file": "raw/tron-disc--blob.gifcities.org_gifcities_2AWYSNBQH7E3JQPMI2B5UNXXOTV7UDLB.gif",
+  "seed": "tron-disc",
+  "frames": 50,
+  "flatness": 0.521,
+  "ground": 0.039,
+  "hotMotion": 0.19,
+  "coverage": 0.0057,
+  "score": 0.5302
+ },
+ {
+  "file": "raw/rig--blob.gifcities.org_gifcities_2GZNWJ32BURZCJ7XKWTLILI6SHH7KAUA.gif",
+  "seed": "rig",
+  "frames": 10,
+  "flatness": 0.481,
+  "ground": 0.043,
+  "hotMotion": 0.193,
+  "coverage": 0.0147,
+  "score": 0.5175
+ },
+ {
+  "file": "raw/spinner--media.tenor.com_XlewEhGOuQgAAAA1_peni-parker-penny-parker.webp.webp",
+  "seed": "spinner",
+  "frames": 65,
+  "flatness": 0.387,
+  "ground": 0.122,
+  "hotMotion": 0.359,
+  "coverage": 0.1581,
+  "score": 0.5174
+ },
+ {
+  "file": "raw/tron-disc--blob.gifcities.org_gifcities_2BPQ3WZLWCZPZXYBVM2SFYGAK5KV5B4U.gif",
+  "seed": "tron-disc",
+  "frames": 10,
+  "flatness": 0.508,
+  "ground": 0.124,
+  "hotMotion": 0.163,
+  "coverage": 0.1599,
+  "score": 0.515
+ },
+ {
+  "file": "raw/spinner--media.tenor.com_6NmYhocrNjMAAAAM_blade-runner-tyrell-corporation.gif.gif",
+  "seed": "spinner",
+  "frames": 54,
+  "flatness": 0.497,
+  "ground": 0.04,
+  "hotMotion": 0.138,
+  "coverage": 0.0212,
+  "score": 0.5149
+ },
+ {
+  "file": "raw/tron-disc--blob.gifcities.org_gifcities_23DTI5FGHJKRGLTR46HJVX3IBIE2U4G3.gif",
+  "seed": "tron-disc",
+  "frames": 40,
+  "flatness": 0.602,
+  "ground": 0.08,
+  "hotMotion": 0.291,
+  "coverage": 0.3418,
+  "score": 0.5146
+ },
+ {
+  "file": "raw/fake-os-loaders--media.tenor.com_qSiv7MdS0FsAAAA1_onregion-nintendo.webp.webp",
+  "seed": "fake-os-loaders",
+  "frames": 89,
+  "flatness": 0.433,
+  "ground": 0.071,
+  "hotMotion": 0.413,
+  "coverage": 0.2785,
+  "score": 0.5134
+ },
+ {
+  "file": "raw/spinner--media.tenor.com_6NmYhocrNjMAAAA1_blade-runner-tyrell-corporation.webp.webp",
+  "seed": "spinner",
+  "frames": 144,
+  "flatness": 0.46,
+  "ground": 0.042,
+  "hotMotion": 0.138,
+  "coverage": 0.0261,
+  "score": 0.5016
+ },
+ {
+  "file": "raw/spinner-console--blob.gifcities.org_gifcities_2CVXBIKAGKLDNI3KJ5X6XTH4BSVLQGXJ.gif",
+  "seed": "spinner-console",
+  "frames": 24,
+  "flatness": 0.467,
+  "ground": 0.174,
+  "hotMotion": 0.295,
+  "coverage": 0.1727,
+  "score": 0.5013
+ },
+ {
+  "file": "raw/rig--blob.gifcities.org_gifcities_3KDIF74K3ZG7TLDTLKWOGBQT4ED5RYH3.gif",
+  "seed": "rig",
+  "frames": 8,
+  "flatness": 0.498,
+  "ground": 0.01,
+  "hotMotion": 0.408,
+  "coverage": 0.8287,
+  "score": 0.4964
+ },
+ {
+  "file": "raw/fake-os-loaders--media.tenor.com_qSiv7MdS0FsAAAAM_onregion-nintendo.gif.gif",
+  "seed": "fake-os-loaders",
+  "frames": 31,
+  "flatness": 0.452,
+  "ground": 0.089,
+  "hotMotion": 0.385,
+  "coverage": 0.3184,
+  "score": 0.4855
+ },
+ {
+  "file": "raw/cyberpunk-hud--media.tenor.com_gdhPO38XjlUAAAAM_urith-set.gif.gif",
+  "seed": "cyberpunk-hud",
+  "frames": 53,
+  "flatness": 0.413,
+  "ground": 0.162,
+  "hotMotion": 0.144,
+  "coverage": 0.1314,
+  "score": 0.4684
+ },
+ {
+  "file": "raw/spinner--media.tenor.com_xVmzWI7ZoVwAAAAM_joi-blade-runner.gif.gif",
+  "seed": "spinner",
+  "frames": 16,
+  "flatness": 0.323,
+  "ground": 0.183,
+  "hotMotion": 0.333,
+  "coverage": 0.0848,
+  "score": 0.4577
+ },
+ {
+  "file": "raw/spinner--media.tenor.com_xVmzWI7ZoVwAAAA1_joi-blade-runner.webp.webp",
+  "seed": "spinner",
+  "frames": 30,
+  "flatness": 0.293,
+  "ground": 0.182,
+  "hotMotion": 0.336,
+  "coverage": 0.0983,
+  "score": 0.4537
+ },
+ {
+  "file": "raw/cyberpunk-hud--media.tenor.com_gdhPO38XjlUAAAA1_urith-set.webp.webp",
+  "seed": "cyberpunk-hud",
+  "frames": 153,
+  "flatness": 0.396,
+  "ground": 0.17,
+  "hotMotion": 0.141,
+  "coverage": 0.139,
+  "score": 0.4532
+ },
+ {
+  "file": "raw/rig--blob.gifcities.org_gifcities_2PCPYQIN4QOUBAPCUSRF2J63IYJ6O7JM.gif",
+  "seed": "rig",
+  "frames": 9,
+  "flatness": 0.392,
+  "ground": 0.131,
+  "hotMotion": 0.179,
+  "coverage": 0.0382,
+  "score": 0.4483
+ },
+ {
+  "file": "raw/magi--media.tenor.com__aNGbtj7bQ8AAAAM_nite-sweet-dreams.gif",
+  "seed": "magi",
+  "frames": 12,
+  "flatness": 0.243,
+  "ground": 0.136,
+  "hotMotion": 0.246,
+  "coverage": 0.1454,
+  "score": 0.4312
+ },
+ {
+  "file": "raw/hologlobe--blob.gifcities.org_gifcities_2CW2JW7CEZP4FXCUBBNI2EPWDDLXQQOI.gif",
+  "seed": "hologlobe",
+  "frames": 12,
+  "flatness": 0.451,
+  "ground": 0.008,
+  "hotMotion": 0.101,
+  "coverage": 0.3632,
+  "score": 0.4302
+ },
+ {
+  "file": "raw/magi--blob.gifcities.org_gifcities_2BBLKGXJB5KAJZARVU6AEMEWNKFFCIX3.gif",
+  "seed": "magi",
+  "frames": 12,
+  "flatness": 0.403,
+  "ground": 0.282,
+  "hotMotion": 0.2,
+  "coverage": 0.1224,
+  "score": 0.4257
+ },
+ {
+  "file": "raw/insertion-sync--blob.gifcities.org_gifcities_2C4I4ETZCMMDL74OK5FQHSLCKJEQK45Z.gif",
+  "seed": "insertion-sync",
+  "frames": 20,
+  "flatness": 0.69,
+  "ground": 1.0,
+  "hotMotion": 0.0,
+  "coverage": 0.1308,
+  "score": 0.4206
+ },
+ {
+  "file": "raw/tron-grid--media.tenor.com_1UAP9GJcLFIAAAAM_ocbc-ocbc-cycle.gif.gif",
+  "seed": "tron-grid",
+  "frames": 60,
+  "flatness": 0.518,
+  "ground": 0.986,
+  "hotMotion": 0.288,
+  "coverage": 0.1418,
+  "score": 0.4183
+ },
+ {
+  "file": "raw/fake-os-loaders--media.tenor.com_f1aQJ-FnON8AAAAM_the-chosen-the-chosen-tv-series.gif.gif",
+  "seed": "fake-os-loaders",
+  "frames": 36,
+  "flatness": 0.339,
+  "ground": 0.181,
+  "hotMotion": 0.11,
+  "coverage": 0.0965,
+  "score": 0.4152
+ },
+ {
+  "file": "raw/akira-capsule--media.tenor.com_N_KvrPF8bLIAAAAM_dancing-anime-characters.gif.gif",
+  "seed": "akira-capsule",
+  "frames": 34,
+  "flatness": 0.513,
+  "ground": 0.053,
+  "hotMotion": 0.134,
+  "coverage": 0.6152,
+  "score": 0.4135
+ },
+ {
+  "file": "raw/fake-os-loaders--media.tenor.com_f1aQJ-FnON8AAAA1_the-chosen-the-chosen-tv-series.webp.webp",
+  "seed": "fake-os-loaders",
+  "frames": 66,
+  "flatness": 0.31,
+  "ground": 0.19,
+  "hotMotion": 0.106,
+  "coverage": 0.112,
+  "score": 0.406
+ },
+ {
+  "file": "raw/tron-grid--media.tenor.com_1UAP9GJcLFIAAAA1_ocbc-ocbc-cycle.webp.webp",
+  "seed": "tron-grid",
+  "frames": 180,
+  "flatness": 0.485,
+  "ground": 0.988,
+  "hotMotion": 0.293,
+  "coverage": 0.1641,
+  "score": 0.3952
+ },
+ {
+  "file": "raw/magi--media.tenor.com_etSO5vLqKjYAAAAM_quadmester-system.gif",
+  "seed": "magi",
+  "frames": 147,
+  "flatness": 0.397,
+  "ground": 0.0,
+  "hotMotion": 0.095,
+  "coverage": 0.5353,
+  "score": 0.3826
+ },
+ {
+  "file": "raw/magi--media.tenor.com_86Ef0-fGKbkAAAAm_aw3-allwhitelaser.webp",
+  "seed": "magi",
+  "frames": 27,
+  "flatness": 0.556,
+  "ground": 1.0,
+  "hotMotion": 0.17,
+  "coverage": 0.2063,
+  "score": 0.3718
+ },
+ {
+  "file": "raw/spinner-console--blob.gifcities.org_gifcities_2C3TAKAQIQI3NSE6EFZ6TPABBXLJPPLY.gif",
+  "seed": "spinner-console",
+  "frames": 28,
+  "flatness": 0.261,
+  "ground": 0.215,
+  "hotMotion": 0.115,
+  "coverage": 0.1426,
+  "score": 0.3695
+ },
+ {
+  "file": "raw/hologlobe--blob.gifcities.org_gifcities_2G7G3GP4GP3RV32POQJ44BXNGQF2HQE5.gif",
+  "seed": "hologlobe",
+  "frames": 16,
+  "flatness": 0.311,
+  "ground": 0.126,
+  "hotMotion": 0.403,
+  "coverage": 0.4235,
+  "score": 0.3651
+ },
+ {
+  "file": "raw/akira-capsule--media.tenor.com_N_KvrPF8bLIAAAA1_dancing-anime-characters.webp.webp",
+  "seed": "akira-capsule",
+  "frames": 33,
+  "flatness": 0.37,
+  "ground": 0.058,
+  "hotMotion": 0.152,
+  "coverage": 0.5965,
+  "score": 0.3584
+ },
+ {
+  "file": "raw/insertion-sync--blob.gifcities.org_gifcities_2GR3M22SZERKOBYQPVKLW2MWDHRTKL62.gif",
+  "seed": "insertion-sync",
+  "frames": 5,
+  "flatness": 0.338,
+  "ground": 0.219,
+  "hotMotion": 0.48,
+  "coverage": 0.6627,
+  "score": 0.3509
+ },
+ {
+  "file": "raw/fake-os-loaders--media.tenor.com__EYj7MgpRGIAAAAM_fake-smile.gif.gif",
+  "seed": "fake-os-loaders",
+  "frames": 20,
+  "flatness": 0.354,
+  "ground": 0.326,
+  "hotMotion": 0.099,
+  "coverage": 0.0774,
+  "score": 0.3398
+ },
+ {
+  "file": "raw/generic-hud--media.tenor.com_dGu30CNlqkkAAAAM_sad-hug-gif.gif.gif",
+  "seed": "generic-hud",
+  "frames": 32,
+  "flatness": 0.376,
+  "ground": 0.147,
+  "hotMotion": 0.094,
+  "coverage": 0.356,
+  "score": 0.3359
+ },
+ {
+  "file": "raw/fake-os-loaders--media.tenor.com__EYj7MgpRGIAAAA1_fake-smile.webp.webp",
+  "seed": "fake-os-loaders",
+  "frames": 13,
+  "flatness": 0.314,
+  "ground": 0.332,
+  "hotMotion": 0.103,
+  "coverage": 0.1021,
+  "score": 0.3343
+ },
+ {
+  "file": "raw/gits-optic--media.tenor.com_wn2h7OIneRwAAAA1_ghost-in-the-shell-anime-girl.webp.webp",
+  "seed": "gits-optic",
+  "frames": 21,
+  "flatness": 0.254,
+  "ground": 0.36,
+  "hotMotion": 0.202,
+  "coverage": 0.1163,
+  "score": 0.3288
+ },
+ {
+  "file": "raw/lumon--ces.com_wp-content_uploads_2017_02_jm-31-navigation-animated.gif_ssl_1.gif",
+  "seed": "lumon",
+  "frames": 36,
+  "flatness": 0.381,
+  "ground": 0.109,
+  "hotMotion": 0.082,
+  "coverage": 0.4058,
+  "score": 0.3281
+ },
+ {
+  "file": "raw/star-citizen--media.tenor.com_PGI7w5PjQ-AAAAA1_uhh-uh.webp.webp",
+  "seed": "star-citizen",
+  "frames": 84,
+  "flatness": 0.268,
+  "ground": 0.266,
+  "hotMotion": 0.174,
+  "coverage": 0.0206,
+  "score": 0.3243
+ },
+ {
+  "file": "raw/star-citizen--media.tenor.com_PGI7w5PjQ-AAAAAM_uhh-uh.gif.gif",
+  "seed": "star-citizen",
+  "frames": 54,
+  "flatness": 0.28,
+  "ground": 0.26,
+  "hotMotion": 0.165,
+  "coverage": 0.0088,
+  "score": 0.3238
+ },
+ {
+  "file": "raw/magi--media.tenor.com_EQype_oQI-MAAAA1_pusheen-cat.webp",
+  "seed": "magi",
+  "frames": 4,
+  "flatness": 0.439,
+  "ground": 0.941,
+  "hotMotion": 0.139,
+  "coverage": 0.0408,
+  "score": 0.3207
+ },
+ {
+  "file": "raw/cyberpunk-hud--media.tenor.com_43RQA3tT7vMAAAAm_dj-lui-v-lui-v.webp.webp",
+  "seed": "cyberpunk-hud",
+  "frames": 18,
+  "flatness": 0.543,
+  "ground": 0.207,
+  "hotMotion": 0.0,
+  "coverage": 0.4438,
+  "score": 0.3186
+ },
+ {
+  "file": "raw/generic-hud--media.tenor.com_dGu30CNlqkkAAAA1_sad-hug-gif.webp.webp",
+  "seed": "generic-hud",
+  "frames": 44,
+  "flatness": 0.349,
+  "ground": 0.155,
+  "hotMotion": 0.095,
+  "coverage": 0.3691,
+  "score": 0.315
+ },
+ {
+  "file": "raw/magi--edia.tenor.com_Z5M4QCFFIo8AAAA1_cat6cable-system-cable-management.webp.webp",
+  "seed": "magi",
+  "frames": 90,
+  "flatness": 0.369,
+  "ground": 0.861,
+  "hotMotion": 0.179,
+  "coverage": 0.0642,
+  "score": 0.3145
+ },
+ {
+  "file": "raw/tron-grid--media.tenor.com_ohSJUuqiZkcAAAAM_jagyasini-singh-happy-new-year.gif.gif",
+  "seed": "tron-grid",
+  "frames": 30,
+  "flatness": 0.257,
+  "ground": 0.5,
+  "hotMotion": 0.391,
+  "coverage": 0.1925,
+  "score": 0.3143
+ },
+ {
+  "file": "raw/magi--media.tenor.com_Z5M4QCFFIo8AAAAM_cat6cable-system-cable-management.gif.gif",
+  "seed": "magi",
+  "frames": 60,
+  "flatness": 0.397,
+  "ground": 0.879,
+  "hotMotion": 0.129,
+  "coverage": 0.0561,
+  "score": 0.3091
+ },
+ {
+  "file": "raw/tron-grid--media.tenor.com_ohSJUuqiZkcAAAA1_jagyasini-singh-happy-new-year.webp.webp",
+  "seed": "tron-grid",
+  "frames": 66,
+  "flatness": 0.235,
+  "ground": 0.507,
+  "hotMotion": 0.412,
+  "coverage": 0.202,
+  "score": 0.306
+ },
+ {
+  "file": "raw/fake-os-loaders--media.tenor.com_Fhp4XyZzAWYAAAAM_pc2-happy.gif.gif",
+  "seed": "fake-os-loaders",
+  "frames": 26,
+  "flatness": 0.355,
+  "ground": 0.347,
+  "hotMotion": 0.224,
+  "coverage": 0.2742,
+  "score": 0.3057
+ },
+ {
+  "file": "raw/gits-optic--media.tenor.com_VF1njMisAREAAAAM_major-motoko.gif.gif",
+  "seed": "gits-optic",
+  "frames": 49,
+  "flatness": 0.286,
+  "ground": 0.32,
+  "hotMotion": 0.274,
+  "coverage": 0.2793,
+  "score": 0.3009
+ },
+ {
+  "file": "raw/fake-os-loaders--blob.gifcities.org_gifcities_252EX5GXJE6BCNT4RSSDONF7UBPCE2BI.gif",
+  "seed": "fake-os-loaders",
+  "frames": 11,
+  "flatness": 0.473,
+  "ground": 0.801,
+  "hotMotion": 0.036,
+  "coverage": 0.0249,
+  "score": 0.3007
+ },
+ {
+  "file": "raw/lumon--media.tenor.com_a5XhPdFDGYEAAAAM_helly-r-macrodata-refinement.gif.gif",
+  "seed": "lumon",
+  "frames": 40,
+  "flatness": 0.313,
+  "ground": 0.414,
+  "hotMotion": 0.192,
+  "coverage": 0.0635,
+  "score": 0.2978
+ },
+ {
+  "file": "raw/insertion-sync--media.tenor.com_VHHSBFU2EM8AAAAM_dexters-laboratory.gif.gif",
+  "seed": "insertion-sync",
+  "frames": 13,
+  "flatness": 0.291,
+  "ground": 0.531,
+  "hotMotion": 0.253,
+  "coverage": 0.194,
+  "score": 0.2926
+ },
+ {
+  "file": "raw/star-citizen--media.tenor.com_4yMcUi0V7QwAAAAM_theastropub-paul-shelley.gif.gif",
+  "seed": "star-citizen",
+  "frames": 34,
+  "flatness": 0.286,
+  "ground": 0.273,
+  "hotMotion": 0.114,
+  "coverage": 0.2606,
+  "score": 0.2926
+ },
+ {
+  "file": "raw/akira-capsule--media.tenor.com_x2XXdMLovF0AAAA1_cym-cropped-yakuza-memes.webp.webp",
+  "seed": "akira-capsule",
+  "frames": 20,
+  "flatness": 0.3,
+  "ground": 0.765,
+  "hotMotion": 0.126,
+  "coverage": 0.0953,
+  "score": 0.2892
+ },
+ {
+  "file": "raw/fake-os-loaders--media.tenor.com_Fhp4XyZzAWYAAAA1_pc2-happy.webp.webp",
+  "seed": "fake-os-loaders",
+  "frames": 50,
+  "flatness": 0.33,
+  "ground": 0.351,
+  "hotMotion": 0.221,
+  "coverage": 0.2825,
+  "score": 0.2889
+ },
+ {
+  "file": "raw/akira-capsule--media.tenor.com_x2XXdMLovF0AAAAM_cym-cropped-yakuza-memes.gif.gif",
+  "seed": "akira-capsule",
+  "frames": 21,
+  "flatness": 0.309,
+  "ground": 0.763,
+  "hotMotion": 0.119,
+  "coverage": 0.154,
+  "score": 0.2863
+ },
+ {
+  "file": "raw/gits-optic--media.tenor.com_VF1njMisAREAAAA1_major-motoko.webp.webp",
+  "seed": "gits-optic",
+  "frames": 64,
+  "flatness": 0.258,
+  "ground": 0.339,
+  "hotMotion": 0.267,
+  "coverage": 0.2649,
+  "score": 0.2861
+ },
+ {
+  "file": "raw/rig--media.tenor.com_B4QIuSlRB70AAAAM_dead-space-isaac-clarke.gif.gif",
+  "seed": "rig",
+  "frames": 12,
+  "flatness": 0.312,
+  "ground": 0.377,
+  "hotMotion": 0.251,
+  "coverage": 0.2654,
+  "score": 0.2853
+ },
+ {
+  "file": "raw/lumon--media.tenor.com_a5XhPdFDGYEAAAA1_helly-r-macrodata-refinement.webp.webp",
+  "seed": "lumon",
+  "frames": 80,
+  "flatness": 0.283,
+  "ground": 0.413,
+  "hotMotion": 0.178,
+  "coverage": 0.068,
+  "score": 0.285
+ },
+ {
+  "file": "raw/rig--media.tenor.com_ITRBPx5QvF8AAAAM_67.gif.gif",
+  "seed": "rig",
+  "frames": 44,
+  "flatness": 0.307,
+  "ground": 0.15,
+  "hotMotion": 0.122,
+  "coverage": 0.7223,
+  "score": 0.2819
+ },
+ {
+  "file": "raw/lumon--media.tenor.com_y5JfzkXUNNEAAAAM_stare-down-severance.gif.gif",
+  "seed": "lumon",
+  "frames": 41,
+  "flatness": 0.367,
+  "ground": 0.665,
+  "hotMotion": 0.116,
+  "coverage": 0.0147,
+  "score": 0.2732
+ },
+ {
+  "file": "raw/lumon--media.tenor.com_Uf4j5d7ceokAAAAM_ms-casey-severance.gif.gif",
+  "seed": "lumon",
+  "frames": 36,
+  "flatness": 0.266,
+  "ground": 0.475,
+  "hotMotion": 0.118,
+  "coverage": 0.0937,
+  "score": 0.2728
+ },
+ {
+  "file": "raw/rig--media.tenor.com_B4QIuSlRB70AAAA1_dead-space-isaac-clarke.webp.webp",
+  "seed": "rig",
+  "frames": 24,
+  "flatness": 0.295,
+  "ground": 0.378,
+  "hotMotion": 0.261,
+  "coverage": 0.284,
+  "score": 0.2712
+ },
+ {
+  "file": "raw/lumon--media.tenor.com_Uf4j5d7ceokAAAA1_ms-casey-severance.webp.webp",
+  "seed": "lumon",
+  "frames": 59,
+  "flatness": 0.265,
+  "ground": 0.475,
+  "hotMotion": 0.11,
+  "coverage": 0.0945,
+  "score": 0.2708
+ },
+ {
+  "file": "raw/star-citizen--media.tenor.com_4yMcUi0V7QwAAAA1_theastropub-paul-shelley.webp.webp",
+  "seed": "star-citizen",
+  "frames": 49,
+  "flatness": 0.274,
+  "ground": 0.282,
+  "hotMotion": 0.116,
+  "coverage": 0.2882,
+  "score": 0.2702
+ },
+ {
+  "file": "raw/tron-grid--media.tenor.com_wea_Tz9mf08AAAA1_omori-neutral.webp.webp",
+  "seed": "tron-grid",
+  "frames": 23,
+  "flatness": 0.273,
+  "ground": 0.598,
+  "hotMotion": 0.039,
+  "coverage": 0.1246,
+  "score": 0.2666
+ },
+ {
+  "file": "raw/lumon--media.tenor.com_y5JfzkXUNNEAAAA1_stare-down-severance.webp.webp",
+  "seed": "lumon",
+  "frames": 68,
+  "flatness": 0.337,
+  "ground": 0.664,
+  "hotMotion": 0.119,
+  "coverage": 0.022,
+  "score": 0.2656
+ },
+ {
+  "file": "raw/magi--media.tenor.com_ApvAP_wB5rkAAAAM_i-puk-your-system.gif.gif",
+  "seed": "magi",
+  "frames": 29,
+  "flatness": 0.324,
+  "ground": 0.179,
+  "hotMotion": 0.067,
+  "coverage": 0.552,
+  "score": 0.2611
+ },
+ {
+  "file": "raw/magi--FBCQAAAAM_digitalisasi-sistem-penjualan-tiket-asdp-terus-berlanjut.gif",
+  "seed": "magi",
+  "frames": 33,
+  "flatness": 0.29,
+  "ground": 0.195,
+  "hotMotion": 0.129,
+  "coverage": 0.4113,
+  "score": 0.2597
+ },
+ {
+  "file": "raw/rig--media.tenor.com_CnhZ8L8cSfMAAAAM_psychopathtale-rapper-route.gif.gif",
+  "seed": "rig",
+  "frames": 8,
+  "flatness": 0.335,
+  "ground": 0.427,
+  "hotMotion": 0.031,
+  "coverage": 0.0437,
+  "score": 0.2536
+ },
+ {
+  "file": "raw/magi--media.tenor.com_ApvAP_wB5rkAAAA1_i-puk-your-system.webp.webp",
+  "seed": "magi",
+  "frames": 75,
+  "flatness": 0.289,
+  "ground": 0.179,
+  "hotMotion": 0.08,
+  "coverage": 0.5094,
+  "score": 0.2504
+ },
+ {
+  "file": "raw/akira-capsule--media.tenor.com_dg_oP4OGPWcAAAAm_diwali-dhamaka-kalia.webp.webp",
+  "seed": "akira-capsule",
+  "frames": 20,
+  "flatness": 0.309,
+  "ground": 0.688,
+  "hotMotion": 0.103,
+  "coverage": 0.218,
+  "score": 0.2504
+ },
+ {
+  "file": "raw/tron-grid--media.tenor.com_wea_Tz9mf08AAAAM_omori-neutral.gif.gif",
+  "seed": "tron-grid",
+  "frames": 60,
+  "flatness": 0.28,
+  "ground": 0.593,
+  "hotMotion": 0.036,
+  "coverage": 0.1736,
+  "score": 0.2442
+ },
+ {
+  "file": "raw/rig--media.tenor.com_CnhZ8L8cSfMAAAA1_psychopathtale-rapper-route.webp.webp",
+  "seed": "rig",
+  "frames": 9,
+  "flatness": 0.302,
+  "ground": 0.433,
+  "hotMotion": 0.035,
+  "coverage": 0.0472,
+  "score": 0.2431
+ },
+ {
+  "file": "raw/magi--media.tenor.com_DsOG5u4CNHkAAAAM_fudo-fudopop.gif.gif",
+  "seed": "magi",
+  "frames": 34,
+  "flatness": 0.274,
+  "ground": 0.378,
+  "hotMotion": 0.251,
+  "coverage": 0.3378,
+  "score": 0.2334
+ },
+ {
+  "file": "raw/magi--media.tenor.com__H_NA61lRr0AAAAM_caps-evangelion.gif.gif",
+  "seed": "magi",
+  "frames": 17,
+  "flatness": 0.304,
+  "ground": 0.302,
+  "hotMotion": 0.193,
+  "coverage": 0.4805,
+  "score": 0.226
+ },
+ {
+  "file": "raw/magi--media.tenor.com_ol-TQF31vxQAAAA1_mari-makinami-illustrious-mari.webp",
+  "seed": "magi",
+  "frames": 168,
+  "flatness": 0.235,
+  "ground": 0.272,
+  "hotMotion": 0.185,
+  "coverage": 0.6366,
+  "score": 0.2107
+ },
+ {
+  "file": "raw/magi--media.tenor.com__H_NA61lRr0AAAA1_caps-evangelion.webp.webp",
+  "seed": "magi",
+  "frames": 19,
+  "flatness": 0.273,
+  "ground": 0.308,
+  "hotMotion": 0.185,
+  "coverage": 0.4936,
+  "score": 0.2088
+ },
+ {
+  "file": "raw/magi--media.tenor.com_DsOG5u4CNHkAAAA1_fudo-fudopop.webp.webp",
+  "seed": "magi",
+  "frames": 28,
+  "flatness": 0.257,
+  "ground": 0.336,
+  "hotMotion": 0.248,
+  "coverage": 0.4122,
+  "score": 0.2087
+ },
+ {
+  "file": "raw/insertion-sync--media.tenor.com_5y8cpd3mdaMAAAAM_champion-black-belter.gif.gif",
+  "seed": "insertion-sync",
+  "frames": 37,
+  "flatness": 0.279,
+  "ground": 0.351,
+  "hotMotion": 0.223,
+  "coverage": 0.7689,
+  "score": 0.2002
+ },
+ {
+  "file": "raw/spinner-console--blob.gifcities.org_gifcities_22KXMYNKZDP2YB3T6HJ6HUINWV76WGZ6.gif",
+  "seed": "spinner-console",
+  "frames": 6,
+  "flatness": 0.345,
+  "ground": 0.374,
+  "hotMotion": 0.158,
+  "coverage": 0.424,
+  "score": 0.1994
+ },
+ {
+  "file": "raw/insertion-sync--media.tenor.com_5y8cpd3mdaMAAAA1_champion-black-belter.webp.webp",
+  "seed": "insertion-sync",
+  "frames": 58,
+  "flatness": 0.262,
+  "ground": 0.353,
+  "hotMotion": 0.24,
+  "coverage": 0.7529,
+  "score": 0.1967
+ },
+ {
+  "file": "raw/insertion-sync--media.tenor.com_VHHSBFU2EM8AAAA1_dexters-laboratory.webp.webp",
+  "seed": "insertion-sync",
+  "frames": 10,
+  "flatness": 0.25,
+  "ground": 0.535,
+  "hotMotion": 0.215,
+  "coverage": 0.342,
+  "score": 0.1927
+ },
+ {
+  "file": "raw/tron-disc--blob.gifcities.org_gifcities_2OLGWGF5BUXAOXTGVA6VZ5LKESABHTRE.gif",
+  "seed": "tron-disc",
+  "frames": 13,
+  "flatness": 0.307,
+  "ground": 0.507,
+  "hotMotion": 0.27,
+  "coverage": 0.9913,
+  "score": 0.1903
+ },
+ {
+  "file": "raw/gits-optic--media.tenor.com_YmizP6ZPRKwAAAAM_ghost-cod.gif.gif",
+  "seed": "gits-optic",
+  "frames": 49,
+  "flatness": 0.286,
+  "ground": 0.62,
+  "hotMotion": 0.073,
+  "coverage": 0.3219,
+  "score": 0.1817
+ },
+ {
+  "file": "raw/magi--blob.gifcities.org_gifcities_2FM6VXCLFGFDW7K25O6LQ66KP77TIXST.gif",
+  "seed": "magi",
+  "frames": 6,
+  "flatness": 0.363,
+  "ground": 0.587,
+  "hotMotion": 0.134,
+  "coverage": 0.5942,
+  "score": 0.1787
+ },
+ {
+  "file": "raw/lumon--media.tenor.com_NM3M3totYHEAAAAM_severance-running-white-hallway.gif.gif",
+  "seed": "lumon",
+  "frames": 29,
+  "flatness": 0.376,
+  "ground": 0.897,
+  "hotMotion": 0.085,
+  "coverage": 0.4067,
+  "score": 0.1783
+ },
+ {
+  "file": "raw/lumon--media.tenor.com_NM3M3totYHEAAAA1_severance-running-white-hallway.webp.webp",
+  "seed": "lumon",
+  "frames": 57,
+  "flatness": 0.363,
+  "ground": 0.898,
+  "hotMotion": 0.084,
+  "coverage": 0.4023,
+  "score": 0.175
+ },
+ {
+  "file": "raw/magi--m_zgU_x9IXmvkAAAAM_workforce-management-system-rfid-asset-tracking.gif",
+  "seed": "magi",
+  "frames": 4,
+  "flatness": 0.375,
+  "ground": 0.898,
+  "hotMotion": 0.083,
+  "coverage": 0.7079,
+  "score": 0.1708
+ },
+ {
+  "file": "raw/gits-optic--media.tenor.com_YmizP6ZPRKwAAAA1_ghost-cod.webp.webp",
+  "seed": "gits-optic",
+  "frames": 70,
+  "flatness": 0.265,
+  "ground": 0.623,
+  "hotMotion": 0.072,
+  "coverage": 0.3331,
+  "score": 0.1675
+ },
+ {
+  "file": "raw/magi--blob.gifcities.org_gifcities_26YQQTNGQ54IDCE2MOICCWNYRHSMVGNA.gif",
+  "seed": "magi",
+  "frames": 5,
+  "flatness": 0.295,
+  "ground": 0.769,
+  "hotMotion": 0.189,
+  "coverage": 0.9149,
+  "score": 0.1653
+ },
+ {
+  "file": "raw/cyberpunk-hud--media.tenor.com_cI-VsnLASjUAAAAM_erik-swgoh.gif.gif",
+  "seed": "cyberpunk-hud",
+  "frames": 101,
+  "flatness": 0.282,
+  "ground": 0.364,
+  "hotMotion": 0.014,
+  "coverage": 0.3818,
+  "score": 0.1621
+ },
+ {
+  "file": "raw/magi--blob.gifcities.org_gifcities_27GU5PX4IGJ5RNWFQJTH5H3ZLCIORWPF.gif",
+  "seed": "magi",
+  "frames": 21,
+  "flatness": 0.308,
+  "ground": 0.412,
+  "hotMotion": 0.131,
+  "coverage": 0.5048,
+  "score": 0.1598
+ },
+ {
+  "file": "raw/insertion-sync--media.tenor.com_H2iWMCqaaBsAAAAM_sync-done.gif.gif",
+  "seed": "insertion-sync",
+  "frames": 78,
+  "flatness": 0.302,
+  "ground": 0.408,
+  "hotMotion": 0.103,
+  "coverage": 0.4597,
+  "score": 0.1523
+ },
+ {
+  "file": "raw/insertion-sync--media.tenor.com_OqdnW132Vu0AAAAM_jack-stauber-pull-the-plug.gif.gif",
+  "seed": "insertion-sync",
+  "frames": 100,
+  "flatness": 0.288,
+  "ground": 0.436,
+  "hotMotion": 0.114,
+  "coverage": 0.7113,
+  "score": 0.1437
+ },
+ {
+  "file": "raw/insertion-sync--media.tenor.com_OqdnW132Vu0AAAA1_jack-stauber-pull-the-plug.webp.webp",
+  "seed": "insertion-sync",
+  "frames": 140,
+  "flatness": 0.267,
+  "ground": 0.44,
+  "hotMotion": 0.136,
+  "coverage": 0.7,
+  "score": 0.1408
+ },
+ {
+  "file": "raw/tron-grid--media.tenor.com_yLPMiKOnm08AAAAM_stopiee-bike-trick.gif.gif",
+  "seed": "tron-grid",
+  "frames": 35,
+  "flatness": 0.318,
+  "ground": 0.418,
+  "hotMotion": 0.044,
+  "coverage": 0.5359,
+  "score": 0.1392
+ },
+ {
+  "file": "raw/insertion-sync--media.tenor.com_H2iWMCqaaBsAAAA1_sync-done.webp.webp",
+  "seed": "insertion-sync",
+  "frames": 111,
+  "flatness": 0.259,
+  "ground": 0.44,
+  "hotMotion": 0.104,
+  "coverage": 0.4599,
+  "score": 0.1296
+ },
+ {
+  "file": "raw/tron-grid--media.tenor.com_yLPMiKOnm08AAAA1_stopiee-bike-trick.webp.webp",
+  "seed": "tron-grid",
+  "frames": 85,
+  "flatness": 0.288,
+  "ground": 0.471,
+  "hotMotion": 0.053,
+  "coverage": 0.5379,
+  "score": 0.1285
+ },
+ {
+  "file": "raw/cyberpunk-hud--media.tenor.com_cI-VsnLASjUAAAA1_erik-swgoh.webp.webp",
+  "seed": "cyberpunk-hud",
+  "frames": 101,
+  "flatness": 0.247,
+  "ground": 0.372,
+  "hotMotion": 0.011,
+  "coverage": 0.4838,
+  "score": 0.1244
+ },
+ {
+  "file": "raw/generic-hud--media.tenor.com_pCADhAyoF64AAAAM_trash-garbage.gif.gif",
+  "seed": "generic-hud",
+  "frames": 21,
+  "flatness": 0.26,
+  "ground": 0.605,
+  "hotMotion": 0.077,
+  "coverage": 0.5073,
+  "score": 0.1233
+ },
+ {
+  "file": "raw/generic-hud--media.tenor.com_pCADhAyoF64AAAA1_trash-garbage.webp.webp",
+  "seed": "generic-hud",
+  "frames": 46,
+  "flatness": 0.247,
+  "ground": 0.602,
+  "hotMotion": 0.082,
+  "coverage": 0.5172,
+  "score": 0.1193
+ }
+]
