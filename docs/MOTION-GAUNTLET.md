@@ -161,3 +161,15 @@ scope, we draw frames of data, not pixels.
   gates correctly never animated. The 406px sheet hides a 20px stroke:
   glyph-level claims are decided on raw frames. PASS, with the rule now
   proven twice.
+
+### final sweep tranche -- all PASS as drawn
+bypass draws its red arc source-to-opt-in like the act itself. sync
+inserts new channels into the stack, failed drives staying hatched.
+tri-vision fills hex by hex through the lens; strands links arc by arc
+with the unmeasured strand dashed. glass lets passing fields extend and
+stops blocked ones dashed against the wall, sightline arrow last. burn
+accumulates holes across the frame to the stated percentage. dispatch
+fills manifests node by node; individuation and stock-flow boot their
+ledgers line by line. The 35 live components are now all frame-judged:
+four were fixed (radar, mfd, lanes, the shared cascade rule) and the
+rest pass as drawn.
