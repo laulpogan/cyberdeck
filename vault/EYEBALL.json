@@ -135,6 +135,13 @@
   "sheetNote": "The /tmp path names the strip set the eyes were on at the time of the mark; sheets are regenerated artifacts and are not in git. Re-run `python3 vault/eyeball.py SEED=<seed>` to reproduce the strip for this file.",
   "shows": "QUOTE FOR globe, weak: a rotating Earth repainted through a saturated rainbow palette on a 2.6s loop — rotation plus hue cycle, the same disc as the 8s Hologlobe file at a shorter period."
  },
+ "raw/hurricane-irma-radar-loop.gif": {
+  "contentVerified": true,
+  "eyeballedBy": "agent-eye(qwen/dot-backbone)",
+  "framesViewed": "8 frames sampled across the file's own timeline",
+  "sheet": "see OUT dir",
+  "shows": "NWS radar mosaic of the Southeast: a labelled plate with state outlines and a dBZ legend; the storm complex advances in discrete observation steps while the timestamp counts 19:00, 19:06, 19:12 UTC"
+ },
  "raw/insertion-sync--blob.gifcities.org_gifcities_24JLZWYQLJHG4W2VMUXRGCMI3NB5MWY4.gif": {
   "contentVerified": false,
   "eyeballedBy": "agent-eye(qwen/dot-backbone)",

@@ -112,7 +112,7 @@ const ROWS = FORBIDDEN_IDIOMS.length + PERMITTED_IDIOMS.length;
 // against vault/EYEBALL.json, MOVING_COUNT against the list vault/RANK.json ranks. The first
 // draft of this line said 131 from memory, and the test named 114 — which is what the ranking
 // actually contains.
-export const VERIFIED_COUNT = 16;
+export const VERIFIED_COUNT = 17;
 export const MOVING_COUNT = 114;
 export const VAULT_NOTE = `${MOVING_COUNT} moving reference files were ranked for how much of `
   + `the frame they move and how dark their ground is; ${VERIFIED_COUNT} of them survived an `

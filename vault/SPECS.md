@@ -134,6 +134,17 @@ judgement step and is meant to be disagreed with.
 - travel of the bright head: 0.449 of the frame crossed, 0.62 of the way along at half the duration — constant rate, not monotone (it comes back)
 - motion amplitude (max difference from frame zero): 27.48
 
+## `hurricane-irma-radar-loop.gif`
+
+- seed: `direct-clips`  ·  source: https://upload.wikimedia.org/wikipedia/commons/6/6e/Hurricane_Irma_radar_loop_across_Florida.webm
+- eye: NWS radar mosaic of the Southeast: a labelled plate with state outlines and a dBZ legend; the storm complex advances in discrete observation steps while the timestamp counts 19:00, 19:06, 19:12 UTC
+- measured: 25 frames over 4.17s, median delay 170.0ms, loop no return to frame zero
+- first change by cell (4x3, index = frame): `[1, 1, 1, 1, 1, 6, 1, 1, None, 1, 1, 1]`
+- cells that never move: 0 of 12
+- extent (area of one saturated ink): 0.25 of its final extent present at half the duration — front-loaded (ease-out)
+- travel of the bright head: 0.471 of the frame crossed, 0.92 of the way along at half the duration — back-loaded, not monotone (it comes back)
+- motion amplitude (max difference from frame zero): 36.03
+
 ## `motion-tracker--blob.gifcities.org_gifcities_25G2DJC3DOO6R72EAGURMGNK5YW7FRZC.gif`
 
 - seed: `motion-tracker`  ·  source: https://blob.gifcities.org/gifcities/25G2DJC3DOO6R72EAGURMGNK5YW7FRZC.gif

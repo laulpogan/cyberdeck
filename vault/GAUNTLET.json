@@ -250,6 +250,17 @@
         "route": "#/component/hardCut",
         "fieldIncludes": "changed"
       }
+    },
+    {
+      "id": "radar-loop-wraps-without-a-tween",
+      "reference": "hurricane-irma-radar-loop.gif",
+      "component": "radar",
+      "gap": "the loop returns toward its oldest step through a fade or an eased position reset, where the reference wraps in a jump",
+      "referenceFigure": "25 frames over 4.17s, median delay 170.0ms, loop no return to frame zero",
+      "assertKind": "a position trace at frame resolution across two periods, checked for a discontinuity at the wrap",
+      "observed": "not asserted; the row is recorded so the reference stays attached to the gap it came from",
+      "notHeld": "Catching an eased wrap needs the position trace sampled at frame resolution across two full periods and aligned to the wrap. The recorder that does this exists since hardCut was tested, and it taught the harder half of the lesson: a change window about 300ms long is missed entirely by anything sampling at human cadence. Wiring that recorder to a wrap rather than to a click is real work with its own sabotage, and a row written before the sabotage exists would certify the very crossfade it claims to watch for.",
+      "watch": "the needle or coverage mass easing back toward zero instead of stepping, or an opacity fade at the wrap"
     }
   ]
 }
