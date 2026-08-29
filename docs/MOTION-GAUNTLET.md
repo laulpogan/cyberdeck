@@ -93,3 +93,25 @@ deck now fills itself: values on the deck's count (A, then B), detail
 lines behind them, while each rule stays a trace of its own measured
 arrival. Re-shoot confirms the cascade -- pane B's number lands roughly
 a beat after A's, details land last.
+
+### lanes / oscillation / deviation -- cycle 1 -- judged against
+vault/ref/fui-diagnostics
+Lanes: the deck draws its runs and stops. Its model carries a measured
+freshness window, so the running lane's last tick now pulses on it --
+the phosphor saying "this run is still arriving". Waiting and finished
+lanes get no wrapper at all (a refusal may not wrap a mover).
+Oscillation and deviation: judged PASS as drawn. Oscillation's model
+says live but supplies no measured interval, and deviation has no live
+state at all -- an invented tempo would be the lie, not the stillness.
+Principle from the cycle: no tempo without a measurement.
+
+### esper / mfd / crush -- cycle 2 -- the shared cascade rule
+The ESPER dive flipped through its four enhancement frames in ~250ms --
+the stagger existed but read as one pop. Root cause was the span formula
+duplicated in counted() and traced(): the per-element step, tuned for
+walls of two hundred, collapses to a flicker at counts of two to four.
+One rule now governs every cascade: a readable beat floor for small
+counts, big counts still ride the step and compress at the ceiling. The
+dive materialises frame by frame, the MFD deck fills with a visible
+pause between panes, and the 216-cell fleet wall still admits its count
+inside about a second. 176/176.

@@ -81,6 +81,17 @@
   // Counting. Order is the payload's, not the DOM's guess at it, and the
   // whole reveal is capped so a wall of two hundred cells does not take
   // four seconds to admit it has two hundred cells.
+  // One cascade rule for everything that staggers (counts and traces).
+  // The step is tuned for walls of two hundred; a fleet console counts
+  // two or three of a thing, and a reveal over in fifty milliseconds is
+  // three elements appearing at once with extra machinery. The floor
+  // gives small counts a readable beat; big counts ride the step until
+  // the whole cascade would pass the ceiling, then compress -- a wall of
+  // two hundred cells still admits it has two hundred cells in a second.
+  function cascade(total) {
+    return Math.min(Math.max(T.step * total, T.enter * 1.6), T.enter * 3.2);
+  }
+
   function counted(el) {
     var index = parseInt(el.getAttribute('data-index'), 10) || 0;
     var total = parseInt(el.getAttribute('data-total'), 10) || 1;
@@ -90,7 +101,7 @@
     // is three elements appearing at once with extra machinery. The floor
     // makes small counts readable; the cap stops a wall of two hundred
     // cells taking four seconds to admit it has two hundred cells.
-    var span = Math.max(T.enter * 0.6, Math.min(T.step * total, T.enter * 2));
+    var span = cascade(total);
     play(el, { opacity: [0, 1] }, {
       duration: T.enter / 1000, easing: 'ease-out',
       delay: (span * (index / Math.max(total, 1))) / 1000,
@@ -280,7 +291,7 @@
       .test(el.tagName) ? [el] : el.querySelectorAll(SHAPES);
     var index = parseInt(el.getAttribute('data-index'), 10) || 0;
     var total = parseInt(el.getAttribute('data-total'), 10) || 1;
-    var span = Math.max(T.enter * 0.6, Math.min(T.step * total, T.enter * 2));
+    var span = cascade(total);
     var delay = (span * (index / Math.max(total, 1))) / 1000;
     for (var i = 0; i < paths.length; i++) {
       var path = paths[i];

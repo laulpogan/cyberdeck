@@ -86,9 +86,20 @@ export function river({ lanes, cite, width = 900, laneHeight = 66,
            + `x2="${px(events[i + 1].at).toFixed(1)}" y2="${y}"/>`;
     }).join('');
 
-    const marks = events.map((e, i) =>
-      `<g class="cd-riv-ev" data-kind="${shapeOf(e.kind)}"${attrs(count(i, events.length))}>`
-      + glyph(px(e.at).toFixed(1), y, e.kind) + '</g>').join('');
+    const marks = events.map((e, i) => {
+      const tick = `<g class="cd-riv-ev" data-kind="${shapeOf(e.kind)}"${attrs(count(i, events.length))}>`
+        + glyph(px(e.at).toFixed(1), y, e.kind) + '</g>';
+      // The live beam. A running lane's last tick pulses on the lane's
+      // own measured freshness window: the pulse is the phosphor saying
+      // "this run is still arriving." A finished, waiting or unwindowed
+      // lane gets no wrap at all -- a refusal may not become a wrapper
+      // around something that moves.
+      if (i === events.length - 1 && lane.state === 'running'
+        && Number(staleAfter) > 0) {
+        return `<g${attrs(traffic(staleAfter, 'live', { cite }))}>${tick}</g>`;
+      }
+      return tick;
+    }).join('');
 
     // The beam. It travels because the run happened; the stagger is the
     // order the lanes are read, so the deck fills top to bottom.
