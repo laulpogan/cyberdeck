@@ -1790,3 +1790,40 @@ gaps as open, and it was specific enough to send me off "fixing" two closed find
 next reader will see it, because every long-running session on this branch inherits the same hazard: a summary is a
 photograph of the work at compaction time, and the work moved. **Re-run the instrument, or read the bullet in the file —
 the file carries the corrections, the recollection carries the drift.**
+
+## Going to ask whether `queueState` needed a row, and finding a false all-clear instead
+
+The last two named demands without gauntlet rows were `queueState` (Solari: *a change arrives by FLIP; only the cells
+whose value changed move*) and `killmail` (barcode: *a charge record arrives already priced*). Neither can hold a row.
+`killmail`'s claim is already asserted where it is checkable — `test/agents.test.mjs` renders a priced receipt and an
+unpriced one and compares their marks — and `queueState` carries **no marks at all**: it is a static plate, so a row would
+be a filmstrip of nothing moving, which is `mfd` in a new costume. Solari informs its *vocabulary*, not its motion. Both
+recorded rather than built.
+
+Reading `queueState` to write that down found the defect. Its headline is chosen by `counted`, which is the test *"did
+anybody reach the board"* — not *"did a count arrive, and what is it"*. So:
+
+```
+queueState({ sourceState: 'live', openCount: 3 })   →  NO REQUEST NEEDS AN OPERATOR   over   OPEN 3
+queueState({ sourceState: 'live' })                 →  NO REQUEST NEEDS AN OPERATOR   over   OPEN 0
+```
+
+A queue plate whose headline denies the number printed underneath it, and a zero made out of absence, in the one sentence
+the plate exists to get right. Nothing caught it because nothing rendered it: the showcase fixture is the measured-empty
+story, the two tests drew measured-empty and unreached, and so the lying path had no caller anywhere in the repository —
+the live-caller-gate failure mode, inside the library. The evidence for that is the fix itself: three faces changed their
+printed words and **zero existing tests failed**.
+
+The fix separates the two claims into three empties. Only a measured empty board gets the all-clear; a board holding work
+prints `3 REQUESTS WAITING` / `1 REQUEST WAITING` beside its own number; a board that was read but never counted prints
+`REQUEST COUNT UNMEASURED`, `BOARD READ · NO ALL-CLEAR IS CLAIMED`, hatching where the numeral would be, and declares a
+`still` refusal; the unreached board keeps its words. My first version dashed the frame of anything that was not an
+all-clear, which would have put a *measured* board holding three inside the unmeasured frame — trading one lie for
+another, caught by the library's own grammar rather than by taste.
+
+Three guards, each proven against its own half of the bug: the wording test goes red when `clear` is chosen by `counted`
+again (*"did not match /3 REQUESTS WAITING/"*), and the count-missing test goes red when `hasCount` collapses back into
+`counted` (*"a zero with no count behind it is not a measurement"*). `state-legibility` now holds all four faces apart —
+clear, holding, uncounted, unreached are the four answers that change what an operator does next, and none of them may
+live in hue. `npm test` **315**, gate 5 passes on the telegraph family with `lying=0`, full sweep **261 clean**, both
+sabotages restored with `git diff` showing only the intended change.

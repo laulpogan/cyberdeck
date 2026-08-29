@@ -341,30 +341,52 @@ export function tape({ items, sourceState, cite = 'items[].wait.seconds' }) {
     { note: 'Ranked by the order it will hurt, not by arrival.' });
 }
 
-/** The queue's own state -- and the difference between two empties.
+/** The queue's own state -- and the difference between three empties.
  *
- * A board that was measured and holds nothing, and a board nobody could
- * reach, render identical markup unless one of them says so. Only the
- * first is an all-clear. The second draws the producer, the last contact,
- * and the next step, and claims nothing. */
+ * A board that was measured and holds nothing, a board that was reached but whose count never
+ * arrived, and a board nobody could reach, render identical markup unless each of them says so.
+ * Only the first is an all-clear. The second prints no numeral either: a zero with no count behind
+ * it is a number made out of absence, in the one sentence a queue plate exists to get right. The
+ * third draws the producer, the last contact, and the next step, and claims nothing. */
 export function queueState({ sourceState, openCount = null,
                              producer = null, age = null }) {
   const counted = ['live', 'measured_empty', 'stale'].includes(sourceState);
+  // Two claims, which the first version of this line confused. `counted` says the board was
+  // REACHED; that is not the same as a count having arrived. The headline used to be chosen by
+  // `counted`, so `queueState({ sourceState: 'live', openCount: 3 })` printed
+  // `NO REQUEST NEEDS AN OPERATOR` directly above `OPEN 3` — the sentence on the plate denying the
+  // number underneath it — and `sourceState: 'live'` with no count printed an all-clear over a 0
+  // nobody measured. Neither face had a caller: the showcase fixture draws the measured-empty story
+  // and the tests drew that face plus the unreached one, so the path where the lie lived was never
+  // rendered by anything. A path nobody renders is a rumour, and this one lied about the only thing
+  // a queue plate exists to say.
+  const hasCount = counted && openCount != null && openCount !== '';
+  const waiting = hasCount ? Math.max(0, Number(openCount) || 0) : null;
+  const clear = hasCount && waiting === 0;
   const g = [];
-  g.push(rect(PAD, 24, SPAN, 60, { dashed: !counted, width: counted ? 1 : 1.5 }));
+  // Dashed is this library's grammar for "not measured", so it belongs to the two faces with no
+  // count, and to nothing else: a board that was read and holds three requests is a measured board
+  // and must not wear the unmeasured frame.
+  g.push(rect(PAD, 24, SPAN, 60, { dashed: !hasCount, width: hasCount ? 1 : 1.5 }));
   g.push(text(W / 2, 52,
-    counted ? 'NO REQUEST NEEDS AN OPERATOR' : 'REQUEST QUEUE UNMEASURED',
+    !counted ? 'REQUEST QUEUE UNMEASURED'
+      : !hasCount ? 'REQUEST COUNT UNMEASURED'
+        : clear ? 'NO REQUEST NEEDS AN OPERATOR'
+          : `${waiting} REQUEST${waiting === 1 ? '' : 'S'} WAITING`,
     { size: 10, anchor: 'middle' }));
   g.push(text(W / 2, 68,
-    counted ? 'the board was measured and nothing is waiting'
-            : `SOURCE ${String(sourceState).toUpperCase()} · NO ALL-CLEAR IS CLAIMED`,
+    !counted ? `SOURCE ${String(sourceState).toUpperCase()} \u00b7 NO ALL-CLEAR IS CLAIMED`
+      : !hasCount ? 'BOARD READ \u00b7 NO ALL-CLEAR IS CLAIMED'
+        : clear ? 'the board was measured and nothing is waiting'
+          : 'measured; these are waiting on an operator',
     { size: 7, anchor: 'middle', opacity: '.7' }));
-  if (counted) {
+  if (hasCount) {
     g.push(text(PAD, 112, 'OPEN', { size: 7, opacity: '.7' }));
-    g.push(text(PAD, 128, String(openCount ?? 0), { size: 16 }));
+    g.push(text(PAD, 128, String(waiting), { size: 16 }));
   } else {
-    // Not one numeral. The producer was unreachable, so there is nothing
-    // to count and no zero to print.
+    // Not one numeral, in either of the two ways a queue can be unknown. The hatching is the same
+    // ink as the unreached face because the reader's question — "how many?" — has the same answer
+    // either way: none was supplied. The producer line differs, which is what separates them.
     g.push(text(PAD, 112, 'OPEN', { size: 7, opacity: '.7' }));
     g.push(hatched(PAD, 118, 74, 18));
     g.push(text(PAD + 37, 131, 'UNCOUNTED', { size: 7, anchor: 'middle' }));
@@ -373,11 +395,19 @@ export function queueState({ sourceState, openCount = null,
     g.push(text(PAD, 184, `LAST CONTACT ${age || 'UNMEASURED'}`,
       { size: 7, opacity: '.7' }));
   }
-  return card('queue', 'The queue, and its two empties',
+  return card('queue', 'The queue, and the claims it may make',
     frame(W, H, g.join(''), {
-      label: counted ? 'A measured board holding nothing.'
-                     : 'A board nobody could reach, claiming nothing.' }),
-    counted
-      ? { note: 'Measured empty is an all-clear. It is allowed to say so.' }
-      : { mark: refusal('the board was never reached, so no all-clear is claimed') });
+      label: !counted ? 'A board nobody could reach, claiming nothing.'
+        : !hasCount ? 'A board that was read, whose count did not arrive.'
+          : clear ? 'A measured board holding nothing.'
+            : `A measured board holding ${waiting}.` }),
+    !counted
+      ? { mark: refusal('the board was never reached, so no all-clear is claimed') }
+      : !hasCount
+        ? { mark: refusal('the board was read and its count did not arrive') }
+        : { note: clear
+          ? 'Measured empty is an all-clear. It is allowed to say so.'
+          : 'A board with work on it is measured in the same voice, and says what is waiting.' }
+    );
+
 }

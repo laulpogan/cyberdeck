@@ -224,12 +224,14 @@ export const FAMILY_TABLES = [
           + '01 because it IS first. The shutter is `intent`: the operator caused it.',
       }),
       entry(telegraph, TELEGRAPH_FIXTURES, 'queueState', {
-        title: 'The queue, and its two empties',
+        title: 'The queue, and the claims it may make',
         producer: 'notifications.summary · source.state',
         refusal: 'The board was never reached, so no all-clear is claimed.',
-        note: 'A measured empty board is an all-clear and says so. A board nobody could '
-          + 'reach prints no numeral at all, names the producer and the last contact, '
-          + 'and claims nothing.',
+        note: 'A measured empty board is an all-clear and says so, and a board holding work names '
+          + 'the count beside the sentence about it. A board that was read but never counted, and a '
+          + 'board nobody could reach, print no numeral at all, name the producer and the last '
+          + 'contact, and claim nothing — because a zero with no count behind it is the most '
+          + 'dangerous number a queue can show.',
       }),
     ],
   },

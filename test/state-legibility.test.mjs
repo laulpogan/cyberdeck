@@ -16,7 +16,7 @@ import assert from 'node:assert/strict';
 
 import { keycard } from '../src/components/decision.js';
 import { syncRatio } from '../src/components/thread.js';
-import { twoState } from '../src/components/telegraph.js';
+import { twoState, queueState } from '../src/components/telegraph.js';
 import { dispatch } from '../src/components/agents.js';
 import { needleField } from '../src/components/field.js';
 import { river } from '../src/components/river.js';
@@ -70,6 +70,22 @@ function assertLegible (label, states, { expectWords = false } = {}) {
     }
   }
 }
+
+test('queueState: three ways to be empty, and only one of them is an all-clear', () => {
+  // The faces the old build could not tell apart in words — an all-clear, a queue holding three, a
+  // count that never arrived, a board nobody reached — are the states a colour-blind operator must
+  // be able to read at a glance, because "clear" and "unknown" are the two answers that change what
+  // the operator does next.
+  const faces = new Map([
+    ['holding work', queueState({ sourceState: 'live', openCount: 3 })],
+    ['measured empty', queueState({ sourceState: 'measured_empty', openCount: 0 })],
+    ['read, uncounted', queueState({ sourceState: 'live', producer: 'dispatcher', age: '12s' })],
+    ['unreached', queueState({ sourceState: 'unavailable', producer: 'dispatcher', age: '4M AGO' })],
+  ]);
+  const states = new Map([...faces].map(([state, html]) => [state,
+    { form: formOf(html), words: wordsOf(html), all: html }]));
+  assertLegible('queueState', states, { expectWords: true });
+});
 
 test('keycard: open, shut and not-reached differ in the drawing itself', () => {
   const states = statesIn(keycard({ doors: [

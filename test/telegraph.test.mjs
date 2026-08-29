@@ -173,6 +173,44 @@ test('a measured empty board is allowed to say all clear', () => {
   assert.doesNotMatch(html, /data-motion="still"/);
 });
 
+test('a board holding work says work is waiting, beside its own number', () => {
+  // The headline used to be chosen by `counted` rather than by the count, so this render printed
+  // NO REQUEST NEEDS AN OPERATOR above OPEN 3. Nothing in the repository drew a non-empty queue —
+  // not the showcase fixture, not one test — which is how a false all-clear survived for as long
+  // as it did: a path nobody renders is a rumour, and this one lied about the queue's own state.
+  const three = t.queueState({ sourceState: 'live', openCount: 3 });
+  assert.match(three, /3 REQUESTS WAITING/);
+  assert.doesNotMatch(three, /NO REQUEST NEEDS AN OPERATOR/);
+  assert.match(three, /A measured board holding 3\./);
+  // Dashed is the library's grammar for "not measured". A board that was read and holds three is a
+  // measured board, and putting it in the unmeasured frame would trade one lie for another.
+  assert.doesNotMatch(three, /<rect[^>]*dasharray/,
+    'a measured queue may not wear the unmeasured frame');
+
+  const one = t.queueState({ sourceState: 'stale', openCount: 1 });
+  assert.match(one, /\b1 REQUEST WAITING/);
+  assert.doesNotMatch(one, /1 REQUESTS/, 'one request is not requests');
+
+  // The fix must not cost the all-clear to the board that earned it.
+  assert.match(t.queueState({ sourceState: 'measured_empty', openCount: 0 }),
+    /NO REQUEST NEEDS AN OPERATOR/);
+});
+
+test('a board that was read but never counted prints no zero and claims no all-clear', () => {
+  // `sourceState: 'live'` says somebody reached the board. It does not say a count arrived, and the
+  // old code answered the second question with the first: `OPEN 0` under an all-clear, a number made
+  // out of absence, which is the most dangerous zero on the page (the same rule `bypass` cites).
+  const html = t.queueState({ sourceState: 'live', producer: 'dispatcher', age: '12s' });
+  assert.match(html, /REQUEST COUNT UNMEASURED/);
+  assert.match(html, /BOARD READ · NO ALL-CLEAR IS CLAIMED/);
+  assert.match(html, /UNCOUNTED/);
+  assert.match(html, /<rect[^>]*dasharray/, 'an uncounted board wears the unmeasured frame');
+  assert.doesNotMatch(html, /NO REQUEST NEEDS AN OPERATOR/);
+  assert.doesNotMatch(html, /<text[^>]*>0<\/text>/,
+    'a zero with no count behind it is not a measurement');
+  still(html, 'the board was read and its count did not arrive');
+});
+
 test('an unreached board claims no all-clear and prints no zero', () => {
   // The two empties render identical markup unless one of them says so.
   const html = t.queueState({ sourceState: 'unavailable',
