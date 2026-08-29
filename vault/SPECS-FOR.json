@@ -100,5 +100,13 @@
       "muthur"
     ],
     "reading": "A frequency sweep: oscillation rate climbs monotonically and the amplitude ramps in, with no interface furniture anywhere in the file. It is honest to use it only for what it shows — a rate that changes because a measured frequency changes, and an attack that arrives over a fraction of the window rather than all of it. It cannot license anything about frames, labels or readouts, because it has none. Recorded here so the next reader does not mistake a plot of a signal for an interface."
+  },
+  "solari-departure-flap.gif": {
+    "for": [
+      "dispatch",
+      "hardCut",
+      "queueState"
+    ],
+    "reading": "The dispatch board is the dispatch queue, built in 1960s electromechanics, and it settles three arguments this library keeps having. (1) A change arrives by FLIP, never by fade: a character is one of a fixed set of faces and there is no in-between state to render, which is what `hardCut` is for and what an eased reveal on a value change is not. (2) Only the cells whose value changed move — the destination labels and column heads are ink, not animation, so movement reports and everything else rests. (3) Absence is a CHARACTER: a blank flap occupies the cell, holds its position and takes the same time to arrive as a digit, rather than deleting the field and letting the row shrink. And note the two inks for two mechanisms: the clock is red seven-segment, the board is white on black flaps — nothing about a difference is carried by hue alone here, each ink belongs to a different physical claim. CAVEAT, recorded because it inflates any rate read from this file: the camera is handheld and the frame drifts, so `travel of the bright head` includes camera motion the board did not make."
   }
 }

@@ -330,6 +330,13 @@
   "sheet": "see OUT dir",
   "shows": "A screen recording of an audio editor, frame-filling: two named tracks (violin_pizz above, Piano below) with drawn waveforms, a time ruler across the top, and a playhead that travels left to right across the whole width while a selection block holds behind it. The violin track decays fast into a long low tail; the piano track holds longer then dies. Everything on screen is a measurement of sound — the shapes ARE the data — and the only motion is the playhead moving over it."
  },
+ "raw/solari-departure-flap.gif": {
+  "contentVerified": true,
+  "eyeballedBy": "agent-eye(qwen/dot-backbone)",
+  "framesViewed": "8 frames sampled across the file's own timeline",
+  "sheet": "see OUT dir",
+  "shows": "A Solari split-flap departure board, frame-filling, thirty-two frames of one update cycle. A header card reads To Hoboken; column heads DEPARTS and TRACK sit over five rows (S. CONC STOP, then Wesmont four times); a red seven-segment LED clock is a different mechanism in a different ink, upper left. Four rows of flaps CYCLE — mid-flip frames hold part-glyphs (W, 5, 5A, L, R, 4, 9, E) and by t=3s the values have settled to 12:54 5, 1:01 G, 1:25 G, 1:53 G, 2:01 G. Each cell flips on its own schedule and only the cells whose value changed move: the destination labels never stir. In the second row"
+ },
  "raw/spinner--media.tenor.com_5VlkKDNwp5sAAAA1_blade-runner-2049-mariette.webp.webp": {
   "contentVerified": false,
   "eyeballedBy": "agent-eye(qwen/dot-backbone)",

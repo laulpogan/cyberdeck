@@ -698,3 +698,24 @@ print "now is where this lane stopped", the falsest sentence a time chart can ma
 escape hatch either: it is the *decision* tape, a queue of waits, with no axis at all. The mark kind
 still does not exist; the row stays `notHeld` with this reason in it. Building the idiom means a
 component whose x is absolute time — which is a new drawing, not a new dialect.
+
+## The Commons search API throttles; the file resolver does not
+
+`vault/clip.mjs` derives from a **direct media URL**, and there are two ways to get one. The search
+API (`generator=search&gsrsearch=filetype:video …`) is the discovery route, and it eventually answers
+`You are making too many requests to the API` in plain text with no JSON — so a script that pipes that
+into `json.load` reports a parse error and looks like a code bug. Two rules:
+
+- **Never reconstruct a URL from a truncated print.** One run of this vault recorded a 137-byte 403
+  page as a candidate reference because the search output had cut the URL and the hash directory was
+  guessed. Take the whole field, or take nothing.
+- **Resolve a known filename instead of searching for it again**:
+  `curl -IL "https://commons.wikimedia.org/wiki/Special:FilePath/<File_name_with_underscores>"` and read
+  `url_effective`. That is the canonical resolver, it is not the search API, and it returns the exact
+  `upload.wikimedia.org/…` path — including the query the CDN attaches, which is fine to drop.
+
+Also new in the manifest: `cameraDrift: true` on `raw/solari-departure-flap.gif`. The Solari board is a
+superb dispatch reference and the camera was handheld, so `travel of the bright head` reads 0.163 when
+the board's own centroid travel is close to zero — a flap changes **in place**. Where a split-flap
+recorded from a moving camera measures travel, the travel is the cameraperson. Say so in the file
+record before somebody quotes the number.

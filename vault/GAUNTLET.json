@@ -219,6 +219,33 @@
       "heldAs": "model",
       "gap": "The audio editor's whole idiom is a marker crossing a strip that is ALREADY ink: the waveform, the ruler, the track labels and the selection block hold still and one hairline travels. `tape` has no such marker — it stamps `count`, `elapsed`, `still` and one refusal, and nothing translates along its axis. The five mark kinds that exist cannot express it: `trace` reveals a shape, `count` reveals by index, `cycle` addresses a clock, `level` is an extent from an anchor. Building it means a kind that moves a marker along an axis, which is a library change, not a showcase change.",
       "notHeld": "Two facts, read out of the source rather than the name. `tape` is the DECISION tape -- a queue of waits with an `elapsed` clock on each row and no axis to cross, so there is no position for a marker to have. And the component that DOES draw time, `river`, scales every lane to its own first-and-last event (px(t) normalises by that lane's span), so there is no shared present anywhere in the drawing to put a line on; a now-line clamped to each lane's right edge would say 'now is where this lane stopped', which is the falsest sentence a time chart can make. The idiom needs a shared absolute axis, which the library does not draw."
+    },
+    {
+      "id": "dispatch-unchanged-rows-hold",
+      "component": "dispatch",
+      "reference": "solari-departure-flap.gif",
+      "referenceFigure": "measured: 32 frames over 4.01s, motion amplitude (max difference from frame zero): 15.82",
+      "heldAs": "model",
+      "gap": "On the Solari board only the cells whose value changed flip; the destination labels and the column heads never stir, so the movement is the report and everything else is ink. A dispatch panel that animates its own furniture on every refresh says 'everything changed' when one row did, so the furniture must hold still over a change.",
+      "assert": {
+        "kind": "furniture_still",
+        "furniture": [
+          ".cd-ag-link"
+        ],
+        "contacts": [
+          "[data-motion='count']"
+        ],
+        "tolerancePx": 0.75
+      }
+    },
+    {
+      "id": "hardcut-has-no-in-between-state",
+      "component": "hardCut",
+      "reference": "solari-departure-flap.gif",
+      "referenceFigure": "travel of the bright head: 0.163 of the frame crossed",
+      "heldAs": "model",
+      "gap": "A flap has a fixed set of faces and no in-between state to render: it goes from one character to the next, and the low measured centroid travel (0.163, most of it the handheld camera) is the number that says so — a change in place, not a change arriving across the screen. `hardCut` must therefore never be an eased crossfade of the old value into the new.",
+      "notHeld": "The gauntlet cannot express this yet. Asserting 'no in-between state' needs per-frame sampling of the GLYPH itself across the change — every intermediate frame must show either the old value or the new one, never a blend, a partial clip, or a tweened opacity — which means a recorder keyed to a value change rather than to animation clocks, since a crossfade is a single well-behaved Animation and reports itself as such. `no_residual_motion` proves it settles and `constant_rate` proves a rate; neither can see an intermediate value. The row stays notHeld rather than passing on an instrument that would report green either way."
     }
   ]
 }
