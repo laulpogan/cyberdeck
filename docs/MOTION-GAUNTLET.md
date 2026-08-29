@@ -229,3 +229,14 @@ carry glyph verdicts. city, lanes, killmail, magi all read designed on
 cream. crush, re-filmed under the shared cascade rule, now admits its
 216 cells in a visible wave with the impacts lighting as their cells
 arrive -- the wall counts itself off inside about 600ms. PASS.
+
+## Gauntlet status: complete
+52/52 components frame-judged in dark, light, and reduced; arrival reel
+(17 refusals proven still-by-design, clock accounted, radar control
+moving); live reel dark-on-feed-down in both themes; honesty bar zero
+wherever the camera looked; 176/176. Vault: 67 provenance-hashed
+reference stills + 16 steeped motion strips (game UI, ESPER dive, MAGI
+conclave, MU/TH/UR terminal, Dominator display, GIT-S net-dive HUD).
+Motion fixed by the sweep: radar trail+pings, mfd cascade, lanes live
+pulse, the shared cascade rule, the light-theme trail multiplier. All
+other movers passed as drawn under the vision audit.
