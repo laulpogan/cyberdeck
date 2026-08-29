@@ -13,7 +13,7 @@
 
 import { frame, rect, line, dot, text, hatched, staticField, axis } from '../draw.js';
 import { trace, count, level, still, attrs } from '../marks.js';
-import { card, esc, W, H } from './card.js';
+import { card, esc, W, H , refusalFrame } from './card.js';
 
 const PAD = 12;
 const SPAN = W - PAD * 2;
@@ -48,8 +48,19 @@ function corners(x, y, w, h, span = 7) {
  * worse than a dark one. */
 export function mfd({ panes }) {
   if (!panes || panes.length < 2) {
+    // The deck, unswitched. Two bezels and their labels, because the refusal is
+    // about a deck that cannot be a deck, and the reader should see the pair of
+    // instruments that is not there rather than a generic hole.
+    const emptyDeck = [
+      corners(PAD, 30, SPAN / 2 - 6, 108),
+      corners(PAD + SPAN / 2 + 6, 30, SPAN / 2 - 6, 108),
+      text(PAD + 4, 24, 'PANE A', { size: 6.5, opacity: '.5' }),
+      text(PAD + SPAN / 2 + 10, 24, 'PANE B', { size: 6.5, opacity: '.5' }),
+      text(PAD, 174, 'SWITCHED SEPARATELY', { size: 8, weight: '600', opacity: '.6' }),
+    ];
     return card('mfd', 'Twin MFD deck', '',
-      { mark: still('a twin deck needs two panes') });
+      { refusalWord: 'ONE PANE SHORT', ghost: emptyDeck,
+        mark: still('a twin deck needs two panes') });
   }
   const [a, b] = panes;
   const g = [];
@@ -264,7 +275,8 @@ export function hardCut({ changed = null, inFlight = null, attempt = null,
 export function muthur({ answers }) {
   if (!answers || !answers.length) {
     return card('muthur', 'MU/TH/UR query mode', '',
-      { mark: still('no question list is defined for this subject') });
+      { refusalWord: 'NO QUESTIONS DEFINED',
+    mark: still('no question list is defined for this subject') });
   }
   const answered = answers.filter((a) => a.answer != null).length;
   const rows = answers.map((row, i) => {
@@ -329,10 +341,9 @@ export function contextBurn({ percent = null, subject = null,
                               cite = 'telemetry.context_percent' }) {
   if (percent === null || percent === undefined) {
     return card('burn', 'Context-burn creep',
-      `<div class="cd-th-noburn"><b>CONTEXT UNMEASURED</b>
-        <span>No panel is drawn. A worker whose telemetry is absent, drawn
-        clean, reads as a fresh one.</span></div>`,
-      { mark: still('context was not measured') });
+      refusalFrame({ word: 'CONTEXT UNMEASURED' }),
+      { mark: still('context was not measured, and a worker whose telemetry is absent, '
+        + 'drawn clean, reads as a fresh one') });
   }
   const value = Number(percent);
   const top = 24, height = 132;

@@ -19,7 +19,7 @@
 
 import { frame, rect, line, dot, hexCell, text, hatched } from '../draw.js';
 import { trace, count, still, attrs } from '../marks.js';
-import { card, esc, W, H } from './card.js';
+import { card, esc, W, H , refusalFrame } from './card.js';
 
 const PAD = 12;
 const SPAN = W - PAD * 2;
@@ -140,7 +140,7 @@ export function admission({ offered = null, taken = null, status = null,
   if (offered === null || offered === undefined
       || taken === null || taken === undefined) {
     return card('admission', 'Cargo admission balance',
-      `<p class="cd-og-uncounted">${UNMEASURED} OFFERED · ${UNMEASURED} TAKEN</p>`,
+      refusalFrame({ word: `${UNMEASURED} OFFERED · ${UNMEASURED} TAKEN` }),
       { mark: still('one side of the balance was never counted') });
   }
   const cx = W / 2, beamY = 74, arm = 118;
@@ -358,7 +358,8 @@ export function atField({ scopes, writable = false,
                           cite = 'authority.evaluate' }) {
   if (!scopes || !scopes.length) {
     return card('at-field', 'AT-field write scope', '',
-      { mark: still('no reach was computed') });
+      { refusalWord: 'NO REACH COMPUTED',
+    mark: still('no reach was computed') });
   }
   const cx = W / 2, cy = 92;
   const g = [];

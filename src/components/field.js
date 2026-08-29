@@ -100,7 +100,8 @@ export function scaleCrush({ count: total, bleeding = [], cite = 'fleet.cells' }
     mark: (i) => attrs(count(i, total)) });
   if (!built) {
     return card('crush', 'Fleet-wall scale crush', '',
-      { mark: still('the board was never counted') });
+      { refusalWord: 'BOARD UNCOUNTED',
+    mark: still('the board was never counted') });
   }
   return card('crush', 'Fleet-wall scale crush',
     frame(built.width, built.height, built.body,
@@ -152,7 +153,8 @@ export function coverage({ contours, dark, endpoints = [], cite = 'coverage.obse
 export function chipBudget({ chips, ceiling, cite = 'hud.channel_budget' }) {
   if (!chips || !chips.length) {
     return card('chips', 'HUD chip budget', '',
-      { mark: still('no chip was inventoried') });
+      { refusalWord: 'NO INVENTORY',
+    mark: still('no chip was inventoried') });
   }
   const spent = chips.filter((c) => c.on).reduce((n, c) => n + (c.cost || 0), 0);
   const priced = chips.every((c) => typeof c.cost === 'number');

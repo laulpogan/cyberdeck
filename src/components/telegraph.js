@@ -175,7 +175,8 @@ export function ceremony({ stages, windowSeconds,
                            cite = 'ceremony.stages[].reached' }) {
   if (!stages || !stages.length) {
     return card('ceremony', 'Acceptance ceremony', '',
-      { mark: still('no ceremony is defined for this verb') });
+      { refusalWord: 'NO CEREMONY DEFINED',
+    mark: still('no ceremony is defined for this verb') });
   }
   const top = 56;
   const step = (SPAN - 28) / Math.max(stages.length - 1, 1);
@@ -266,7 +267,8 @@ export function twoState({ states, doNothing = null }) {
 export function tape({ items, sourceState, cite = 'items[].wait.seconds' }) {
   if (!items || !items.length) {
     return card('tape', 'The decision tape', '',
-      { mark: still('no decision is waiting on a person') });
+      { refusalWord: 'NOTHING PENDING',
+    mark: still('no decision is waiting on a person') });
   }
   const strips = items.map((item, i) => {
     const hot = algedonic(item);

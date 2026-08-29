@@ -558,6 +558,7 @@ export const NON_COMPONENTS = {
   esc: 'HTML escaping helper in card.js.',
   card: 'the deck wrapper every bounded specimen shares, not a specimen itself.',
   wrapped: 'SVG text wrapping helper; SVG text does not wrap.',
+  refusalFrame: 'the drawing a refusal keeps, drawn by card() when a body is empty over a still mark.',
   cadence: 'maps a measured wait to a tick interval in telegraph.js.',
   algedonic: 'predicate: whether a decision may not be snoozed.',
   evaluate: 'grades a verb against an environment into one of three authority states.',

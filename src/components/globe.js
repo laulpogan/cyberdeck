@@ -30,9 +30,19 @@ export function globe({ endpoints, cite, periodSeconds = null,
   const turn = traffic(periodSeconds, sourceState, { cite: 'source.refresh_ms' });
   const turning = turn['data-motion'] === 'traffic';
 
+  // A globe nobody has observed is still a globe, and it is the shape the refusal is about:
+  // printing only the sentence left a 15px hole where a world had been, which reads as
+  // "nothing to look at" rather than "nothing placed". The mesh stays, the pins are absent
+  // because they are readings, and the caption says which of the two it is.
   if (!endpoints || !endpoints.length) {
-    return `<figure class="cd-globe"${attrs(still('no endpoint was observed'))}>
-  <i class="cd-why">no endpoint was observed</i></figure>`;
+    const none = still('no endpoint was observed');
+    return `<figure class="cd-globe"${attrs(none)} data-source-state="${sourceState}"
+        style="--cd-globe-size:${size}px">
+  <canvas class="cd-globe-mesh" width="${size}" height="${size}" aria-hidden="true"></canvas>
+  <svg class="cd-globe-layer" viewBox="0 0 ${size} ${size}" role="img"
+       aria-label="no endpoint observed"></svg>
+  <figcaption>NO ENDPOINT OBSERVED — ${none['data-still-reason']}</figcaption>
+</figure>`;
   }
 
   // Endpoints are readings, so they are elements, not paint. They sit in

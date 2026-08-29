@@ -152,7 +152,8 @@ export const OSCILLATION_CANDIDATE = 3;
 export function esperDive({ levels }) {
   if (!levels || !levels.length) {
     return card('esper', 'ESPER evidence dive', '',
-      { mark: still('nothing was dived into') });
+      { refusalWord: 'NO DEPTH MEASURED',
+    mark: still('nothing was dived into') });
   }
   const gap = 12;
   const bw = (SPAN - gap * (levels.length - 1)) / levels.length;

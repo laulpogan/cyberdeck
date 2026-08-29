@@ -99,7 +99,8 @@ export function individuation({ profile, siblings,
                                 cite = 'telemetry.context_percent' }) {
   if (!siblings || !siblings.length) {
     return card('individuation', 'Tachikoma individuation', '',
-      { mark: still('no sibling was observed on this profile') });
+      { refusalWord: 'NO SIBLING OBSERVED',
+    mark: still('no sibling was observed on this profile') });
   }
   const burns = siblings.map((s) => s.context_percent)
     .filter((v) => v !== null && v !== undefined);
@@ -357,7 +358,8 @@ export function redaction({ workers }) {
 export function killmail({ receipt }) {
   if (!receipt) {
     return card('killmail', 'Killmail receipt', '',
-      { mark: still('no attempt was recorded as lost') });
+      { refusalWord: 'NO LOSS RECORDED',
+    mark: still('no attempt was recorded as lost') });
   }
   const fit = receipt.fit || {};
   const damage = receipt.damage || {};
