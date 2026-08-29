@@ -438,6 +438,27 @@ for (const route of routes) {
               + `(named here: ${allowed.join(', ') || 'nothing'})`);
           }
         }
+        // "A refusal keeps its space" has to be measured *against a refusal*. It was not:
+        // the only height floor in this file ran on the evidence-present page, where
+        // nothing is refused, and the sweep stayed green while twelve components answered
+        // "no measurement" by returning a card with an empty body -- frame and sentence
+        // left standing, drawing area gone. The globe fell from 445px to 15.
+        //
+        // The bar is 60% of the height the component held with its evidence, which is
+        // loose enough for a refusal that legitimately reflows its own words and tight
+        // enough that a drawing area cannot vanish: the collapses measured so far land at
+        // 14-20%, and refusals that draw their absence in place measure 100%.
+        if (off.heights && off.heights.length === before.specimens.length) {
+          const lost = before.specimens
+            .map((spec, i) => ({ label: spec.label, was: spec.h, now: off.heights[i] }))
+            .filter((pair) => pair.was > 40 && pair.now < pair.was * 0.6);
+          if (lost.length) {
+            bad.push(`${lost.length} specimen(s) lose their drawing when the evidence goes: `
+              + lost.slice(0, 6).map((pair) => `${pair.label} ${pair.was}px→${pair.now}px`).join(', ')
+              + (lost.length > 6 ? ` … (${lost.length} total)` : ''));
+          }
+        }
+
         // Only pages that show registry components owe this one. The primitives page
         // is a shape gallery -- seventeen drawings, no measurement anywhere to remove --
         // and demanding a refusal from it would be demanding a lie.
