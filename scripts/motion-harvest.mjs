@@ -50,6 +50,10 @@ const SCENES = [
     note: 'Ghost in the Shell 1995: thermo-optic cam HUD', windows: [[15, 100], [80, 55]] },
   { file: '/tmp/magi.mp4', tag: 'magi-scene', origin: 'https://www.youtube.com/watch?v=t9Lb2__oCdM',
     note: 'Evangelion: the MAGI system program screen', windows: [[0, 20]] },
+  { file: '/tmp/muther.mp4', tag: 'muthur-scene', origin: 'https://www.youtube.com/watch?v=rkBhLjwuq20',
+    note: 'Aliens: the MU/TH/UR terminal (Weyland-Yutani scene)', windows: [[40, 80], [120, 80], [200, 60]] },
+  { file: '/tmp/dominator.mp4', tag: 'dominator-scene', origin: 'https://www.youtube.com/watch?v=rhmh3tyEEfs',
+    note: 'Psycho-Pass: Dominator mode-call screens', windows: [[10, 80], [80, 49]] },
 ];
 
 const CELL_H = 200;
