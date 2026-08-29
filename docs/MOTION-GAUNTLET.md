@@ -265,3 +265,26 @@ camera had scored "moving" without asking WHAT moves:
 Lessons for the ledger: a liveness number says something moves, not that
 it moves as drawn -- eyeball the live page too. And a branch nobody
 emits is dead code no test catches: test the MARKS, not just the runtime.
+
+## Cycle: blips sync to the line (operator request)
+
+Reloaded the live radar and the dots faded out of step with the sweep.
+The phase maths multiplied the crossing fraction by the PARTIAL first
+lap (period*(1-spent) = 4002ms here) instead of the full circle. The
+sweep turns at a constant 360 degrees per period wherever a lap starts,
+so a bearing's wait is its fraction of the FULL period; the partial-lap
+product made first-revolution blips fade up to a third of a turn early.
+
+Verification went through three layers before the fix was believed:
+the animation list (all five pings live, delays exact against the
+keyframe model), the opacity timeline (no dot dims before its scheduled
+crossing), and a pixel frame -- wedge edge at 288deg, the 234deg blip
+mid-fade just behind it, the 324deg blip full brightness just ahead.
+Computed rotate readings sampled ~20deg ahead of the keyframe model at
+first; that was probe sampling skew, not the machine: screenshot and
+keyframe maths agree to the degree.
+
+The regression now has a gate: the browser pass re-derives every ping's
+delay from the same data-period / data-spent / data-sweep-angle inputs
+the runtime reads, and fails on anything more than 2ms off the line.
+178/178.

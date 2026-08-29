@@ -162,16 +162,17 @@
       var pings = el.parentElement
         ? [].slice.call(el.parentElement.querySelectorAll('[data-sweep-angle]'))
         : [];
-      function pingLap(startDeg, lapSec) {
+      function pingLap(startDeg) {
+        // Phase maths in FULL-CIRCLE units. The sweep turns at a constant
+        // 360 degrees per period wherever a lap happens to start, so a
+        // bearing's wait is its lap fraction of the FULL period -- not of
+        // the partial first lap. Multiplying by the partial lap made the
+        // first revolution's dots fade ahead of the line, the desync this
+        // replaced.
         for (var p = 0; p < pings.length; p++) {
           var at = parseFloat(pings[p].getAttribute('data-sweep-angle'));
           if (!(at >= 0)) continue;
           var frac = (((at - startDeg) % 360) + 360) % 360 / 360;
-          // fill:forwards holds the decay until the next pass refreshes
-          // the blip; without it the dot flashed back to full brightness
-          // just before the line arrived -- the inverse of what a blip
-          // means. Prior lap effects are cancelled first so a page open
-          // all shift does not bank thousands of finished effects.
           // The ping rides the dot's own circle, not the contact group:
           // the mini keeps one animation per element per property, and
           // the arrival stagger claims the group's opacity at mount --
@@ -183,12 +184,12 @@
             for (var q = 0; q < old.length; q++) { try { old[q].cancel(); } catch (e) {} }
           }
           play(blip, { opacity: [1, 0.35] },
-            { duration: lapSec * 0.55, delay: lapSec * frac, fill: 'forwards',
+            { duration: period * 0.55, delay: period * frac, fill: 'forwards',
               easing: 'cubic-bezier(.12,.72,.3,1)' });
         }
       }
       function lap(startDeg, lapSec) {
-        pingLap(startDeg, lapSec);
+        pingLap(startDeg);
         var a = play(el, { rotate: [startDeg + 'deg', '360deg'] },
           { duration: lapSec, easing: 'linear' });
         if (a && a.finished && a.finished.then) {

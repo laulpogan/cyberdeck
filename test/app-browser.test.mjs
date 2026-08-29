@@ -165,6 +165,51 @@ test('app browser pass', { skip }, async (t) => {
       await ctx.close();
     });
 
+    await t.test('each blip fades exactly when the sweep edge crosses its bearing', async () => {
+      // The sync contract: the sweep turns at a constant 360 degrees per
+      // FULL period, so a bearing's wait is its fraction of the period --
+      // not of the partial first lap. Phasing against the partial lap
+      // made the first revolution's dots fade up to a third of a turn
+      // ahead of the line. Delays are re-derived here from the same
+      // data-* inputs the runtime reads, so drift fails this gate.
+      const ctx = await browser.newContext();
+      const { page, noise } = await openPage(ctx);
+      await page.goto(base + '#/component/radar');
+      await page.waitForSelector('.cd-fd-contact[data-sweep-angle] circle');
+      const sync = await page.evaluate(() => {
+        const sweep = document.querySelector('[data-cycle-axis="rotate"]');
+        if (!sweep) return { error: 'no rotate-axis cycle mark' };
+        // data-period is in seconds; the Web Animations surface speaks ms.
+        const period = parseFloat(sweep.getAttribute('data-period')) * 1000;
+        const startDeg = parseFloat(sweep.getAttribute('data-spent')) * 360;
+        const pings = [...document.querySelectorAll('[data-sweep-angle]')]
+          .map((g) => {
+            const circle = g.querySelector('circle') || g;
+            const anim = circle.getAnimations()
+              .find((a) => a.effect && a.effect.target === circle);
+            return {
+              at: parseFloat(g.getAttribute('data-sweep-angle')),
+              delay: anim ? anim.effect.getTiming().delay : null,
+              duration: anim ? anim.effect.getTiming().duration : null,
+            };
+          });
+        return { period, startDeg, pings };
+      });
+      assert.equal(sync.error, undefined, sync.error);
+      assert.ok(sync.pings.length >= 5, `only ${sync.pings.length} blips scheduled`);
+      for (const ping of sync.pings) {
+        assert.ok(ping.delay !== null, `blip at ${ping.at}deg has no ping animation`);
+        const frac = (((ping.at - sync.startDeg) % 360) + 360) % 360 / 360;
+        assert.ok(Math.abs(ping.delay - sync.period * frac) < 2,
+          `blip at ${ping.at}deg fades at ${ping.delay}ms, sweep reaches it at `
+          + `${sync.period * frac}ms -- ${Math.abs(ping.delay - sync.period * frac).toFixed(0)}ms off the line`);
+        assert.ok(Math.abs(ping.duration - sync.period * 0.55) < 2,
+          'the blip decay is not measured against the poll period');
+      }
+      assert.deepEqual(noise, []);
+      await ctx.close();
+    });
+
     await t.test('kill switch leaves the page byte-identical to the static export', async () => {
       const ctx = await browser.newContext();
       // collar carries the clocks (the only marks that edit the document
