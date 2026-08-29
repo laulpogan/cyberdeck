@@ -49,8 +49,19 @@ function args() {
   };
   return {
     only: get('--only', '').split(',').filter(Boolean),
+    interact: process.argv.includes('--interact'),
   };
 }
+
+// Components the load-time reel finds still -- by design (a refusal in
+// the markup) or because their fixture's story is "nothing has arrived".
+// Still-at-load is honest only if the moment evidence arrives moves;
+// --interact strips evidence via the page's own control and films the
+// restore, so "dead" is never confused with "refusing on purpose".
+// radar rides as the positive control: it must arrive MOVING.
+const ARRIVAL_KEYS = ['radar', 'standard-sheet', 'joi', 'oracle', 'killmail', 'strip',
+  'two-state', 'queue', 'envelope', 'garage', 'grid', 'gevulot', 'dominator',
+  'ladder', 'disc', 'dossier', 'channel', 'redaction'];
 
 // Fraction of pixels that differ beyond a stated colour distance.
 // Fraction of pixels that moved, on quarter-quantised channels so JPEG
@@ -108,7 +119,7 @@ const SHEET = async (page, frames, key, span) => {
   }, { frames, key, span });
 };
 
-const { only } = args();
+const { only, interact } = args();
 fs.mkdirSync(FILM_DIR, { recursive: true });
 
 const chromium = await resolveChromium();
@@ -141,7 +152,7 @@ await page.waitForSelector('[data-theme-choice="dark"]');
 await page.click('[data-theme-choice="dark"]');
 await page.waitForTimeout(300);
 
-const keys = only.length ? only : Object.keys(SPECS);
+const keys = only.length ? only : (interact ? ARRIVAL_KEYS : Object.keys(SPECS));
 const report = [];
 for (const key of keys) {
   if (!SPECS[key]) { console.log(`skip ${key}: not a spec`); continue; }
@@ -159,13 +170,35 @@ async function shoot(key) {
   // A hash-only goto is same-document; the random query forces a real load
   // every time so frame zero means what it says. The wait returns the box
   // in the same round-trip: every extra hop lands AFTER short marks die.
-  const box = await (await page.waitForFunction(() => {
+  const box = await boxOf();
+  if (interact) {
+    await page.waitForTimeout(1300); // let the load render settle to still
+    const movable = await page.evaluate(() => [...document.querySelectorAll('#stage [data-motion]')]
+      .filter((el) => { const k = el.getAttribute('data-motion'); return k !== 'still' && k !== 'intent'; }).length);
+    await page.click('#btn-evidence'); // strip all evidence
+    await page.waitForTimeout(300);
+    await boxOf(); // the dark model may sit at a different height
+    await page.evaluate(() => { window.__cdProbe.maxAnims = 0; });
+    await page.click('#btn-evidence'); // restore it: this is the arrival
+    const r = await burst(key, '-arrival');
+    r.movable = movable;
+    return r;
+  }
+  return await burst(key, '', box);
+}
+
+async function boxOf() {
+  return (await page.waitForFunction(() => {
     const el = document.querySelector('#stage');
     if (!el) return null;
     const r = el.getBoundingClientRect();
     if (r.width < 8 || r.height < 8) return null;
     return { x: r.x, y: r.y, width: r.width, height: Math.min(r.height, 860) };
   }, null, { timeout: 8000 })).jsonValue();
+}
+
+async function burst(key, suffix, pre) {
+  const box = pre || await boxOf();
   const shots = [];
   const times = [];
   let shotClock = 0;
@@ -178,7 +211,8 @@ async function shoot(key) {
   // JPEG at dsf1 keeps each shot fast enough to bracket 300ms marks; the
   // comparison quantizes colours so JPEG noise cannot fake movement.
   for (let i = 0; i < 10; i++) await grab(i === 0 ? 60 : 70); // ~0-700ms burst
-  for (let i = 0; i < 6; i++) await grab(800);                // loops to ~5.5s
+  const lying = suffix ? await page.textContent('#h-lying') : null;
+  if (!suffix) for (let i = 0; i < 6; i++) await grab(800);    // loops to ~5.5s
   let delta = 0;
   for (let i = 0; i + 1 < shots.length; i++) {
     const d = await blank.evaluate(
@@ -188,25 +222,39 @@ async function shoot(key) {
     if (d > delta) delta = d;
   }
   const probe = await page.evaluate(() => window.__cdProbe || null);
-  const picked = [0, 2, 4, 6, 8, 11, 13, 15].filter((i) => i < shots.length).map((i) =>
-    ({ b64: shots[i].toString('base64'), width: box.width, height: box.height, t: times[i] }));
-  await SHEET(sheet, picked, key, picked[picked.length - 1].t);
-  await sheet.screenshot({ path: path.join(FILM_DIR, `${key}.png`), fullPage: true });
+  const clocks = suffix ? await page.evaluate(
+    () => (window.CyberdeckMotion && window.CyberdeckMotion.clocks) ? window.CyberdeckMotion.clocks() : 0) : 0;
+  const picked = (suffix ? [0, 2, 4, 6, 8, 9] : [0, 2, 4, 6, 8, 11, 13, 15])
+    .filter((i) => i < shots.length).map((i) =>
+      ({ b64: shots[i].toString('base64'), width: box.width, height: box.height, t: times[i] }));
+  await SHEET(sheet, picked, key + suffix + (lying !== null ? `  MOVING-WITHOUT-EVIDENCE=${lying}` : ''),
+    picked[picked.length - 1].t);
+  await sheet.screenshot({ path: path.join(FILM_DIR, `${key}${suffix}.png`), fullPage: true });
   await sheet.goto('about:blank');
-  report.push({
-    key,
+  const entry = {
+    key: key + suffix,
     deltaPct: Math.round(delta * 1000) / 10,
     anims: probe ? probe.maxAnims : -1,
     dom: probe ? (probe.h1 !== probe.h2) : false,
-  });
+    lying: suffix ? Number(lying) : null,
+    clocks,
+  };
+  report.push(entry);
+  return entry;
 }
 await browser.close();
 server.close();
 report.sort((a, b) => a.deltaPct - b.deltaPct);
 for (const r of report) {
-  const alive = (r.anims ?? -1) > 0 || r.dom || r.deltaPct > 0.2;
-  console.log(`${String(r.deltaPct).padStart(6)}%  ${String(r.anims).padStart(3)}a  ${r.dom ? 'dom' : '   '}  ${alive ? '' : 'DEAD '}${r.key}`);
+  const alive = (r.anims ?? -1) > 0 || r.dom || r.deltaPct > 0.2 || (r.clocks ?? 0) > 0;
+  // A refusal's full model carries no movable mark at all: the arrival
+  // staying still IS the designed behaviour, not a dead component.
+  const byDesign = r.movable === 0;
+  console.log(`${String(r.deltaPct).padStart(6)}%  ${String(r.anims).padStart(3)}a  ${r.dom ? 'dom' : '   '}  ${byDesign ? 'BY-DESIGN' : alive ? '' : 'DEAD '}${r.key}`
+    + ((r.clocks ?? 0) ? `  clk=${r.clocks}` : '')
+    + (r.lying === null || r.lying === undefined ? '' : `  MEW=${r.lying}${r.lying > 0 ? ' <-- VIOLATION' : ''}`));
 }
-const dead = report.filter((r) => (r.anims ?? -1) <= 0 && !r.dom && r.deltaPct <= 0.2);
+const dead = report.filter((r) => r.movable !== 0 && (r.anims ?? -1) <= 0 && !r.dom
+  && r.deltaPct <= 0.2 && (r.clocks ?? 0) === 0);
 console.log(`\n${report.length} filmed -> ${path.relative(process.cwd(), FILM_DIR)}/`);
 console.log(dead.length ? `DEAD: ${dead.map((r) => r.key).join(', ')}` : 'every component moves');

@@ -371,6 +371,14 @@
     elapsed: elapsing, trace: traced, traffic: trafficking, cycle: cycling,
   };
 
+  // A render plays its marks once. Re-mounts hand the same page back to
+  // start(), and the initial mount can meet both the DOMContentLoaded
+  // auto-start and the app's own handoff; replaying a node that already
+  // played would stack a second animation on the same element. A JS-side
+  // set, not an attribute: the settled document must stay byte-identical
+  // to the static export, so nothing bookkeeping may touch the markup.
+  var played = new WeakSet();
+
   function start(scope) {
     readTokens();
     var nodes = (scope || document).querySelectorAll('[data-motion]');
@@ -380,8 +388,11 @@
       // `still` and `intent` are deliberately absent from HANDLERS. The
       // first must never be touched; the second is CSS and needs no help.
       var handler = HANDLERS[kind];
-      if (handler) { try { handler(el); } catch (e) { /* one bad mark
-        must not stop the rest of the page from settling */ } }
+      if (handler && !played.has(el)) {
+        played.add(el);
+        try { handler(el); } catch (e) { /* one bad mark
+        must not stop the rest of the page from settling */ }
+      }
     }
   }
 
@@ -432,6 +443,11 @@
     settle: settle,
     start: start,
     count: function () { return running.length; },
+    // Interval clocks are live motion with zero WAAPI animations; a
+    // liveness probe that only counts WAAPI would call the strip chart
+    // dead. This counts them honestly, off the JS surface so the markup
+    // stays byte-identical to the static export.
+    clocks: function () { return clocks.length; },
   };
 
   if (!OFF) {

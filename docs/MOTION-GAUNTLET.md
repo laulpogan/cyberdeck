@@ -173,3 +173,20 @@ fills manifests node by node; individuation and stock-flow boot their
 ledgers line by line. The 35 live components are now all frame-judged:
 four were fixed (radar, mfd, lanes, the shared cascade rule) and the
 rest pass as drawn.
+
+### the arrival reel -- the refusals prove they can move
+Still-at-load is only honest if the moment evidence arrives moves. The
+film camera grew an --interact mode: load the page, strip every evidence
+control through the page's own button, restore it, and film the
+restore. Verdicts: 16 full models carry no movable mark at all -- still
+on arrival IS the designed refusal, printed BY-DESIGN, not DEAD. The
+strip chart's one mark is an interval clock (WAAPI-zero by nature), so
+the runtime now counts clocks off its JS surface, and the reel reads the
+honesty bar during the arrival: MEW=0 on every one. radar rides as the
+positive control and arrives moving -- contacts pinging in as the sweep
+takes them. 176/176 with byte-identity intact (the guard is a JS WeakSet;
+nothing bookkeeping touches the markup).
+Side finding while wiring the reel: start() can now meet a page twice
+(the DOMContentLoaded auto-start and the app's kill-switch handoff); a
+per-node played-guard in the runtime makes a render play its marks once,
+which is the honest meaning of replay.
