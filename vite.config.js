@@ -22,16 +22,24 @@ export default defineConfig({
   root: 'app',
   base: './',
   plugins: [react()],
+  // The page has to be able to say which checkout rendered it, because two worktrees of this repository
+  // can answer the same port and a verify tool cannot tell them apart from the rendered DOM. The verify
+  // tools refuse to measure a build that cannot identify itself — see app/verify/app-identity.mjs.
+  define: { __CD_WORKTREE__: JSON.stringify(process.cwd()) },
   resolve: { dedupe: ['react', 'react-dom'] },
   server: {
     host: '127.0.0.1',
-    port: 5199,
+    // 5199 is claimed by the `cyberdeck-pi` worktree, whose config claims the same number with
+    // `strictPort: true` — whoever binds it first wins, and every tool with a hardcoded default keeps
+    // pointing at the port rather than at the tree. This worktree therefore has its own port, and the
+    // tools read THIS number instead of remembering one.
+    port: 5299,
     strictPort: true,
     fs: { allow: ['..'] },
   },
   preview: {
     host: '127.0.0.1',
-    port: 5199,
+    port: 5299,
     strictPort: true,
   },
   build: {

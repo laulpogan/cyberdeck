@@ -164,6 +164,19 @@ in the file rather than hidden in a helper:
   all if the specimen is still being written to.
 
 ## The traps, paid for
+- **Two worktrees can answer one port, and a gate that measures the wrong one prints the same green.**
+  This tree's `vite.config.js` claimed 5199 with `strictPort: true` — and 5199 was, and is, held by
+  `_worktrees/cyberdeck-pi`. Every verify tool here defaulted to 5199, so `npm run verify:gauntlet` in
+  this directory measured the *other branch's build* while printing routes, fixtures and a clean
+  `0 FAIL`. A wrong tree is not a partial result, so: the app stamps `data-cd-worktree` on `<html>`
+  (vite `define` + `app/src/main.jsx`), `app/verify/app-identity.mjs` refuses an unidentified build or a
+  different checkout with exit 2 **before any row is written**, and `defaultBase()` reads the port out of
+  *this tree's* config — which is why the vault worktree now runs on 5299. Fifteen tools were rewired;
+  `test/app-identity.test.mjs` refuses a tool that declares a literal address or opens a page blind, and
+  it caught four unwired tools and five blind probes inside the hour it was written. The check for a
+  hardcoded port is structural (`const|let|var BASE =`), not comment-shaped: two files write usage
+  examples in block comments with no leading `*`, and a rule keyed on the marker flags prose while
+  missing code.
 - **A webfont landing mid-capture is not motion, and the instrument called it motion three times.**
   The host loads its display and mono faces over the network; when they arrive (140-220 ms in) every text
   box is re-metric'd — `magi`'s label grew from 25 px to 29 px, `killmail`'s UNPRICED line drifted 529.4 px

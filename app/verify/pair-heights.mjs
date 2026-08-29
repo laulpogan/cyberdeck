@@ -18,7 +18,10 @@ import { writeFileSync } from 'node:fs';
 import { DRAWING_SELECTOR, DRAWING_PROBE, GROWTH_TOLERANCE_PX } from './drawing.mjs';
 import { COMPONENT_KEYS } from '../src/registry/index.js';
 
-const BASE = process.env.BASE || 'http://127.0.0.1:5299/';
+// Default port comes from this tree's vite.config.js, and a server identifying another checkout
+// is refused before anything is measured. See app/verify/app-identity.mjs.
+import { assertServedThisCheckout, defaultBase } from './app-identity.mjs';
+const BASE = process.env.BASE || defaultBase();
 const OUT = process.env.OUT || '';
 // The same allowance the gate uses, imported rather than restated, so the report cannot
 // quietly disagree with the rule it is measuring.
@@ -33,6 +36,7 @@ const views = (page) => page.evaluate(() => [...document.querySelectorAll('[data
                  h: Math.round(n.getBoundingClientRect().height) })));
 
 const browser = await chromium.launch();
+await assertServedThisCheckout(browser, BASE, 'app/verify/pair-heights.mjs');
 const page = await browser.newPage({ viewport: { width: 1280, height: 1200 } });
 const rows = [];
 

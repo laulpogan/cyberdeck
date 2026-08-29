@@ -1,6 +1,10 @@
 import { chromium } from 'playwright';
-const BASE = process.env.BASE || 'http://127.0.0.1:5299/';
+// Default port comes from this tree's vite.config.js, and a server identifying another checkout
+// is refused before anything is measured. See app/verify/app-identity.mjs.
+import { assertServedThisCheckout, defaultBase } from './app-identity.mjs';
+const BASE = process.env.BASE || defaultBase();
 const b = await chromium.launch();
+await assertServedThisCheckout(browser, BASE, 'app/verify/probe-sweep.mjs');
 const p = await (await b.newContext()).newPage();
 await p.goto(BASE + '#/component/radar', { waitUntil: 'commit' });
 await p.waitForSelector('[data-specimen-view="radar"]', { timeout: 15000 });

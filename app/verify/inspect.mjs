@@ -20,7 +20,11 @@
 import { chromium } from 'playwright';
 import { mkdirSync } from 'node:fs';
 
-const BASE = process.env.BASE || 'http://127.0.0.1:5199/';
+// The default port is this tree's own vite.config.js, and the run refuses a server that
+// identifies a different checkout: two worktrees can hold one port, and measuring the other
+// branch prints the same green. See app/verify/app-identity.mjs.
+import { assertServedThisCheckout, defaultBase } from './app-identity.mjs';
+const BASE = process.env.BASE || defaultBase();
 const OUT = process.env.OUT || '/tmp/cyberdeck-shots';
 const routes = (process.env.ROUTES || '#/,#/overview,#/rules,#/primitives').split(',');
 const widths = (process.env.WIDTHS || '1280,390').split(',').map(Number);
@@ -30,6 +34,7 @@ const settleMs = Number(process.env.SETTLE_MS || 900);
 mkdirSync(OUT, { recursive: true });
 
 const browser = await chromium.launch();
+await assertServedThisCheckout(browser, BASE, 'app/verify/inspect.mjs');
 let failures = 0;
 
 for (const route of routes) {

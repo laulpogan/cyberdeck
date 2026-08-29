@@ -24,6 +24,8 @@
  * documentation as green is how a review stops being able to tell the difference.
  *
  *   BASE=http://127.0.0.1:5299/ node app/verify/gauntlet.mjs
+ *   # no BASE at all: the port comes from this tree's vite.config.js, and a server that
+ *   # identifies another checkout is refused before any row is measured (app-identity.mjs).
  *   BASE=… OUT=/tmp/gauntlet GAPS=globe-constant-rate node app/verify/gauntlet.mjs
  *
  * Then compose the pictures:
@@ -38,7 +40,11 @@ import { audit as furnitureAudit } from './furniture.mjs';
 
 const HERE = dirname(fileURLToPath(import.meta.url));
 const ROOT = resolve(HERE, '../..');
-const BASE = process.env.BASE || 'http://127.0.0.1:5199/';
+// The default port is this tree's own vite.config.js, and the run refuses a server that
+// identifies a different checkout: two worktrees can hold one port, and measuring the other
+// branch prints the same green. See app/verify/app-identity.mjs.
+import { assertServedThisCheckout, defaultBase } from './app-identity.mjs';
+const BASE = process.env.BASE || defaultBase();
 const OUT = process.env.OUT || join(ROOT, 'app/verify/GAUNTLET');
 const only = process.env.GAPS ? process.env.GAPS.split(',') : null;
 const SAMPLE_MS = Number(process.env.SAMPLE_MS || 16);
@@ -360,6 +366,7 @@ function deadCells(frames, tolerancePx) {
 }
 
 const browser = await chromium.launch();
+await assertServedThisCheckout(browser, BASE, 'app/verify/gauntlet.mjs');
 const rows = [];
 
 for (const gap of GAPS) {

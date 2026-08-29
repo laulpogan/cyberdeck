@@ -23,11 +23,16 @@ import { DRAWING_SELECTOR, DRAWING_PROBE, drawingVerdict, MIN_DRAWING_PX } from 
 // Trailing slash or not, the hash goes after the origin: `BASE` arrives with one from
 // `npm run verify:all` neighbours and without one from a typed command, and `//#/x` is a
 // different URL from `/#/x` to a dev server.
-const BASE = (process.env.BASE || 'http://127.0.0.1:5199').replace(/\/+$/, '');
+// The default port is this tree's own vite.config.js, and the run refuses a server that
+// identifies a different checkout: two worktrees can hold one port, and measuring the other
+// branch prints the same green. See app/verify/app-identity.mjs.
+import { assertServedThisCheckout, defaultBase } from './app-identity.mjs';
+const BASE = (process.env.BASE || defaultBase()).replace(/\/+$/, '');
 const ROUTES = (process.env.ROUTES || '/component/mfd,/component/globe,/component/tape').split(',');
 
 const probe = eval(DRAWING_PROBE);
 const browser = await chromium.launch();
+await assertServedThisCheckout(browser, BASE, 'app/verify/negative-control.mjs');
 const outcomes = [];
 
 for (const route of ROUTES) {

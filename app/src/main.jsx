@@ -24,6 +24,13 @@ import { startMotion, stillnessReason } from './motion-bridge.js';
 // which is what lets the media query in tokens.css decide.
 applyTheme(document, readStoredTheme(globalThis.localStorage));
 
+// Which checkout rendered this page. `__CD_WORKTREE__` is defined in vite.config.js from the `cwd` of
+// the dev server, and the verify tools refuse to measure a build that cannot identify itself — two
+// worktrees can answer the same port, and the rendered DOM of the wrong branch looks fine.
+if (typeof __CD_WORKTREE__ === 'string' && __CD_WORKTREE__) {
+  document.documentElement.setAttribute('data-cd-worktree', __CD_WORKTREE__);
+}
+
 // One start for the whole document. The runtime owns the document, not a
 // component subtree, because motion marks routinely sit on SVG geometry
 // rendered by code that has never heard of this library. Specimens restart

@@ -3,10 +3,14 @@
 // view or merely rejected by its filter.
 //   node app/verify/probe-after-change.mjs [route] [field path]
 import { chromium } from 'playwright';
+// Opens no page this tree cannot identify. See app/verify/app-identity.mjs — a probe of the wrong
+// worktree is believed exactly as readily as a gate's number.
+import { assertServedThisCheckout, defaultBase } from './app-identity.mjs';
 const route = process.argv[2] || '#/component/hardCut';
 const field = process.argv[3] || 'changed';
 const base = process.env.BASE || 'http://127.0.0.1:5299/';
 const b = await chromium.launch();
+await assertServedThisCheckout(browser, typeof BASE === 'string' ? BASE : defaultBase(), 'app/verify/probe-after-change.mjs');
 const p = await b.newPage({ viewport: { width: 1280, height: 900 } });
 await p.goto(base + route);
 await p.waitForSelector('[data-specimen-view]');

@@ -42,12 +42,17 @@ async function moduleFor(key) {
   return null;
 }
 
-const BASE = process.env.BASE || 'http://127.0.0.1:5199';
+// The default port is this tree's own vite.config.js, and the run refuses a server that
+// identifies a different checkout: two worktrees can hold one port, and measuring the other
+// branch prints the same green. See app/verify/app-identity.mjs.
+import { assertServedThisCheckout, defaultBase } from './app-identity.mjs';
+const BASE = (process.env.BASE || defaultBase()).replace(/\/+$/, '');
 const components = process.env.KEYS
   ? process.env.KEYS.split(',').map((key) => ({ key }))
   : allComponents();
 
 const browser = await chromium.launch();
+await assertServedThisCheckout(browser, BASE, 'app/verify/roundtrip.mjs');
 const page = await browser.newPage({ viewport: { width: 1280, height: 1400 } });
 const failures = [];
 

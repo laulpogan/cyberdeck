@@ -34,7 +34,10 @@ import { chromium } from 'playwright';
 import { createHash } from 'node:crypto';
 import { mkdirSync, readFileSync, writeFileSync } from 'node:fs';
 
-const BASE = process.env.BASE || 'http://127.0.0.1:5299';
+// Default port comes from this tree's vite.config.js, and a server identifying another checkout
+// is refused before anything is measured. See app/verify/app-identity.mjs.
+import { assertServedThisCheckout, defaultBase } from './app-identity.mjs';
+const BASE = process.env.BASE || defaultBase();
 const OUT = process.env.OUT || '/tmp/film';
 const KEYS = (process.env.KEYS || 'gauge').split(',').map((k) => k.trim()).filter(Boolean);
 const ENTER_MS = Number(process.env.ENTER_MS || 900);
@@ -45,6 +48,7 @@ const LOOP_EVERY = Number(process.env.LOOP_EVERY || 380);
 mkdirSync(OUT, { recursive: true });
 
 const browser = await chromium.launch();
+await assertServedThisCheckout(browser, BASE, 'app/verify/filmstrip.mjs');
 const ctx = await browser.newContext({ viewport: { width: 1280, height: 900 } });
 const page = await ctx.newPage();
 

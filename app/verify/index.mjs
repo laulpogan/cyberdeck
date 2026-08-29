@@ -23,7 +23,11 @@ import { UNCONDITIONAL_MARKS } from '../src/undeclared.js';
 import { FIXTURES } from '../fixtures/index.js';
 import { DRAWING_SELECTOR, DRAWING_PROBE, drawingVerdict, layoutVerdict } from './drawing.mjs';
 
-const BASE = process.env.BASE || 'http://127.0.0.1:5199/';
+// The default port is this tree's own vite.config.js, and the run refuses a server that
+// identifies a different checkout: two worktrees can hold one port, and measuring the other
+// branch prints the same green. See app/verify/app-identity.mjs.
+import { assertServedThisCheckout, defaultBase } from './app-identity.mjs';
+const BASE = process.env.BASE || defaultBase();
 const OUT = process.env.OUT || '/tmp/cyberdeck-gate';
 const widths = (process.env.WIDTHS || '1280,390').split(',').map(Number);
 const schemes = (process.env.SCHEMES || 'dark,light').split(',');
@@ -85,6 +89,7 @@ if (SHARD[1] > 1) console.log(`shard ${SHARD[0]}/${SHARD[1]}: ${routes.length} o
 mkdirSync(OUT, { recursive: true });
 
 const browser = await chromium.launch();
+await assertServedThisCheckout(browser, BASE, 'app/verify/index.mjs');
 const results = [];
 const report = (name, line, bad = []) => {
   results.push({ name, line, bad });
