@@ -1133,16 +1133,20 @@ disagreed:
   rendered 211..454 (drift 177px / 0px)`. The mis-anchor that produced finding #11's `0.189` is
   caught on the left edge.
 - **`scaleX(0.9)` written into the markup under a mark that says 0.406 → green**, and the first
-  draft of this entry claimed that sabotage turned it red. It does not, and the reason is worth
-  keeping: the gate samples ~200ms after the specimen mounts, while the runtime's reveal still owns
-  the property, so the inline extent the server wrote is not what is on screen yet and the claim
-  measures the animation instead of the markup.
+  draft of this entry explained that green as sampling timing — "the gate measures at 200ms, while
+  the reveal still owns the property". That explanation was wrong too, and the wrongness is the
+  useful part. The runtime animates the fill to the mark's own value and *keeps* it
+  (`fill: forwards`), so it owns the property permanently: the sabotaged bar rendered 0.406 at
+  200ms, at two seconds, and after settle. No browser check can ever see that disagreement, because
+  the page never shows it — but the export, which is what a review reads and what the
+  byte-identity claim is about, said 0.9 the whole time.
 
-**Still open, narrowed.** The gate has no settled measurement of a `level`: it asserts arrival
-during the reveal and byte-identity of the markup after settle, and neither one compares a settled
-rendered extent against `data-level`. Closing it means measuring the same prediction a second time
-after the animations finish, not inventing an encoding rule to excuse the first. Do not trust the
-green in the second bullet again.
+So the hole is closed where it is visible: statically, in `test/level-encoding.test.mjs`. An inline
+extent written by a host must be read from the mark (`mark['data-level'] ?? 1`), never a numeric
+literal, and no app CSS block may put `transform-origin` at the centre of a level fill. Both rules
+were proven to bite by the same two sabotages, which is the point of putting them in source: the
+browser gate keeps its three real jobs — motion in flight, arrival of the extent, and byte identity
+after settle — and stops being asked to detect a lie it is structurally unable to observe.
 
 ---
 
