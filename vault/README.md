@@ -84,3 +84,17 @@ what it is good for will be used as if it were good.
   WebP entries are stills and are marked as such.
 - `app/verify/FILMSTRIP.md` records the library's own motion; the comparison of the two — the
   gauntlet — is the next task and has not been run.
+
+## Sources tried, and what each one can and cannot give
+
+| source | reach | what it actually returns | status |
+| --- | --- | --- | --- |
+| Tenor / GifCities (`vault/acquire.mjs`) | ✓ browsed in a real browser, scrolled | characters, memes, site logos and banners. 12 of 114 ranked moving files survive an eye looking for an interface filling the frame | the haul that exists; yield ~1 interface in 10 |
+| YouTube clip harvest (planned `vault/clip.mjs`) | search works (`yt-dlp "ytsearch…"` returns titles and durations) | **media download is refused from this network**: `HTTP Error 403` on the plain client, `The page needs to be reloaded.` on the `tv` client. Two distinct client failures, so the path is not a flag away | blocked here; needs browser cookies or another host |
+| Internet Archive (`advancedsearch.php` + `metadata/`) | ✓ queries and direct file downloads both answer | its index points at ROMs, game builds and let's-play videos; a `ftl+faster+than+light+gameplay` query returned a ZX Spectrum tape, a Stellaris video and a GOG installer, not one HUD recording | reachable but not yet productive; the query, not the host, is the problem |
+
+Why the distinction matters: a diegetic interface that FILLS the frame is what a motion spec can
+be read off. GIF hosts index the character holding the screen, mission footage indexes the rocket,
+and the panel is a wedge in the corner of the shot. The verified corpus today (7 of 51 components
+quoted in `SPECS-FOR.json`, see `vault/MAPPING.md`) is not a ranking failure — `vault/rank.py`
+already puts the likeliest files first, and the likeliest files are stormtroopers.

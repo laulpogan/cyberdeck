@@ -88,9 +88,32 @@ def eyeball_marks():
     return json.load(open(path))
 
 
+def spec_rows():
+    """Which verified files `SPECS-FOR.json` quotes FOR each component.
+
+    The distinction is the whole point of the column. `seen` counts eye marks on files under a
+    component's search seed, and a seed is a topic: three verified fake-OS loaders sit beside
+    `dispatch` as `seen`, yet none of them is quoted for dispatch — two are counter-examples for
+    the rules page. A component can be well-sighted and still unheld, so both numbers are printed
+    and neither is allowed to be read as the other.
+    """
+    path = os.path.join(HERE, "SPECS-FOR.json")
+    if not os.path.exists(path):
+        return {}
+    data = json.load(open(path))
+    out = defaultdict(list)
+    for f, entry in data.items():
+        if f == "_about":
+            continue
+        for comp in entry.get("for", []):
+            out[comp].append(f)
+    return out
+
+
 def main():
     manifest = json.load(open(os.path.join(HERE, "MANIFEST.json")))["files"]
     marks = eyeball_marks()
+    quoted_for = spec_rows()
     by_seed = defaultdict(list)
     for record in manifest.values():
         by_seed[record["seed"]].append(record)
@@ -102,8 +125,15 @@ def main():
              "explicit statement of what the vault cannot yet show. Reading *how* a reference moves",
              "is a person's job, done against `vault/sheet.py` output.",
              "",
-             "| component | reference seed | why that reference | files | verified frames | median loop | status mix |",
-             "| --- | --- | --- | --- | --- | --- | --- |"]
+             "Two coverage columns are printed and they are not the same claim: `eye marks` counts",
+             "verified files under the component's search seed, and `spec rows` counts verified",
+             "files `SPECS-FOR.json` quotes as evidence about that component. `SPECS-FOR.json`",
+             "also quotes files for the eleven mark KINDS (`level`, `trace`, `arrive`), which are",
+             "not rows of this table and are counted below instead.",
+             "",
+             "| component | reference seed | why that reference | files | eye marks (seed) "
+             "| spec rows (this component) | median loop | status mix |",
+             "| --- | --- | --- | --- | --- | --- | --- | --- |"]
     unmapped = []
     for component, (seed, why) in sorted(MAP.items()):
         files = by_seed.get(seed, [])
@@ -119,9 +149,23 @@ def main():
         if seed == "none" or not usable:
             unmapped.append(component)
             mix = f"**{mix}**" if seed == "none" else f"{mix} — no usable reference"
+        quoted = quoted_for.get(component, [])
         lines.append(f"| `{component}` | {seed} | {why} | {len(files) if seed != 'none' else 0} "
-                     f"| {len(seen)} seen, {len(refuted)} refuted | {median} | {mix} |")
+                     f"| {len(seen)} seen, {len(refuted)} refuted "
+                     f"| {'**' + str(len(quoted)) + '**' if quoted else '0'} | {median} | {mix} |")
 
+    held = sorted(k for k, v in quoted_for.items() if k in MAP)
+    kinds = sorted(k for k, v in quoted_for.items() if k not in MAP)
+    lines += ["",
+              f"**Spec coverage of the components: {len(held)} of {len(MAP)}** have at least one "
+              f"verified file quoted for them ({', '.join('`' + k + '`' for k in held)}). The other "
+              f"{len(MAP) - len(held)} are drawn against nothing that survived the eye, and no "
+              f"amount of re-ranking of the current haul changes that — the remaining moving files "
+              f"in `vault/RANK.json` come from the same population that has been rejecting at about "
+              f"one interface in ten. Acquisition, not ranking, is the lever.",
+              "",
+              f"Mark kinds quoted: {', '.join('`' + k + '`' for k in kinds)}.",
+              ""]
     still_haul = sum(1 for r in manifest.values() if r.get("status") == "reference"
                       and (r.get("frames") or 0) <= 1)
     gif_reference = sum(1 for r in manifest.values() if r.get("status") == "reference"

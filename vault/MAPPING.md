@@ -5,59 +5,70 @@ component is the boring half: the measured timings of the files in play, and an
 explicit statement of what the vault cannot yet show. Reading *how* a reference moves
 is a person's job, done against `vault/sheet.py` output.
 
-| component | reference seed | why that reference | files | verified frames | median loop | status mix |
-| --- | --- | --- | --- | --- | --- | --- |
-| `admission` | none | a balance beam of offered against taken; nothing held | 0 | 0 seen, 0 refuted | no moving reference | **0 reference / 0 look-alike / 0 drift** |
-| `atField` | none | a written scope drawn as a field boundary; no reference held | 0 | 0 seen, 0 refuted | no moving reference | **0 reference / 0 look-alike / 0 drift** |
-| `bypass` | none | a bypass taken; nothing held | 0 | 0 seen, 0 refuted | no moving reference | **0 reference / 0 look-alike / 0 drift** |
-| `ceremony` | none | an acceptance ceremony state machine; nothing held | 0 | 0 seen, 0 refuted | no moving reference | **0 reference / 0 look-alike / 0 drift** |
-| `channel` | none | a channel's own state; nothing held | 0 | 0 seen, 0 refuted | no moving reference | **0 reference / 0 look-alike / 0 drift** |
-| `chipBudget` | none | a channel budget in HUD units; nothing held | 0 | 0 seen, 0 refuted | no moving reference | **0 reference / 0 look-alike / 0 drift** |
-| `city` | none | placement as city blocks; closest is a map surface, not held | 0 | 0 seen, 0 refuted | no moving reference | **0 reference / 0 look-alike / 0 drift** |
-| `collar` | spinner-console | a baseline that breathes with the subject, drawn as a measurement | 11 | 0 seen, 0 refuted | stills only | 7 reference / 4 look-alike / 0 drift |
-| `contextBurn` | none | a creep toward an edge; nothing held | 0 | 0 seen, 0 refuted | no moving reference | **0 reference / 0 look-alike / 0 drift** |
-| `coverage` | motion-tracker | swept ground: observed territory versus ground nobody looked at | 25 | 0 seen, 9 refuted | stills only | 12 reference / 4 look-alike / 9 drift |
-| `dispatch` | fake-os-loaders | a boot sequence: stages entered in order, not a spinner | 19 | 0 seen, 0 refuted | stills only | 7 reference / 4 look-alike / 8 drift |
-| `dominator` | lumon | graded authority in a corporate interface, deliberately inert | 21 | 0 seen, 0 refuted | 3.6s over 5 clip(s) | 21 reference / 0 look-alike / 0 drift |
-| `dossier` | tron-disc | the identity disc itself | 23 | 0 seen, 0 refuted | stills only | 19 reference / 4 look-alike / 0 drift |
-| `envelope` | none | a demand envelope; nothing in the vault draws envelopes | 0 | 0 seen, 0 refuted | no moving reference | **0 reference / 0 look-alike / 0 drift** |
-| `esperDive` | none | evidence dive levels; nothing held | 0 | 0 seen, 0 refuted | no moving reference | **0 reference / 0 look-alike / 0 drift** |
-| `garage` | none | assembly stages as a loadout; no reference held | 0 | 0 seen, 0 refuted | no moving reference | **0 reference / 0 look-alike / 0 drift** |
-| `gauge` | rig | a suit-integrity spine that drains as integrity is spent | 25 | 0 seen, 0 refuted | 1.2s over 1 clip(s) | 15 reference / 4 look-alike / 6 drift |
-| `gevulot` | none | visibility contract; nothing held | 0 | 0 seen, 0 refuted | no moving reference | **0 reference / 0 look-alike / 0 drift** |
-| `glassCell` | lumon | reviewed through glass, one direction only | 21 | 0 seen, 0 refuted | 3.6s over 5 clip(s) | 21 reference / 0 look-alike / 0 drift |
-| `globe` | hologlobe | a model that turns on its own clock with plotted routes that hold | 19 | 0 seen, 0 refuted | stills only | 15 reference / 4 look-alike / 0 drift |
-| `grid` | none | overview grid doctrine; no reference held | 0 | 0 seen, 0 refuted | no moving reference | **0 reference / 0 look-alike / 0 drift** |
-| `hardCut` | fake-os-loaders | a progress idiom that changes when the system changes state | 19 | 0 seen, 0 refuted | stills only | 7 reference / 4 look-alike / 8 drift |
-| `ice` | rig | walls as discrete barriers; a breach changes the shape, not the mood | 25 | 0 seen, 0 refuted | 1.2s over 1 clip(s) | 15 reference / 4 look-alike / 6 drift |
-| `individuation` | rig | identity marks on a shared harness, one per unit | 25 | 0 seen, 0 refuted | 1.2s over 1 clip(s) | 15 reference / 4 look-alike / 6 drift |
-| `joiOverlay` | spinner-console | a projection over the observation rather than onto it | 11 | 0 seen, 0 refuted | stills only | 7 reference / 4 look-alike / 0 drift |
-| `keycard` | lumon | an access affordance that is inert until taken | 21 | 0 seen, 0 refuted | 3.6s over 5 clip(s) | 21 reference / 0 look-alike / 0 drift |
-| `killmail` | none | a receipt for a loss; nothing held | 0 | 0 seen, 0 refuted | no moving reference | **0 reference / 0 look-alike / 0 drift** |
-| `ladder` | lumon | the same authority ladder in another Lumon surface | 21 | 0 seen, 0 refuted | 3.6s over 5 clip(s) | 21 reference / 0 look-alike / 0 drift |
-| `loopDeviation` | none | a loop spent against its period; the fake-OS loaders are nearest, not joined | 0 | 0 seen, 0 refuted | no moving reference | **0 reference / 0 look-alike / 0 drift** |
-| `magi` | magi | three cores deliberating, verdict after the vote | 34 | 0 seen, 0 refuted | 1.7s over 1 clip(s) | 15 reference / 11 look-alike / 8 drift |
-| `mfd` | spinner-console | instrument panels whose readouts resolve under a scanning pass | 11 | 0 seen, 0 refuted | stills only | 7 reference / 4 look-alike / 0 drift |
-| `muthur` | lumon | a terminal that answers what it can and prints the refusal | 21 | 0 seen, 0 refuted | 3.6s over 5 clip(s) | 21 reference / 0 look-alike / 0 drift |
-| `needleField` | rig | a spine of segment LEDs, each one a discrete measured state | 25 | 0 seen, 0 refuted | 1.2s over 1 clip(s) | 15 reference / 4 look-alike / 6 drift |
-| `oracle` | magi | fragments of testimony: each one arrives and holds | 34 | 0 seen, 0 refuted | 1.7s over 1 clip(s) | 15 reference / 11 look-alike / 8 drift |
-| `oscillation` | none | a rhythm hunt; sakugabooru-style frame sets would show a period, not held | 0 | 0 seen, 0 refuted | no moving reference | **0 reference / 0 look-alike / 0 drift** |
-| `queueState` | fake-os-loaders | queued/active states in a fake OS: which state animates and which waits | 19 | 0 seen, 0 refuted | stills only | 7 reference / 4 look-alike / 8 drift |
-| `radar` | motion-tracker | the M513-3 sweep: a contact firms as the sweep crosses it and decays | 25 | 0 seen, 9 refuted | stills only | 12 reference / 4 look-alike / 9 drift |
-| `redaction` | tron-disc | an identity withheld, drawn as a shape | 23 | 0 seen, 0 refuted | stills only | 19 reference / 4 look-alike / 0 drift |
-| `river` | none | attempt ticks on an axis; the fake-OS boot screens are the nearest idiom, not joined | 0 | 0 seen, 0 refuted | no moving reference | **0 reference / 0 look-alike / 0 drift** |
-| `scaleCrush` | none | a fleet wall shrinking; nothing held | 0 | 0 seen, 0 refuted | no moving reference | **0 reference / 0 look-alike / 0 drift** |
-| `scanOverlay` | cyberpunk-hud | a scan pass that resolves what it passes over | 8 | 0 seen, 0 refuted | no moving reference | 0 reference / 0 look-alike / 8 drift — no usable reference |
-| `standardSheet` | none | a legend is a glyph table; the vault holds no reference for a legend refusing | 0 | 0 seen, 0 refuted | no moving reference | **0 reference / 0 look-alike / 0 drift** |
-| `stockFlow` | none | a flow that is named but has no stream mark; nothing held | 0 | 0 seen, 0 refuted | no moving reference | **0 reference / 0 look-alike / 0 drift** |
-| `strands` | none | delivery routes; closest is a shipping HMI, not held | 0 | 0 seen, 0 refuted | no moving reference | **0 reference / 0 look-alike / 0 drift** |
-| `stripChart` | spinner-console | a test over time: the line is the reading, the clock is real | 11 | 0 seen, 0 refuted | stills only | 7 reference / 4 look-alike / 0 drift |
-| `syncRatio` | insertion-sync | a percentage climbing under measurement with warning hatching | 25 | 0 seen, 0 refuted | 8.9s over 2 clip(s) | 17 reference / 4 look-alike / 4 drift |
-| `tape` | lumon | nothing moves until the operator moves; a hold is a hold | 21 | 0 seen, 0 refuted | 3.6s over 5 clip(s) | 21 reference / 0 look-alike / 0 drift |
-| `tapeSplice` | none | a splice in a retained reel: nothing in the vault draws an edit point | 0 | 0 seen, 0 refuted | no moving reference | **0 reference / 0 look-alike / 0 drift** |
-| `tracker` | motion-tracker | same idiom, second instrument | 25 | 0 seen, 9 refuted | stills only | 12 reference / 4 look-alike / 9 drift |
-| `triVision` | cyberpunk-hud | discrete optic modes, switched not transitioned | 8 | 0 seen, 0 refuted | no moving reference | 0 reference / 0 look-alike / 8 drift — no usable reference |
-| `twoState` | none | commit versus draft; nothing held | 0 | 0 seen, 0 refuted | no moving reference | **0 reference / 0 look-alike / 0 drift** |
+Two coverage columns are printed and they are not the same claim: `eye marks` counts
+verified files under the component's search seed, and `spec rows` counts verified
+files `SPECS-FOR.json` quotes as evidence about that component. `SPECS-FOR.json`
+also quotes files for the eleven mark KINDS (`level`, `trace`, `arrive`), which are
+not rows of this table and are counted below instead.
+
+| component | reference seed | why that reference | files | eye marks (seed) | spec rows (this component) | median loop | status mix |
+| --- | --- | --- | --- | --- | --- | --- | --- |
+| `admission` | none | a balance beam of offered against taken; nothing held | 0 | 0 seen, 0 refuted | **1** | no moving reference | **0 reference / 0 look-alike / 0 drift** |
+| `atField` | none | a written scope drawn as a field boundary; no reference held | 0 | 0 seen, 0 refuted | 0 | no moving reference | **0 reference / 0 look-alike / 0 drift** |
+| `bypass` | none | a bypass taken; nothing held | 0 | 0 seen, 0 refuted | 0 | no moving reference | **0 reference / 0 look-alike / 0 drift** |
+| `ceremony` | none | an acceptance ceremony state machine; nothing held | 0 | 0 seen, 0 refuted | 0 | no moving reference | **0 reference / 0 look-alike / 0 drift** |
+| `channel` | none | a channel's own state; nothing held | 0 | 0 seen, 0 refuted | 0 | no moving reference | **0 reference / 0 look-alike / 0 drift** |
+| `chipBudget` | none | a channel budget in HUD units; nothing held | 0 | 0 seen, 0 refuted | 0 | no moving reference | **0 reference / 0 look-alike / 0 drift** |
+| `city` | none | placement as city blocks; closest is a map surface, not held | 0 | 0 seen, 0 refuted | **1** | no moving reference | **0 reference / 0 look-alike / 0 drift** |
+| `collar` | spinner-console | a baseline that breathes with the subject, drawn as a measurement | 11 | 1 seen, 1 refuted | 0 | stills only | 7 reference / 4 look-alike / 0 drift |
+| `contextBurn` | none | a creep toward an edge; nothing held | 0 | 0 seen, 0 refuted | 0 | no moving reference | **0 reference / 0 look-alike / 0 drift** |
+| `coverage` | motion-tracker | swept ground: observed territory versus ground nobody looked at | 25 | 1 seen, 8 refuted | 0 | stills only | 12 reference / 4 look-alike / 9 drift |
+| `dispatch` | fake-os-loaders | a boot sequence: stages entered in order, not a spinner | 19 | 3 seen, 2 refuted | 0 | stills only | 7 reference / 4 look-alike / 8 drift |
+| `dominator` | lumon | graded authority in a corporate interface, deliberately inert | 21 | 0 seen, 0 refuted | 0 | 3.6s over 5 clip(s) | 21 reference / 0 look-alike / 0 drift |
+| `dossier` | tron-disc | the identity disc itself | 23 | 1 seen, 2 refuted | **1** | stills only | 19 reference / 4 look-alike / 0 drift |
+| `envelope` | none | a demand envelope; nothing in the vault draws envelopes | 0 | 0 seen, 0 refuted | 0 | no moving reference | **0 reference / 0 look-alike / 0 drift** |
+| `esperDive` | none | evidence dive levels; nothing held | 0 | 0 seen, 0 refuted | 0 | no moving reference | **0 reference / 0 look-alike / 0 drift** |
+| `garage` | none | assembly stages as a loadout; no reference held | 0 | 0 seen, 0 refuted | 0 | no moving reference | **0 reference / 0 look-alike / 0 drift** |
+| `gauge` | rig | a suit-integrity spine that drains as integrity is spent | 25 | 1 seen, 5 refuted | 0 | 1.2s over 1 clip(s) | 15 reference / 4 look-alike / 6 drift |
+| `gevulot` | none | visibility contract; nothing held | 0 | 0 seen, 0 refuted | 0 | no moving reference | **0 reference / 0 look-alike / 0 drift** |
+| `glassCell` | lumon | reviewed through glass, one direction only | 21 | 0 seen, 0 refuted | 0 | 3.6s over 5 clip(s) | 21 reference / 0 look-alike / 0 drift |
+| `globe` | hologlobe | a model that turns on its own clock with plotted routes that hold | 19 | 4 seen, 0 refuted | **3** | stills only | 15 reference / 4 look-alike / 0 drift |
+| `grid` | none | overview grid doctrine; no reference held | 0 | 0 seen, 0 refuted | **1** | no moving reference | **0 reference / 0 look-alike / 0 drift** |
+| `hardCut` | fake-os-loaders | a progress idiom that changes when the system changes state | 19 | 3 seen, 2 refuted | 0 | stills only | 7 reference / 4 look-alike / 8 drift |
+| `ice` | rig | walls as discrete barriers; a breach changes the shape, not the mood | 25 | 1 seen, 5 refuted | 0 | 1.2s over 1 clip(s) | 15 reference / 4 look-alike / 6 drift |
+| `individuation` | rig | identity marks on a shared harness, one per unit | 25 | 1 seen, 5 refuted | 0 | 1.2s over 1 clip(s) | 15 reference / 4 look-alike / 6 drift |
+| `joiOverlay` | spinner-console | a projection over the observation rather than onto it | 11 | 1 seen, 1 refuted | 0 | stills only | 7 reference / 4 look-alike / 0 drift |
+| `keycard` | lumon | an access affordance that is inert until taken | 21 | 0 seen, 0 refuted | 0 | 3.6s over 5 clip(s) | 21 reference / 0 look-alike / 0 drift |
+| `killmail` | none | a receipt for a loss; nothing held | 0 | 0 seen, 0 refuted | 0 | no moving reference | **0 reference / 0 look-alike / 0 drift** |
+| `ladder` | lumon | the same authority ladder in another Lumon surface | 21 | 0 seen, 0 refuted | 0 | 3.6s over 5 clip(s) | 21 reference / 0 look-alike / 0 drift |
+| `loopDeviation` | none | a loop spent against its period; the fake-OS loaders are nearest, not joined | 0 | 0 seen, 0 refuted | 0 | no moving reference | **0 reference / 0 look-alike / 0 drift** |
+| `magi` | magi | three cores deliberating, verdict after the vote | 34 | 0 seen, 1 refuted | 0 | 1.7s over 1 clip(s) | 15 reference / 11 look-alike / 8 drift |
+| `mfd` | spinner-console | instrument panels whose readouts resolve under a scanning pass | 11 | 1 seen, 1 refuted | 0 | stills only | 7 reference / 4 look-alike / 0 drift |
+| `muthur` | lumon | a terminal that answers what it can and prints the refusal | 21 | 0 seen, 0 refuted | 0 | 3.6s over 5 clip(s) | 21 reference / 0 look-alike / 0 drift |
+| `needleField` | rig | a spine of segment LEDs, each one a discrete measured state | 25 | 1 seen, 5 refuted | 0 | 1.2s over 1 clip(s) | 15 reference / 4 look-alike / 6 drift |
+| `oracle` | magi | fragments of testimony: each one arrives and holds | 34 | 0 seen, 1 refuted | 0 | 1.7s over 1 clip(s) | 15 reference / 11 look-alike / 8 drift |
+| `oscillation` | none | a rhythm hunt; sakugabooru-style frame sets would show a period, not held | 0 | 0 seen, 0 refuted | 0 | no moving reference | **0 reference / 0 look-alike / 0 drift** |
+| `queueState` | fake-os-loaders | queued/active states in a fake OS: which state animates and which waits | 19 | 3 seen, 2 refuted | 0 | stills only | 7 reference / 4 look-alike / 8 drift |
+| `radar` | motion-tracker | the M513-3 sweep: a contact firms as the sweep crosses it and decays | 25 | 1 seen, 8 refuted | **1** | stills only | 12 reference / 4 look-alike / 9 drift |
+| `redaction` | tron-disc | an identity withheld, drawn as a shape | 23 | 1 seen, 2 refuted | 0 | stills only | 19 reference / 4 look-alike / 0 drift |
+| `river` | none | attempt ticks on an axis; the fake-OS boot screens are the nearest idiom, not joined | 0 | 0 seen, 0 refuted | 0 | no moving reference | **0 reference / 0 look-alike / 0 drift** |
+| `scaleCrush` | none | a fleet wall shrinking; nothing held | 0 | 0 seen, 0 refuted | 0 | no moving reference | **0 reference / 0 look-alike / 0 drift** |
+| `scanOverlay` | cyberpunk-hud | a scan pass that resolves what it passes over | 8 | 1 seen, 2 refuted | 0 | no moving reference | 0 reference / 0 look-alike / 8 drift — no usable reference |
+| `standardSheet` | none | a legend is a glyph table; the vault holds no reference for a legend refusing | 0 | 0 seen, 0 refuted | 0 | no moving reference | **0 reference / 0 look-alike / 0 drift** |
+| `stockFlow` | none | a flow that is named but has no stream mark; nothing held | 0 | 0 seen, 0 refuted | 0 | no moving reference | **0 reference / 0 look-alike / 0 drift** |
+| `strands` | none | delivery routes; closest is a shipping HMI, not held | 0 | 0 seen, 0 refuted | **1** | no moving reference | **0 reference / 0 look-alike / 0 drift** |
+| `stripChart` | spinner-console | a test over time: the line is the reading, the clock is real | 11 | 1 seen, 1 refuted | 0 | stills only | 7 reference / 4 look-alike / 0 drift |
+| `syncRatio` | insertion-sync | a percentage climbing under measurement with warning hatching | 25 | 0 seen, 5 refuted | 0 | 8.9s over 2 clip(s) | 17 reference / 4 look-alike / 4 drift |
+| `tape` | lumon | nothing moves until the operator moves; a hold is a hold | 21 | 0 seen, 0 refuted | 0 | 3.6s over 5 clip(s) | 21 reference / 0 look-alike / 0 drift |
+| `tapeSplice` | none | a splice in a retained reel: nothing in the vault draws an edit point | 0 | 0 seen, 0 refuted | 0 | no moving reference | **0 reference / 0 look-alike / 0 drift** |
+| `tracker` | motion-tracker | same idiom, second instrument | 25 | 1 seen, 8 refuted | 0 | stills only | 12 reference / 4 look-alike / 9 drift |
+| `triVision` | cyberpunk-hud | discrete optic modes, switched not transitioned | 8 | 1 seen, 2 refuted | 0 | no moving reference | 0 reference / 0 look-alike / 8 drift — no usable reference |
+| `twoState` | none | commit versus draft; nothing held | 0 | 0 seen, 0 refuted | 0 | no moving reference | **0 reference / 0 look-alike / 0 drift** |
+
+**Spec coverage of the components: 7 of 51** have at least one verified file quoted for them (`admission`, `city`, `dossier`, `globe`, `grid`, `radar`, `strands`). The other 44 are drawn against nothing that survived the eye, and no amount of re-ranking of the current haul changes that — the remaining moving files in `vault/RANK.json` come from the same population that has been rejecting at about one interface in ten. Acquisition, not ranking, is the lever.
+
+Mark kinds quoted: `arrive`, `level`, `rules page`, `trace`.
+
 
 ## What this vault cannot show yet
 
@@ -94,66 +105,3 @@ every file before a number is taken from it.
 Vault status counts: 87 drift, 39 look-alike, 147 reference.
 
 Re-run after every acquisition and after any change to the component list: `python3 vault/map.py`.
-
----
-
-## The eye pass, and what it unblocked
-
-`MAPPING.md` was written from text, and said plainly that text could not be trusted about
-pictures. It has now been read against pictures: **37 of the 131 moving files put in front of
-an eye** (`python3 vault/eyeball.py`, strips of eight frames sampled across each file's own
-timeline), **11 verified**, and the specs measured off those 11 are in `vault/SPECS.md`.
-
-The yield is the finding. Of the seeds whose subjects have the most famous interfaces in the
-genre, essentially none produced a usable reference, and the reason is structural: a GIF host
-indexes *works and characters*, because that is what people search. What each seed actually
-returned:
-
-| seed | wanted | largest moving files actually show |
-| --- | --- | --- |
-| `motion-tracker` | Aliens motion tracker | a Mega Man cartoon, a man falling down, a kitchen fan, a balance-beam physics sim |
-| `rig` | Dead Space RIG spine | a spaceship under engine glow; cinematic footage of armoured figures |
-| `insertion-sync` | Evangelion insertion interface | a person in a white room; a snowy road with the words `sync` / `done.` stamped on it |
-| `spinner`, `spinner-console` | Blade Runner 2049 spinner HUD | an amber-lit face, and separately a starship under warp |
-| `gits-optic` | Ghost in the Shell optic overlay | two schoolgirls reading a magazine; a character over a static painted skyline |
-| `cyberpunk-hud` | Cyberpunk 2077 overlay | a figure crawling a tunnel under a glitch filter, watermarked |
-| `magi` | MAGI display | one file of illegible green text tearing into shards; nothing quotable |
-
-Verified and quotable instead: three globes, a survey grid with a travelling contact, a warp
-trail, a circuit trail, a progress-marker on a lane, and a balance beam. Two fake-OS loaders
-are verified as **counter-examples** — a rotating word and a cycling ellipsis, both with no
-quantity anywhere — which is what the rules page needed and did not have.
-
-**The rule this writes for future acquisition: a reference must be a frame where the screen
-fills the frame.** Name the interface, not the work; prefer prop renders, studio art pages and
-UI-in-film archives over clip sites; and let no text-derived relevance reach a spec without an
-eye's mark on it. `vault/mark.py` still sorts by caption and tag, and it is still the least
-trustworthy layer in the vault.
-
-Three instruments came out of doing it, all in `vault/`:
-
-- `eyeball.py` — strips, checklist, and the marks. Marks are addressed by sheet row against a
-  written index and the tool refuses any path that is not in `MANIFEST.json`, because three
-  marks had been written against hashes filled in from truncated sheet labels: descriptions of
-  pictures attached to files that do not exist. Those marks have been moved to the rows actually
-  looked at and carry a `correction` note; one more was attached to the wrong row and is
-  corrected on the record too.
-- `rank.py` — a queue for the eye, scored off the pixels (flat colour fields, dark ground,
-  saturated ink in motion, a middle band of coverage). It decides nothing: 114 unseen files, and
-  the eye still marks every one that gets quoted.
-- `spec.py` — durations from the GIF's own delays, entry order and dead cells from a 4×3 grid,
-  the travel of the changed-pixel centroid, and a loop only when the picture genuinely returns.
-  Its component table is `SPECS-FOR.json`, hand-written, and it refuses to render a file no eye
-  verified.
-
-`spec.py` measured the wrong thing twice before it measured the right thing. The first measure
-was an area of saturated ink and reported 1176 pixels constant across the whole progress bar —
-the *track* is green ink and the thing that travels is a bright head along it. The bright
-centroid then found the two white terminal glyphs parked at the ends and called the centre
-still. The centroid of the pixels that **changed** is what tracks a marker past its own
-furniture, and it corroborates the eye from the other direction: the hue-cycled globe returns
-`no travel`, which is the same claim the eye made from the strips.
-
-**Still uneyeballed: 94 moving files.** No verified reference exists for `magi`, `syncRatio`,
-`esperDive`, `dossier`, `mfd`, `triVision`, `dispatch`, `chipBudget`, and everything MAPPING
-listed as having no reference still has none.
