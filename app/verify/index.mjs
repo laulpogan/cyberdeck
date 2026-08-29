@@ -42,9 +42,7 @@ const DRAWN_ONLY = new Set(allComponents()
 // serially takes an hour. `SHARD=2/4` takes every fourth route starting at the second,
 // so four processes finish together and each writes its own results file.
 const SHARD = process.env.SHARD ? process.env.SHARD.split('/').map(Number) : [1, 1];
-const _all = process.env.ROUTES
-  ? process.env.ROUTES.split(',')
-  : [
+const DEFAULT_ROUTES = [
     '#/',
     '#/overview',
     '#/rules',
@@ -52,6 +50,25 @@ const _all = process.env.ROUTES
     ...REGISTRY.map((family) => `#/families/${family.slug}`),
     ...allComponents().map((component) => `#/component/${component.key}`),
   ];
+// Routes may be named by argument OR by `ROUTES=a,b`. Until this block existed the argument
+// form looked harmless and was not: it was ignored, the sweep ran over every route at four
+// viewports, and a check written to look at one page reported the landing page instead — which
+// cost a 15-minute kill and left a page unverified. An unknown route now refuses to run at all,
+// because under a hash router a typo'd path renders Home, and a gate that measures Home while
+// naming another page is worse than no gate at all.
+const _requested = process.env.ROUTES
+  ? process.env.ROUTES.split(',').map((r) => r.trim())
+  : process.argv.slice(2);
+const _all = _requested.length ? _requested : DEFAULT_ROUTES;
+if (_requested.length) {
+  const unknown = _requested.filter((route) => !DEFAULT_ROUTES.includes(route));
+  if (unknown.length) {
+    console.error(`verify: ${unknown.join(', ')} is not a route the app has. Not running:`);
+    console.error("  a typo'd route renders the landing page under a hash router, and the pass");
+    console.error('  would be real about the wrong page.');
+    process.exit(2);
+  }
+}
 const routes = _all.filter((_, i) => i % SHARD[1] === SHARD[0] - 1);
 if (SHARD[1] > 1) console.log(`shard ${SHARD[0]}/${SHARD[1]}: ${routes.length} of ${_all.length} routes`);
 
