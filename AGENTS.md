@@ -864,3 +864,13 @@ after the tag's `>`, so nothing about geometry changed and the instrument honest
 The tell was in its own output: the row's `value=width` pairs were all equal. After every sabotage plant, confirm
 the change is observable in the measurement (a value moved, a mark appeared, a string printed); a red proves the
 instrument, a green proves nothing until you know the defect was in the room.
+
+## A change-time check must wait for its own precondition, not sleep
+
+`app/verify/index.mjs` clicked the evidence switch, slept 600 ms, sampled, and under four-shard concurrency sometimes
+read a page React had not re-rendered — the measured render scored as the refused one, producing thirteen false
+motion-without-evidence reds against a green library. Fixed by polling for a delta in three numbers (specimen markup
+size, declared refusals, printed refusal words — three because twelve components refuse by ink, not mark) and, when
+nothing ever changed, emitting one red that names the failed precondition and **skips the checks underneath instead of
+scoring them**. Any check that clicks, toggles, or dispatches and then samples needs this: sleep proves the clock, only
+a delta proves the change.

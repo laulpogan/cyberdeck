@@ -220,9 +220,22 @@ export const OSCILLATION_CANDIDATE = 3;
  * somewhere, which is the one thing ESPER is famous for getting wrong. */
 export function esperDive({ levels }) {
   if (!levels || !levels.length) {
-    return card('esper', 'ESPER evidence dive', '',
-      { refusalWord: 'NO DEPTH MEASURED',
-    mark: still('nothing was dived into') });
+    // The absence is drawn where the levels would have stood, at a level row's own geometry, and
+    // the refusal line under the card names the reason. `card`'s refusal furniture prints a word
+    // either way; what it cannot do is stand in for a picture, and the drawing test says so in the
+    // language the audit reads — region kinds. With nothing supplied this plate used to render an
+    // empty frame, `loses its drawing entirely`, which is the board's third argument answered
+    // backwards: a blank flap occupies the cell, holds its position, and takes the same time to
+    // arrive as a digit, rather than deleting the field and letting the row shrink.
+    const band = `<g class="cd-riv-empty"${attrs(still('nothing was dived into'))}>`
+      + hatched(PAD, 12, SPAN, 52)
+      + text(W / 2, 42, 'NO DEPTH MEASURED', { size: 9, anchor: 'middle' })
+      + '</g>';
+    return card('esper', 'ESPER evidence dive',
+      frame(W, H, band, {
+        label: 'Nothing was dived into: the band is where the levels would have stood.',
+      }),
+      { refusalWord: 'NO DEPTH MEASURED', mark: still('nothing was dived into') });
   }
   const gap = 12;
   const bw = (SPAN - gap * (levels.length - 1)) / levels.length;
@@ -268,11 +281,20 @@ export function esperDive({ levels }) {
   levels.forEach((level, i) => {
     const y = 96 + i * 25;
     const known = level.value !== null && level.value !== undefined && level.value !== '';
+    // The reveal sequence belongs to the rows that hold something. An unconditional `count(i, n)`
+    // here animated four rows of the dive after every value was removed — motion reporting
+    // measurements that had been taken away, unlicensed, because `esperDive` is not named in
+    // `app/src/undeclared.js` and should not be: the floor row draws NO RESOLUTION, which is a
+    // declaration about the record, not an observation arriving. `data-known` already told this
+    // story; the mark now agrees with it.
+    const rowMark = known ? count(i, levels.length)
+      : still(level.floor ? 'the record stops here; the floor is drawn, not measured'
+                          : 'this row was not measured');
     // The row under the windows, not another window. It carried `cd-riv-level` too, which is
     // how an audit that reads class names came to count seven decoy windows in a four-level
     // dive: one class for two roles makes every count a guess, in the CSS and in the tests.
     g.push(`<g class="cd-riv-readrow" data-floor="${level.floor ? 1 : 0}" `
-      + `data-known="${known ? 1 : 0}"${attrs(count(i, levels.length))}>`
+      + `data-known="${known ? 1 : 0}"${attrs(rowMark)}>`
       + text(PAD, y, level.label, { size: 7, opacity: '.7' })
       + text(PAD, y + 11, known ? String(level.value)
           : (level.floor ? NO_RESOLUTION : 'UNMEASURED'),

@@ -1549,3 +1549,62 @@ their own colour discipline. Filed rather than forced: a reading that implies wo
 
 Gauntlet 23 rows: **21 pass, 2 held, 0 FAIL**. Gate green on `#/component/stockFlow` and `#/families/organism` (9
 passes). Coverage tiers add up: 21 spec-held + 17 files-only + 13 nothing. `npm test` 297.
+
+## The sweep that lied: thirteen components "still marked", and the sharded run was the defect
+
+I started a full sweep to re-establish the 261-pass artifact after a day of library edits, and its partial log named
+thirteen components for marks surviving the evidence switch — `glassCell trace@cd-dc-sightline`, `oscillation`,
+`syncRatio`, `radar`, `scaleCrush`, `ceremony`, `globe`, `mfd`, `dominator`, `esperDive` and more. Every one of those
+components is documented in `app/src/undeclared.js` as **already fixed into a declared refusal**, and every route I ran
+afterward came back green. Running one shard alone: **67 passes over 16 routes, no complaint anywhere**.
+
+The failure mode was the instrument, not the library. `app/verify/index.mjs` clicked the evidence switch, slept a fixed
+600 ms, and sampled. Four shards share one dev server, and under that load the sample sometimes landed on a page React
+had not re-rendered yet — the **measured render wearing the refused render's clothes**. Every mark on the page then
+looked like motion-without-evidence, which is the exact defect that check exists to find. A check whose precondition can
+silently fail reports its own failure condition as a finding, and I nearly spent the day fixing thirteen components that
+were innocent.
+
+The fix is to wait for the thing I am about to score, and to say so when it never happened:
+
+```js
+const beforeShape = await shapeOf();          // markup size, declared refusals, printed refusal words
+await evidenceSwitch.click();
+for (let waited = 0; waited < 4000 && !changed; waited += 100) { …poll… }
+```
+
+Three numbers, not one, because **twelve components refuse by ink rather than by mark** — a `still`-count delta cannot
+see them, and my first attempt at this guard used exactly that and passed over a sabotaged build. With the click
+disabled as a sabotage, the instrument now reports a single red — *"the evidence switch never took effect over 1
+specimen(s) (9 mark(s) still on the page: the specimen markup, the declared refusals, and the printed refusal words all
+read identical after the click) — this is the measured render wearing the refused render's clothes, so the mark, drawing
+and height checks below are skipped rather than scored"* — instead of four copies of a bogus "still marked". Pages that
+legitimately owe no refusal (`#/primitives`, a shape gallery with nothing to remove) do not owe the complaint either.
+
+**`esperDive` was real, and it took the fixture fix to see it.** The same partial log said *"`esperDive` loses its
+drawing entirely when the evidence goes"*, and this one was true: its `levels: []` branch returned a card whose body was
+`''` — the refusal sentence printed underneath an empty picture. The Solari board's third argument is the standard: *a
+blank flap occupies the cell, holds its position, and takes the same time to arrive as a digit, rather than deleting the
+field and letting the row shrink.* So the empty dive now draws a hatched band at a level row's own geometry with `NO
+DEPTH MEASURED` inside it, `still`-marked, in the same `viewBox` — no growth, which the pair-height rule would otherwise
+catch. `SPECS-FOR` now quotes the board for `esperDive` (coverage 22), and the sweep's red was observed **before** any of
+my edits, which is the only reason I trust the claim.
+
+Then the fixture change exposed a second, worse defect. `esperDive`'s fixture declared `['levels[].value', 'levels']` —
+the whole array as well as its values — so the dark model deleted the plate's shape, which is how the two columns drift
+into being two different components. With the array kept and only its values nulled, four readout rows appeared, **all
+carrying `count(i, n)`**, animating an arrival for values that had been taken away, unlicensed, with `still=0` beside
+`peak=10`. The mark now follows the value it sits on: measured → `count(i, levels.length)`; unmeasured →
+`still('this row was not measured')`; the floor row → `still('the record stops here; the floor is drawn, not measured')`
+because `NO RESOLUTION` is a declaration about the record, not an observation arriving. `data-known` had been telling
+this story all along and the mark simply disagreed with the attribute next to it.
+
+Two-way proof, both directions run: old fixture + fixed component → **4 passes** (the drawing fix alone suffices); fixed
+fixture + reverted component → **4 problems** (so the defect was the component's, and the fixture had been hiding it).
+Five tests in `test/esper-empty.test.mjs` pin the band, the mark, the shared `viewBox`, the per-row mark rule, and a dive
+that is motionless because nothing is known. `npm test` 302.
+
+A note on my own arithmetic, since it is the kind that wastes an afternoon: I attributed the sweep's complaints to
+routes by looking for `· /route` headers and got it wrong, because four shards write one stdout and I read it as if it
+were one stream. The shard tag `[2/4]` was already there; grouping by it is what made the table legible. Interleaved
+output needs the tag used, not just present.

@@ -45,7 +45,14 @@ export const RIVER_FIXTURES = {
     // A dive is as deep as the record goes. The floor is drawn as a frame, not
     // left off the end: a viewer that keeps offering another step teaches an
     // operator that the detail exists somewhere.
-    fields: ['levels[].value', 'levels'],
+    // Which levels the diver *knew* is the measurement; the shape of the dive is the attempt,
+    // and the attempt is not evidence. Declaring `levels` wholesale let the dark model delete the
+    // plate's shape, which is how the full sweep caught `esperDive` rendering an empty frame under
+    // the evidence switch: the two columns drifted into being two different components. The empty
+    // case is real too — a producer that sends no array at all — and it stays covered by
+    // `test/esper-empty.test.mjs`, which is where a drawing that does not depend on the fixture
+    // belongs.
+    fields: ['levels[].value'],
     model: {
       levels: [
         { label: 'SUBJECT', value: 'ses-4419', cite: 'sessions[].id' },

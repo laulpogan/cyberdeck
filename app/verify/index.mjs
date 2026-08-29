@@ -584,8 +584,31 @@ for (const route of routes) {
         // have nothing to do with the drawing. See `drawing.mjs` for what this instrument is
         // for and `negative-control.mjs` for the run that proves it bites.
         const drawingsOn = await page.evaluate(eval(DRAWING_PROBE), DRAWING_SELECTOR);
+        // The state of the page before the switch, in three numbers that a re-render must move:
+        // the specimen markup's size, the count of declared refusals, and the count of printed
+        // refusal words (twelve components refuse by ink rather than by mark, so a `still` count
+        // alone cannot see them). Polling for change instead of sleeping is what makes this check
+        // survive load: a shard beside three others can sample a page React has not re-rendered
+        // yet, and a page sampled mid-flight is the measured render wearing the refused render's
+        // clothes — which is how thirteen components came to "still be marked" over a build that
+        // had refused every one of them.
+        const shapeOf = () => page.evaluate(() => ({
+          size: [...document.querySelectorAll('[data-specimen-view]')]
+            .reduce((n, n2) => n + n2.innerHTML.length, 0),
+          still: document.querySelectorAll('[data-still-reason]').length,
+          words: [...document.querySelectorAll('[data-specimen-view] text, [data-specimen-view] span, [data-specimen-view] div')]
+            .filter((el) => el.children.length === 0 && /UNMEASURED|UNPRICED|UNATTRIBUTED|NO PROOF HISTORY|\bDARK\b|NO RESOLUTION|NO DEADLINE SET/.test(el.textContent || '')).length,
+        }));
+        const beforeShape = await shapeOf();
         await evidenceSwitch.click();
-        await page.waitForTimeout(600);
+        let changed = false;
+        for (let waited = 0; waited < 4000 && !changed; waited += 100) {
+          await page.waitForTimeout(100);
+          const now = await shapeOf();
+          changed = now.size !== beforeShape.size || now.still !== beforeShape.still
+            || now.words !== beforeShape.words;
+        }
+        await page.waitForTimeout(300);
         const off = await page.evaluate(() => ({
           still: document.querySelectorAll('[data-motion="still"]').length,
           // Counted per specimen, because a component can answer "no measurement" by
@@ -616,63 +639,87 @@ for (const route of routes) {
               .reduce((sum, el) => sum + el.getBoundingClientRect().height, 0))),
           painted: getComputedStyle(document.body).backgroundColor,
         }));
-        if (off.verdict !== 0) bad.push(`with evidence absent the verdict reads ${off.verdict}`);
-        // The promise this app makes, stated as a check: with evidence absent, no
-        // drawing on the page is still moving. Four specimens in the library mark
-        // themselves as moving without asking a measurement first -- `trace(true)` and
-        // `count(0, 1)`, named one by one in `app/src/undeclared.js` -- so those marks
-        // are allowed, and only those, and only where they are named. An empty list
-        // here means an empty licence: everything else has to refuse.
-        const licence = Object.fromEntries(Object.entries(UNCONDITIONAL_MARKS)
-          .map(([key, entries]) => [key, entries.map((entry) => `${entry.kind}@${entry.carrier}`)]));
-        for (const specimen of off.liveMarks) {
-          const allowed = licence[specimen.label] || [];
-          const extra = specimen.marks.filter((m) => !allowed.includes(m));
-          if (extra.length) {
-            bad.push(`${specimen.label} is still marked ${extra.join(', ')} with every measurement removed `
-              + `(named here: ${allowed.join(', ') || 'nothing'})`);
+        // The precondition this whole section silently assumed: the click landed. A button that
+        // is disabled does nothing when clicked, and a page under load can be sampled before the
+        // re-render lands — in both cases the "refused" render IS the measured render, and every
+        // check below reports the marks it is hunting for as if the operator had taken the
+        // evidence away. Four shards against one dev server produced exactly these false reds:
+        // thirteen components "still marked", one "loses its drawing". Score those checks only
+        // over a render that proves it changed, and say plainly when it did not.
+        const switchTook = changed;
+        const marksLeft = off.liveMarks.reduce((n, s) => n + s.marks.length, 0);
+        // Only pages that show registry components owe a refusal at all — the primitives page is a
+        // shape gallery with no measurement anywhere to remove, and demanding a refusal from it
+        // would be demanding a lie. It also does not owe the precondition complaint.
+        const owesRefusal = readout.specimens.some((spec) => COMPONENT_KEYS.has(spec.label)
+          && !DRAWN_ONLY.has(spec.label));
+        if (!switchTook && owesRefusal) {
+          bad.push(`the evidence switch never took effect over ${readout.specimens.length} specimen(s) `
+            + `(${marksLeft} mark(s) still on the page: the specimen markup, the declared refusals, and `
+            + `the printed refusal words all read identical after the click) — `
+            + `this is the measured render wearing the refused render's clothes, so the mark, drawing and `
+            + `height checks below are skipped rather than scored: an instrument that cannot tell "the `
+            + `refusal is applied" from "nothing happened" reports the very defect it hunts`);
+        }
+        if (switchTook) {
+          if (off.verdict !== 0) bad.push(`with evidence absent the verdict reads ${off.verdict}`);
+          // The promise this app makes, stated as a check: with evidence absent, no
+          // drawing on the page is still moving. Four specimens in the library mark
+          // themselves as moving without asking a measurement first -- `trace(true)` and
+          // `count(0, 1)`, named one by one in `app/src/undeclared.js` -- so those marks
+          // are allowed, and only those, and only where they are named. An empty list
+          // here means an empty licence: everything else has to refuse.
+          const licence = Object.fromEntries(Object.entries(UNCONDITIONAL_MARKS)
+            .map(([key, entries]) => [key, entries.map((entry) => `${entry.kind}@${entry.carrier}`)]));
+          for (const specimen of off.liveMarks) {
+            const allowed = licence[specimen.label] || [];
+            const extra = specimen.marks.filter((m) => !allowed.includes(m));
+            if (extra.length) {
+              bad.push(`${specimen.label} is still marked ${extra.join(', ')} with every measurement removed `
+                + `(named here: ${allowed.join(', ') || 'nothing'})`);
+            }
           }
-        }
-        // "A refusal keeps its space" has to be measured *against a refusal*, and the first
-        // version of this did not: the only height floor in this file ran on the
-        // evidence-present page, where nothing is refused, so the sweep stayed green while
-        // twelve components answered "no measurement" by returning a card with an empty body
-        // -- frame and sentence standing, drawing area gone, the globe 445px down to 15.
-        //
-        // Its replacement measures the drawing rather than the card, because a ratio cannot
-        // tell a vanished picture from a refusal that is honestly shorter than the presence it
-        // refuses: MU/TH/UR's console with one unasked prompt is not four answered queries, and
-        // asking it to pad out to four would be asking for a lie. Same instrument, sharper
-        // question -- is the picture still there, and is it still drawing-sized?
-        const drawingsOff = await page.evaluate(eval(DRAWING_PROBE), DRAWING_SELECTOR);
-        const byLabel = new Map(drawingsOff.map((d) => [d.label, d]));
-        const lost = drawingVerdict(drawingsOn
-          .filter((d) => byLabel.has(d.label))
-          .map((d) => ({ label: d.label, measured: d, refused: byLabel.get(d.label) })));
-        if (lost.length) {
-          bad.push(`${lost.length} specimen(s) fail the drawing test when the evidence goes: `
-            + lost.slice(0, 4).join('; ') + (lost.length > 4 ? ` and ${lost.length - 4} more` : ''));
-        }
-        // The asymmetric half: a refusal may say less, so it may be shorter — MU/TH/UR's
-        // console with one unasked prompt legitimately halves. It may not be taller: that
-        // is ink the measurement never claimed, and it moves everything below the card
-        // because someone changed an epistemic state. `scaleCrush` did +371px and
-        // `individuation` +554px before the refusal frames were sized to the space.
-        if (off.heights.length === before.specimens.length) {
-          const grew = layoutVerdict(before.specimens.map((spec, i) => ({
-            label: spec.label, measured: spec.h, refused: off.heights[i],
-            reason: off.reasons?.[i] ?? 0,
-          })).filter((pair) => COMPONENT_KEYS.has(pair.label)));
-          if (grew.length) bad.push(grew.slice(0, 3).join('; ')
-            + (grew.length > 3 ? `; and ${grew.length - 3} more` : ''));
-        }
-        // Only pages that show registry components owe this one. The primitives page
-        // is a shape gallery -- seventeen drawings, no measurement anywhere to remove --
-        // and demanding a refusal from it would be demanding a lie.
-        const declaredOnes = before.specimens
-          .filter((spec) => COMPONENT_KEYS.has(spec.label) && !DRAWN_ONLY.has(spec.label));
-        if (declaredOnes.length && off.still < 1) {
-          bad.push('with evidence absent the page declares no refusal anywhere');
+          // "A refusal keeps its space" has to be measured *against a refusal*, and the first
+          // version of this did not: the only height floor in this file ran on the
+          // evidence-present page, where nothing is refused, so the sweep stayed green while
+          // twelve components answered "no measurement" by returning a card with an empty body
+          // -- frame and sentence standing, drawing area gone, the globe 445px down to 15.
+          //
+          // Its replacement measures the drawing rather than the card, because a ratio cannot
+          // tell a vanished picture from a refusal that is honestly shorter than the presence it
+          // refuses: MU/TH/UR's console with one unasked prompt is not four answered queries, and
+          // asking it to pad out to four would be asking for a lie. Same instrument, sharper
+          // question -- is the picture still there, and is it still drawing-sized?
+          const drawingsOff = await page.evaluate(eval(DRAWING_PROBE), DRAWING_SELECTOR);
+          const byLabel = new Map(drawingsOff.map((d) => [d.label, d]));
+          const lost = drawingVerdict(drawingsOn
+            .filter((d) => byLabel.has(d.label))
+            .map((d) => ({ label: d.label, measured: d, refused: byLabel.get(d.label) })));
+          if (lost.length) {
+            bad.push(`${lost.length} specimen(s) fail the drawing test when the evidence goes: `
+              + lost.slice(0, 4).join('; ') + (lost.length > 4 ? ` and ${lost.length - 4} more` : ''));
+          }
+          // The asymmetric half: a refusal may say less, so it may be shorter — MU/TH/UR's
+          // console with one unasked prompt legitimately halves. It may not be taller: that
+          // is ink the measurement never claimed, and it moves everything below the card
+          // because someone changed an epistemic state. `scaleCrush` did +371px and
+          // `individuation` +554px before the refusal frames were sized to the space.
+          if (off.heights.length === before.specimens.length) {
+            const grew = layoutVerdict(before.specimens.map((spec, i) => ({
+              label: spec.label, measured: spec.h, refused: off.heights[i],
+              reason: off.reasons?.[i] ?? 0,
+            })).filter((pair) => COMPONENT_KEYS.has(pair.label)));
+            if (grew.length) bad.push(grew.slice(0, 3).join('; ')
+              + (grew.length > 3 ? `; and ${grew.length - 3} more` : ''));
+          }
+          // Only pages that show registry components owe this one. The primitives page
+          // is a shape gallery -- seventeen drawings, no measurement anywhere to remove --
+          // and demanding a refusal from it would be demanding a lie.
+          const declaredOnes = before.specimens
+            .filter((spec) => COMPONENT_KEYS.has(spec.label) && !DRAWN_ONLY.has(spec.label));
+          if (declaredOnes.length && off.still < 1) {
+            bad.push('with evidence absent the page declares no refusal anywhere');
+          }
         }
         await evidenceSwitch.click();
         await page.waitForTimeout(400);
