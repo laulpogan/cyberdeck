@@ -65,10 +65,25 @@ the page moves on the producer's clock and goes dark when it stops.
   wins, then the repo tree, then the npm global root. If none resolve, the
   browser file skips with a note — do not "fix" the skip by weakening it.
 
+## The film camera (`scripts/motion-film.mjs`)
+
+Contact sheets for every spec in `vault/film/` (gitignored). Modes:
+plain (load reel), `--interact` (strip the page's evidence and restore
+it -- films the arrival), `--live-reel` (films `#/live` and kills the
+producer mid-roll; must end DARK with `MEW=0`), `--theme light`,
+`--reduced`. Verdict vocabulary: `BY-DESIGN` = the full model carries no
+movable mark (that is the refusal, not a failure); interval clocks count
+via `CyberdeckMotion.clocks()`, never WAAPI. A 406px montage cell cannot
+carry a glyph-level verdict -- decide those on raw frames. The live slot
+starts as a stub and grows: clip the viewport, never a mount-time rect.
+
 ## Gotchas that cost hours once
 
 - `CyberdeckMotion.start()` fires on `DOMContentLoaded`; the app module
-  mounts after that listener. Mounting before it double-starts every mark.
+  mounts after that listener. Mounting before it double-starts every
+  mark -- start() now keeps a per-node played-guard (a JS WeakSet, never
+  an attribute: the settled markup must stay byte-identical) so a
+  re-handoff can never stack a second animation on one element.
 - Motion mini commits final keyframes into inline `style` on finish. The
   runtime remembers each node's rendered style at `play()` and restores it
   on settle; handlers that write inline style before `play()` (trace's dash,
