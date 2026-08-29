@@ -1608,3 +1608,26 @@ A note on my own arithmetic, since it is the kind that wastes an afternoon: I at
 routes by looking for `· /route` headers and got it wrong, because four shards write one stdout and I read it as if it
 were one stream. The shard tag `[2/4]` was already there; grouping by it is what made the table legible. Interleaved
 output needs the tag used, not just present.
+
+## Clean sweep, and what it took to earn the word
+
+After the guard learned what a legend is, the whole surface passes again: **261 checks over 63 routes × two widths ×
+two schemes, `MOVING WITHOUT EVIDENCE` reading 0 on every one of them**, this time with the radar turning, the river
+sharing one axis, the collar refusing its deadline in ink, and `esperDive` drawing its absence at a level row's own
+geometry. The number is the same as the pre-vault artifact and means something different: it was taken over a build
+whose motion had been measured against references, and by an instrument that now refuses to score itself over a page
+that never changed.
+
+Three things this sweep taught about instruments, in the order they hurt:
+
+1. **A legend is not a reading.** `/component/standardSheet` and `/component/channel` declare `fields: []` — there is
+   no measurement on a key or a trust-class legend for the toggle to take away — and my new precondition guard demanded
+   that they change anyway. The exemption is now read out of `FIXTURES[label].fields` rather than hard-coded in the
+   checker: *a licence that lives in the checker is a licence nobody reviews.*
+2. **A count printed in a red run is a false green wearing a statistic's clothes.** The tool printed
+   `8 passes over 2 routes × 2 widths × 2 schemes` on the same run that printed `✗ 4 with problems`, because the count
+   line was unconditional and counted rendered configs rather than verified claims — and `grep passes` is the first
+   thing any reviewer reaches for. The summary is now one line, one verdict.
+3. **A snapshot restores a state, not an intent.** Undoing a sabotage with `cp /tmp/index.guard3.js` reverted a fix I
+   had made *after* the snapshot was taken, and the file passed `node --check` looking entirely innocent. The diff is
+   what tells you what the copy took back.

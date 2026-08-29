@@ -874,3 +874,10 @@ size, declared refusals, printed refusal words — three because twelve componen
 nothing ever changed, emitting one red that names the failed precondition and **skips the checks underneath instead of
 scoring them**. Any check that clicks, toggles, or dispatches and then samples needs this: sleep proves the clock, only
 a delta proves the change.
+
+## One line, one verdict — never print a pass count in a red run
+
+`app/verify/index.mjs` used to print `8 passes over 2 routes …` on a run that also printed `✗ 4 with problems`: the
+count line was unconditional and counted rendered configs, not verified claims, and `grep passes` is what a reviewer
+or a shard's parent reads first. Print the count only when it is the whole truth (`✗ RED — 4 of 8 configs with
+problems …` otherwise). Same rule for any tool that reports both.
