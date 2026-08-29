@@ -115,3 +115,20 @@ counts, big counts still ride the step and compress at the ceiling. The
 dive materialises frame by frame, the MFD deck fills with a visible
 pause between panes, and the 216-cell fleet wall still admits its count
 inside about a second. 176/176.
+
+### magi -- cycle 1 -- the conclave convenes seat by seat
+Reference: vault motion strip magi-scene (Evangelion MAGI screen; the
+three terminals flip to their verdicts one after another, the tally
+accumulating last). Our panel's spoke-seats trace on data-index across
+three -- under the shared cascade rule that is 0/160/320ms, and the film
+shows exactly the canon's beat: frame, then seat, then seat, subject in
+the middle, footer tally arriving last. The silent seat never moves: it
+has no evidence to trace on. PASS as drawn; the fix was the shared rule,
+not new code.
+
+Vault note: the Ghost in the Shell thermoptic clip's sampled windows held
+no HUD, so both strips were deleted rather than kept. The ESPER dive
+window (viewfinder codes, progressive enhancement to the face) is the
+canonical study for the esper component -- it confirms the frame-by-frame
+materialise we shipped; image-processing blur-to-sharp stays out of
+scope, we draw frames of data, not pixels.
