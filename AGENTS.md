@@ -719,3 +719,24 @@ superb dispatch reference and the camera was handheld, so `travel of the bright 
 the board's own centroid travel is close to zero — a flap changes **in place**. Where a split-flap
 recorded from a moving camera measures travel, the travel is the cameraperson. Say so in the file
 record before somebody quotes the number.
+
+## A change window is ~300ms, and a sabotage must be planted in the real mechanism
+
+Two ways this vault nearly shipped a fake instrument, both in `no_blend_on_change` (the Solari board's
+rule: a value change shows one face or the other). The recorder found **zero** animations in the change
+window when it sampled at +60/+180/+420/+900ms, and **four** when the same window was sampled at
++30/+50/+70/+150/+300ms: a field change re-runs one entrance, so the whole window is ~300ms. Anything
+that waits a beat before looking reports a clean it never looked at.
+
+And a sabotage must exist in the mechanism the code uses. A stylesheet rule
+`animation: sabotage-fade 900ms linear` on specimen `<text>` produced **no `Animation` object at all** —
+computed style named the animation, `getAnimations()` held nothing, and adding `infinite` changed
+nothing, because the `@keyframes` never resolved. Three invalid sabotage attempts went by before one
+was planted where the library actually animates: a component marking a text-bearing group, which the
+runtime then fades with WAAPI opacity. That one turned the check red. Marks → runtime → WAAPI is the
+mechanism; a CSS rule that may never build an object is not.
+
+Shell hazard found the same hour: `python3 - <<'PY'` with `open(p,'w').write(<big expression>)`
+**truncates the file before the expression is evaluated**, so an exception in the expression leaves the
+file empty. Compute the new text, then open and write it. One findings document was rebuilt from git
+after exactly that.

@@ -245,7 +245,11 @@
       "referenceFigure": "travel of the bright head: 0.163 of the frame crossed",
       "heldAs": "model",
       "gap": "A flap has a fixed set of faces and no in-between state to render: it goes from one character to the next, and the low measured centroid travel (0.163, most of it the handheld camera) is the number that says so — a change in place, not a change arriving across the screen. `hardCut` must therefore never be an eased crossfade of the old value into the new.",
-      "notHeld": "The instrument is written but unproven, so a pass from it would mean nothing. What it does measure today is real: it presses the field control mid-run, samples 106 frames of the swap, and reports 7 values leaving the panel, 8 arriving, and 0 frames holding an old value and a new one together. But its other half -- 'no text may fade through a half-state' -- could not be made red. Injecting `@keyframes { from{opacity:0} to{opacity:1} }` on every `[data-specimen-view] text` still reported 0 opacity animations on text, which means the walk over `getAnimations({subtree:true})` is not seeing what it claims to see, most likely in how a CSS animation's keyframes are read. Until a planted fade turns this row red, the whole row is held: a change-time assert that cannot ring is worse than no assert, because it makes a crossfade look compliant."
+      "assert": {
+        "kind": "no_blend_on_change",
+        "route": "#/component/hardCut",
+        "fieldIncludes": "changed"
+      }
     }
   ]
 }

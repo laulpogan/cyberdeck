@@ -1284,24 +1284,44 @@ the first claim pass over a silent library), and the coverage case pinned to `st
 than `refusal`. `NO CADENCE` and `NO CONTACT` joined the vocabulary because the tracker prints
 them — the list is grown from what the library draws, never from what seems plausible.
 
-## An instrument that cannot ring: `no_blend_on_change`, held at the door
+## `no_blend_on_change`: the change window is ~300ms, and three sabotages were invalid before one was not
 
-The Solari board's rule — a flap shows one face at a time — needs a change-time check, so the gauntlet
-grew `no_blend_on_change`: it presses the specimen's own field control while the recorder is sampling,
-captures the specimen's words on every frame, and compares the two states. That half works and produced
-real numbers immediately: 106 sampled frames across the change, 7 values leaving the panel, 8 arriving,
-**0 frames holding an old value and a new one together**. `hardCut` genuinely swaps faces.
+The Solari board's rule — a flap shows one face at a time — needed a check no assert in this file could
+serve: `no_residual_motion` proves a thing settles, `constant_rate` proves a rate, and a crossfade is a
+single well-behaved `Animation` with `fill: forwards` that satisfies both. So the gauntlet grew
+`no_blend_on_change`: it finds the specimen's own field control (**on the `<li data-field>`, not the
+button** — the button's text is only `remove`/`restore`, and matching button text would have made every
+change-time gap report "no such control" forever), presses it *while the recorder is sampling*, records
+when, and captures the specimen's words and its opacity animations every frame from there.
 
-The second half — no text may fade through a half-state — was written, measured 0, and is not trusted,
-because it refused to fail. To make it fail I planted exactly the defect it claims to catch: a 500 ms
-`opacity: 0 → 1` animation on every `[data-specimen-view] text` in the app stylesheet. It reported 0
-opacity animations on text. An earlier sabotage, a `count` mark on the in-flight group, was a weaker
-test and told me something else worth knowing: that group is not rendered in the state this control
-changes, so the check only ever sees faces actually on the page — a limitation to state, not to hide.
+What it measures on the honest build, `#/component/hardCut`: **108 sampled frames across the change, 7
+values leaving the panel, 8 arriving, 0 frames holding an old value and a new one together, 0 opacity
+animations running on text.** A hard cut cuts.
 
-The suspect is reading keyframes off a CSS animation: `effect.getKeyframes()` on a `CSSAnimation` is not
-shaped the way the WAAPI keyframes the runtime itself creates are, and a filter written against one
-silently matches neither. The row is `notHeld` with that account in its reason, the code stays in the
-tree with its frame numbers intact, and the next pass on it starts where this one stopped: plant the
-fade, make it red, and only then let the green mean anything. Two near-misses in one turn, both about
-the same rule — a claim a sabotage cannot reach is not a claim.
+Getting from "it passes" to "it passes and would fail" took four attempts, and three were invalid.
+
+- **A `count` mark on the in-flight group** — invalid because that group is not rendered in the state
+  this control changes. The check only ever sees faces actually on the page: a limitation to state, not
+  to hide.
+- **A CSS rule, `animation: sabotage-fade 900ms linear`, on every `[data-specimen-view] text`** —
+  invalid twice over. Computed style reported the animation name, yet `getAnimations()` listed nothing:
+  a rule whose `@keyframes` do not resolve creates no `Animation` object at all. Adding `infinite`
+  changed nothing, which is how I knew the object was never there. A filter cannot catch an animation
+  that does not exist, and my first report on this row blamed the filter for my own invalid sabotage.
+- **Sampling too late** — the first probe read the window at +60, +180, +420 and +900ms cumulative and
+  saw *zero* animations, which read as "this app does not animate on change". It does: at +30, +50, +70,
+  +150 and +300ms the same window holds four animations on `<g>` targets with `opacity` keyframes. **The
+  change window is about one entrance long, ~300ms**, and a check that samples at human cadence reports
+  a clean it never looked at.
+- **The valid one:** `hardCut` marking a text-bearing `<g>` with `count(1, 2)` — exactly how this library
+  would produce the defect, a component stamping its own letters and the runtime fading them. Red,
+  verbatim: *max 4 opacity animations running on text … a value that arrives through a half-state is a
+  crossfade, and a hard cut is not a crossfade.* Reverted, green again.
+
+Two rules, both bought: **plant the sabotage in the mechanism the code actually uses** (a mark, then the
+runtime, then WAAPI opacity) rather than in a stylesheet that may never build an object; and **sample a
+change at frame resolution**, because a 300ms window is invisible to anything that waits a beat. Also
+bought, and recorded where it can do damage: a `python3 - <<PY` that opens a file for writing inside a
+`write(...)` argument truncates the file even when the argument then throws. This entry was rebuilt from
+git after exactly that.
+
