@@ -127,5 +127,11 @@ meaningful only if a `for` entry names where a reference actually informs a draw
 the nothing tier — `scaleCrush`, `chipBudget`, `standardSheet`, `tapeSplice`, `loopDeviation`, `bypass`, `ceremony`,
 `twoState`, `contextBurn`, `garage`, `gevulot`, `channel` — several are Stargate metaphors with no diegetic screen in
 the world to photograph (`gevulot` will not tell you; `ceremony` is a commissioning rite), and two of them are legends
-whose whole claim is that they are not readings. The next real candidate is `tapeSplice` ← optical-fibre splicing, whose
-drawing is a join with attempts before it, which is the thing a fusion splicer's screen actually shows.
+whose whole claim is that they are not readings. `tapeSplice` was the one live candidate, and it was **bought and refused**: 14.4 MB pulled through
+`Special:FilePath`, 88.7 s of theora at 320×240, twelve frames to a sheet, then a 2× crop of the machine's own body at
+six moments. The title names the mechanism exactly — optical fibre splicing — and the film shows hands, a splicer, and
+coils of yellow stock while the **display never faces the camera**. Every number that could inform `tapeSplice` (splice
+loss in dB, the arc attempts, the alignment the machine measured) lives behind a lid the camera never resolves. The
+file is deleted, the tier is unchanged, and the rule gets its sharpest form: **a title that names a mechanism is not a
+screen showing it** — the radar-on-a-hill result and this one are the same failure across different media, and the only
+guard is opening the frames.
