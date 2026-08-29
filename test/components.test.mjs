@@ -37,6 +37,11 @@ test('a measured ratio draws its arc to the measured extent', () => {
   // runtime still sees 15 of 18 rather than an empty ring.
   const offset = Number(html.match(/stroke-dashoffset:([\d.]+)/)[1]);
   assert.ok(Math.abs(offset - (1 - 15 / 18)) < 0.001, `rests at the ratio (${offset})`);
+  // The runtime's level kind only animates the dash when the path says
+  // its own length is 1; without pathLength the runtime would scale the
+  // arc sideways and smear a crescent off its track -- a defect this
+  // line, not the runtime, is the last line of defence for.
+  assert.match(html, /pathLength="1"/);
 });
 
 test('an unmeasured ratio never draws a full ring', () => {

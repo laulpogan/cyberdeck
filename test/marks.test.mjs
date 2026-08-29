@@ -111,6 +111,19 @@ test('a stale feed stops the clock and the pulse', () => {
   }
 });
 
+test('a dial origin turns the cycle into a radial sweep', () => {
+  // Nothing emitted data-cycle-axis for its first life: the radar slid
+  // across its dial on the bar branch while looking alive. The origin
+  // request must arrive as BOTH attributes, and the plain bar cycle must
+  // stay untouched.
+  const dial = marks.cycle(2, 6, 'live', { cite: 'x', origin: '100 100' });
+  assert.equal(dial['data-cycle-axis'], 'rotate');
+  assert.equal(dial['data-cycle-origin'], '100 100');
+  const bar = marks.cycle(2, 6, 'live', { cite: 'x' });
+  assert.equal(bar['data-cycle-axis'], undefined);
+  assert.equal(bar['data-cycle-origin'], undefined);
+});
+
 test('an overdue poll refuses rather than wrapping', () => {
   // A wrap would erase the finding, which is that the poll never landed.
   assert.equal(marks.cycle(140, 10, 'live', { cite: 'x' })['data-still-reason'],
