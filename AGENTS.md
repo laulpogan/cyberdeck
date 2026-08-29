@@ -740,3 +740,32 @@ Shell hazard found the same hour: `python3 - <<'PY'` with `open(p,'w').write(<bi
 **truncates the file before the expression is evaluated**, so an exception in the expression leaves the
 file empty. Compute the new text, then open and write it. One findings document was rebuilt from git
 after exactly that.
+
+## The vault's file schemas, and the three ways I broke them in one sitting
+
+Guessed shapes cost more time than the acquisition did. Written down so they are read, not repaid:
+
+- `vault/SPECS-FOR.json` holds **one record per verified file**: `{"for": ["radar", "coverage"],
+  "reading": "…"}`. It is *not* a list of `{component, gap, quote}` objects. A record with invented keys
+  is not rejected loudly — the coverage count simply refuses to rise, which took a test failure to notice.
+- `vault/GAUNTLET.json` rows call the symptom **`gap`**, not `symptom`, and every row needs
+  `referenceFigure` — a fragment of at least 18 characters that appears **verbatim** in `vault/SPECS.md`
+  (`test/gauntlet.test.mjs` splits it on `;·,` and looks for each piece). `heldAs` is what lets a caution
+  row go unasserted; `route` is what lets a row name no component.
+- **Never normalise a data file by rebuilding its records from a whitelist of keys.** I sorted one row's
+  fields with `{k: row[k] for k in keys}` applied to *every* row, which silently deleted `heldAs` and
+  `route` from rows I had not touched and failed two invariants on them. A whitelist is a deletion machine
+  wearing a formatting tool's clothes. Append to a list; do not rebuild the records.
+- `vault/clip.mjs` takes **`KEY=value` pairs as arguments** (`SLUG=… START=… DUR=… URL=… WORK=…
+  SHOWS=… SHOWS_HOW=… RELEVANCE=…`), not `--flags`, and `FILE=` means *a file already on disk*. Its refusal
+  is correct and unhelpful-looking: "needs SLUG=", because it will not write a manifest record with a hole
+  where the provenance goes.
+- Coverage is counted from `for` lists **intersected with `COMPONENT_KEYS`**: 17 of 51 components are
+  spec-held, and `for` legitimately holds mark kinds (`level`, `trace`, `elapsed`, `decay`) and the
+  `rules page`, so a raw count overstates it. `test/gauntlet.test.mjs` now refuses a `for` name that
+  resolves to none of those three things — a typo'd component name would otherwise read as coverage nobody
+  can render, and the guard has been proven red on `radarSweep`.
+
+And the quietest one: piping a verify tool's stderr into `/dev/null` let `gauntlet-sheet.py` fail three
+commits running while I reported "sheets regenerated" from the directory it had left behind. Run the tool
+where its noise can be seen; a broken tool that prints nothing looks exactly like a passing one.

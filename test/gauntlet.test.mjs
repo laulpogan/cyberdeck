@@ -10,13 +10,14 @@ import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 
-import { allComponents } from '../app/src/registry/index.js';
+import { allComponents, COMPONENT_KEYS } from '../app/src/registry/index.js';
 
 const here = (f) => fileURLToPath(new URL(f, import.meta.url));
 const GAUNTLET = JSON.parse(readFileSync(here('../vault/GAUNTLET.json'), 'utf8')).gaps;
 const EYEBALL = JSON.parse(readFileSync(here('../vault/EYEBALL.json'), 'utf8'));
 const MANIFEST = JSON.parse(readFileSync(here('../vault/MANIFEST.json'), 'utf8')).files;
 const SPECS = readFileSync(here('../vault/SPECS.md'), 'utf8');
+const SPECS_FOR = JSON.parse(readFileSync(here('../vault/SPECS-FOR.json'), 'utf8'));
 const TOOL = readFileSync(here('../app/verify/gauntlet.mjs'), 'utf8');
 const byName = new Map(Object.values(MANIFEST).map((r) => [r.file.split('/').pop(), r]));
 const KEYS = new Set(allComponents().map((c) => c.key));
@@ -58,6 +59,27 @@ test('every quoted figure is the figure vault/SPECS.md measured', () => {
       assert.ok(specs.includes(frag), `${gap.id} quotes "${frag}", which vault/SPECS.md does not say`);
     }
   }
+});
+
+test('a `for` name in SPECS-FOR resolves to something a person can render', () => {
+  // SPECS-FOR is where coverage is counted, so a name that resolves to nothing is not a typo —
+  // it is a component counted as spec-held that no page can draw. `level` and `trace` are mark
+  // kinds and are legitimate quotients; `rules page` is the one non-component target the vault
+  // quotes to. Anything else has to be in the registry.
+  const components = new Set(COMPONENT_KEYS);
+  const MARK_KINDS = new Set(['arrive', 'decay', 'count', 'level', 'elapsed', 'trace', 'traffic', 'cycle', 'intent', 'still', 'attrs']);
+  let held = 0;
+  for (const [file, entry] of Object.entries(SPECS_FOR)) {
+    if (file === '_about') continue;
+    for (const name of entry.for || []) {
+      assert.ok(components.has(name) || MARK_KINDS.has(name) || name === 'rules page',
+        `${file} is quoted for "${name}", which is not a component in the registry, not a mark kind, `
+        + `and not the rules page — a name that resolves to nothing is counted as coverage nobody can render`);
+      if (components.has(name)) held += 1;
+    }
+  }
+  assert.ok(held >= 17, `only ${held} component quotients exist across the vault; the count of `
+    + `spec-held components is a coverage claim and it went down`);
 });
 
 test('every assert kind is implemented by the tool, not wished for', () => {
