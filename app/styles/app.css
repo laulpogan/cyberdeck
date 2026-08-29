@@ -1,10 +1,10 @@
-// The rack the components were installed in.
-//
-// No colour is named here. Every one is a token from `src/tokens.css`, or a
-// `color-mix` of tokens, and `test/tokens-ratchet.test.mjs` proves it -- the
-// same ratchet the library holds itself to, extended to the app's own
-// source. Nothing is rounded, nothing floats, nothing is lit from a gradient:
-// these are instruments and the chrome is a rack, not a storefront.
+/* The rack the components were installed in.
+   
+   No colour is named here. Every one is a token from `src/tokens.css`, or a
+   `color-mix` of tokens, and `test/tokens-ratchet.test.mjs` proves it -- the
+   same ratchet the library holds itself to, extended to the app's own
+   source. Nothing is rounded, nothing floats, nothing is lit from a gradient:
+   these are instruments and the chrome is a rack, not a storefront. */
 
 *, *::before, *::after { box-sizing: border-box; }
 
@@ -723,3 +723,31 @@ table.cd-index { max-width: none; }
   .cd-honesty-cell { border-right: var(--cd-hair); border-bottom: var(--cd-hair); }
   .cd-honesty-verdict { grid-column: 1 / -1; border-right: 0; }
 }
+
+/* ── What the reference screens measured ─────────────────────────────────────
+   Prose and two tables, no motion: the section argues that movement needs a
+   measurement behind it, and an animated argument would lose the argument.
+   Colour is tokens only, as everywhere else in `app/`. */
+.cd-vault { margin-top: 2.2rem; display: grid; gap: 0.7rem; }
+.cd-h3 {
+  font: 600 0.82rem/1.25 var(--cd-display);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--cd-steel-ink);
+  margin: 0.5rem 0 0;
+}
+.cd-vault-note { color: var(--cd-steel-muted); max-width: 76ch; margin: 0; }
+.cd-vault-rules,
+.cd-vault-sources { margin: 0; padding-left: 1.15rem; display: grid; gap: 0.25rem; }
+.cd-vault-rules { color: var(--cd-steel-ink); max-width: 76ch; }
+.cd-vault-sources {
+  color: var(--cd-steel-muted);
+  font-size: 0.72rem;
+  overflow-wrap: anywhere;
+}
+
+/* The kind names must not break in half: `lev- el` reads as a typo, and the whole point of the
+   column is which mark carries the idiom. The tables are wide things, so — as everywhere in this
+   rack — they scroll inside their own `.cd-scroll` box rather than wrapping the page. */
+.cd-vault .cd-table { min-width: 44rem; }
+.cd-vault .cd-kind { white-space: nowrap; }

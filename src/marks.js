@@ -84,10 +84,21 @@ export function count(index, total) {
  * is a second opinion waiting to disagree with the first. An unmeasured
  * quantity does not grow to zero: a bar at zero and a bar nobody filled
  * in must never look alike, and motion is the loudest way to confuse them. */
-export function level(value, ceiling, { measured, cite, order = null, total = null }) {
+export function level(value, ceiling, { measured, cite, order = null, total = null,
+                                       axis = null, deg = null, origin = null }) {
   if (!measured || value == null || !ceiling) return still('quantity was not measured');
   const fraction = Math.max(0, Math.min(1, Number(value) / Number(ceiling)));
   const mark = { 'data-motion': 'level', 'data-level': num(fraction), 'data-cite': cite };
+  // The third dialect of an extent. `x` and `y` grow a bar out of its own edge; `tilt`
+  // swings a beam to an angle the two counts decided, which is what `admission` draws and
+  // what the verified balance reference measured (0.93 of the way over by half the duration,
+  // then holding -- front-loaded, because a load arrives and then sits there). `deg` is the
+  // angle the static render ALREADY shows, and the runtime animates from the counter-rotation
+  // down to zero rather than from zero up to the angle: an element may not be left anywhere
+  // the drawing did not put it, so the settled page is the Python page either way.
+  if (axis) mark['data-level-axis'] = axis;
+  if (axis === 'tilt' && deg != null) mark['data-level-deg'] = num(deg);
+  if (origin && origin.length === 2) mark['data-level-origin'] = `${num(origin[0])} ${num(origin[1])}`;
   // `order`/`total` are optional and only present when the caller places the bar in
   // the reveal sequence -- a figure computed from other figures passes the position
   // one slot past its last input, so the bar arrives after the evidence it summarises

@@ -1,5 +1,6 @@
 import { Specimen } from '../components/Specimen.jsx';
 import { MARK_KINDS, markText } from '../rules.js';
+import { FORBIDDEN_IDIOMS, PERMITTED_IDIOMS, RULES_HELD, VAULT_NOTE } from '../vault-evidence.js';
 import { href } from '../router.js';
 import { rewalk } from '../motion-bridge.js';
 import { intent } from '../../../src/marks.js';
@@ -89,6 +90,71 @@ export function Rules({ evidence = { globalOff: false } }) {
           );
         })}
       </div>
+
+      {/* The chrome rule, as a measurement rather than an aversion. Two real loaders were
+          downloaded, verified by eye, and measured frame by frame; neither is re-enacted here,
+          because putting a spinner on screen to argue against spinners would be the app
+          breaking its own rule to make the point. Ink and numbers instead. */}
+      <section className="cd-vault" aria-label="What the reference screens measured">
+        <h2 className="cd-h2">What the reference screens measured</h2>
+        <p className="cd-vault-note">{VAULT_NOTE}</p>
+
+        <h3 className="cd-h3">Motion that reports nothing</h3>
+        <div className="cd-scroll">
+          <table className="cd-table">
+            <thead>
+              <tr><th>Idiom</th><th>What the frames say</th><th>Why it is refused</th></tr>
+            </thead>
+            <tbody>
+              {FORBIDDEN_IDIOMS.map((row) => (
+                // keyed on the file, which is what makes the row a citation rather than a list item
+                <tr key={row.file}>
+                  <td>{row.idiom}</td>
+                  <td><code>{row.measured}</code></td>
+                  <td>{row.verdict}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+
+        <h3 className="cd-h3">Motion that reports a measurement</h3>
+        <div className="cd-scroll">
+          <table className="cd-table">
+            <thead>
+              <tr><th>Idiom</th><th>What the frames say</th><th>How the library carries it</th></tr>
+            </thead>
+            <tbody>
+              {PERMITTED_IDIOMS.map((row) => (
+                <tr key={row.idiom}>
+                  <td>{row.idiom}</td>
+                  <td><code>{row.measured}</code></td>
+                  <td>
+                    {row.verdict}
+                    {' '}
+                    {/* No anchor: the router reads the hash, so `#kind-level` would be parsed as
+                        a route rather than scrolled to. The kind is documented above on this
+                        same page, in the order this table names them. */}
+                    <code className="cd-kind">{row.kind}</code>
+                    {row.library && <> {row.library}</>}
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+
+        <ul className="cd-vault-rules">
+          {RULES_HELD.map((rule) => <li key={rule}>{rule}</li>)}
+        </ul>
+        <ul className="cd-vault-sources">
+          {[...FORBIDDEN_IDIOMS, ...PERMITTED_IDIOMS].map((row) => (
+            <li key={row.file}>
+              <a href={row.source} rel="noreferrer" target="_blank">{row.file}</a>
+            </li>
+          ))}
+        </ul>
+      </section>
 
       <p className="cd-footnote">
         Two of these are not kinds of motion at all. <code>still(reason)</code> is a

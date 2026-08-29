@@ -1,0 +1,87 @@
+/** What the reference vault measured about motion that reports nothing.
+ *
+ * The app's chrome rule — no spinner, no shimmer, no ambient pulse, `MOVING WITHOUT EVIDENCE`
+ * at zero — has always been stated as a rule. Here it is as a measurement, taken off two real
+ * loaders that an eye verified (`vault/EYEBALL.json`) and `vault/spec.py` then measured. Neither
+ * is re-enacted on this page: the app must not put a spinner on screen to argue against
+ * spinners, so what follows is ink and numbers, with the file each number came from.
+ *
+ * Plain ESM with no JSX, like the rest of the app's logic, so `node --test` can read the
+ * figures and fail if a copy edit drifts them away from what was measured.
+ */
+
+/** One row per reference the measurement is about. `numbers` are quoted from `vault/SPECS.md`;
+ * `refusal` is what the library does instead, and each names the mark kind that carries it. */
+export const FORBIDDEN_IDIOMS = [
+  {
+    idiom: 'A word that turns, a dot that follows it',
+    measured: '2.4s of film · the changed pixels travel 0.36 of a frame · no extent anywhere',
+    verdict: 'It moves a great deal. No measurement drives any of it — the travel is the '
+      + 'rotation of a word, not a quantity crossing a lane.',
+    file: 'fake-os-loaders--blob.gifcities.org_gifcities_2S4N3JQ6GIQGIKRNQ6CX4AAHKS6DQHE6.gif',
+    source: 'https://blob.gifcities.org/gifcities/2S4N3JQ6GIQGIKRNQ6CX4AAHKS6DQHE6.gif',
+  },
+  {
+    idiom: 'The ellipsis that grows to three and starts again',
+    measured: '6 frames over 0.24s · travel 0.04 of a frame · the only quantity is the dot count',
+    verdict: 'A count of dots says nothing about the thing it is waiting for.',
+    file: 'fake-os-loaders--blob.gifcities.org_gifcities_34C5WYILX3AL74KKP36H6JB75QTVKCUD.gif',
+    source: 'https://blob.gifcities.org/gifcities/34C5WYILX3AL74KKP36H6JB75QTVKCUD.gif',
+  },
+];
+
+/** What the same instrument says motion *should* look like when there is a measurement. Quoted
+ * next to the two above so the rule does not read as an aversion to movement. */
+export const PERMITTED_IDIOMS = [
+  {
+    idiom: 'A marker crossing a named lane',
+    measured: '0.70 of the frame crossed · 0.46 of the way along at half the duration · '
+      + '4 of 12 grid cells never move',
+    verdict: 'Constant rate, furniture still: the travel is the measurement. The library '
+      + 'travels a head along the named lane with `trace` and puts the extent in `level`.',
+    kind: 'trace',
+    file: 'fake-os-loaders--blob.gifcities.org_gifcities_36SZVJ74JXC6QPNLGBGDNMW26HNU7TFW.gif',
+    source: 'https://blob.gifcities.org/gifcities/36SZVJ74JXC6QPNLGBGDNMW26HNU7TFW.gif',
+  },
+  {
+    idiom: 'A route drawn by the thing that arrived along it',
+    measured: '0.77 of the frame crossed · 1.0 — the far end — by half the duration · '
+      + 'the route it drew stays on screen',
+    verdict: 'Ease out and hold. A trace that keeps moving has not arrived.',
+    kind: 'trace',
+    file: 'spinner-console--blob.gifcities.org_gifcities_2EABIEZLK7C7RZMCFOOHZKIPRAPVWALH.gif',
+    source: 'https://blob.gifcities.org/gifcities/2EABIEZLK7C7RZMCFOOHZKIPRAPVWALH.gif',
+  },
+  {
+    idiom: 'A beam tipping to the difference between two counts',
+    measured: '0.93 of the way over by half the duration, then it holds',
+    verdict: 'Front-loaded, because a load arrives and then sits there.',
+    kind: 'level',
+    library: '`axis: "tilt"` — the third dialect of an extent. The runtime swings the arm in '
+      + 'from level on the same ease-out the reference measured, starting from the counter-'
+      + 'rotation so the angle the server drew stays the angle the page rests at.',
+    file: 'motion-tracker--blob.gifcities.org_gifcities_25G2DJC3DOO6R72EAGURMGNK5YW7FRZC.gif',
+    source: 'https://blob.gifcities.org/gifcities/25G2DJC3DOO6R72EAGURMGNK5YW7FRZC.gif',
+  },
+];
+
+/** The two rules these rows were gathered to support, in the app's own words. */
+export const RULES_HELD = [
+  'Chrome motion is a measurement or it does not happen.',
+  'A distinction that lives only in hue is gone in monochrome — carry it in shape first.',
+];
+
+// The count in the sentence is the count of rows below it. A total written by hand next to a
+// table that can count itself is the drift this library refuses everywhere else (finding #6).
+const ROWS = FORBIDDEN_IDIOMS.length + PERMITTED_IDIOMS.length;
+// Both figures are held to their source by `test/app-vault-evidence.test.mjs`: VERIFIED_COUNT
+// against vault/EYEBALL.json, MOVING_COUNT against the list vault/RANK.json ranks. The first
+// draft of this line said 131 from memory, and the test named 114 — which is what the ranking
+// actually contains.
+export const VERIFIED_COUNT = 11;
+export const MOVING_COUNT = 114;
+export const VAULT_NOTE = `${MOVING_COUNT} moving reference files were ranked for how much of `
+  + `the frame they move and how dark their ground is; ${VERIFIED_COUNT} of them survived an `
+  + `eye looking for an interface filling the frame. These ${ROWS} are the ones the figures `
+  + `below were taken from, and every number on this page is reproducible with `
+  + `\`python3 vault/spec.py\`.`;

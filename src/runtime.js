@@ -372,6 +372,29 @@
     var bar = el.querySelector('i') || el;
     var delay = enterDelay(el);
     var axis = el.getAttribute('data-level-axis') || 'x';
+    if (axis === 'tilt') {
+      // A beam finding the angle two counts decided. The reference (verified, measured in
+      // vault/SPECS.md) swings 0.93 of the way over by half its duration and then holds, so
+      // the easing is ease-out -- front-loaded, the way a load arrives and sits. It animates
+      // from the counter-rotation DOWN to zero rather than from level up to the angle, because
+      // the angle is already in the geometry the server wrote: an element must not be left
+      // anywhere the static render did not put it, and `rotate: 0` is that render.
+      // A measured balance of zero gets no motion at all, which is also true.
+      var raw = el.getAttribute('data-level-deg');
+      var deg = raw === null ? NaN : parseFloat(raw);
+      if (!isFinite(deg) || deg === 0) return;
+      var pivot = el.getAttribute('data-level-origin');
+      remember(el);
+      // view-box, as the dial does: the pivot is a point in the drawing's own coordinates,
+      // and fill-box would spin the beam around the middle of its own bounding box.
+      el.style.transformBox = 'view-box';
+      el.style.transformOrigin = pivot
+        ? pivot.split(/\s+/).map(function (n) { return n + 'px'; }).join(' ')
+        : 'center';
+      play(el, { rotate: [(0 - deg) + 'deg', '0deg'] },
+        { duration: T.enter / 1000, easing: 'ease-out', delay: delay });
+      return;
+    }
     if (axis === 'slide') {
       // Some measurements are a position rather than an extent: the burn
       // marker rides the point on its track that the percentage puts it

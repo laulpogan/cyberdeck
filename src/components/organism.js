@@ -206,7 +206,22 @@ export function admission({ offered = null, taken = null, status = null,
   const dy = arm * Math.sin(tilt);
   const g = [line(cx, 150, cx, beamY, { width: 1.5 }),
              line(cx - 50, 150, cx + 50, 150, { width: 1.5 })];
-  g.push(`<g class="cd-og-arm">`
+  // The tilt is the difference, and the difference was measured -- both counts arrive or the
+  // component refuses above. So the beam's arrival is a `level` in the third dialect
+  // (`axis: 'tilt'`), placed one slot past the crates it summarises so the argument is read in
+  // the order it is argued, and eased out because the verified balance reference swings most
+  // of its way over in the first half of its duration and then holds.
+  // The extent in the DOM is the ratio itself — `offered` against the gap — and never the
+  // capped angle over the cap. The arm's travel is clamped for legibility, which is a bound on
+  // a number, not a rescaling of it: an arm pinned at the cap still reports the imbalance that
+  // pinned it, the same way a clamped `traffic` period keeps its real interval in data-period.
+  const crates = Math.min(Math.trunc(offered), 6) + Math.min(Math.trunc(taken), 6);
+  g.push(`<g class="cd-og-arm"${attrs(level(Math.abs(gap) / offered, 1, {
+      measured: true, axis: 'tilt', deg: (tilt * 180) / Math.PI, origin: [cx, beamY],
+      // One slot past the last crate drawn, so the beam arrives after the evidence it
+      // summarises rather than alongside it (the rule finding #6 wrote).
+      order: crates, total: crates + 1,
+      cite: 'offered vs taken, on a capped arm' }))}>`
     + line(cx - arm, beamY - dy, cx + arm, beamY + dy, { width: 2.5 }) + '</g>');
   [[-1, offered, 'OFFERED'], [1, taken, 'TAKEN']].forEach(([side, n, label]) => {
     const px = cx + side * arm, py = beamY + side * dy;

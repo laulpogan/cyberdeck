@@ -97,9 +97,51 @@ for (const route of routes) {
 
       await page.addInitScript(() => {
         window.__peak = 0;
+        // The same lesson, applied to the beam: a measurement taken after the page settles
+        // reads zero whether or not anything swung. So the tilt's angle is sampled per frame
+        // from a standing start, and the claims below are about the trajectory — how far it
+        // got, and where it came to rest. This also reads the CSS `rotate` property, which is
+        // the one the runtime drives; `transform` alone stays at the identity matrix through a
+        // whole swing, and a claim that is always zero is worse than none because it looks
+        // like a check.
+        window.__tilt = { marks: 0, swung: 0, frames: 0 };
+        const angleOf = (el) => {
+          const cs = getComputedStyle(el);
+          const own = (cs.rotate || '').trim();
+          const deg = own && own !== 'none' ? /(-?[\d.]+)deg/.exec(own) : null;
+          if (deg) return Number(deg[1]);
+          const m = (cs.transform || '').match(/matrix\(([^)]+)\)/);
+          if (m) {
+            const [a, b] = m[1].split(',').map(Number);
+            return Math.atan2(b, a) * 180 / Math.PI;
+          }
+          return 0;
+        };
         const sample = () => {
           const n = document.getAnimations ? document.getAnimations().length : 0;
           if (n > window.__peak) window.__peak = n;
+          const beams = document.querySelectorAll('[data-level-axis="tilt"]');
+          if (beams.length) {
+            window.__tilt.marks = beams.length;
+            window.__tilt.frames++;
+            beams.forEach((el) => {
+              const angle = Math.abs(angleOf(el));
+              if (angle > window.__tilt.swung) window.__tilt.swung = angle;
+              // Where the trajectory ended, not where the page ended up an age later. By the
+              // time settle() runs, the runtime has already given every touched element back
+              // its server-written style — which is right, and is also why a rest check taken
+              // after settle could never see a beam left in the wrong place. The last frame on
+              // which the animation was still alive is the honest end of the swing.
+              // No "where did it land" reading is taken here, and the reason is worth keeping:
+              // the engine fills its animations backwards (so the delay shows the starting
+              // angle), writes a resting value into the `style` ATTRIBUTE on its way out, and
+              // the runtime then hands the element back the server's style at settle(). Three
+              // authorities over one property, and every "last frame" I sampled was one of
+              // theirs rather than the swing's. Where the beam ENDS is already claimed by the
+              // byte-identity check — a settled page must equal the static export, angle
+              // included — so claiming it twice, badly, would only add a flaky voice.
+            });
+          }
           requestAnimationFrame(sample);
         };
         document.addEventListener('DOMContentLoaded', () => requestAnimationFrame(sample));
@@ -364,7 +406,10 @@ for (const route of routes) {
         const out = [];
         document.querySelectorAll('[data-motion="level"]').forEach((el) => {
           const axis = el.getAttribute('data-level-axis') || 'x';
-          if (axis === 'slide' || axis === 'fade') return;
+          // A tilt is not a left-anchored extent — it is an angle about a pivot — so it is
+          // measured by a different claim below (`tilted`), and forcing the anchor rule on it
+          // would compare a rotated bounding box against an unrotated one.
+          if (axis === 'slide' || axis === 'fade' || axis === 'tilt') return;
           const level = Number(el.getAttribute('data-level'));
           if (!(level >= 0)) return;
           // Follow the runtime's own choice of target: a level on a track animates the
@@ -403,6 +448,23 @@ for (const route of routes) {
         });
         return out;
       });
+      // Two claims about the swing, both read off the sampled trajectory:
+      //   * it swung -- a `level(axis:'tilt')` that never moved is the invisible-motion
+      //     defect wearing a new kind, and only a per-frame sample can tell it apart from a
+      //     page that settled quietly;
+      //   * where it came to rest is NOT claimed here. The byte-identity claim does that
+      //     better: a settled page must equal the static export, and the resting angle is part
+      //     of those bytes. (A per-frame landing reading was tried and removed -- see the note
+      //     in the sampler.)
+      const tilt = await page.evaluate(() => window.__tilt || { marks: 0 });
+      if (tilt.marks && (tilt.frames || 0) > 3) {
+        if (tilt.swung < 2) {
+          bad.push(`${tilt.marks} tilt mark(s) on this page swung a maximum of `
+            + `${tilt.swung.toFixed(1)}° over ${tilt.frames} sampled frames -- a beam that is `
+            + `declared to find its angle and never moves is the invisible-motion defect`);
+        }
+      }
+
       for (const bar of anchored) {
         // Tolerance scales with the drawing: a specimen fitted to a 390px phone maps
         // user units to fewer device pixels, and the same one-unit rounding is smaller.
