@@ -280,9 +280,13 @@
       "gap": "lanes are stacked with each lane mapping time by its own normalised position, so a single 'now' has no single x and a playhead or a cross-lane event cannot be drawn",
       "referenceFigure": "48 frames over 8.0s, median delay 170.0ms, loop no return to frame zero",
       "assertKind": "a geometry read across lanes: for one timestamp, the x of a per-lane marker must be identical in every lane",
-      "observed": "not asserted; the gap is the finding and the drawing does not exist yet",
-      "notHeld": "An assert cannot fail on a geometry the component never draws. river maps time with px(t) normalised per lane from each lane's own t0 and span, so 'now' resolves to a different x per lane and there is nothing for a cross-lane x assertion to measure; the reference shows one ruler across the whole plate and one playhead over it, which means the fix is a new drawing on an absolute axis rather than a dialect change, and the marker-crossing idiom was already registered as not held for exactly this reason.",
-      "watch": "any cross-lane marker, playhead, or 'now' cue added to river — it must land at the same x in every lane, which requires an absolute-time axis the component does not have"
+      "assert": {
+        "kind": "lane_axis_shared",
+        "route": "#/component/river",
+        "selector": "[data-specimen-view]"
+      },
+      "observed": "the deck now draws one ruler across the plate and one now-line for every lane; the runs end at different x because the lanes' real last events differ, which the old per-lane normalisation made impossible",
+      "watch": "every run ending at the same x again (per-lane normalisation restored), the ruler losing its printed stamps, or more than one now-line appearing"
     },
     {
       "id": "atfield-unread-scope-keeps-its-row",

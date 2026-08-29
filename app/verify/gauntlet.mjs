@@ -430,6 +430,43 @@ for (const gap of GAPS) {
           row.detail = 'it is still moving after it should have arrived — '
             + `the reference ${a.kind === 'no_residual_motion' ? gap.referenceFigure : ''}`;
         }
+      } else if (a.kind === 'lane_axis_shared') {
+        // The reference is an audio editor: named lanes stacked under ONE ruler across
+        // the top of the plate, one playhead over the whole width. `river` used to map
+        // each lane's own first and last stamp onto the plate, which stretched every run
+        // to the full width — so all lanes ended at the right margin however far apart
+        // their real last events were, and "now" resolved to one x per lane. The count
+        // of distinct run-end x values separates the two geometries without needing the
+        // DOM to confess its timestamps: under the old normalisation it is exactly one.
+        const lanes = await page.evaluate((sel) => {
+          const runs = [];
+          for (const lane of document.querySelectorAll(`${sel} .cd-riv-lane`)) {
+            const xs = [...lane.querySelectorAll('.cd-riv-seg')]
+              .flatMap((l) => [Number(l.getAttribute('x1')), Number(l.getAttribute('x2'))])
+              .filter((n) => Number.isFinite(n));
+            if (xs.length) runs.push({ first: Math.min(...xs), last: Math.max(...xs) });
+          }
+          const key = (n) => n.toFixed(1);
+          return {
+            runs: runs.length,
+            starts: [...new Set(runs.map((r) => key(r.first)))],
+            ends: [...new Set(runs.map((r) => key(r.last)))],
+            ruler: document.querySelectorAll(`${sel} .cd-riv-ruler`).length,
+            now: document.querySelectorAll(`${sel} [data-now="1"]`).length,
+          };
+        }, a.selector);
+        row.measured = `${lanes.runs} run(s) on the plate — ${lanes.ends.length} distinct run end(s) `
+          + `(${lanes.ends.join(', ')}), ${lanes.starts.length} distinct start(s) (${lanes.starts.join(', ')}), `
+          + `ruler=${lanes.ruler}, now-line=${lanes.now}`;
+        row.verdict = lanes.ruler === 0 ? 'FAIL'
+          : lanes.runs < 2 ? 'FAIL'
+          : lanes.now !== 1 ? 'FAIL'
+          : lanes.ends.length >= 2 ? 'pass' : 'FAIL';
+        if (row.verdict === 'FAIL') {
+          row.detail = 'every run ending at the same x means each lane was normalised to fill the plate again: '
+            + 'a deck whose lanes share no common now cannot carry a playhead, a cross-lane event, or a claim '
+            + 'about which run finished late';
+        }
       } else if (a.kind === 'furniture_still') {
         // The recorder tracks the selector's elements, then the furniture, then the contacts, in
         // that order, every frame — so a slice of `f.el` addresses one of those groups across the

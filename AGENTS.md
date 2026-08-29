@@ -795,3 +795,26 @@ that turn had just made — the mark was uncommitted, so "restore" meant "erase 
 coverage test then failed for a *true* reason (a component counted as spec-held on a file nobody verified).
 The instrument was right and my repair was wrong. Snapshot to `/tmp` before sabotaging a file the turn has
 written to, and restore from there.
+
+## A stack of lanes needs one axis before it can have a "now"
+
+`river` built its time mapping *inside* each lane (`px(t)` from that lane's own `t0`/`span`), so every run was
+stretched to the full plate and `now` had one x per lane. Nothing on a single lane reveals this; on three lanes it
+destroys the only facts a stack carries. If a component stacks lanes and anything might later need a shared x — a
+playhead, a cross-lane event, "which one finished late" — the span must be computed across the deck, and each lane's
+own coverage drawn *within* it, so a lane that began late visibly began late.
+
+Two reusable pieces from that change:
+
+- **How to test it from the outside:** count the distinct run-end x values on the plate. Under per-lane
+  normalisation it is exactly **one** — every lane ends at the margin — and on a shared axis it is however many real
+  end times the lanes have. `lane_axis_shared` in `app/verify/gauntlet.mjs` does this, so the DOM never has to
+  confess timestamps. Its sabotage is the old `px` restored verbatim, and it goes red: *1 distinct run end(s) (874.0)*.
+- **A static line can be a measurement.** The ruler and the now-line deliberately carry **no mark and no motion**:
+  the measurement is the run ink, which travels because the run happened. A playhead sweeping across on nothing is
+  exactly the motion `MOVING WITHOUT EVIDENCE` exists to catch. "Now" is a line at a measured x with its stamp
+  printed beside it, clamped-and-named when it falls outside the deck.
+
+SVG labels: a `text-anchor="middle"` label centred near the right edge **hangs past the viewBox**, and
+`app/verify/index.mjs` reads that as a plate defect (it turned 8 viewport/theme combinations red before it was
+anchored to whichever side has room). Long notices go inside the plate, not off its edge.

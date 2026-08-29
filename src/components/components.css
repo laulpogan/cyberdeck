@@ -60,6 +60,15 @@
 
 .cd-river svg { display: block; width: 100%; height: auto; }
 .cd-riv-axis line { stroke: var(--cd-signal-data-dim); stroke-width: 1; }
+/* The deck's ruler and its now-line. Furniture, so it is drawn in the plate's quiet inks
+   and carries no mark: the measurement on a river is the run ink, and a playhead sweeping
+   across on nothing is the motion the honesty rack exists to catch. */
+.cd-riv-ruler line { stroke: var(--cd-steel-line); stroke-width: 1; }
+.cd-riv-tick { fill: var(--cd-steel-line); font-size: 8px; letter-spacing: .04em; }
+.cd-riv-now line { stroke: var(--cd-signal-amber); stroke-width: 1; stroke-dasharray: 2 3; }
+.cd-riv-now[data-clamped="1"] line { stroke: var(--cd-health-colour-critical); }
+.cd-riv-now-label { fill: var(--cd-signal-amber); font-size: 7.5px; letter-spacing: .06em; }
+.cd-riv-now[data-clamped="1"] .cd-riv-now-label { fill: var(--cd-health-colour-critical); }
 .cd-riv-id { fill: var(--cd-steel-muted); font-size: 10px; font-weight: 500; }
 .cd-riv-lane[data-state="needs_human"] .cd-riv-id { fill: var(--cd-signal-amber); }
 .cd-riv-state { fill: var(--cd-steel-line); font-size: 9px; letter-spacing: .06em; }
@@ -77,6 +86,11 @@
 .cd-riv-ev[data-kind="retry"] { color: var(--cd-signal-amber); }
 .cd-riv-ring { fill: none; stroke: currentColor; stroke-width: 1; }
 .cd-riv-await text {
+  fill: var(--cd-health-colour-unknown); font-size: 9px; letter-spacing: .1em;
+  filter: drop-shadow(0 0 6px var(--cd-health-colour-unknown));
+}
+/* The same cue on a lane with no run at all: the note sits on the baseline, not above it. */
+.cd-riv-await-note {
   fill: var(--cd-health-colour-unknown); font-size: 9px; letter-spacing: .1em;
   filter: drop-shadow(0 0 6px var(--cd-health-colour-unknown));
 }

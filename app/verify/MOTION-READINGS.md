@@ -1325,3 +1325,51 @@ bought, and recorded where it can do damage: a `python3 - <<PY` that opens a fil
 `write(...)` argument truncates the file even when the argument then throws. This entry was rebuilt from
 git after exactly that.
 
+
+## The deck had no common now: `river` normalised every lane, and an audio editor refuted it
+
+`river` mapped time with a closure built inside each lane — `px(t) = gutter + ((at(t) - t0) / span) * (right - gutter)`,
+`t0` and `span` from that lane's own first and last event. The consequence is invisible on one lane and fatal on
+three: every run was stretched to fill the plate, so all lanes began at the gutter and ended at the right margin
+however far apart their real last events were, and `now` resolved to **one x per lane**. A deck like that cannot
+carry a playhead, a cross-lane event, or any sentence about which session started late — the timing facts a stack
+of lanes exists to show were destroyed by the mapping.
+
+The reference is `scope-envelope-violin.gif`, an audio editor: two named tracks stacked, **one ruler across the top
+of the whole plate**, one playhead travelling the whole width. It is quoted in `SPECS-FOR.json` explicitly *as a
+refutation* — the reading says the instrument's own travel column reads `N/A — no bright marker crosses the frame`,
+because the playhead is dark ink on a light strip, so the thing this file is quoted for is invisible to the tracker
+and had to be read with an eye.
+
+The change: the deck computes `T0`/`T1` across every lane with two or more events, and every lane draws on it. A
+lane that began late now begins late — lane B's first segment moved from `200.0` to `537.0` in the unit case at the
+half-way mark of a six-minute deck, which is the whole difference between the two geometries. The ruler prints its
+own end stamps (`00:00:00`, the mid-time, `00:06:00`) and the aria-label says *one shared time axis*.
+
+Two decisions worth the ink. **The ruler and the now-line carry no mark and do not move.** The measurement on this
+deck is the run ink, which travels because the run happened; a playhead sweeping left-to-right would move on nothing,
+which is precisely what `MOVING WITHOUT EVIDENCE` is installed to catch — so "now" is a static line at a measured x
+with its stamp printed beside it. And **a `now` outside the deck is drawn clamped and says so**
+(`NOW OUTSIDE THE DECK — DRAWN CLAMPED HERE`), following `envelope`'s ceiling rule rather than silently stretching the
+plate with time nobody observed.
+
+The gate caught two defects in this change that no unit test would have. A centred now-label at the right edge hung
+**past the viewBox** — `/families/river@1280-dark … text drawn outside its viewBox` was red on all 8 viewport/theme
+combinations until the label anchors to whichever side has room; text escaping the plate is a plate defect, not a
+cosmetic slip. And while writing the regression test for the empty-lane refusal I found that branch returning **before**
+the awaiting cue, so a lane that is `needs_human` *and* has no run printed nothing about waiting — the loudest fact on
+that row went missing exactly when the row was emptiest. Fixed, and pinned.
+
+`lane_axis_shared` is a new gauntlet assert kind, and it measures what separates the geometries without asking the
+DOM to confess timestamps: how many distinct **run-end** x values are on the plate. Asserted, not held. Green:
+*2 run(s) — 2 distinct run end(s) (874.0, 407.9), 1 distinct start(s) (200.0), ruler=1, now-line=1* — the single
+shared start is honest here, because the fixture's two sessions genuinely began together. Sabotage, restoring the
+per-lane `px` verbatim: *1 distinct run end(s) (874.0)*, red, with the message naming the normalisation. Then green
+again from a `/tmp` snapshot rather than a `git checkout`, because river.js carried uncommitted work — the trap two
+commits ago sprang on `EYEBALL.json`.
+
+Six unit tests in `test/river-axis.test.mjs` (falls inside the deck; late lane starts late; the plate prints its
+deck; the ruler carries no motion mark; `now` is one line at the deck's x; a clamped `now` names itself; an empty lane
+refuses and keeps its cue), gate green on `#/families/river` and `#/component/river` at both widths and both themes.
+The gauntlet row that recorded this as *not held* — on the grounds that an assert cannot fail on a geometry the
+component never draws — is now asserted, which is the outcome that entry was written hoping for.

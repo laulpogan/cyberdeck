@@ -52,27 +52,94 @@ export function river({ lanes, cite, width = 900, laneHeight = 66,
   <i class="cd-why">no lanes were observed</i></figure>`;
   }
 
-  const height = lanes.length * laneHeight + 24;
+  const height = lanes.length * laneHeight + 44;
   const right = width - 26;
+
+  // One axis for the deck.
+  //
+  // Each lane used to map its own first and last stamp across the whole plate, so
+  // every lane's run began at the gutter and ended at the right margin, and `now`
+  // resolved to a different x per lane. A deck where no two lanes agree on where now
+  // is cannot carry a playhead, a cross-lane event, or any statement about which run
+  // started late -- the normalisation destroys exactly the facts a stack of lanes is
+  // for. The reference is an audio editor: named tracks stacked, ONE ruler across the
+  // top of the whole plate, one playhead travelling over the whole width. So the span
+  // comes from every lane's events and every lane is drawn on it. A lane that began
+  // late now visibly began late, and the baseline before its first event is the
+  // honest reading of "nobody observed anything on this lane then".
+  const timed = lanes.filter((l) => (l.events || []).length >= 2)
+    .map((l) => l.events.map((e) => at(e.at)));
+  const hasDeck = timed.length > 0;
+  const T0 = hasDeck ? Math.min(...timed.map((s) => Math.min(...s))) : 0;
+  const T1 = hasDeck ? Math.max(...timed.map((s) => Math.max(...s))) : 1;
+  const deckSpan = Math.max(1, T1 - T0);
+  const deckX = (t) => gutter + ((at(t) - T0) / deckSpan) * (right - gutter);
+  const clock = (ms) => new Date(ms).toISOString().slice(11, 19);
+
+  // The ruler and the now-line are furniture, and furniture carries no mark. The
+  // measurement on this deck is the run ink, which travels on the fact that the run
+  // happened; a playhead sweeping left to right would move on nothing, which is the
+  // one kind of motion the honesty rack is built to catch. "Now" is therefore a line
+  // at a measured x with its stamp printed beside it, not an animation.
+  let nowX = null;
+  let nowClamped = false;
+  if (hasDeck && now !== null && now !== undefined) {
+    const raw = deckX(now);
+    nowClamped = raw < gutter || raw > right;
+    nowX = Math.min(right, Math.max(gutter, raw));
+  }
+  const ruler = hasDeck ? `
+    <g class="cd-riv-ruler">
+      <line x1="${gutter}" y1="18" x2="${right}" y2="18"/>
+      <line x1="${gutter}" y1="14" x2="${gutter}" y2="22"/>
+      <line x1="${((gutter + right) / 2).toFixed(1)}" y1="15" x2="${((gutter + right) / 2).toFixed(1)}" y2="21"/>
+      <line x1="${right}" y1="14" x2="${right}" y2="22"/>
+      <text class="cd-riv-tick" x="${gutter}" y="11">${clock(T0)}</text>
+      <text class="cd-riv-tick" x="${((gutter + right) / 2).toFixed(1)}" y="11" text-anchor="middle">${clock(T0 + deckSpan / 2)}</text>
+      <text class="cd-riv-tick" x="${right}" y="11" text-anchor="end">${clock(T1)}</text>
+    </g>` : '';
+  const nowLine = nowX === null ? '' : (() => {
+    // The label is anchored to the side with room. Centred on the line, a long
+    // clamped notice at the right edge hung past the viewBox and off the plate — the
+    // gate reads escaping text as a defect on the plate, not a cosmetic slip.
+    const mid = (gutter + right) / 2;
+    const anchorRight = nowX > mid;
+    return `
+    <g class="cd-riv-now" data-now="1"${nowClamped ? ' data-clamped="1"' : ''}>
+      <line x1="${nowX.toFixed(1)}" y1="18" x2="${nowX.toFixed(1)}" y2="${height - 10}"/>
+      <text class="cd-riv-now-label" x="${(nowX + (anchorRight ? -5 : 5)).toFixed(1)}" y="${height - 3}" text-anchor="${anchorRight ? 'end' : 'start'}">${nowClamped ? 'NOW OUTSIDE THE DECK — DRAWN CLAMPED HERE' : `NOW ${clock(at(now))}`}</text>
+    </g>`;
+  })();
+
   const rows = lanes.map((lane, index) => {
-    const y = 20 + index * laneHeight + laneHeight / 2;
+    const y = 40 + index * laneHeight + laneHeight / 2;
     const events = lane.events || [];
 
     // A lane with nothing on it is drawn as a lane, not omitted -- an
     // absent row and an empty row must not look alike.
     if (events.length < 2) {
+      // A lane with nothing on it is drawn as a lane, not omitted -- an absent row
+      // and an empty row must not look alike. And it keeps its state cue: this branch
+      // used to return before the awaiting mark, so a lane that is waiting on a
+      // person AND has no run printed nothing about waiting, which is the one fact on
+      // the row worth the operator's attention.
+      const waiting = lane.state === 'needs_human'
+        ? `<text class="cd-riv-await-note" x="${right}" y="${y + 7}" text-anchor="end">AWAITING OPERATOR</text>`
+        : '';
       return `<g class="cd-riv-lane" data-state="${lane.state}"${attrs(refusal('this lane has no run to draw'))}>
         <text class="cd-riv-id" x="12" y="${y - 7}">${lane.id}</text>
         <text class="cd-riv-state" x="12" y="${y + 7}">NO RUN OBSERVED</text>
         <line class="cd-riv-empty" x1="${gutter}" y1="${y}" x2="${right}" y2="${y}"/>
+        ${waiting}
       </g>`;
     }
 
     const stamps = events.map((e) => at(e.at));
-    const t0 = Math.min(...stamps);
     const t1 = Math.max(...stamps);
-    const span = Math.max(1, t1 - t0);
-    const px = (t) => gutter + ((at(t) - t0) / span) * (right - gutter);
+    // The lane keeps its own last stamp for the fade's age, and borrows the deck's
+    // ruler for every x. `span` used to be the lane's own, which is what made each
+    // lane a private timeline stretched to fill the plate.
+    const px = deckX;
 
     // The trail fades by the lane's real age, not by a constant. With no
     // clock supplied the fade is refused rather than invented.
@@ -109,9 +176,11 @@ export function river({ lanes, cite, width = 900, laneHeight = 66,
 
   return `<figure class="cd-river">
   <svg viewBox="0 0 ${width} ${height}" width="100%" role="img"
-       aria-label="${lanes.length} lanes on a time axis">
-    <g class="cd-riv-axis"><line x1="${right}" y1="8" x2="${right}" y2="${height - 8}"/></g>
+       aria-label="${lanes.length} lanes on one shared time axis, ${clock(T0)} to ${clock(T1)}">
+    ${ruler}
+    <g class="cd-riv-axis"><line x1="${right}" y1="18" x2="${right}" y2="${height - 10}"/></g>
     ${rows.join('')}
+    ${nowLine}
   </svg>
 </figure>`;
 }
