@@ -52,6 +52,8 @@ const SCENES = [
     note: 'Evangelion: the MAGI system program screen', windows: [[0, 20]] },
   { file: '/tmp/muther.mp4', tag: 'muthur-scene', origin: 'https://www.youtube.com/watch?v=rkBhLjwuq20',
     note: 'Aliens: the MU/TH/UR terminal (Weyland-Yutani scene)', windows: [[40, 80], [120, 80], [200, 60]] },
+  { file: '/tmp/optical.mp4', tag: 'ghost-in-the-shell', origin: 'https://www.youtube.com/watch?v=sSrQWUxy_Ew',
+    note: 'Ghost in the Shell: opening optical-cam POV HUD', windows: [[2, 40]] },
   { file: '/tmp/dominator.mp4', tag: 'dominator-scene', origin: 'https://www.youtube.com/watch?v=rhmh3tyEEfs',
     note: 'Psycho-Pass: Dominator mode-call screens', windows: [[10, 80], [80, 49]] },
 ];
