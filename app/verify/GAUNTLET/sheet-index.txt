@@ -14,3 +14,5 @@
  pass  envelope-limit-named             all 2 figure(s) on screen
  pass  stripchart-series-is-drawn-ink   0 animation(s) on 1 element(s) 1500ms after the entrance
  held  tape-sweeps-a-drawn-strip        held
+ pass  dispatch-unchanged-rows-hold     furniture moved at most 0.00px, widest text change 0.0px; 9 contact element(s), 0 with an animation of their own, contacts moved up to 0.50px
+ held  hardcut-has-no-in-between-state  held

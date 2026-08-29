@@ -1283,3 +1283,25 @@ private-dialect-only, with non-vacuity assertions underneath (an empty vocabular
 the first claim pass over a silent library), and the coverage case pinned to `still` rather
 than `refusal`. `NO CADENCE` and `NO CONTACT` joined the vocabulary because the tracker prints
 them — the list is grown from what the library draws, never from what seems plausible.
+
+## An instrument that cannot ring: `no_blend_on_change`, held at the door
+
+The Solari board's rule — a flap shows one face at a time — needs a change-time check, so the gauntlet
+grew `no_blend_on_change`: it presses the specimen's own field control while the recorder is sampling,
+captures the specimen's words on every frame, and compares the two states. That half works and produced
+real numbers immediately: 106 sampled frames across the change, 7 values leaving the panel, 8 arriving,
+**0 frames holding an old value and a new one together**. `hardCut` genuinely swaps faces.
+
+The second half — no text may fade through a half-state — was written, measured 0, and is not trusted,
+because it refused to fail. To make it fail I planted exactly the defect it claims to catch: a 500 ms
+`opacity: 0 → 1` animation on every `[data-specimen-view] text` in the app stylesheet. It reported 0
+opacity animations on text. An earlier sabotage, a `count` mark on the in-flight group, was a weaker
+test and told me something else worth knowing: that group is not rendered in the state this control
+changes, so the check only ever sees faces actually on the page — a limitation to state, not to hide.
+
+The suspect is reading keyframes off a CSS animation: `effect.getKeyframes()` on a `CSSAnimation` is not
+shaped the way the WAAPI keyframes the runtime itself creates are, and a filter written against one
+silently matches neither. The row is `notHeld` with that account in its reason, the code stays in the
+tree with its frame numbers intact, and the next pass on it starts where this one stopped: plant the
+fade, make it red, and only then let the green mean anything. Two near-misses in one turn, both about
+the same rule — a claim a sabotage cannot reach is not a claim.

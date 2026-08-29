@@ -91,8 +91,12 @@ function recorder(cfg) {
     // What has to exist before the clock starts. A cell-stillness check has no marked element
     // to wait for and must not start on an empty document — the first frame's boxes define the
     // grid, and a grid fitted over the app chrome would measure the rack instead of the specimen.
+    // A change-time assert has no marked element either: it watches the specimen's WORDS, so the
+    // specimen itself is the thing to wait for. Without this clause the recorder never sets t0,
+    // collects zero frames, and the gap below reports "no text was sampled" -- which is at least
+    // an honest failure, but only because the detail line prints the frame count.
     const ready = cfg.selector ? !!target
-      : cfg.gridCells ? !!view
+      : cfg.gridCells || cfg.wantText ? !!view
         : furniture.length > 0 || contacts.length > 0;
     if (ready && window.__rec.t0 === null) window.__rec.t0 = performance.now();
     if (window.__rec.t0 !== null) {
@@ -129,6 +133,24 @@ function recorder(cfg) {
         // moving thing is the worst kind of instrument.
         inSpecimen: view && view.getAnimations ? view.getAnimations({ subtree: true }).length : 0,
         markup: view ? view.innerHTML.length : 0,
+        // A change-time blend check needs the WORDS themselves per frame, and which text-bearing
+        // nodes are sitting at a partial opacity right now. Both are opt-in: walking every text
+        // node at 60Hz for gaps that never ask would slow down every other measurement.
+        txt: cfg.wantText && view ? (view.innerText || view.textContent || '') : null,
+        // Not "is any text sitting at half opacity" -- a component may dim a label on purpose, and
+        // `hardCut` does exactly that (its readout ink is drawn at .6, permanently, as a statement
+        // about how well the value is known). A blend is an OPACITY ANIMATION whose target carries
+        // letters, so the animation list is what gets walked: a static 0.6 has no animation behind
+        // it, and a crossfade cannot have anything else.
+        textAnims: cfg.wantText && view && view.getAnimations
+          ? view.getAnimations({ subtree: true }).filter((an) => {
+              const t = an.effect && an.effect.target;
+              if (!t || !(t.textContent || '').trim()) return false;
+              let ks = null;
+              try { ks = an.effect.getKeyframes ? an.effect.getKeyframes() : null; } catch (e) { ks = null; }
+              return !!ks && ks.some((k) => 'opacity' in k && k.opacity !== undefined
+                && k.opacity !== null && !/none/.test(String(k.opacity)));
+            }).length : 0,
         nSel, nFurn: furniture.length, nCont: contacts.length,
         anims: doc.getAnimations ? doc.getAnimations().length : 0,
         el: tracked.map((el) => ({
@@ -277,6 +299,7 @@ for (const gap of GAPS) {
         contacts: a.contacts || null,
         gridCells: a.kind === 'dead_cells' || a.kind === 'no_motion',
         wantTranslate: a.kind === 'turn_period',
+        wantText: a.kind === 'no_blend_on_change',
         scopeSpecimen: !!gap.component,
       });
       await page.goto(BASE + route, { waitUntil: 'commit' });
@@ -288,6 +311,29 @@ for (const gap of GAPS) {
         await page.waitForSelector(`[data-specimen-view="${gap.component}"]`, { timeout: 15000 });
       } else {
         await page.waitForLoadState('domcontentloaded');
+      }
+
+      // A change-time assert has to CAUSE the change while the recorder is sampling, and record
+      // when. Doing it later would mean reading frames that had already been collected, and the
+      // whole point is the frames around the swap.
+      if (a.kind === 'no_blend_on_change') {
+        await page.waitForTimeout(1200);
+        const clicked = await page.evaluate((want) => {
+          // The button's own text is only `remove`/`restore`; the field it addresses is on the
+          // <li> around it. Matching button text would have made every change-time gap report
+          // "no such control" forever, which is the shape of a silently useless instrument.
+          const btn = [...document.querySelectorAll('[data-control="field"]')]
+            .find((b) => (b.closest('li')?.getAttribute('data-field') || '').includes(want));
+          if (!btn) return false;
+          btn.click();
+          window.__rec.clickT = window.__rec.t0 === null ? 0 : performance.now() - window.__rec.t0;
+          return true;
+        }, a.fieldIncludes || '');
+        if (!clicked) {
+          row.verdict = 'FAIL';
+          row.detail = `no field control on this page carries "${a.fieldIncludes}" — the assert `
+            + 'cannot cause a change, so it cannot observe one';
+        }
       }
 
       // The clips are for the sheet, and they are taken while the entrance runs. A screenshot
@@ -573,6 +619,51 @@ for (const gap of GAPS) {
             ? `the pin's travel is not a clean turn (R² ${fit.r2.toFixed(2)}) — the rate is being varied`
             : `the turn takes ${Math.round(fit.periodMs / 1000)}s against the ${declared}s the mark declares — `
               + 'a hologlobe that accelerates is a graphic';
+        }
+      } else if (a.kind === 'no_blend_on_change') {
+        // The Solari board's argument, made assertable: a flap has a fixed set of faces and there
+        // is NO in-between state to render, so a value change shows one value or the other and
+        // never both at once, never a value at half opacity. A crossfade would satisfy every
+        // animation-clock check in this file -- it is one well-behaved Animation, `fill: forwards`
+        // and all -- which is exactly why this row was held rather than asserted.
+        const clickT = await page.evaluate(() => (window.__rec.clickT === undefined ? null : window.__rec.clickT));
+        const words = frames.filter((f) => typeof f.txt === 'string');
+        const pre = clickT === null ? null : words.filter((f) => f.t < clickT).pop();
+        const post = words[words.length - 1];
+        const after = clickT === null ? [] : words.filter((f) => f.t >= clickT - 16);
+        const tokens = (t) => new Set(t.split(/\s+/).map((x) => x.trim()).filter((x) => x.length >= 2));
+        if (row.verdict === 'FAIL') {
+          // already failed on the missing control
+        } else if (clickT === null || !pre || !post) {
+          row.verdict = 'FAIL';
+          row.detail = `no text was sampled before and after a change (${words.length} of `
+            + `${frames.length} frames carried words, clickT=${clickT === null ? 'none' : Math.round(clickT)}ms, `
+            + `first txt=${JSON.stringify(String(words[0] ? words[0].txt : '').slice(0, 40)) || 'n/a'}) `
+            + '-- the assert measured nothing';
+        } else if (pre.txt === post.txt) {
+          row.verdict = 'FAIL';
+          row.detail = 'the specimen printed the same words before and after the control was pressed; '
+            + 'a change that does not reach the page cannot be checked for blending';
+        } else {
+          const was = tokens(pre.txt); const now = tokens(post.txt);
+          const gone = [...was].filter((t) => !now.has(t));
+          const arrived = [...now].filter((t) => !was.has(t));
+          const both = after.filter((f) => gone.some((g) => f.txt.includes(g))
+            && arrived.some((x) => f.txt.includes(x)));
+          const fadedMax = after.reduce((n, f) => Math.max(n, f.textAnims || 0), 0);
+          row.measured = `${after.length} sampled frame(s) across the change: ${gone.length} value(s) `
+            + `left the panel, ${arrived.length} arrived, ${both.length} frame(s) held both at once, `
+            + `max ${fadedMax} opacity animation(s) running on text`;
+          row.verdict = !gone.length || !arrived.length ? 'FAIL'
+            : (both.length || fadedMax) ? 'FAIL' : 'pass';
+          if (row.verdict === 'FAIL' && gone.length && arrived.length) {
+            row.detail = `${both.length} frame(s) showed the old value and the new one together, and `
+              + `${fadedMax} animation(s) faded text in or out. A flap shows one face at a time: a `
+              + `value that arrives through a half-state is a crossfade, and a hard cut is not a `
+              + `crossfade`;
+          } else if (row.verdict === 'FAIL') {
+            row.detail = 'the change swapped no words at all, so there was no pair of states to watch';
+          }
         }
       } else if (a.kind === 'no_motion') {
         const framesSeen = frames.filter((f) => f.inSpecimen !== undefined);
