@@ -22,7 +22,7 @@
 // different shape and a badge is just a louder queue entry.
 
 import { frame, rect, line, dot, ring, arc, text, hatched } from '../draw.js';
-import { trace, count, traffic, elapsed, intent, still, durationWords, attrs }
+import { trace, count, traffic, elapsed, intent, still, refusal, durationWords, attrs }
   from '../marks.js';
 import { card, esc, wrapped, W, H } from './card.js';
 
@@ -224,7 +224,7 @@ export function ceremony({ stages, windowSeconds,
 export function twoState({ states, doNothing = null }) {
   if (!states || states.length !== 2) {
     return card('two-state', 'Two-state commit', '',
-      { mark: still('a two-state commit needs exactly two outcomes') });
+      { mark: refusal('a two-state commit needs exactly two outcomes') });
   }
   const g = [];
   states.forEach((state, i) => {
@@ -282,7 +282,7 @@ export function tape({ items, sourceState, cite = 'items[].wait.seconds' }) {
           </div>
         </article>
       </div>`,
-      { mark: still('no decision is waiting on a person') });
+      { mark: refusal('no decision is waiting on a person') });
   }
   const strips = items.map((item, i) => {
     const hot = algedonic(item);
@@ -350,5 +350,5 @@ export function queueState({ sourceState, openCount = null,
                      : 'A board nobody could reach, claiming nothing.' }),
     counted
       ? { note: 'Measured empty is an all-clear. It is allowed to say so.' }
-      : { mark: still('the board was never reached, so no all-clear is claimed') });
+      : { mark: refusal('the board was never reached, so no all-clear is claimed') });
 }

@@ -44,7 +44,7 @@ export function magi({ seats, collapsedState = null,
                        cite = 'source.per_producer_verdicts()' }) {
   if (!seats || seats.length !== 3) {
     return card('magi', 'MAGI dissent panel', '',
-      { mark: still('a dissent panel needs its full bench') });
+      { mark: refusal('a dissent panel needs its full bench') });
   }
   const cx = W / 2;
   const points = [[cx, 34], [PAD + 40, 132], [W - PAD - 40, 132]];
@@ -170,7 +170,7 @@ const DOOR_WORD = { open: 'TURNED', shut: 'HELD SHUT', not_reached: 'NOT REACHED
 export function keycard({ doors, unstamped = 0 }) {
   if (!doors || !doors.length) {
     return card('keycard', 'Keycard access trace', '',
-      { mark: still('no corridor was described') });
+      { mark: refusal('no corridor was described') });
   }
   const slot = SPAN / doors.length;
   const top = 26, height = 92;
@@ -199,7 +199,7 @@ export function keycard({ doors, unstamped = 0 }) {
   g.push(`<g class="cd-dc-untested" data-any="${untried ? 1 : 0}">`
     + text(PAD, 165, `${untried} not reached`, { size: 6.5 }) + '</g>');
   if (unstamped) {
-    g.push(`<g class="cd-dc-unstamped"${attrs(still('these events carry no instant'))}>`
+    g.push(`<g class="cd-dc-unstamped"${attrs(refusal('these events carry no instant'))}>`
       + text(PAD, 184, `UNORDERABLE · ${unstamped} EVENT${unstamped === 1 ? '' : 'S'} CARRY NO INSTANT`,
           { size: 7.5 }) + '</g>');
   }
@@ -227,7 +227,7 @@ export function keycard({ doors, unstamped = 0 }) {
 export function ice({ walls }) {
   if (!walls || !walls.length) {
     return card('ice', 'ICE / countermeasure walls', '',
-      { mark: still('no barrier was described') });
+      { mark: refusal('no barrier was described') });
   }
   const height = 168;
   // Derived from the count, and floored at nothing. A fixed step ran out
@@ -277,7 +277,7 @@ export const UNCONTRACTED = 'UNCONTRACTED';
 export function gevulot({ fields, producer = 'configuration.visibility_contracts' }) {
   if (!fields || !fields.length) {
     return card('gevulot', 'Gevulot visibility contract', '',
-      { mark: still('nothing on this surface is readable') });
+      { mark: refusal('nothing on this surface is readable') });
   }
   const rows = fields.map((row) => {
     const contract = row.contract || UNCONTRACTED;

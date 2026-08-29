@@ -340,12 +340,15 @@ cannot quietly start paraphrasing a refusal into marketing.
 
 Things the fixtures turned up, all of them in the library rather than the app:
 
-- **`killmail` stamps a refusal it does not mean.** The cost line carries
-  `data-motion="still" data-still-reason="no canonical charge record is supplied"`
-  unconditionally, so given a charge record it prints `data-priced="1"`, the
-  amount, and a sentence denying the amount exists. `agents.js` computes `priced`
-  two lines above and never uses it for the mark. The fixture keeps the receipt
-  honestly UNPRICED so the showcase does not ship the contradiction.
+- **`killmail` stamped a refusal it did not mean — fixed on this branch.** The
+  cost line carried the missing-charge stillness unconditionally, so a receipt that
+  *does* hold a charge record printed `data-priced="1"`, the amount, and a mark
+  denying the amount exists. `agents.js` computed `priced` two lines above and never
+  used it for the mark. It now stamps the refusal only in the else-branch, and
+  `test/agents.test.mjs` asserts both halves: priced prints the amount and carries no
+  `data-refusal`; unpriced still refuses. A refusal that is not true is not a
+  conservative error — the honesty ledger reads the DOM, so it is a second reading of
+  one fact, and the two disagree in the markup.
 - **Twelve components refuse by drawing rather than declaring.** `tapeSplice`,
   `twoState`, `muthur`, `city`, `garage`, `grid`, `gevulot`, `dominator`, `ladder`,
   `dossier`, `channel` and `redaction` write their absence as ink — `UNMEASURED`,
@@ -427,3 +430,32 @@ eye:
 
 Still on the list, now that the vocabulary exists: dispatch's rails, ice's walls,
 keycard's sleeves, triVision's field, needleField's field of hollow rings.
+
+## Which stillnesses are refusals (and which are not)
+
+`still(reason)` covers two facts and the drawing has always had to separate them by
+itself. The split is now marked, and the rule used to decide is worth keeping:
+
+- **`refusal(reason)`** — nothing was held to draw: `no series was retained`,
+  `no producer`, `no instant`, `no priors`, `no canonical charge record`, plus every
+  card-level refusal (`{ mark: refusal(...) }`, 29 call sites), because a card that
+  declines to draw is declining for lack of data.
+- **Plain `still(reason)`** — the thing is motionless *and measured*: the sightline
+  that is the asymmetry, the axis that is a frame, the threshold that is a rule not a
+  route, the glass that blocks a pane, the projection that is not a reading, the lane
+  waiting on a person, the legend that is not a reading. Colouring those in refusal
+  ink would state that the archive is silent about something the archive actually
+  reported.
+
+Refusal bands take `refusalHatched()` too, so an in-card refusal is dense crosshatch
+with a dot-dash graphite border and graphite words (`NO PRODUCER`, `NO REFERENCE
+TRACE`, `NO FORECAST IS ASSEMBLED`) against a measured row's green frame and a per-row
+absence's magenta dot-dash box: three claims, three textures, on one card. Known
+residue: the hatch *lines* inside a band still take the specimen's default colour,
+because `hatched()` paints its pattern with `currentColor` resolved at the `<defs>`
+root, not at the referencing element — the density and the border carry the claim
+while the line hue stays, and the pattern def is contract-held, so it is not touched.
+
+`syncRatio`'s ratio band was a thirteenth component refusing by drawing rather than
+declaring — hatched span, the words `NO SERIES RETAINED`, and nothing in the DOM —
+found while doing the ink work, now declared, and its `DECLARED STILL` went 0 → 4.

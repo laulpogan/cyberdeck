@@ -48,7 +48,7 @@ function glyph(x, y, kind) {
 export function river({ lanes, cite, width = 900, laneHeight = 66,
                         gutter = 200, staleAfter = null, now = null }) {
   if (!lanes || !lanes.length) {
-    return `<figure class="cd-river"${attrs(still('no lanes were observed'))}>
+    return `<figure class="cd-river"${attrs(refusal('no lanes were observed'))}>
   <i class="cd-why">no lanes were observed</i></figure>`;
   }
 
@@ -61,7 +61,7 @@ export function river({ lanes, cite, width = 900, laneHeight = 66,
     // A lane with nothing on it is drawn as a lane, not omitted -- an
     // absent row and an empty row must not look alike.
     if (events.length < 2) {
-      return `<g class="cd-riv-lane" data-state="${lane.state}"${attrs(still('this lane has no run to draw'))}>
+      return `<g class="cd-riv-lane" data-state="${lane.state}"${attrs(refusal('this lane has no run to draw'))}>
         <text class="cd-riv-id" x="12" y="${y - 7}">${lane.id}</text>
         <text class="cd-riv-state" x="12" y="${y + 7}">NO RUN OBSERVED</text>
         <line class="cd-riv-empty" x1="${gutter}" y1="${y}" x2="${right}" y2="${y}"/>
@@ -127,7 +127,7 @@ export function river({ lanes, cite, width = 900, laneHeight = 66,
 // names the series it wanted -- rather than six charts printing the same
 // shrug. A reader learns which recorder to build first.
 
-import { frame, rect, line, text, arc, ring, dot, hatched, axis } from '../draw.js';
+import { arc, axis, dot, frame, hatched, line, rect, refusalHatched, ring, text } from '../draw.js';
 import { traffic, elapsed, durationWords } from '../marks.js';
 import { card, esc as _esc, W, H } from './card.js';
 
@@ -230,7 +230,7 @@ export function tapeSplice({ attempt, events = 0, cite = 'sessions[].evidence.ti
           + line(x + 2, y, x + bw - 2, y, { width: 3 }) + '</g>');
         g.push(text(x + 16, y + 27, `${events} EVENTS`, { size: 7, opacity: '.6' }));
       } else {
-        g.push(`<g class="cd-riv-gap"${attrs(still('this attempt kept no tape'))}>`
+        g.push(`<g class="cd-riv-gap"${attrs(refusal('this attempt kept no tape'))}>`
           + line(x + 2, y, x + bw - 2, y, { width: 2, dashed: true }) + '</g>');
         g.push(text(x + 2, y - 9, NO_TAPE, { size: 7 }));
       }
@@ -352,7 +352,7 @@ export function loopDeviation({ observed = [], cite = 'expected_trace(work_id)' 
   // wrote the loop down — a fact about the archive, drawn in the refusal ink so
   // it does not read as another unmeasured quantity inside live data.
   g.push(`<g class="cd-riv-noref"${attrs(refusal('no reference trace was ever written'))}>`
-    + hatched(PAD, y, SPAN, lane)
+    + refusalHatched(PAD, y, SPAN, lane)
     + text(W / 2, y + lane - 9, 'NO REFERENCE TRACE', { size: 8.5, anchor: 'middle' })
     + '</g>');
   g.push(text(PAD, y + lane + 22, 'NO DELTA IS COMPUTED', { size: 8, weight: '600' }));
@@ -463,5 +463,5 @@ export function stripChart({ sample = null, sourceState,
       label: `${lanes.length} lanes on one axis. Only one holds a sample.` })
     + readout,
     sample ? { note: 'One sample is not a series.' }
-           : { mark: still('no sample was retained') });
+           : { mark: refusal('no sample was retained') });
 }

@@ -681,3 +681,17 @@
    loadout — carries the same two signals, because the rule is one rule whether the
    drawing is a `<g>` or a `<div>`. */
 [data-refusal="1"] { border-style: solid; }
+
+/* The words inside a refusal follow the ink, not the class they were born with.
+   `.cd-th-lane text` and its siblings colour specimen type by measurement state,
+   which is right — until the group holding them is a refusal, and the texture says
+   "nothing was held" while the word inside it is still wearing the colour of an
+   unmeasured quantity. Equal specificity, later in the file: the refusal wins
+   because it is the more specific fact about that element. */
+/* Shapes and words inside a refusal, but not the HTML furniture's readings: the
+   receipt's UNPRICED is a truthful value in the cannot-see colour by a decision
+   already stated in this stylesheet, and a refusal group around it does not revoke
+   that. The dash pattern is the line that divides them — an SVG shape that dashes
+   is drawing absence, and inside a refusal that absence is the refusal's. */
+[data-refusal="1"] text,
+[data-refusal="1"] [stroke-dasharray] { color: var(--cd-refusal-ink); }

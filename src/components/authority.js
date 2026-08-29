@@ -19,7 +19,7 @@
 //     CEREMONY REQ.   the grant exists and the action is irreversible, so
 //                     it takes staged steps and a window, never one click
 
-import { still, attrs } from '../marks.js';
+import { attrs, refusal, still } from '../marks.js';
 import { card, esc } from './card.js';
 
 export const ACTING_MODE = 'act-reversible';
@@ -135,7 +135,7 @@ export function control(verb, grant) {
 export function dominator({ verbs, env }) {
   if (!verbs || !verbs.length) {
     return card('dominator', 'The Dominator control', '',
-      { mark: still('no verb was offered') });
+      { mark: refusal('no verb was offered') });
   }
   const graded = verbs.map((verb) => [verb, evaluate(verb, env)]);
   return card('dominator', 'The Dominator control',
@@ -153,7 +153,7 @@ export function dominator({ verbs, env }) {
 export function ladder({ verbs, env, label = 'Command ladder' }) {
   if (!verbs || !verbs.length) {
     return card('ladder', 'Command ladder', '',
-      { mark: still('the orchestrator exposes no verbs') });
+      { mark: refusal('the orchestrator exposes no verbs') });
   }
   const graded = verbs.map((verb) => [verb, evaluate(verb, env)]);
   const granted = graded.filter(([, g]) => g.state === 'granted').length;

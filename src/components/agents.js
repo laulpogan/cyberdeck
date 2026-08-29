@@ -15,8 +15,8 @@
 // KEEPS ITS PLACE: silent absence teaches an operator the fleet is
 // smaller than it is, and there is no way to notice from inside the list.
 
-import { frame, line, dot, rect, text, hatched } from '../draw.js';
-import { count, level, still, attrs } from '../marks.js';
+import { dot, frame, hatched, line, rect, refusalHatched, text } from '../draw.js';
+import { attrs, count, level, refusal, still } from '../marks.js';
 import { card, esc, wrapped, W, H , refusalFrame } from './card.js';
 
 const PAD = 12;
@@ -107,7 +107,7 @@ export function individuation({ profile, siblings,
         word: 'NO SIBLING OBSERVED',
         ghost: [`<g transform="translate(30,77)">${disc(profile || {})}</g>`],
       }),
-      { mark: still('no sibling was observed on this profile') });
+      { mark: refusal('no sibling was observed on this profile') });
   }
   const burns = siblings.map((s) => s.context_percent)
     .filter((v) => v !== null && v !== undefined);
@@ -173,7 +173,7 @@ export const PARTS = [['HARNESS', 'harness'], ['MODEL', 'model'],
 export function dispatch({ workers }) {
   if (!workers || !workers.length) {
     return card('dispatch', 'Suit-up dispatch', '',
-      { mark: still('no worker was offered for dispatch') });
+      { mark: refusal('no worker was offered for dispatch') });
   }
   // A gutter for the worker names. Drawn over the first column they
   // collided with its own header.
@@ -237,14 +237,14 @@ const brokenBefore = (worker, index) =>
 export function oracle({ fragments, seam = 'source.outcome_priors(work_id)' }) {
   if (!fragments || !fragments.length) {
     return card('oracle', 'Oracle fragments', '',
-      { mark: still('no fragment was held') });
+      { mark: refusal('no fragment was held') });
   }
   const g = [];
   fragments.forEach((row, i) => {
     const held = row.value !== null && row.value !== undefined;
     const y = 24 + i * 30;
     g.push(`<g class="cd-ag-fragment" data-held="${held ? 1 : 0}"${
-      attrs(still('a fragment composes with nothing'))}>`
+      attrs(refusal('a fragment composes with nothing'))}>`
       + rect(PAD, y, SPAN, 22, { dashed: !held })
       + text(PAD + 7, y + 9, row.label, { size: 6.5, opacity: '.7' })
       + text(PAD + 7, y + 18, held ? String(row.value) : 'UNMEASURED', { size: 8 })
@@ -256,8 +256,8 @@ export function oracle({ fragments, seam = 'source.outcome_priors(work_id)' }) {
   // The space a forecast would occupy, drawn empty. Left off the panel it
   // would read as a component that simply does not forecast, rather than
   // one that refuses to.
-  g.push(`<g class="cd-ag-noforecast"${attrs(still('no priors exist to forecast from'))}>`
-    + hatched(PAD, y, SPAN, 30)
+  g.push(`<g class="cd-ag-noforecast"${attrs(refusal('no priors exist to forecast from'))}>`
+    + refusalHatched(PAD, y, SPAN, 30)
     + text(W / 2, y + 18, 'NO FORECAST IS ASSEMBLED', { size: 8, anchor: 'middle' })
     + '</g>');
   g.push(text(PAD, y + 46, seam, { size: 6, opacity: '.45' }));
@@ -283,7 +283,7 @@ export const DOSSIER_ROWS = [['HARNESS', 'harness'], ['MODEL', 'model'],
 export function dossier({ worker }) {
   if (!worker) {
     return card('dossier', 'Identity disc dossier', '',
-      { mark: still('nothing was observed, so no identity is drawn') });
+      { mark: refusal('nothing was observed, so no identity is drawn') });
   }
   const rows = DOSSIER_ROWS.map(([label, key]) => {
     const value = worker[key];
@@ -326,7 +326,7 @@ export function channel({ classes = TRUST }) {
 export function redaction({ workers }) {
   if (!workers || !workers.length) {
     return card('redaction', 'Canonical redaction', '',
-      { mark: still('no worker was observed') });
+      { mark: refusal('no worker was observed') });
   }
   const withheld = workers.filter((w) => w.redacted).length;
   const rows = workers.map((worker) =>
@@ -379,12 +379,18 @@ export function killmail({ receipt }) {
         <h5>COST</h5>
         <p class="cd-ag-cost" data-priced="0"><b>${esc(UNPRICED)}</b></p>
       </div>`,
-      { mark: still('no attempt was recorded as lost') });
+      { mark: refusal('no attempt was recorded as lost') });
   }
   const fit = receipt.fit || {};
   const damage = receipt.damage || {};
   const row = (label, value) => `<li${value ? '' : ' data-unmeasured="1"'}>
     <b>${esc(label)}</b><span>${esc(value || 'UNMEASURED')}</span></li>`;
+  // The cost line's refusal is stamped only when it is true. This used to stamp
+  // the missing-charge reason on every receipt, so one that does hold a record
+  // printed the amount and a mark denying an amount was held — and the mark
+  // lives in the DOM, which is what the honesty ledger reads and what a reviewer
+  // greps. A refusal that is not true is not a conservative error; it is a second
+  // reading of the same fact, and the two disagree in the markup.
   const priced = receipt.cost && receipt.cost.amount != null;
   return card('killmail', 'Killmail receipt',
     `<div class="cd-ag-receipt" data-drawing="receipt">
@@ -398,7 +404,7 @@ export function killmail({ receipt }) {
         ${row('BLOCKED BY', damage.reason)}</ul>
       <h5>COST</h5>
       <p class="cd-ag-cost" data-priced="${priced ? 1 : 0}"${
-        attrs(still('no canonical charge record is supplied'))}>
+        attrs(priced ? {} : refusal('no canonical charge record is supplied'))}>
         <b>${esc(priced ? receipt.cost.amount : UNPRICED)}</b>
         <span>${esc((receipt.cost && receipt.cost.cite) || 'cost_gateway.CLAIMS[provider_charge]')}</span></p>
     </div>`,

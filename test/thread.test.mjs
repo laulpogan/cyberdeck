@@ -173,3 +173,17 @@ test('no thread component hides moving marks inside a stillness', () => {
   ];
   for (const html of cases) assert.equal(nesting(html), 0);
 });
+
+/** The ratio band is the library's clearest unmarked silence, and it sat inside a
+ * component whose lanes were both marked: a hatched span with `NO SERIES RETAINED`
+ * printed on it and no mark in the DOM, so a script auditing refusals counted zero
+ * over a refusal made on purpose. A ratio is a relationship over time, and one
+ * sample cannot make one. */
+test('the sync ratio declares why it cannot be computed', () => {
+  const html = th.syncRatio({ output: { known: true, value: '91%' },
+    state: { known: true, value: '4%' }, verdict: 'spinning' });
+  assert.match(html, /class="cd-th-ratio"[^>]*data-refusal="1"/);
+  assert.match(html, /class="cd-th-ratio"[^>]*data-motion="still"/,
+    'a refusal is still a stillness — the honesty counters read the same attribute');
+  assert.match(html, /class="cd-th-ratio"[^>]*data-still-reason="a ratio is a relationship over time, and one sample cannot make one"/);
+});

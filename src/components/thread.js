@@ -11,8 +11,8 @@
 // half that exists and name the half that does not -- rather than
 // reporting a whole verdict off a single lane.
 
-import { frame, rect, line, dot, text, hatched, staticField, axis } from '../draw.js';
-import { trace, count, level, still, attrs } from '../marks.js';
+import { axis, dot, frame, hatched, line, rect, refusalHatched, staticField, text } from '../draw.js';
+import { attrs, count, level, refusal, still, trace } from '../marks.js';
 import { card, esc, W, H , refusalFrame } from './card.js';
 
 const PAD = 12;
@@ -77,7 +77,7 @@ export function mfd({ panes }) {
     } else {
       // The dark face. It names which producer went dark, which is a fact
       // worth having, and it is never the other pane's readout.
-      g.push(`<g class="cd-th-dark"${attrs(still('this readout has no producer'))}>`
+      g.push(`<g class="cd-th-dark"${attrs(refusal('this readout has no producer'))}>`
         + hatched(x + 8, 46, w - 16, 40)
         + text(x + w / 2, 70, 'NO PRODUCER', { size: 7.5, anchor: 'middle' })
         + '</g>');
@@ -129,24 +129,29 @@ export function syncRatio({ output, state, verdict = null,
   lanes.forEach(([label, channel]) => {
     const known = Boolean(channel && channel.known);
     g.push(`<g class="cd-th-lane" data-known="${known ? 1 : 0}"`
-      + `${attrs(still('no series was retained for this lane'))}>`);
+      + `${attrs(refusal('no series was retained for this lane'))}>`);
     g.push(text(PAD, y - 4, label, { size: 7, opacity: '.8' }));
     if (known) {
-      g.push(hatched(PAD, y, SPAN - 10, lane));
+      g.push(refusalHatched(PAD, y, SPAN - 10, lane));
       g.push(dot(PAD + SPAN - 4, y + lane / 2, 3.4));
       g.push(text(PAD + SPAN - 12, y - 4, 'ONE SAMPLE',
         { size: 6, anchor: 'end', opacity: '.7' }));
     } else {
-      g.push(hatched(PAD, y, SPAN, lane));
+      g.push(refusalHatched(PAD, y, SPAN, lane));
       g.push(text(W / 2, y + lane / 2 + 2.5, 'NO PRODUCER',
         { size: 7.5, anchor: 'middle' }));
     }
     g.push('</g>');
     y += lane + gap;
   });
-  g.push('<g class="cd-th-ratio">');
+  // The ratio band used to be unmarked silence: a hatched span with a word on it
+  // and nothing in the DOM saying why, so `DECLARED STILL` read zero over a
+  // deliberate refusal and a review script could not tell it from a forgotten one.
+  // A ratio is a relationship over time, and one sample cannot make one.
+  g.push(`<g class="cd-th-ratio"${attrs(refusal('a ratio is a relationship over time,'
+    + ' and one sample cannot make one'))}>`);
   g.push(text(PAD, y - 4, 'RATIO', { size: 7, opacity: '.8' }));
-  g.push(hatched(PAD, y, SPAN, lane));
+  g.push(refusalHatched(PAD, y, SPAN, lane));
   g.push(text(W / 2, y + lane / 2 + 2.5, 'NO SERIES RETAINED',
     { size: 7.5, anchor: 'middle' }));
   g.push('</g>');
@@ -258,7 +263,7 @@ export function hardCut({ changed = null, inFlight = null, attempt = null,
            + 'below the line.' }),
     priced
       ? { note: 'No fade. The bars are what the cut costs.' }
-      : { mark: still('the cut is unpriced, and a free-looking cut is a lie') });
+      : { mark: refusal('the cut is unpriced, and a free-looking cut is a lie') });
 }
 
 /** MU/TH/UR query mode -- what may be asked, and what may not.
@@ -289,7 +294,7 @@ export function muthur({ answers }) {
           class="cd-th-cursor" aria-hidden="true"></i></p>
       </div>
       <p class="cd-th-edge"><b>NOTHING ASKED OF THIS CONSOLE</b></p>`,
-      { mark: still('no question list is defined for this subject') });
+      { mark: refusal('no question list is defined for this subject') });
   }
   const answered = answers.filter((a) => a.answer != null).length;
   const rows = answers.map((row, i) => {
@@ -355,7 +360,7 @@ export function contextBurn({ percent = null, subject = null,
   if (percent === null || percent === undefined) {
     return card('burn', 'Context-burn creep',
       refusalFrame({ word: 'CONTEXT UNMEASURED' }),
-      { mark: still('context was not measured, and a worker whose telemetry is absent, '
+      { mark: refusal('context was not measured, and a worker whose telemetry is absent, '
         + 'drawn clean, reads as a fresh one') });
   }
   const value = Number(percent);

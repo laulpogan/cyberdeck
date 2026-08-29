@@ -18,7 +18,7 @@
 // never supplied -- rather than drawing a comfortable middle.
 
 import { frame, rect, line, dot, hexCell, text, hatched } from '../draw.js';
-import { trace, count, still, attrs } from '../marks.js';
+import { attrs, count, refusal, still, trace } from '../marks.js';
 import { card, esc, W, H , refusalFrame } from './card.js';
 
 const PAD = 12;
@@ -120,7 +120,7 @@ export function envelope({ boundaries = BOUNDARIES, position = null }) {
   });
   return card('envelope', 'Safe-envelope gauge',
     frame(W, H, g.join(''), {
-      extra: position ? '' : attrs(still('no position was measured to move')).trim(),
+      extra: position ? '' : attrs(refusal('no position was measured to move')).trim(),
       label: 'The operating space with all three boundaries hatched and no '
            + 'position marked.' }),
     position ? { note: 'A position drawn against three measured edges.' }
@@ -141,7 +141,7 @@ export function admission({ offered = null, taken = null, status = null,
       || taken === null || taken === undefined) {
     return card('admission', 'Cargo admission balance',
       refusalFrame({ word: `${UNMEASURED} OFFERED · ${UNMEASURED} TAKEN` }),
-      { mark: still('one side of the balance was never counted') });
+      { mark: refusal('one side of the balance was never counted') });
   }
   const cx = W / 2, beamY = 74, arm = 118;
   const gap = offered - taken;
@@ -198,7 +198,7 @@ const TOWER_UNIT = 16, TOWER_BASE = 14;
 export function city({ hosts = [] }) {
   if (!hosts.length) {
     return card('city', 'Placement as city', '',
-      { mark: still('no placement was observed') });
+      { mark: refusal('no placement was observed') });
   }
   const gap = 12;
   const width = Math.min(52, (SPAN - gap * (hosts.length - 1)) / hosts.length);
@@ -247,7 +247,7 @@ export function city({ hosts = [] }) {
 export function garage({ loadouts = [] }) {
   if (!loadouts.length) {
     return card('garage', 'Garage assembly', '',
-      { mark: still('no loadout was observed') });
+      { mark: refusal('no loadout was observed') });
   }
   const rows = loadouts.map((item) => {
     const proof = Object.entries(item.proof || {});
@@ -275,7 +275,7 @@ export function garage({ loadouts = [] }) {
 export function strands({ routes = [] }) {
   if (!routes.length) {
     return card('strands', 'Strand delivery routes', '',
-      { mark: still('no route was observed') });
+      { mark: refusal('no route was observed') });
   }
   const landings = new Map();
   routes.forEach((r) => {
@@ -325,7 +325,7 @@ export const GRID_COLUMNS = ['TASK', 'STATE', 'HOST', 'HARNESS', 'MODEL',
 export function grid({ rows = [], columns = GRID_COLUMNS }) {
   if (!rows.length) {
     return card('grid', 'Overview grid doctrine', '',
-      { mark: still('no subject was observed') });
+      { mark: refusal('no subject was observed') });
   }
   const body = rows.map((row) => {
     const cells = columns.map((key) => {

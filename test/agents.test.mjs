@@ -240,3 +240,25 @@ test('no agents component hides moving marks inside a stillness', () => {
   ];
   for (const html of cases) assert.equal(nesting(html), 0);
 });
+
+/** A priced receipt must not carry a refusal. The cost line used to stamp
+ * `no canonical charge record is supplied` on every receipt, so the markup
+ * said `data-priced="1"`, printed the amount, and declared in the same tag
+ * that no charge record was supplied. The honesty bar reads the DOM, and a
+ * reviewer greps it: a refusal that is not true is not a conservative error,
+ * it is a second reading of the same fact. */
+test('a killmail with a charge record claims the charge it holds', () => {
+  const priced = ag.killmail({ receipt: {
+    title: 'ATTEMPT LOST', receipt_id: 'km-4419',
+    fit: { harness: 'h-1' }, damage: { proof_state: 'PROVEN' },
+    cost: { amount: '4.10 ISK', cite: 'cost_gateway.CLAIMS[provider_charge]' },
+  } });
+  assert.match(priced, /data-priced="1"/);
+  assert.match(priced, /4\.10 ISK/);
+  assert.doesNotMatch(priced, /data-refusal|data-still-reason/,
+    'a refusal is stamped only when it is true');
+  const unpriced = ag.killmail({ receipt: { title: 'ATTEMPT LOST', fit: {}, damage: {} } });
+  assert.match(unpriced, /data-priced="0"/);
+  assert.match(unpriced, /data-refusal="1"[^>]*data-still-reason="no canonical charge record is supplied"|data-still-reason="no canonical charge record is supplied"[^>]*data-refusal="1"/,
+    'the unpriced receipt still refuses, in the refusal ink');
+});

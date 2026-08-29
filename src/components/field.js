@@ -12,7 +12,7 @@
 
 import { frame, hexCell, rect, line, dot, ring, arc, wedge, needle, text,
          hatched, scanlines, wall, curve } from '../draw.js';
-import { trace, count, level, cycle, arrive, still, attrs } from '../marks.js';
+import { arrive, attrs, count, cycle, level, refusal, still, trace } from '../marks.js';
 import { card, esc, W, H } from './card.js';
 
 
@@ -24,7 +24,7 @@ import { card, esc, W, H } from './card.js';
  * selected from, and the thing being annotated should still be on screen. */
 export function scanOverlay({ subject, cite = 'sessions[].id' }) {
   if (!subject) return card('scan', 'Kiroshi scan overlay', '',
-    { mark: still('no subject is selected') });
+    { mark: refusal('no subject is selected') });
   const rows = [
     ['IDENTITY', subject.identity, 'sessions[].id'],
     ['AUTHORITY', subject.authority, 'authority.evaluate'],
@@ -71,7 +71,7 @@ export function triVision({ cells, lens = 'health', lenses = ['health', 'cost', 
   });
   if (!cells || !cells.length) {
     return card('tri-vision', 'Tri-vision lens toggle', frame(W, H, g.join('')),
-      { mark: still('the comb was not enumerated') });
+      { mark: refusal('the comb was not enumerated') });
   }
   cells.forEach((cell, i) => {
     const col = i % 5, row = Math.trunc(i / 5);
@@ -142,7 +142,7 @@ export function coverage({ contours, dark, endpoints = [], cite = 'coverage.obse
   return card('coverage', 'Coverage as territory',
     frame(W, H, g.join(''), { label: 'Observed territory and unmeasured ground' }),
     drawn ? { note: 'Observed territory renders · dark zones do not' }
-          : { mark: still('no contour was sampled') });
+          : { mark: refusal('no contour was sampled') });
 }
 
 /** HUD chip budget -- density is a spent resource.
@@ -279,7 +279,7 @@ export function radar({ contacts, pollElapsed = null, pollPeriod = null,
 export function needleField({ workers, cite = 'sessions[].constraint' }) {
   if (!workers || !workers.length) {
     return card('needles', 'Magnetic needle field', '',
-      { mark: still('no worker reported a constraint') });
+      { mark: refusal('no worker reported a constraint') });
   }
   const g = [];
   workers.forEach((w, i) => {
@@ -289,7 +289,7 @@ export function needleField({ workers, cite = 'sessions[].constraint' }) {
     // needle pointing somewhere plausible.
     if (w.bearing === null || w.bearing === undefined) {
       g.push(`<g class="cd-fd-needle" data-known="0"`
-        + `${attrs(still('this worker reported no constraint'))}>`
+        + `${attrs(refusal('this worker reported no constraint'))}>`
         + ring(cx, cy, 4, { dashed: true }) + '</g>');
       return;
     }
@@ -327,5 +327,5 @@ export function standardSheet({ glyphs }) {
   });
   return card('standard-sheet', 'Semiotic standard sheet',
     frame(W, H, g.join(''), { label: 'The glyph legend' }),
-    { mark: still('a legend is not a reading') });
+    { mark: refusal('a legend is not a reading') });
 }
