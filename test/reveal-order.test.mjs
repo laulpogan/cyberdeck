@@ -19,7 +19,9 @@ import * as a from '../src/components/agents.js';
 import * as d from '../src/components/decision.js';
 import * as f from '../src/components/field.js';
 import * as o from '../src/components/organism.js';
+import * as th from '../src/components/thread.js';
 import { brightFor, darkFor } from '../app/fixtures/index.js';
+import { allComponents } from '../app/src/registry/index.js';
 
 /** Every element of one class that the runtime would animate, as the runtime reads
  * it: attributes are pulled one at a time, because markup attribute order is not a
@@ -52,6 +54,77 @@ function entersLast(html, derivedCls, inputCls, label) {
     `${label}: derived ${conclusion.index}/${conclusion.total} must enter after the `
     + `last input (worst input ratio ${worst.toFixed(3)})`);
 }
+
+/** Every `count` reveal in one render, grouped by the population it says it is a member of. */
+function reveals (html) {
+  const groups = new Map();
+  for (const chunk of html.split('<')) {
+    const tag = chunk.slice(0, chunk.indexOf('>') + 1);
+    if (!/data-motion="count"/.test(tag)) continue;
+    const total = Number((tag.match(/data-total="(\d+)"/) || [null, '1'])[1]);
+    const index = Number((tag.match(/data-index="(\d+)"/) || [null, '0'])[1]);
+    if (!groups.has(total)) groups.set(total, []);
+    groups.get(total).push(index);
+  }
+  return groups;
+}
+
+test('a refusal has no reveal slot, in every bright model in the library', () => {
+  // Inferred while attributing this branch's motion changes, and then checked over the whole
+  // registry before it was written down: 65 `still` marks, none of them carrying `data-index` or
+  // `data-total`. A reveal slot is a promise that this element is a member of a population
+  // arriving in order; a refusal is not a member of anything arriving, it is the space where a
+  // measurement did not arrive. Give a stillness a slot and the runtime starts scheduling the
+  // absence of a fact, which is the difference between a gap and a performance about one.
+  let seen = 0;
+  for (const component of allComponents()) {
+    const html = component.fn(brightFor(component.key));
+    for (const m of html.matchAll(/<[a-z]+[^>]*data-motion="still"[^>]*>/g)) {
+      seen += 1;
+      assert.doesNotMatch(m[0], /data-(index|total)=/,
+        `${component.key}: a declared stillness carries a reveal slot — the runtime will give an `
+        + `absence a place in the arrival order: ${m[0].slice(0, 120)}`);
+    }
+  }
+  assert.ok(seen >= 40, `only ${seen} stillnesses were inspected; this check is meant to survey the `
+    + `library, not a handful of plates`);
+});
+
+test('the cascades this branch gave its first motion reveal in payload order', () => {
+  // `3204181` ("every level bar in the library returned to where it was drawn") is a global fix, and
+  // when the before/after filmstrips were diffed it turned out to have handed its own reveal-order
+  // machinery to three plates that had never animated at all: killmail's receipt lists, oracle's
+  // fragments, joiOverlay's rows. Three cascades added by a fix to something else is the kind of
+  // change that is either fine or quietly wrong, so here is the claim they all have to satisfy: the
+  // members arrive in the order the producer sent them, over one stated population, and the member
+  // that is missing refuses rather than taking a slot.
+  const mail = reveals(a.killmail(brightFor('killmail')));
+  assert.deepEqual([...mail.keys()].sort(), [3, 4], 'the receipt holds two listed populations, of four '
+    + 'and three parts');
+  for (const [total, indices] of mail) {
+    assert.deepEqual(indices, [...indices.keys()], `killmail: the population of ${total} must arrive 0..n-1, got ${indices}`);
+  }
+  assert.match(a.killmail(brightFor('killmail')),
+    /class="cd-ag-cost"[^>]*data-motion="still"/, 'the unpriced cost line refuses, in its own tag');
+
+  const ora = a.oracle(brightFor('oracle'));
+  const fragments = reveals(ora).get(4);
+  assert.ok(fragments && fragments.length === 3,
+    `three of four fragments are known: got ${fragments && fragments.length}`);
+  assert.deepEqual(fragments, [0, 1, 2], 'oracle: the known fragments arrive in payload order');
+  // The fourth member of the population is not quietly dropped: it is still-marked, and the
+  // population is still stated as four, which is what keeps "one of these is missing" readable.
+  assert.match(ora, /class="cd-ag-fragment"[^>]*data-motion="still"/,
+    'the fragment nobody held is drawn and declared, not left off the list');
+  assert.match(ora, /class="cd-ag-noforecast"[^>]*data-motion="still"/,
+    'the space where a forecast would go is declared still — no reveal travels a hatched area');
+
+  const joi = th.joiOverlay(brightFor('joiOverlay'));
+  const rows = reveals(joi).get(2);
+  assert.deepEqual(rows, [0, 1], 'joiOverlay: the two observed rows arrive in order');
+  assert.match(joi, /class="cd-th-overlay"[^>]*data-motion="still"/,
+    'the projection is lifted out and declared, so the cascade belongs to the observations only');
+});
 
 test('the admission balance enters after the crates it is computed from', () => {
   entersLast(o.admission({ offered: 14, taken: 9, status: 'partial', reason: 'r' }),
