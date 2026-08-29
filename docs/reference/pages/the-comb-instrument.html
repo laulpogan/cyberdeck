@@ -1,0 +1,509 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<!-- Preserved from the published Claude artifact "The Comb Instrument".
+     Source: https://claude.ai/code/artifact/a7165f6f-2e55-4f5f-b81f-ee2946fc8d61
+     The artifact host frame runtime has been removed; nothing else is edited.
+     Self-contained apart from Google Fonts. -->
+</head>
+<body>
+<title>The Comb Instrument</title>
+<style>
+  :root {
+    --void: #060a08;
+    --void-2: #0b110e;
+    --void-3: #131a16;
+    --live: #7fdf9b;
+    --live-mid: #3f8f5c;
+    --live-low: #1d3a2b;
+    --bone: #eef2ec;
+    --bone-dim: #9fb0a6;
+    --amber: #d99a2b;
+    --alarm: #e05252;
+    --serif: Georgia, 'Times New Roman', 'Liberation Serif', serif;
+    --sans: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+    --mono: ui-monospace, SFMono-Regular, Menlo, Consolas, 'Liberation Mono', monospace;
+    --measure: 68ch;
+  }
+
+  * { box-sizing: border-box; }
+
+  body {
+    background: var(--void);
+    color: var(--bone);
+    font-family: var(--sans);
+    font-size: 16px;
+    line-height: 1.65;
+    margin: 0;
+    padding: 0 0 6rem;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .wrap { max-width: 1080px; margin: 0 auto; padding: 0 1.5rem; }
+
+  /* ---------------------------------------------------------- hero */
+  .hero {
+    position: relative;
+    border-bottom: 1px solid var(--live-low);
+    overflow: hidden;
+    padding: 3.5rem 0 2.25rem;
+  }
+  .hero-field {
+    position: absolute; inset: 0;
+    opacity: 0.5;
+    pointer-events: none;
+  }
+  .hero-field svg { display: block; width: 100%; height: 100%; }
+  .hero-inner { position: relative; }
+
+  .eyebrow {
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--live-mid);
+    margin: 0 0 1.1rem;
+  }
+  h1 {
+    font-family: var(--serif);
+    font-size: clamp(2.6rem, 7vw, 4.6rem);
+    line-height: 0.95;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    margin: 0 0 1rem;
+    color: var(--live);
+    text-wrap: balance;
+  }
+  .standfirst {
+    font-family: var(--serif);
+    font-size: clamp(1.05rem, 2.2vw, 1.3rem);
+    line-height: 1.5;
+    color: var(--bone);
+    max-width: 46ch;
+    margin: 0 0 1.6rem;
+  }
+  .bars { display: flex; flex-wrap: wrap; gap: 4px; }
+  .bar {
+    background: var(--live);
+    color: var(--void);
+    font-family: var(--serif);
+    font-weight: 700;
+    font-size: 0.85rem;
+    letter-spacing: 0.03em;
+    padding: 2px 11px 3px;
+  }
+  .bar.dim { background: var(--live-low); color: var(--bone); }
+
+  /* ---------------------------------------------------------- structure */
+  section { padding-top: 3.25rem; }
+  h2 {
+    font-family: var(--serif);
+    font-size: clamp(1.5rem, 3.4vw, 2.1rem);
+    line-height: 1.1;
+    margin: 0 0 0.4rem;
+    color: var(--bone);
+    letter-spacing: -0.01em;
+    text-wrap: balance;
+  }
+  .kicker {
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--live-mid);
+    margin: 0 0 0.9rem;
+  }
+  p { max-width: var(--measure); margin: 0 0 1rem; }
+  a { color: var(--live); text-decoration: none; border-bottom: 1px solid var(--live-low); }
+  a:hover { border-bottom-color: var(--live); }
+  a:focus-visible { outline: 2px solid var(--live); outline-offset: 2px; }
+  strong { color: var(--live); font-weight: 600; }
+  em.q { color: var(--bone-dim); font-style: italic; }
+
+  /* ---------------------------------------------------------- evidence */
+  .evidence { display: grid; gap: 1px; background: var(--live-low); border: 1px solid var(--live-low); margin-top: 1.6rem; }
+  @media (min-width: 720px) { .evidence { grid-template-columns: repeat(3, 1fr); } }
+  .ev { background: var(--void-2); padding: 1.1rem 1.15rem 1.25rem; }
+  .ev h3 { font-family: var(--mono); font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--live); margin: 0 0 0.55rem; }
+  .ev p { font-size: 0.9rem; line-height: 1.55; margin: 0 0 0.7rem; color: var(--bone-dim); }
+  .ev p:last-child { margin-bottom: 0; }
+  .ev .verdict { color: var(--bone); }
+
+  /* ---------------------------------------------------------- gap callout */
+  .gap {
+    margin-top: 2.2rem;
+    border-top: 1px solid var(--live-mid);
+    padding: 1.5rem 0 0;
+  }
+  .gap p {
+    margin: 0;
+    font-family: var(--serif);
+    font-size: clamp(1.15rem, 2.6vw, 1.5rem);
+    line-height: 1.4;
+    max-width: 46ch;
+    color: var(--bone);
+  }
+
+  /* ---------------------------------------------------------- ideas */
+  .axis { margin-top: 2.4rem; }
+  .axis-head { display: flex; align-items: baseline; gap: 0.8rem; border-bottom: 1px solid var(--live-low); padding-bottom: 0.45rem; margin-bottom: 1.1rem; flex-wrap: wrap; }
+  .axis-head h3 { font-family: var(--serif); font-size: 1.25rem; margin: 0; color: var(--bone); font-weight: 700; }
+  .axis-head .n { font-family: var(--mono); font-size: 10px; letter-spacing: 0.16em; color: var(--live-mid); text-transform: uppercase; }
+
+  .cells { display: grid; gap: 1px; background: var(--live-low); border: 1px solid var(--live-low); }
+  @media (min-width: 700px) { .cells { grid-template-columns: 1fr 1fr; } }
+  .cell { background: var(--void-2); padding: 0.95rem 1.05rem 1.05rem; display: flex; flex-direction: column; gap: 0.4rem; }
+  .cell .t { font-weight: 600; color: var(--bone); line-height: 1.35; }
+  .cell .d { font-size: 0.88rem; line-height: 1.5; color: var(--bone-dim); margin: 0; }
+  .cell .sig {
+    font-family: var(--mono); font-size: 10px; letter-spacing: 0.08em;
+    color: var(--live-mid); text-transform: uppercase;
+    border-top: 1px dashed var(--live-low); padding-top: 0.45rem; margin-top: auto;
+  }
+  /* Priority is marked the way the comb marks a live cell: the cell itself
+     burns brighter. A coloured rail down one side would be a different
+     language from the instrument this page is about. */
+  .cell.hot { background: var(--void-3); }
+  .cell.hot .t { color: var(--live); }
+  .cell.hot .t::before,
+  .cell.warm .t::before {
+    content: "";
+    display: inline-block;
+    width: 9px; height: 10px;
+    margin-right: 0.5rem;
+    vertical-align: baseline;
+    background: var(--live);
+    clip-path: polygon(25% 0, 75% 0, 100% 50%, 75% 100%, 25% 100%, 0 50%);
+  }
+  .cell.warm { background: var(--void-3); }
+  .cell.warm .t { color: var(--amber); }
+  .cell.warm .t::before { background: var(--amber); }
+
+  /* ---------------------------------------------------------- rank */
+  .rank { margin-top: 1.4rem; border: 1px solid var(--live-low); }
+  .rank-row { display: grid; grid-template-columns: 2.2rem 1fr auto; gap: 0.9rem; align-items: center; padding: 0.7rem 1rem; border-bottom: 1px solid var(--void-3); background: var(--void-2); }
+  .rank-row:last-child { border-bottom: 0; }
+  .rank-row .i { font-family: var(--mono); font-size: 11px; color: var(--live-mid); }
+  .rank-row .name { font-weight: 600; color: var(--bone); }
+  .rank-row .name span { display: block; font-weight: 400; font-size: 0.85rem; color: var(--bone-dim); line-height: 1.45; }
+  .pill { font-family: var(--mono); font-size: 9px; letter-spacing: 0.12em; text-transform: uppercase; padding: 2px 8px; border: 1px solid var(--live-low); color: var(--live); white-space: nowrap; }
+  .pill.free { color: var(--live); border-color: var(--live-mid); }
+  .pill.some { color: var(--amber); border-color: var(--amber); }
+
+  /* ---------------------------------------------------------- legend of states */
+  .statekey { display: flex; flex-wrap: wrap; gap: 0.35rem 1.1rem; margin: 1.2rem 0 0; padding: 0; list-style: none; font-family: var(--mono); font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--bone-dim); }
+  .statekey li { display: flex; align-items: center; gap: 0.45rem; }
+  .swatch { width: 22px; height: 13px; display: inline-block; }
+
+  footer { margin-top: 3.5rem; border-top: 1px solid var(--live-low); padding-top: 1.2rem; font-family: var(--mono); font-size: 11px; color: var(--live-mid); letter-spacing: 0.06em; }
+  footer a { color: var(--live-mid); }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .pulse { animation: p 3s ease-in-out infinite; }
+    @keyframes p { 0%,100% { opacity: 1; } 50% { opacity: 0.45; } }
+  }
+</style>
+
+<div class="hero">
+  <div class="hero-field" aria-hidden="true">
+    <svg viewBox="0 0 1200 340" preserveAspectRatio="xMidYMid slice">
+      <g id="field"></g>
+    </svg>
+  </div>
+  <div class="wrap hero-inner">
+    <p class="eyebrow">Ideation sprint &middot; SOTA spike &middot; 19 Aug 2026</p>
+    <h1>The Comb<br>Instrument</h1>
+    <p class="standfirst">A population, one cell each, encoded by a live measurement. It is currently spent on one population. Here is the field it belongs to, and the twenty-six other places it could go.</p>
+    <div class="bars">
+      <span class="bar">26 ideas filed to the pool</span>
+      <span class="bar dim">3 prior-art anchors</span>
+      <span class="bar dim">1 gap worth taking</span>
+    </div>
+  </div>
+</div>
+
+<div class="wrap">
+
+  <section>
+    <p class="kicker">What the pattern actually is</p>
+    <h2>Not a chart. An instrument for reading a population.</h2>
+    <p>Strip the hexagons away and the pattern underneath is simple: <strong>take a set of things that all have the same shape, give each one cell, and drive that cell from a measurement that is true right now.</strong> The hexagon matters only because cells that share edges read as one field rather than as a grid of separate objects — the eye gets a texture instead of a list.</p>
+    <p>Which means the interesting question is never "should this be hexagons". It is <strong>which population, and which measurement</strong>. Change either and you have a different instrument built from the same parts.</p>
+    <ul class="statekey">
+      <li><i class="swatch" style="background:var(--live)"></i> wrote in the last minute</li>
+      <li><i class="swatch" style="background:var(--live-mid)"></i> wrote inside the window</li>
+      <li><i class="swatch" style="background:var(--live-low)"></i> gone quiet</li>
+      <li><i class="swatch" style="background:var(--amber)"></i> stalled</li>
+      <li><i class="swatch" style="background:var(--alarm)"></i> needs a human</li>
+    </ul>
+  </section>
+
+  <section>
+    <p class="kicker">SOTA spike &middot; verified against primary sources</p>
+    <h2>Where this sits in the field</h2>
+    <div class="evidence">
+      <div class="ev">
+        <h3>Datadog Host Map</h3>
+        <p>The mature version of this exact pattern. Each host is a hexagon, colour is a metric (CPU by default, green to red), nodes sharing a tag cluster into hexagonal groups, and a click zooms into that host's integrations.</p>
+        <p class="verdict">Verdict: we converged on it independently, including the grouping. Their cells are <em class="q">hosts</em> — a population that barely changes.</p>
+      </div>
+      <div class="ev">
+        <h3>Calm technology</h3>
+        <p>The design discipline for information that lives in the periphery: glanceable, no modals, no alarm walls. There is now a Calm Tech Institute certification with a published 2025 product list, so this is a maintained standard rather than a 1995 essay.</p>
+        <p class="verdict">Verdict: this is the theory behind "changing with system status". It also warns why an all-red field failed — alarm colour spent on the ordinary state.</p>
+      </div>
+      <div class="ev">
+        <h3>Agent observability, 2026</h3>
+        <p>The category is trace-first: timelines, span graphs, token counters, OpenTelemetry GenAI conventions. Its own practitioners name the failure — reconstructing a swarm means replaying many concurrent agents, and <em class="q">"five concurrent agents producing five concurrent traces with shared state mutations is unreadable."</em></p>
+        <p class="verdict">Verdict: the whole field is building better microscopes. Nobody is building the wide shot.</p>
+      </div>
+    </div>
+    <div class="gap">
+      <p>Traces answer <em class="q">what did this agent do</em>. At ninety concurrent agents that question is unanswerable and also the wrong one. The comb answers <em class="q">what is the colony doing</em> — and that instrument, applied to work rather than to hosts, is the thing the 2026 field does not have.</p>
+    </div>
+  </section>
+
+  <section>
+    <p class="kicker">The sprint &middot; 26 ideas, all filed to the pool the scoper reads</p>
+    <h2>Other populations, other encodings</h2>
+    <p>Grouped by which part you swap. Each names the signal it rides on, because a cell property with no measurement behind it fails the vision doc and cannot be filed.</p>
+
+    <div class="axis">
+      <div class="axis-head"><h3>Swap the population</h3><span class="n">what a cell is</span></div>
+      <div class="cells">
+        <div class="cell hot">
+          <span class="t">A cell is a systemd unit</span>
+          <p class="d">165 user timers run this fleet and nothing shows them at once. Colour by last exit status, brightness by time since it completed. Tonight's failures kept coming from here and it has no view.</p>
+          <span class="sig">signal &middot; systemctl show ExecMainStatus</span>
+        </div>
+        <div class="cell hot">
+          <span class="t">A cell is a card, not just a worker</span>
+          <p class="d">Queued cards are unbuilt comb, blocked cards stripe, cards done today are spent comb fading over the day. This is what makes the comb the kanban rather than a view of it.</p>
+          <span class="sig">signal &middot; the board</span>
+        </div>
+        <div class="cell">
+          <span class="t">A cell is a branch at the merge gate</span>
+          <p class="d">Colour by gate verdict, brightness by age. Turns the merge queue from a log line into a place you look at.</p>
+          <span class="sig">signal &middot; gate cache (branch sha, trunk sha)</span>
+        </div>
+        <div class="cell">
+          <span class="t">A cell is a repo file</span>
+          <p class="d">Churn heat over a week. Shows which files the swarm keeps fighting over — which is to say, where two writers will collide next.</p>
+          <span class="sig">signal &middot; git log --numstat</span>
+        </div>
+        <div class="cell">
+          <span class="t">A cell is a lens</span>
+          <p class="d">One hex per lens, brightness by cards landed. The swarm's steering wheel drawn as a comb, so re-pointing it is something you see rather than reason about.</p>
+          <span class="sig">signal &middot; board history</span>
+        </div>
+        <div class="cell">
+          <span class="t">A cell is an hour</span>
+          <p class="d">A contribution comb over the last week, brightness = commits landed that hour. Answers "was last night any good" without reading a log.</p>
+          <span class="sig">signal &middot; git log --since</span>
+        </div>
+        <div class="cell">
+          <span class="t">A cell is an open defect</span>
+          <p class="d">Every OPEN line in the gate-failure ledger as a field you cannot look away from. Currently that ledger is only read when the scoper remembers to.</p>
+          <span class="sig">signal &middot; state/gate-failures.md</span>
+        </div>
+        <div class="cell">
+          <span class="t">A cell is a host</span>
+          <p class="d">Datadog parity for the four machines and the engines: colour by GPU utilisation, brightness by queue depth. The one case where the prior art is a spec.</p>
+          <span class="sig">signal &middot; vLLM /metrics, sweep host reports</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="axis">
+      <div class="axis-head"><h3>Swap the encoding</h3><span class="n">what a cell says</span></div>
+      <div class="cells">
+        <div class="cell hot">
+          <span class="t">A sparkline inside each cell</span>
+          <p class="d">Its own last hour of log growth, drawn in the hex. Separates "quiet because queued" from "quiet because stuck" without opening anything — the exact confusion that cost hours tonight.</p>
+          <span class="sig">signal &middot; sampled log sizes</span>
+        </div>
+        <div class="cell">
+          <span class="t">Nested comb</span>
+          <p class="d">A hex that contains its own comb. Click a lens and it expands into that lens's workers, in place. Uber's H3 hierarchical hex index is the reference.</p>
+          <span class="sig">signal &middot; existing clustering</span>
+        </div>
+        <div class="cell">
+          <span class="t">Size is spend</span>
+          <p class="d">Cell size by tokens burned, colour still state. An expensive agent becomes visibly expensive, which is the only way spend gets felt rather than audited.</p>
+          <span class="sig">signal &middot; usage sensor</span>
+        </div>
+        <div class="cell">
+          <span class="t">Ghost cells</span>
+          <p class="d">A finished worker leaves a fading trace for an hour, so you can see where effort went this evening without a report.</p>
+          <span class="sig">signal &middot; completed_at</span>
+        </div>
+        <div class="cell">
+          <span class="t">Notches for reclaims</span>
+          <p class="d">A card reclaimed three times looks different from one on its first attempt — the difference between healthy and doomed, currently invisible.</p>
+          <span class="sig">signal &middot; retry counter</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="axis">
+      <div class="axis-head"><h3>Make it ambient</h3><span class="n">the comb reacting to system state &mdash; the axis worth the most</span></div>
+      <div class="cells">
+        <div class="cell hot">
+          <span class="t">Field temperature</span>
+          <p class="d">The ground shifts with engine saturation. When the engines are sixty deep, quiet cells are queued and not stalled, and the field should say so ambiently instead of on another page. Already carded.</p>
+          <span class="sig">signal &middot; vllm num_requests_waiting</span>
+        </div>
+        <div class="cell hot">
+          <span class="t">The favicon is one hexagon</span>
+          <p class="d">Coloured by the worst state on the board. Fleet state readable from a browser tab in another window — the cheapest ambient display available, and it costs one canvas element.</p>
+          <span class="sig">signal &middot; board totals</span>
+        </div>
+        <div class="cell warm">
+          <span class="t">The hum</span>
+          <p class="d">Audio ambient. Pitch tracks throughput, a dropped note marks a failure. Bees, and genuinely peripheral — you notice a room going quiet without looking at anything.</p>
+          <span class="sig">signal &middot; commits landed, failures</span>
+        </div>
+        <div class="cell">
+          <span class="t">Full-bleed screensaver</span>
+          <p class="d">The comb with no chrome, legible across a room, for a spare monitor or a TV on the wall.</p>
+          <span class="sig">signal &middot; unchanged</span>
+        </div>
+        <div class="cell">
+          <span class="t">Statusline comb</span>
+          <p class="d">The field compressed to one line, one block per lens, shaded by activity. Puts the fleet in every shell prompt you open.</p>
+          <span class="sig">signal &middot; /api/fleet</span>
+        </div>
+        <div class="cell">
+          <span class="t">Wallpaper, regenerated</span>
+          <p class="d">Desktop background rebuilt each minute from the live comb. Ambient by construction: you see it whenever you clear your windows.</p>
+          <span class="sig">signal &middot; unchanged</span>
+        </div>
+        <div class="cell">
+          <span class="t">One hex to phone or watch</span>
+          <p class="d">Colour is fleet state. Answers "is it still running" without opening anything at all.</p>
+          <span class="sig">signal &middot; board totals</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="axis">
+      <div class="axis-head"><h3>Add time, and add control</h3><span class="n">the comb as a record, and as an instrument</span></div>
+      <div class="cells">
+        <div class="cell hot">
+          <span class="t">Scrub back through the comb</span>
+          <p class="d">The SQLite history is already in the repo. Watching the swarm build itself is the demo; replaying a bad hour is how you diagnose one.</p>
+          <span class="sig">signal &middot; existing history slices</span>
+        </div>
+        <div class="cell">
+          <span class="t">Comb diff</span>
+          <p class="d">Two moments side by side, cells that changed state highlighted. "What changed while I slept" as a picture rather than a digest.</p>
+          <span class="sig">signal &middot; two history slices</span>
+        </div>
+        <div class="cell">
+          <span class="t">Timelapse export</span>
+          <p class="d">A night rendered to a twenty-second video. The artefact you would actually show someone.</p>
+          <span class="sig">signal &middot; history</span>
+        </div>
+        <div class="cell">
+          <span class="t">Right-click a cell to act</span>
+          <p class="d">Dispatch, reclaim, peek. The moment this lands the comb stops being read-only and starts being the control surface.</p>
+          <span class="sig">signal &middot; hermes CLI</span>
+        </div>
+        <div class="cell">
+          <span class="t">Drag-select a region</span>
+          <p class="d">Act on all of it at once. Bulk reclaim of a stuck lens without opening a terminal.</p>
+          <span class="sig">signal &middot; hermes CLI</span>
+        </div>
+        <div class="cell warm">
+          <span class="t">Generalise the renderer</span>
+          <p class="d">Point it at any JSON array plus a state field and a recency field, get a comb. The fleet is not the only population with this shape — and the wide shot is the instrument the field is missing.</p>
+          <span class="sig">signal &middot; whatever the caller supplies</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <p class="kicker">If you only take four</p>
+    <h2>Ranked by value per unit of new plumbing</h2>
+    <div class="rank">
+      <div class="rank-row">
+        <span class="i">01</span>
+        <span class="name">The favicon hexagon
+          <span>Ambient, costs almost nothing, and answers the question you actually ask forty times a day from a different window.</span></span>
+        <span class="pill free">signal exists</span>
+      </div>
+      <div class="rank-row">
+        <span class="i">02</span>
+        <span class="name">Sparkline inside the cell
+          <span>Kills the queued-versus-stuck confusion at a glance. That confusion has cost more hours than any bug in the fleet.</span></span>
+        <span class="pill some">needs sampling</span>
+      </div>
+      <div class="rank-row">
+        <span class="i">03</span>
+        <span class="name">A cell is a systemd unit
+          <span>165 timers with no view, and the origin of most of tonight's incidents. Same renderer, different population.</span></span>
+        <span class="pill free">signal exists</span>
+      </div>
+      <div class="rank-row">
+        <span class="i">04</span>
+        <span class="name">Scrub back through history
+          <span>The SQLite slices are already written. This is the demo, and it is also the diagnostic.</span></span>
+        <span class="pill free">signal exists</span>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    Sources &middot;
+    <a href="https://docs.datadoghq.com/dashboards/widgets/hostmap/">Datadog Host Map</a> &middot;
+    <a href="https://ixdf.org/literature/topics/calm-computing">IxDF: calm computing</a> &middot;
+    <a href="https://www.calmtech.institute/post/the-complete-calm-tech-certified-product-list-for-2025">Calm Tech Institute</a> &middot;
+    <a href="https://arize.com/blog/best-ai-observability-tools-for-autonomous-agents-in-2026/">Arize: agent observability 2026</a>
+    <br>All 26 ideas written to <span style="color:var(--bone-dim)">foundry-boss/state/ideas/comb-patterns.md</span>, which the scoper reads whenever the queue runs dry.
+  </footer>
+</div>
+
+<script>
+  // The hero field is the real geometry, not a decorative pattern: flat-top
+  // hexes at 1.5r across and sqrt(3)r down, odd columns dropped half a cell.
+  // If it did not tessellate, the page would be arguing against itself.
+  (function () {
+    var g = document.getElementById('field');
+    if (!g) return;
+    var r = 26, W = 1200, H = 340;
+    var cols = Math.ceil(W / (r * 1.5)) + 2;
+    var rows = Math.ceil(H / (Math.sqrt(3) * r)) + 2;
+    var states = [
+      { fill: '#7fdf9b', op: 0.9, w: 1 },
+      { fill: '#3f8f5c', op: 0.8, w: 1 },
+      { fill: 'none', stroke: '#3f8f5c', op: 0.55, w: 1.6 },
+      { fill: 'none', stroke: '#1d3a2b', op: 0.9, w: 1.2 },
+      { fill: '#d99a2b', op: 0.75, w: 1 }
+    ];
+    // deterministic pseudo-random so the field is stable between loads
+    var seed = 7;
+    function rnd() { seed = (seed * 1103515245 + 12345) % 2147483648; return seed / 2147483648; }
+    var parts = [];
+    for (var c = 0; c < cols; c++) {
+      for (var rw = 0; rw < rows; rw++) {
+        var cx = c * (r * 1.5);
+        var cy = rw * (Math.sqrt(3) * r) + (c % 2 ? Math.sqrt(3) * r / 2 : 0);
+        var pts = [];
+        for (var i = 0; i < 6; i++) {
+          var a = Math.PI / 180 * (60 * i);
+          pts.push((cx + r * Math.cos(a)).toFixed(1) + ',' + (cy + r * Math.sin(a)).toFixed(1));
+        }
+        var pick = rnd();
+        var s = pick > 0.88 ? states[4] : pick > 0.72 ? states[0] : pick > 0.55 ? states[1] : pick > 0.3 ? states[2] : states[3];
+        parts.push('<polygon points="' + pts.join(' ') + '" fill="' + (s.fill || 'none') +
+          '" stroke="' + (s.stroke || s.fill) + '" stroke-width="' + s.w + '" opacity="' + s.op + '"/>');
+      }
+    }
+    g.innerHTML = parts.join('');
+  })();
+</script>
+
+</body></html>

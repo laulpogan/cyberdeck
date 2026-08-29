@@ -1,0 +1,164 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<!-- Preserved from the published Claude artifact "The Substitution Matrix".
+     Source: https://claude.ai/code/artifact/0338e180-9134-4cda-a486-1213382905ec
+     The artifact host frame runtime has been removed; nothing else is edited.
+     Self-contained apart from Google Fonts. -->
+</head>
+<body>
+<meta charset="utf-8">
+<title>The Substitution Matrix</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Serif+Display:wght@900&family=JetBrains+Mono:wght@400;500;700&family=Saira+Extra+Condensed:wght@600;800&display=swap">
+<style>
+:root{--void:#000;--panel:#0B0B09;--line:#26200F;--line2:#3E341B;--o:#FF9830;--od:#8A5510;--hot:#FFCC50;
+--g:#50FF50;--gd:#2E7A2E;--cy:#20F0FF;--cyd:#12707E;--r:#FF3030;--steel:#D8D8D0;--mut:#8A8478;--unm:#E858B8;
+--title:'Noto Serif Display',serif;--mono:'JetBrains Mono',monospace;--stamp:'Saira Extra Condensed',Impact,sans-serif}
+*{box-sizing:border-box;margin:0}
+body{background:var(--void);color:var(--steel);font:400 12.5px/1.55 var(--mono);-webkit-font-smoothing:antialiased}
+body::before{content:"";position:fixed;inset:0;z-index:95;pointer-events:none;
+background:repeating-linear-gradient(to bottom,rgba(0,0,0,.18) 0 1px,transparent 1px 3px)}
+.wrap{max-width:1220px;margin:0 auto;padding:0 24px}
+header.hero{padding:60px 0 24px}
+h1{font-family:var(--title);font-weight:900;font-size:clamp(36px,6vw,76px);color:var(--o);
+text-transform:uppercase;letter-spacing:.04em;transform:scaleX(.82);transform-origin:left;line-height:.95}
+h1 small{display:block;font-size:.32em;color:var(--steel);letter-spacing:.24em;margin-top:12px}
+h2{font-family:var(--title);font-weight:900;font-size:clamp(19px,2.6vw,30px);color:var(--o);
+text-transform:uppercase;letter-spacing:.1em;transform:scaleX(.86);transform-origin:left}
+.sub{color:var(--mut);font-size:10.5px;letter-spacing:.15em;text-transform:uppercase;margin:5px 0 18px}
+.sub b{color:var(--g);font-weight:500}
+section{padding:36px 0;border-top:1px solid var(--line)}
+p.lede{max-width:68ch;color:var(--mut)}
+p.lede b{color:var(--g);font-weight:500} p.lede mark{background:none;color:var(--unm)}
+.tbl{overflow-x:auto;border:1px solid var(--line);background:var(--panel)}
+table{border-collapse:collapse;width:100%;min-width:900px}
+th{font-size:9.5px;letter-spacing:.18em;color:var(--od);text-transform:uppercase;font-weight:500;
+text-align:left;padding:10px 12px;border-bottom:1px solid var(--line2)}
+td{padding:9px 12px;border-bottom:1px solid #14110A;vertical-align:top;font-size:11.5px}
+td.ab{color:var(--steel);min-width:170px}
+td.subst{color:var(--cy)} td.subst b{color:var(--steel);font-weight:500;display:block}
+td.state{white-space:nowrap;font-size:10px;letter-spacing:.1em}
+.NOW{color:var(--g)} .LATER{color:var(--hot)} .GATED{color:var(--unm)} .KEEP{color:var(--mut)} .ADV{color:var(--cy)}
+td.mob{color:var(--mut);font-size:10.5px;min-width:130px}
+.prodrow td{background:#0E0D08;border-top:1px solid var(--line2)}
+.prodrow b{font-family:var(--stamp);font-size:17px;letter-spacing:.1em;color:var(--o)}
+.prodrow span{color:var(--mut);font-size:10.5px;margin-left:14px}
+.picks{display:grid;grid-template-columns:repeat(auto-fit,minmax(330px,1fr));gap:14px}
+.pick{border:1px solid var(--line2);background:var(--panel);padding:15px 17px;
+clip-path:polygon(0 10px,10px 0,calc(100% - 16px) 0,100% 16px,100% 100%,16px 100%,0 calc(100% - 10px))}
+.pick b{display:block;font-family:var(--stamp);font-size:19px;letter-spacing:.08em;color:var(--hot)}
+.pick i{font-style:normal;display:block;color:var(--cyd);font-size:9.5px;letter-spacing:.14em;text-transform:uppercase;margin:2px 0 8px}
+.pick p{color:var(--steel);font-size:11.5px}
+.pick p em{font-style:normal;color:var(--g)}
+.pick .serves{margin-top:8px;color:var(--mut);font-size:10px;letter-spacing:.08em}
+.pick .serves b2{color:var(--o)}
+.legend{display:flex;flex-wrap:wrap;gap:16px;margin-top:12px;font-size:10px;letter-spacing:.12em;color:var(--mut);text-transform:uppercase}
+footer{padding:36px 0 64px;color:var(--line2);font-size:10px;letter-spacing:.2em;text-transform:uppercase;text-align:center}
+</style>
+<div class="wrap">
+<header class="hero">
+<h1>The Substitution Matrix<small>what Scape · AionUI · Omnigent · Paperclip do — and what Hive subs in, with today's data status</small></h1>
+<p class="lede" style="margin-top:16px">Hive is the metaharness surface: <b>Salud supplies truth, Kanpai owns mutation</b>,
+and the reference products get absorbed as roles, not copied as shells. Every row below names their ability, the Hive
+substitute (surface + specimen), the producer status <b>verified against the live gateways this session</b>, and the
+mobile cut. <mark>Statuses are measured, not aspirational.</mark></p>
+</header>
+
+<section>
+<h2>The Six That Matter</h2>
+<p class="sub"><b>ranked by usefulness across all five pillars</b> · not by spectacle</p>
+<div class="picks">
+<div class="pick"><b>1 · Dominator authority states</b><i>Psycho-Pass → every surface</i>
+<p>The one pattern that serves <em>every</em> pillar at once. Paperclip's governance becomes pixel law: a control
+without a grant renders as inert glass naming the missing authority. It kills the fake-retry class permanently,
+makes the orchestrator's verb surface self-documenting, and is what makes an agent-facing UI trustworthy enough
+to hand to AionUI-style chat control.</p>
+<div class="serves">SERVES: governance · orchestrator · chat control · mobile (fewer, truer buttons)</div></div>
+<div class="pick"><b>2 · Tape + shutter Telegraph</b><i>algedonic channel → owner-operator</i>
+<p>The metaharness value proposition in one strip: <em>one queue of human decisions across every harness</em> —
+Claude Code, Codex, goose, whatever Kanpai drives. Scape pings per-session; Paperclip has no human channel at all.
+The Telegraph is the consolidation. All data present today.</p>
+<div class="serves">SERVES: metaharness core · Paperclip's missing human board · THE mobile surface</div></div>
+<div class="pick"><b>3 · Cassette rack + VHS scrub</b><i>Katana ZERO / GitS → Thread + River</i>
+<p>The session-truth spine. Scape shows you terminals; this shows you <em>attempts</em> — the durable work identity
+across retries, with failures rewinding visibly and the adopted take playing clean. Attempts-to-5 and the 9-kind
+event vocabulary are in the live payload now. This is what AionUI's chat history becomes when it grows receipts.</p>
+<div class="serves">SERVES: session workbench · orchestrator retry story · post-mortems</div></div>
+<div class="pick"><b>4 · Quickhack command ladder</b><i>Cyberpunk 2077 → orchestrator verbs</i>
+<p>The generic pattern for every Kanpai operation: commands listed <em>priced in authority and expected wait</em>,
+disabled rungs naming the missing grant. One component covers retry, reassign, drain, abandon, salvage — the whole
+orchestrator verb set — and composes with #1 as its rendering rule.</p>
+<div class="serves">SERVES: orchestrator · governance · mobile (a ladder thumbs well)</div></div>
+<div class="pick"><b>5 · Killmail receipt</b><i>EVE Online → cost control seed</i>
+<p>Cost is WITHHELD by the gateway today — honestly. The killmail starts the economics anyway: every lost attempt
+gets an immutable receipt with fit (model/profile), damage (proof state), and cost class (<em>UNPRICED —
+subscription pool</em> is a truthful value). When Salud supplies charge records, the cost field lights up in place.
+This is also the provider-comparison unit AionUI never had.</p>
+<div class="serves">SERVES: cost control · provider adapter · manager learning loop</div></div>
+<div class="pick"><b>6 · Turn() batch commit</b><i>Transistor → orchestrator batch ops</i>
+<p>Queue bounded commands against an authority budget, review the whole plan, commit once, one receipt set.
+This is Omnigent-class orchestration made honest — and it is <em>gated</em>: no mutation route exists until the
+authenticated task.retry seam lands. Design it now, wire it when Kanpai exposes the ops. A disabled plan bar is
+honest; a live one that fakes is not.</p>
+<div class="serves">SERVES: orchestrator · budget ceilings · the approve-from-phone dream, safely</div></div>
+</div>
+</section>
+
+<section>
+<h2>Ability × Substitution</h2>
+<p class="sub"><b>verdicts:</b> <span class="NOW">SUB NOW</span> data present · <span class="LATER">SUB LATER</span> producer missing ·
+<span class="GATED">GATED</span> blocked on authority/mutation seam · <span class="KEEP">DON'T SUB</span> stays theirs ·
+<span class="ADV">OUR ADVANTAGE</span> they lack it</p>
+<div class="tbl"><table>
+<tr><th>Their ability</th><th>Hive substitute (surface · specimen)</th><th>Producer status today</th><th>Verdict</th><th>Mobile cut</th></tr>
+
+<tr class="prodrow"><td colspan="5"><b>SCAPE</b><span>macOS session workbench — terminals, editor, notes, playbooks, browser, worktrees</span></td></tr>
+<tr><td class="ab">Multi-session terminal management</td><td class="subst"><b>Thread twin-MFD + cassette rack</b>attempts as first-class, not tabs</td><td class="state">timeline + attempts LIVE; PTY stream ABSENT</td><td class="state NOW">SUB NOW (right CRT)</td><td class="mob">read-only session card; no terminal</td></tr>
+<tr><td class="ab">Native macOS shell, windows, deep links</td><td class="subst"><b>Hive.app</b>already shipped: profiles, restoration, palette</td><td class="state">BUILT · verified 2a97943</td><td class="state NOW">DONE</td><td class="mob">n/a</td></tr>
+<tr><td class="ab">Notes, playbooks, data stores</td><td class="subst">— personal knowledge is not fleet truth</td><td class="state">out of scope by law</td><td class="state KEEP">DON'T SUB</td><td class="mob">stays in Scape</td></tr>
+<tr><td class="ab">Embedded browser / dev preview</td><td class="subst"><b>guarded native browser/editor actions</b></td><td class="state">BUILT in Hive.app</td><td class="state NOW">DONE</td><td class="mob">link-out only</td></tr>
+<tr><td class="ab">Worktree management</td><td class="subst"><b>Projects bench + worktree cassette</b></td><td class="state">evidence.git LIVE per session</td><td class="state NOW">SUB NOW</td><td class="mob">state badge only</td></tr>
+<tr><td class="ab">Session-to-session messaging</td><td class="subst"><b>Wire + channel-with-noise rendering</b>trust class on every message</td><td class="state">wire optional by design</td><td class="state LATER">SUB LATER</td><td class="mob">notifications relay</td></tr>
+
+<tr class="prodrow"><td colspan="5"><b>AIONUI</b><span>chat GUI over CLI agents — multi-model conversations, file handling</span></td></tr>
+<tr><td class="ab">Chat with a running agent</td><td class="subst"><b>Dashboard Agent tray + MU/TH/UR focus mode</b>citations mandatory, Joi-overlay presence</td><td class="state">C1 tray BUILT; read tools live</td><td class="state NOW">SUB NOW</td><td class="mob">the chat IS the mobile app's second tab</td></tr>
+<tr><td class="ab">Multi-model management</td><td class="subst"><b>garage assembly + model relay field</b>swaps priced by outcome-history delta</td><td class="state">models_gateway: 1 model visible — thin</td><td class="state LATER">SUB LATER</td><td class="mob">read-only fit card</td></tr>
+<tr><td class="ab">Cross-provider session adapters</td><td class="subst"><b>provider profile + killmail compare</b></td><td class="state">1 endpoint (dell-local); capability matrix ABSENT</td><td class="state LATER">SUB LATER</td><td class="mob">outage banner</td></tr>
+<tr><td class="ab">File send / artifact handling in chat</td><td class="subst"><b>evidence drawer + Quick Look</b>receipts, not attachments</td><td class="state">artifact evidence LIVE per session</td><td class="state NOW">SUB NOW</td><td class="mob">artifact preview</td></tr>
+
+<tr class="prodrow"><td colspan="5"><b>OMNIGENT</b><span>orchestration surface — capabilities unverified this session; treated as the orchestrator role generally</span></td></tr>
+<tr><td class="ab">Mission decomposition / dispatch</td><td class="subst"><b>manager proposal ledger + oracle fragments</b>STABLE_WAIT honestly partial</td><td class="state">work_gateway: mission+proposals UNMEASURED</td><td class="state LATER">SUB LATER</td><td class="mob">proposal inbox, approve/defer</td></tr>
+<tr><td class="ab">Placement / capacity routing</td><td class="subst"><b>city placement + cargo balance + envelope gauge</b></td><td class="state">admission UNKNOWN — Kanpai capacity not supplied</td><td class="state LATER">SUB LATER</td><td class="mob">starvation alert only</td></tr>
+<tr><td class="ab">Batch agent operations</td><td class="subst"><b>Turn() batch commit</b>authority-budgeted plans, one receipt set</td><td class="state">no mutation route — task.retry seam absent</td><td class="state GATED">GATED</td><td class="mob">the phone-approve flow, when real</td></tr>
+<tr><td class="ab">Retry / recovery loops</td><td class="subst"><b>quickhack ladder + VHS scrub + oscillation detector</b>retry storms as named pathology</td><td class="state">retry evidence + timeline LIVE</td><td class="state NOW">SUB NOW (read)</td><td class="mob">retry decision card</td></tr>
+
+<tr class="prodrow"><td colspan="5"><b>PAPERCLIP</b><span>agent org charts, goals, budgets, governance — humans famously invisible</span></td></tr>
+<tr><td class="ab">Agent org chart</td><td class="subst"><b>Organism FORMAL + nerve map</b></td><td class="state">no org-directory producer — 7 governance gaps UNMEASURED</td><td class="state LATER">SUB LATER</td><td class="mob">none</td></tr>
+<tr><td class="ab">Goals / mission definition</td><td class="subst"><b>Ace-Combat briefing terminal</b>intent, criteria, expiry annotated live</td><td class="state">mission UNMEASURED in payload</td><td class="state LATER">SUB LATER</td><td class="mob">read + approve revisions</td></tr>
+<tr><td class="ab">Budget ceilings</td><td class="subst"><b>authority-budget bar + gravity-festival rollover</b></td><td class="state">budget None; cost verdict WITHHELD</td><td class="state LATER">SUB LATER</td><td class="mob">ceiling breach push</td></tr>
+<tr><td class="ab">Governance / approvals</td><td class="subst"><b>Telegraph + Dominator states + ceremony</b></td><td class="state">needs-me LIVE · 3 items now</td><td class="state NOW">SUB NOW</td><td class="mob">THE mobile surface — see below</td></tr>
+<tr><td class="ab">Humans in the org (their gap)</td><td class="subst"><b>Role Surface Index: humans + agents, one environment</b></td><td class="state">by design</td><td class="state ADV">OUR ADVANTAGE</td><td class="mob">role-aware entry</td></tr>
+
+<tr class="prodrow"><td colspan="5"><b>COST CONTROL</b><span>the pillar none of them own honestly</span></td></tr>
+<tr><td class="ab">Spend attribution</td><td class="subst"><b>killmail receipts + cost tape counter</b>evidence class on every amount</td><td class="state">cost_gateway verdict: WITHHELD — truthfully</td><td class="state LATER">SUB LATER (receipts NOW)</td><td class="mob">weekly digest push</td></tr>
+<tr><td class="ab">Waste detection</td><td class="subst"><b>oscillation detector</b>retry storms from timeline math</td><td class="state">computable from LIVE events today</td><td class="state NOW">SUB NOW</td><td class="mob">storm alert</td></tr>
+<tr><td class="ab">Budget-bounded execution</td><td class="subst"><b>Turn() plan bar + NieR chip budget</b>attention and authority both budgeted</td><td class="state">no budget producer</td><td class="state GATED">GATED</td><td class="mob">approve-within-ceiling</td></tr>
+</table></div>
+</section>
+
+<section>
+<h2>The Mobile Doctrine</h2>
+<p class="sub"><b>the phone is the Telegraph, full stop</b> · everything else is a read-only card one tap deep</p>
+<p class="lede">The Snow Crash gargoyle is the failure mode: an operator drowning in feeds. The phone cut refuses it.
+One surface — the decision queue with motion-tracker cadence — plus push on algedonic class only. Each decision is a
+card: blocker, consequence of waiting, evidence receipt, and the command ladder with grants honestly rendered.
+Approve/defer/snooze thumb from the armrest, <b>Cybersyn big-button class, 44px floors</b>. The Field, River, and
+Organism do not ship on the phone; a tapped card deep-links the desktop. <mark>When the mutation seam lands, the
+phone approves through the same ceremony as the desk — never a lighter one.</mark></p>
+</section>
+<footer>substitution matrix · statuses measured against live gateways 2026-08-24 · hive presents, salud proves, kanpai mutates</footer>
+</div>
+
+</body></html>

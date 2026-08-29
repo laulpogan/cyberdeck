@@ -154,6 +154,20 @@ Turning motion off lands on the markup the page already declared. Cancelling is
 settling, not a second design: the operator's system preference, the toggle, and
 a vendor bundle that fails to load all produce the identical page.
 
+## Reference and examples
+
+[`examples/`](examples/) holds three standalone pages that run the library — the
+nine kinds of motion, the full motion vocabulary, and three canvas components
+rebuilt as elements. They open from the file system.
+
+[`docs/reference/`](docs/reference/) holds where the design came from: 73 sources
+mined for 183 interface mechanisms, the 50 motifs that survived, the six
+cybernetics diagrams each component answers to, and the doctrine on motion, sound
+and the spatial cut. It also carries the map of what is not on this branch —
+[`docs/reference/branches.md`](docs/reference/branches.md) — because four
+unmerged branches hold the showcase apps, the reference vault and the motion
+gauntlet.
+
 ## Provenance
 
 The marks, the runtime and the palette were lifted out of a working operations

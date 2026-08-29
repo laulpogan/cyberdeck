@@ -1,0 +1,1568 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<!-- Preserved from the published Claude artifact "The Deck, Redrawn".
+     Source: https://claude.ai/code/artifact/1bbc122a-ec9e-42c7-8cdc-70bdbff4aea0
+     The artifact host frame runtime has been removed; nothing else is edited.
+     Self-contained apart from Google Fonts. -->
+</head>
+<body>
+<title>The Deck, Redrawn</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Saira+Condensed:wght@600;700&display=swap">
+<style>
+/* Palette, as tokens. Nothing in this library names a colour directly;
+   every component reads these, which is what makes a re-skin a
+   stylesheet edit rather than a search-and-replace through the markup.
+
+   Three theme states, not two. An explicit choice stamps data-theme on
+   the root; the default "system" setting stamps nothing at all, and only
+   prefers-color-scheme separates light from dark there. So the bare
+   :root carries the complete light palette, the media query redefines
+   the tokens for a dark OS unless light was explicitly chosen, and the
+   attribute selector wins in both directions. */
+:root {
+  --cd-void-base: #F4EBDD;
+  --cd-void-warm: #F0E5D4;
+  --cd-void-panel: #EADCC8;
+  --cd-void-raised: #E0CFB7;
+  --cd-signal-amber: #924300;
+  --cd-signal-amber-dim: #733B14;
+  --cd-signal-amber-hot: #B94D00;
+  --cd-signal-amber-fill: rgba(146, 67, 0, 0.10);
+  --cd-signal-data: #166534;
+  --cd-signal-data-dim: #2F6B3B;
+  --cd-signal-data-faint: rgba(22, 101, 52, 0.08);
+  --cd-signal-data-fill: rgba(22, 101, 52, 0.12);
+  --cd-signal-wire: #006675;
+  --cd-signal-wire-dim: #315F66;
+  --cd-signal-wire-glow: rgba(0, 102, 117, 0.12);
+  --cd-signal-alert: #AD2117;
+  --cd-signal-alert-dim: #8F1D15;
+  --cd-signal-alert-hot: #A51D14;
+  --cd-signal-alert-fill: rgba(173, 33, 23, 0.13);
+  --cd-signal-warn: #715600;
+  --cd-signal-unknown: #960060;
+  --cd-steel-ink: #241A14;
+  --cd-steel-muted: #665448;
+  --cd-steel-faint: rgba(36, 26, 20, 0.07);
+  --cd-steel-line: rgba(36, 26, 20, 0.18);
+  --cd-lifecycle-queued-fill: rgba(22,101,52,0.05);
+  --cd-lifecycle-queued-ink: #665448;
+  --cd-lifecycle-queued-mark: ·;
+  --cd-lifecycle-working-fill: rgba(22, 101, 52, 0.12);
+  --cd-lifecycle-working-ink: #166534;
+  --cd-lifecycle-working-mark: ●;
+  --cd-lifecycle-waiting-fill: rgba(146,67,0,0.06);
+  --cd-lifecycle-waiting-ink: #733B14;
+  --cd-lifecycle-waiting-mark: ⏸;
+  --cd-lifecycle-spinning-fill: rgba(146, 67, 0, 0.10);
+  --cd-lifecycle-spinning-ink: #924300;
+  --cd-lifecycle-spinning-mark: ▲;
+  --cd-lifecycle-stalled-fill: rgba(146, 67, 0, 0.10);
+  --cd-lifecycle-stalled-ink: #733B14;
+  --cd-lifecycle-stalled-mark: ◐;
+  --cd-lifecycle-blocked-fill: rgba(173, 33, 23, 0.13);
+  --cd-lifecycle-blocked-ink: #AD2117;
+  --cd-lifecycle-blocked-mark: ▨;
+  --cd-lifecycle-needs-human-fill: rgba(173, 33, 23, 0.13);
+  --cd-lifecycle-needs-human-ink: #A51D14;
+  --cd-lifecycle-needs-human-mark: 🔒;
+  --cd-lifecycle-failed-fill: rgba(173,33,23,0.08);
+  --cd-lifecycle-failed-ink: #AD2117;
+  --cd-lifecycle-failed-mark: ✕;
+  --cd-lifecycle-completed-fill: rgba(36,26,20,0.04);
+  --cd-lifecycle-completed-ink: #665448;
+  --cd-lifecycle-completed-mark: ▬;
+  --cd-lifecycle-no-data-fill: none;
+  --cd-lifecycle-no-data-ink: #960060;
+  --cd-lifecycle-no-data-mark: –;
+  --cd-lifecycle-unclassified-fill: none;
+  --cd-lifecycle-unclassified-ink: #665448;
+  --cd-lifecycle-unclassified-mark: ?;
+  --cd-health-colour-healthy: #166534;
+  --cd-health-colour-degraded: #715600;
+  --cd-health-colour-critical: #AD2117;
+  --cd-health-colour-unknown: #960060;
+  --cd-emergency-critical-mode: emergency;
+  --cd-emergency-critical-ink: #AD2117;
+  --cd-emergency-critical-hot: #A51D14;
+  --cd-emergency-critical-wash: rgba(173, 33, 23, 0.05);
+  --cd-emergency-critical-word: EMERGENCY;
+  --cd-emergency-critical-jp: 緊急事態;
+  --cd-emergency-unknown-mode: blind;
+  --cd-emergency-unknown-ink: #960060;
+  --cd-emergency-unknown-hot: #960060;
+  --cd-emergency-unknown-wash: rgba(150, 0, 96, 0.05);
+  --cd-emergency-unknown-word: NO CONTACT;
+  --cd-emergency-unknown-jp: 接続不能;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --cd-void-base: #000000;
+    --cd-void-warm: #080807;
+    --cd-void-panel: #0C0C0A;
+    --cd-void-raised: #111110;
+    --cd-signal-amber: #FF9830;
+    --cd-signal-amber-dim: #C87020;
+    --cd-signal-amber-hot: #FFCC50;
+    --cd-signal-amber-fill: rgba(255, 152, 48, 0.08);
+    --cd-signal-data: #50FF50;
+    --cd-signal-data-dim: #30BB30;
+    --cd-signal-data-faint: rgba(80, 255, 80, 0.06);
+    --cd-signal-data-fill: rgba(80, 255, 80, 0.1);
+    --cd-signal-wire: #20F0FF;
+    --cd-signal-wire-dim: #10A0B0;
+    --cd-signal-wire-glow: rgba(32, 240, 255, 0.12);
+    --cd-signal-alert: #FF3030;
+    --cd-signal-alert-dim: #CC2020;
+    --cd-signal-alert-hot: #FF5050;
+    --cd-signal-alert-fill: rgba(255, 48, 48, 0.15);
+    --cd-signal-warn: #FFE820;
+    --cd-signal-unknown: #F030C0;
+    --cd-steel-ink: #D8D8D0;
+    --cd-steel-muted: #888880;
+    --cd-steel-faint: rgba(200, 200, 192, 0.06);
+    --cd-steel-line: rgba(200, 200, 192, 0.12);
+    --cd-lifecycle-queued-fill: rgba(80,255,80,0.05);
+    --cd-lifecycle-queued-ink: #888880;
+    --cd-lifecycle-queued-mark: ·;
+    --cd-lifecycle-working-fill: rgba(80, 255, 80, 0.1);
+    --cd-lifecycle-working-ink: #50FF50;
+    --cd-lifecycle-working-mark: ●;
+    --cd-lifecycle-waiting-fill: rgba(255,152,48,0.06);
+    --cd-lifecycle-waiting-ink: #C87020;
+    --cd-lifecycle-waiting-mark: ⏸;
+    --cd-lifecycle-spinning-fill: rgba(255, 152, 48, 0.08);
+    --cd-lifecycle-spinning-ink: #FF9830;
+    --cd-lifecycle-spinning-mark: ▲;
+    --cd-lifecycle-stalled-fill: rgba(255, 152, 48, 0.08);
+    --cd-lifecycle-stalled-ink: #C87020;
+    --cd-lifecycle-stalled-mark: ◐;
+    --cd-lifecycle-blocked-fill: rgba(255, 48, 48, 0.15);
+    --cd-lifecycle-blocked-ink: #FF3030;
+    --cd-lifecycle-blocked-mark: ▨;
+    --cd-lifecycle-needs-human-fill: rgba(255, 48, 48, 0.15);
+    --cd-lifecycle-needs-human-ink: #FF5050;
+    --cd-lifecycle-needs-human-mark: 🔒;
+    --cd-lifecycle-failed-fill: rgba(255,48,48,0.08);
+    --cd-lifecycle-failed-ink: #FF3030;
+    --cd-lifecycle-failed-mark: ✕;
+    --cd-lifecycle-completed-fill: rgba(200,200,192,0.04);
+    --cd-lifecycle-completed-ink: #888880;
+    --cd-lifecycle-completed-mark: ▬;
+    --cd-lifecycle-no-data-fill: none;
+    --cd-lifecycle-no-data-ink: #F030C0;
+    --cd-lifecycle-no-data-mark: –;
+    --cd-lifecycle-unclassified-fill: none;
+    --cd-lifecycle-unclassified-ink: #888880;
+    --cd-lifecycle-unclassified-mark: ?;
+    --cd-health-colour-healthy: #50FF50;
+    --cd-health-colour-degraded: #FFE820;
+    --cd-health-colour-critical: #FF3030;
+    --cd-health-colour-unknown: #F030C0;
+    --cd-emergency-critical-mode: emergency;
+    --cd-emergency-critical-ink: #FF3030;
+    --cd-emergency-critical-hot: #FF5050;
+    --cd-emergency-critical-wash: rgba(255, 48, 48, 0.05);
+    --cd-emergency-critical-word: EMERGENCY;
+    --cd-emergency-critical-jp: 緊急事態;
+    --cd-emergency-unknown-mode: blind;
+    --cd-emergency-unknown-ink: #F030C0;
+    --cd-emergency-unknown-hot: #FF7AE0;
+    --cd-emergency-unknown-wash: rgba(240, 48, 192, 0.05);
+    --cd-emergency-unknown-word: NO CONTACT;
+    --cd-emergency-unknown-jp: 接続不能;
+  }
+}
+
+:root[data-theme="dark"] {
+  --cd-void-base: #000000;
+  --cd-void-warm: #080807;
+  --cd-void-panel: #0C0C0A;
+  --cd-void-raised: #111110;
+  --cd-signal-amber: #FF9830;
+  --cd-signal-amber-dim: #C87020;
+  --cd-signal-amber-hot: #FFCC50;
+  --cd-signal-amber-fill: rgba(255, 152, 48, 0.08);
+  --cd-signal-data: #50FF50;
+  --cd-signal-data-dim: #30BB30;
+  --cd-signal-data-faint: rgba(80, 255, 80, 0.06);
+  --cd-signal-data-fill: rgba(80, 255, 80, 0.1);
+  --cd-signal-wire: #20F0FF;
+  --cd-signal-wire-dim: #10A0B0;
+  --cd-signal-wire-glow: rgba(32, 240, 255, 0.12);
+  --cd-signal-alert: #FF3030;
+  --cd-signal-alert-dim: #CC2020;
+  --cd-signal-alert-hot: #FF5050;
+  --cd-signal-alert-fill: rgba(255, 48, 48, 0.15);
+  --cd-signal-warn: #FFE820;
+  --cd-signal-unknown: #F030C0;
+  --cd-steel-ink: #D8D8D0;
+  --cd-steel-muted: #888880;
+  --cd-steel-faint: rgba(200, 200, 192, 0.06);
+  --cd-steel-line: rgba(200, 200, 192, 0.12);
+  --cd-lifecycle-queued-fill: rgba(80,255,80,0.05);
+  --cd-lifecycle-queued-ink: #888880;
+  --cd-lifecycle-queued-mark: ·;
+  --cd-lifecycle-working-fill: rgba(80, 255, 80, 0.1);
+  --cd-lifecycle-working-ink: #50FF50;
+  --cd-lifecycle-working-mark: ●;
+  --cd-lifecycle-waiting-fill: rgba(255,152,48,0.06);
+  --cd-lifecycle-waiting-ink: #C87020;
+  --cd-lifecycle-waiting-mark: ⏸;
+  --cd-lifecycle-spinning-fill: rgba(255, 152, 48, 0.08);
+  --cd-lifecycle-spinning-ink: #FF9830;
+  --cd-lifecycle-spinning-mark: ▲;
+  --cd-lifecycle-stalled-fill: rgba(255, 152, 48, 0.08);
+  --cd-lifecycle-stalled-ink: #C87020;
+  --cd-lifecycle-stalled-mark: ◐;
+  --cd-lifecycle-blocked-fill: rgba(255, 48, 48, 0.15);
+  --cd-lifecycle-blocked-ink: #FF3030;
+  --cd-lifecycle-blocked-mark: ▨;
+  --cd-lifecycle-needs-human-fill: rgba(255, 48, 48, 0.15);
+  --cd-lifecycle-needs-human-ink: #FF5050;
+  --cd-lifecycle-needs-human-mark: 🔒;
+  --cd-lifecycle-failed-fill: rgba(255,48,48,0.08);
+  --cd-lifecycle-failed-ink: #FF3030;
+  --cd-lifecycle-failed-mark: ✕;
+  --cd-lifecycle-completed-fill: rgba(200,200,192,0.04);
+  --cd-lifecycle-completed-ink: #888880;
+  --cd-lifecycle-completed-mark: ▬;
+  --cd-lifecycle-no-data-fill: none;
+  --cd-lifecycle-no-data-ink: #F030C0;
+  --cd-lifecycle-no-data-mark: –;
+  --cd-lifecycle-unclassified-fill: none;
+  --cd-lifecycle-unclassified-ink: #888880;
+  --cd-lifecycle-unclassified-mark: ?;
+  --cd-health-colour-healthy: #50FF50;
+  --cd-health-colour-degraded: #FFE820;
+  --cd-health-colour-critical: #FF3030;
+  --cd-health-colour-unknown: #F030C0;
+  --cd-emergency-critical-mode: emergency;
+  --cd-emergency-critical-ink: #FF3030;
+  --cd-emergency-critical-hot: #FF5050;
+  --cd-emergency-critical-wash: rgba(255, 48, 48, 0.05);
+  --cd-emergency-critical-word: EMERGENCY;
+  --cd-emergency-critical-jp: 緊急事態;
+  --cd-emergency-unknown-mode: blind;
+  --cd-emergency-unknown-ink: #F030C0;
+  --cd-emergency-unknown-hot: #FF7AE0;
+  --cd-emergency-unknown-wash: rgba(240, 48, 192, 0.05);
+  --cd-emergency-unknown-word: NO CONTACT;
+  --cd-emergency-unknown-jp: 接続不能;
+}
+
+:root {
+  --m-enter: 300ms;
+  --m-leave: 200ms;
+  --m-flash: 400ms;
+  --m-decay: 15s;
+  --m-pulse: 2400ms;
+  --m-step: 18ms;
+  --m-ease-out: cubic-bezier(0.2, 0, 0.13, 1);
+  --m-ease-in: cubic-bezier(0.7, 0, 1, 0.6);
+  --m-ease-loop: cubic-bezier(0.37, 0, 0.63, 1);
+}
+
+/* Operator response. These are the only transitions written in CSS rather
+   than driven from the runtime, because they have to survive the runtime
+   never loading -- an interface that stops responding to a hover when a
+   script fails to parse feels broken in a way a missing flourish does
+   not. */
+[data-motion="intent"] {
+  transition: opacity var(--m-enter) var(--m-ease-out),
+              color var(--m-enter) var(--m-ease-out),
+              border-color var(--m-enter) var(--m-ease-out),
+              background-color var(--m-leave) var(--m-ease-in);
+}
+
+/* The contact age, one shape on every deck. */
+.hv-contact { color:var(--muted); font-size:9px; letter-spacing:.14em; }
+.hv-contact[data-measured="0"] { color:var(--unknown); }
+
+/* A declared stillness is not a styling hook -- it exists so the tests and
+   the review scripts can see it -- but it does one useful thing: it wins
+   over anything that tries to animate it later. */
+[data-motion="still"] { animation: none !important; transition: none !important; }
+
+/* The operator asked for no motion, so there is none, and nothing is
+   half-faded waiting for a script to finish it. Every kind above rests at
+   the geometry Python already rendered, so switching motion off is not a
+   second design -- it is this page with the runtime never having run. */
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    --m-enter: 0ms; --m-leave: 0ms; --m-flash: 0ms;
+    --m-decay: 0ms; --m-pulse: 0ms; --m-step: 0ms;
+  }
+  [data-motion] { animation: none !important; transition: none !important; }
+}
+
+/* Component chrome. Every colour here is a token or a mix of tokens --
+   nothing names a hex, so the ratchet in test/ can prove it. */
+
+.cd-gauge, .cd-river, .cd-globe { margin: 0; }
+
+/* ——— the trinity dial ——— */
+
+/* Tone is a role, never a colour: a caller asks for "warn" and the token
+   set decides what that is in this theme. It is set once, on the figure,
+   so the arc, the reading and the bloom are the same colour by
+   construction rather than by three declarations agreeing. */
+.cd-gauge { display: flex; flex-direction: column; align-items: center; gap: .5rem;
+            color: var(--cd-signal-data); }
+.cd-gauge[data-tone="warn"] { color: var(--cd-signal-amber); }
+.cd-gauge[data-tone="unmeasured"] { color: var(--cd-health-colour-unknown); }
+.cd-gauge svg { overflow: visible; }
+
+.cd-gauge-track {
+  fill: none; stroke: var(--cd-steel-faint); stroke-width: 10; stroke-linecap: butt;
+}
+.cd-gauge-ticks line { stroke: var(--cd-steel-line); stroke-width: 1; }
+
+/* The bloom. A phosphor dot does not have an edge -- it has a bright
+   core and a halo that falls off, which is why the canvas original
+   carried a shadow at every stroke. Two shadows rather than one: a tight
+   core so the stroke still reads as a line, and a wide one for the
+   spill. Both take currentColor, so a new tone needs no new glow. */
+.cd-gauge-arc {
+  fill: none; stroke: currentColor; stroke-width: 10; stroke-linecap: butt;
+  filter: drop-shadow(0 0 3px currentColor) drop-shadow(0 0 11px currentColor);
+}
+/* An unmeasured dial gets the colour and none of the light. The glow is
+   how this palette says "live", so spending it on a quantity nobody
+   measured would be the whole argument undone in a stylesheet. */
+.cd-gauge[data-tone="unmeasured"] .cd-gauge-arc { filter: none; }
+.cd-gauge-absent { opacity: .5; }
+
+.cd-gauge-read {
+  fill: currentColor; font: 700 1.55rem/1 var(--cd-mono, inherit);
+  font-variant-numeric: tabular-nums;
+  filter: drop-shadow(0 0 8px currentColor);
+}
+.cd-gauge[data-tone="unmeasured"] .cd-gauge-read { filter: none; }
+.cd-gauge figcaption {
+  font-size: .72rem; letter-spacing: .14em; color: var(--cd-signal-amber);
+  text-transform: uppercase; text-align: center;
+}
+
+/* ——— the phosphor lanes ——— */
+
+.cd-river svg { display: block; width: 100%; height: auto; }
+.cd-riv-axis line { stroke: var(--cd-signal-data-dim); stroke-width: 1; }
+.cd-riv-id { fill: var(--cd-steel-muted); font-size: 10px; font-weight: 500; }
+.cd-riv-lane[data-state="needs_human"] .cd-riv-id { fill: var(--cd-signal-amber); }
+.cd-riv-state { fill: var(--cd-steel-line); font-size: 9px; letter-spacing: .06em; }
+.cd-riv-seg { stroke: var(--cd-signal-data-dim); stroke-width: 2; opacity: .75;
+              filter: drop-shadow(0 0 3px var(--cd-signal-data-dim)); }
+.cd-riv-seg[data-blocked="1"] { stroke: var(--cd-health-colour-critical); opacity: .7;
+  filter: drop-shadow(0 0 3px var(--cd-health-colour-critical)); }
+/* An empty lane is drawn, and drawn as empty. Omitting the row would let
+   "nothing happened here" and "this subject does not exist" look alike. */
+.cd-riv-empty { stroke: var(--cd-steel-line); stroke-width: 1; stroke-dasharray: 3 4; }
+.cd-riv-ev { fill: currentColor; color: var(--cd-steel-ink);
+              filter: drop-shadow(0 0 5px currentColor); }
+.cd-riv-ev[data-kind="sealed"] { color: var(--cd-signal-data); }
+.cd-riv-ev[data-kind="blocked"] { color: var(--cd-health-colour-critical); }
+.cd-riv-ev[data-kind="retry"] { color: var(--cd-signal-amber); }
+.cd-riv-ring { fill: none; stroke: currentColor; stroke-width: 1; }
+.cd-riv-await text {
+  fill: var(--cd-health-colour-unknown); font-size: 9px; letter-spacing: .1em;
+  filter: drop-shadow(0 0 6px var(--cd-health-colour-unknown));
+}
+
+/* ——— the globe ——— */
+
+.cd-globe {
+  position: relative; width: var(--cd-globe-size, 420px); max-width: 100%;
+  --cd-globe-mesh-colour: var(--cd-signal-data-dim);
+}
+.cd-globe-mesh, .cd-globe-layer {
+  display: block; width: 100%; height: auto; aspect-ratio: 1;
+}
+.cd-globe-layer { position: absolute; inset: 0; overflow: visible; }
+.cd-globe-dot { fill: var(--cd-signal-data);
+                filter: drop-shadow(0 0 5px var(--cd-signal-data)); }
+.cd-globe-pin[data-awaiting="1"] .cd-globe-dot { fill: var(--cd-signal-amber);
+  filter: drop-shadow(0 0 7px var(--cd-signal-amber)); }
+.cd-globe-halo { fill: none; stroke: var(--cd-signal-amber); stroke-width: 1.4; }
+.cd-globe-arc { fill: none; stroke: var(--cd-signal-amber-dim); stroke-width: 1.1; }
+.cd-globe figcaption {
+  margin-top: .6rem; font-size: .64rem; letter-spacing: .14em;
+  color: var(--cd-steel-muted); text-transform: uppercase; text-align: center;
+}
+
+/* ——— the reason a component is holding still ——— */
+
+.cd-why {
+  display: block; font-style: normal; font-size: .66rem; line-height: 1.45;
+  color: var(--cd-signal-amber-dim); letter-spacing: .04em; text-align: center;
+}
+[data-motion="still"] > svg { opacity: .55; }
+
+/* The tube. Opt in by putting `cd-crt` on any container.
+
+   This is the one place in the library where motion is not a measurement,
+   and it is allowed only because it makes no claim: scanlines and a
+   vignette are a surface, the way a bezel is. They say "this is a screen".
+   They do not say anything about the fleet, and an operator cannot read
+   a number off them.
+
+   The one moving part, the beam, is deliberately slow and dim enough to
+   read as tube behaviour rather than as an event. If it ever starts
+   looking like a sweep that means something, delete it. */
+
+.cd-crt { position: relative; isolation: isolate; }
+
+.cd-crt::before, .cd-crt::after {
+  content: ""; position: absolute; inset: 0; pointer-events: none; z-index: 2;
+}
+.cd-crt::before {
+  background: repeating-linear-gradient(
+    to bottom, var(--cd-crt-line, rgba(0,0,0,.22)) 0 1px, transparent 1px 3px);
+}
+.cd-crt::after {
+  background: radial-gradient(ellipse at 50% 45%,
+    transparent 55%, var(--cd-crt-vignette, rgba(0,0,0,.6)) 100%);
+}
+
+.cd-crt-beam {
+  position: absolute; left: 0; right: 0; height: 120px; z-index: 1;
+  pointer-events: none;
+  background: linear-gradient(to bottom, transparent,
+    var(--cd-signal-data-faint) 50%, transparent);
+  animation: cd-beam 7s linear infinite;
+}
+@keyframes cd-beam { from { top: -140px; } to { top: 110%; } }
+
+/* R11: the operator's preference wins over the surface, always. */
+@media (prefers-reduced-motion: reduce) {
+  .cd-crt-beam { animation: none; opacity: 0; }
+}
+/* And so does the library's own switch, so one control settles the page. */
+[data-motion-off] .cd-crt-beam { animation: none; opacity: 0; }
+
+:root{
+  --mono:"JetBrains Mono",ui-monospace,"SF Mono",Menlo,monospace;
+  --display:"Saira Condensed","Helvetica Neue",Arial,sans-serif;
+  --cd-mono:var(--mono);
+  --ink:var(--cd-steel-ink); --mut:var(--cd-steel-muted); --line:var(--cd-steel-line);
+  --acc:var(--cd-signal-amber); --live:var(--cd-signal-data);
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--cd-void-base);color:var(--ink);font:400 13.5px/1.6 var(--mono);
+     -webkit-font-smoothing:antialiased}
+.wrap{max-width:76rem;margin:0 auto;padding:0 1.5rem 5rem}
+.top{padding:3.5rem 0 0;border-bottom:1px solid var(--line);margin-bottom:2rem}
+.eyebrow{font-size:.66rem;letter-spacing:.3em;color:var(--acc);margin:0 0 1rem}
+h1{font-family:var(--display);font-weight:700;text-transform:uppercase;
+   font-size:clamp(2.4rem,7vw,4.6rem);line-height:.94;margin:0 0 1rem;letter-spacing:.01em;
+   text-wrap:balance}
+h1 em{font-style:normal;color:var(--acc)}
+.lede{color:var(--mut);max-width:64ch;margin:0 0 2rem}
+.lede b{color:var(--ink);font-weight:500}
+.readout{display:flex;flex-wrap:wrap;border:1px solid var(--line);border-bottom:none;margin:0 0 1.2rem}
+.readout>div{flex:1 1 8rem;padding:.7rem .9rem .8rem;border-bottom:1px solid var(--line);
+             border-right:1px solid var(--line)}
+.readout>div:last-child{border-right:none}
+.readout dt{font-size:.58rem;letter-spacing:.2em;color:var(--mut);margin:0 0 .3rem}
+.readout dd{margin:0;font-size:1.45rem;line-height:1;font-weight:500;color:var(--live);
+            font-variant-numeric:tabular-nums}
+.readout dd.amber{color:var(--acc)}
+.readout dd small{font-size:.66rem;letter-spacing:.14em;color:var(--mut)}
+.controls{display:flex;gap:.6rem;flex-wrap:wrap;margin-bottom:3rem}
+button{font:500 .72rem/1 var(--mono);letter-spacing:.15em;text-transform:uppercase;cursor:pointer;
+       background:transparent;color:var(--acc);border:1px solid var(--cd-signal-amber-dim);
+       padding:.6rem 1.1rem}
+button:hover,button:focus-visible{background:var(--cd-signal-amber-fill)}
+button:focus-visible{outline:2px solid var(--acc);outline-offset:2px}
+h2{font-family:var(--display);font-weight:700;text-transform:uppercase;
+   font-size:clamp(1.4rem,3vw,2rem);letter-spacing:.03em;margin:0 0 .3rem;color:var(--acc)}
+.sub{color:var(--mut);max-width:64ch;margin:0 0 1.5rem;font-size:.82rem}
+section{margin-bottom:4rem}
+.panel{border:1px solid var(--line);background:var(--cd-void-panel);padding:1.4rem;
+       overflow-x:auto}
+.row{display:flex;gap:1.6rem;flex-wrap:wrap;align-items:flex-start;justify-content:center}
+.note{border-left:2px solid var(--acc);padding-left:1rem;color:var(--mut);max-width:66ch;
+      margin:1.2rem 0 0;font-size:.82rem}
+.note b{color:var(--ink);font-weight:500}
+.was{display:grid;gap:1px;background:var(--line);border:1px solid var(--line);
+     grid-template-columns:1fr;margin-bottom:2rem}
+@media(min-width:44rem){.was{grid-template-columns:1fr 1fr}}
+.was>div{background:var(--cd-void-panel);padding:.9rem 1.1rem}
+.was h3{margin:0 0 .5rem;font-size:.6rem;letter-spacing:.2em;color:var(--mut);
+        text-transform:uppercase;font-weight:400}
+.was p{margin:0;font-size:.8rem;color:var(--mut)}
+.was.now>div:last-child h3{color:var(--live)}
+code{color:var(--cd-signal-amber-dim);font-size:.8em}
+footer{border-top:1px solid var(--line);padding-top:1.4rem;color:var(--mut);font-size:.76rem}
+footer a{color:var(--acc)}
+</style>
+<div class="wrap">
+<header class="top">
+  <p class="eyebrow">CYBERDECK · COMPONENTS</p>
+  <h1>The deck,<br><em>redrawn</em></h1>
+  <p class="lede">These three components already existed — hand-built, good-looking,
+    and painted into <b>canvas</b> bitmaps. Canvas was the problem. A bitmap has no
+    elements, so there was nothing to hang a mark on and nothing for a review to ask.
+    The dials grew from zero whether or not a ratio had been measured. The globe
+    turned at a constant rate over any feed, including a dead one — and
+    <b>a turning globe reads as health</b>, which makes it the most expensive thing
+    on a deck to get wrong.</p>
+</header>
+
+<dl class="readout">
+  <div><dt>ANIMATIONS RUNNING</dt><dd id="r-a">0</dd></div>
+  <div><dt>MARKS</dt><dd id="r-m">0</dd></div>
+  <div><dt>DECLARED STILL</dt><dd class="amber" id="r-s">0</dd></div>
+  <div><dt>MOVING WITHOUT EVIDENCE</dt><dd id="r-l">0</dd></div>
+  <div><dt>STATE</dt><dd id="r-st"><small>RUNNING</small></dd></div>
+</dl>
+<div class="controls">
+  <button id="kill" type="button">Motion off</button>
+  <button id="replay" type="button">Replay</button>
+</div>
+
+<section>
+  <h2>MAGI consensus</h2>
+  <p class="sub">A ratio drawn as an arc was always <code>level</code> — a measured
+    quantity drawing itself to its measured extent. The third ring was never
+    measured. It does not sweep to zero; it declines, and prints the reason.</p>
+  <div class="panel"><div class="row" id="magi"></div></div>
+  <p class="note">On canvas all three grew identically from zero, because the growth
+    was a loop rather than a reading. <b>A ring at zero and a ring nobody filled in
+    must not look alike.</b></p>
+</section>
+
+<section>
+  <h2>The river — phosphor</h2>
+  <p class="sub">One lane per subject on a real time axis. The beam is
+    <code>trace</code>, staggered in the order the lanes are read. The trail fades by
+    each lane's real age rather than by a constant — and refuses to fade at all when
+    no clock was supplied.</p>
+  <div class="panel cd-crt"><div class="cd-crt-beam"></div><div id="river"></div></div>
+  <p class="note">The last lane has no run. It is drawn as an empty lane rather than
+    left out, because <b>an absent row and an empty row must not look alike.</b></p>
+</section>
+
+<section>
+  <h2>The globe — live, then stale</h2>
+  <p class="sub">The same component twice. The mesh stays canvas: a wireframe sphere
+    is a few hundred arcs per frame, and as DOM it would be slower without being more
+    honest — the mesh means "this is a globe", it carries no reading. So the seam
+    moved. The endpoints are real elements over the bitmap, and the rotation is
+    <code>traffic</code>: one turn per measured interval, or none.</p>
+  <div class="panel"><div class="row" id="globes"></div></div>
+  <p class="note">Right-hand feed is stale, so it stops. <b>One host is carrying
+    nobody, so no arc is drawn to it</b> — an arc between two points is the most
+    convincing way a screen can claim flow.</p>
+</section>
+
+<footer>
+  <p>Every component on this page is called from the library, not reproduced for the
+     demo. Runtime, marks, components and palette are inlined here verbatim.</p>
+  <p>MIT · <a href="https://github.com/laulpogan/cyberdeck">github.com/laulpogan/cyberdeck</a></p>
+</footer>
+</div>
+
+<script>(()=>{var h=()=>{};function M(t){let e;return()=>(e===void 0&&(e=t()),e)}var B=t=>t;var d=t=>t*1e3,g=t=>t/1e3;var D=t=>Array.isArray(t)&&typeof t[0]=="number";var K=(t,e,o=10)=>{let r="",i=Math.max(Math.round(e/o),2);for(let m=0;m<i;m++)r+=Math.round(t(m/(i-1))*1e4)/1e4+", ";return`linear(${r.substring(0,r.length-2)})`};var te=t=>t!==null;function z(t,{repeat:e,repeatType:o="loop"},r,i=1){let m=t.filter(te),c=i<0||e&&o!=="loop"&&e%2===1?0:m.length-1;return!c||r===void 0?m[c]:r}var V=class{constructor(){this.updateFinished()}get finished(){return this._finished}updateFinished(){this._finished=new Promise(e=>{this.resolve=e})}notifyFinished(){this.resolve()}then(e,o){return this.finished.then(e,o)}};function P(t){for(let e=1;e<t.length;e++)t[e]??(t[e]=t[e-1])}var S=t=>t.startsWith("--");function j(t,e,o){S(e)?t.style.setProperty(e,o):t.style[e]=o}var q={};function A(t,e){let o=M(t);return()=>q[e]??o()}var H=A(()=>window.ScrollTimeline!==void 0,"scrollTimeline");var E=A(()=>{try{document.createElement("div").animate({opacity:0},{easing:"linear(0, 1)"})}catch{return!1}return!0},"linearEasing");var x=([t,e,o,r])=>`cubic-bezier(${t}, ${e}, ${o}, ${r})`;var w={linear:"linear",ease:"ease",easeIn:"ease-in",easeOut:"ease-out",easeInOut:"ease-in-out",circIn:x([0,.65,.55,1]),circOut:x([.55,0,1,.45]),backIn:x([.31,.01,.66,-.59]),backOut:x([.33,1.53,.69,.99])};function C(t,e){if(t)return typeof t=="function"?E()?K(t,e):"ease-out":D(t)?x(t):Array.isArray(t)?t.map(o=>C(o,e)||w.easeOut):w[t]}function $(t,e,o,{delay:r=0,duration:i=300,repeat:m=0,repeatType:u="loop",ease:c="easeOut",times:s}={},n=void 0){let a={[e]:o};s&&(a.offset=s);let l=C(c,i);Array.isArray(l)&&(a.easing=l);let p={delay:r,duration:i,easing:Array.isArray(l)?"linear":l,fill:"both",iterations:m+1,direction:u==="reverse"?"alternate":"normal"};return n&&(p.pseudoElement=n),t.animate(a,p)}function _(t){return typeof t=="function"&&"applyToOptions"in t}function U({type:t,...e}){return _(t)&&E()?t.applyToOptions(e):(e.duration??(e.duration=300),e.ease??(e.ease="easeOut"),e)}var y=class extends V{constructor(e){if(super(),this.finishedTime=null,this.isStopped=!1,this.manualStartTime=null,!e)return;let{element:o,name:r,keyframes:i,pseudoElement:m,allowFlatten:u=!1,finalKeyframe:c,onComplete:s}=e;this.isPseudoElement=!!m,this.allowFlatten=u,this.options=e,h(typeof e.type!="string",`Mini animate() doesn't support "type" as a string.`,"mini-spring");let n=U(e);this.animation=$(o,r,i,n,m),n.autoplay===!1&&this.animation.pause(),this.animation.onfinish=()=>{if(this.finishedTime=this.time,!m){let a=z(i,this.options,c,this.speed);this.updateMotionValue&&this.updateMotionValue(a),j(o,r,a),this.animation.cancel()}s?.(),this.notifyFinished()}}play(){this.isStopped||(this.manualStartTime=null,this.animation.play(),this.state==="finished"&&this.updateFinished())}pause(){this.animation.pause()}complete(){this.animation.finish?.()}cancel(){try{this.animation.cancel()}catch{}}stop(){if(this.isStopped)return;this.isStopped=!0;let{state:e}=this;e==="idle"||e==="finished"||(this.updateMotionValue?this.updateMotionValue():this.commitStyles(),this.isPseudoElement||this.cancel())}commitStyles(){let e=this.options?.element;!this.isPseudoElement&&e?.isConnected&&this.animation.commitStyles?.()}get duration(){let e=this.animation.effect?.getComputedTiming?.().duration||0;return g(Number(e))}get iterationDuration(){let{delay:e=0}=this.options||{};return this.duration+g(e)}get time(){return g(Number(this.animation.currentTime)||0)}set time(e){let o=this.finishedTime!==null;this.manualStartTime=null,this.finishedTime=null,this.animation.currentTime=d(e),o&&this.animation.pause()}get speed(){return this.animation.playbackRate}set speed(e){e<0&&(this.finishedTime=null),this.animation.playbackRate=e}get state(){return this.finishedTime!==null?"finished":this.animation.playState}get startTime(){return this.manualStartTime??Number(this.animation.startTime)}set startTime(e){this.manualStartTime=this.animation.startTime=e}attachTimeline({timeline:e,rangeStart:o,rangeEnd:r,observe:i}){return this.allowFlatten&&this.animation.effect?.updateTiming({easing:"linear"}),this.animation.onfinish=null,e&&H()?(this.animation.timeline=e,o&&(this.animation.rangeStart=o),r&&(this.animation.rangeEnd=r),B):i(this)}};var b=class{constructor(e){this.stop=()=>this.runAll("stop"),this.animations=e.filter(Boolean)}get finished(){return Promise.all(this.animations.map(e=>e.finished))}getAll(e){return this.animations[0][e]}setAll(e,o){for(let r=0;r<this.animations.length;r++)this.animations[r][e]=o}attachTimeline(e){let o=this.animations.map(r=>r.attachTimeline(e));return()=>{o.forEach((r,i)=>{r&&r(),this.animations[i].stop()})}}get time(){return this.getAll("time")}set time(e){this.setAll("time",e)}get speed(){return this.getAll("speed")}set speed(e){this.setAll("speed",e)}get state(){return this.getAll("state")}get startTime(){return this.getAll("startTime")}get duration(){return Z(this.animations,"duration")}get iterationDuration(){return Z(this.animations,"iterationDuration")}runAll(e){this.animations.forEach(o=>o[e]())}play(){this.runAll("play")}pause(){this.runAll("pause")}cancel(){this.runAll("cancel")}complete(){this.runAll("complete")}};function Z(t,e){let o=0;for(let r=0;r<t.length;r++){let i=t[r][e];i!==null&&i>o&&(o=i)}return o}var T=class extends b{then(e,o){return this.finished.finally(e).then(()=>{})}};var J=new WeakMap,F=(t,e="")=>`${t}:${e}`;function I(t){let e=J.get(t);return e||(e=new Map,J.set(t,e)),e}function X(t,e){if(t?.inherit&&e){let{inherit:o,...r}=t;return{...e,...r}}return t}function R(t,e){let o=t?.[e]??t?.default??t;return o!==t?X(o,t):o}var Y=["borderTopLeftRadius","borderTopRightRadius","borderBottomRightRadius","borderBottomLeftRadius"];var Q=new Set(["borderWidth","borderTopWidth","borderRightWidth","borderBottomWidth","borderLeftWidth","borderRadius",...Y,"width","maxWidth","height","maxHeight","top","right","bottom","left","inset","insetBlock","insetBlockStart","insetBlockEnd","insetInline","insetInlineStart","insetInlineEnd","padding","paddingTop","paddingRight","paddingBottom","paddingLeft","paddingBlock","paddingBlockStart","paddingBlockEnd","paddingInline","paddingInlineStart","paddingInlineEnd","margin","marginTop","marginRight","marginBottom","marginLeft","marginBlock","marginBlockStart","marginBlockEnd","marginInline","marginInlineStart","marginInlineEnd","fontSize","backgroundPositionX","backgroundPositionY"]);function k(t,e){for(let o=0;o<t.length;o++)typeof t[o]=="number"&&Q.has(e)&&(t[o]=t[o]+"px")}function O(t,e,o){if(t==null)return[];if(t instanceof EventTarget)return[t];if(typeof t=="string"){let r=document;e&&(r=e.current);let i=o?.[t]??r.querySelectorAll(t);return i?Array.from(i):[]}return Array.from(t).filter(r=>r!=null)}function v(t,e){let o=window.getComputedStyle(t);return S(e)?o.getPropertyValue(e):o[e]}function ee(t,e,o,r){if(t==null)return[];let i=O(t,r),m=i.length;h(!!m,"No valid elements provided.","no-valid-elements");let u=[];for(let s=0;s<m;s++){let n=i[s],a={...o};typeof a.delay=="function"&&(a.delay=a.delay(s,m));for(let l in e){let p=e[l];Array.isArray(p)||(p=[p]);let f={...R(a,l)};f.duration&&(f.duration=d(f.duration)),f.delay&&(f.delay=d(f.delay));let L=I(n),W=F(l,f.pseudoElement||""),G=L.get(W);G&&G.stop(),u.push({map:L,key:W,unresolvedKeyframes:p,options:{...f,element:n,name:l,allowFlatten:!a.type&&!a.ease}})}}for(let s=0;s<u.length;s++){let{unresolvedKeyframes:n,options:a}=u[s],{element:l,name:p,pseudoElement:f}=a;!f&&n[0]===null&&(n[0]=v(l,p)),P(n),k(n,p),!f&&n.length<2&&n.unshift(v(l,p)),a.keyframes=n}let c=[];for(let s=0;s<u.length;s++){let{map:n,key:a,options:l}=u[s],p=new y(l);n.set(a,p),p.finished.finally(()=>n.delete(a)),c.push(p)}return c}var oe=t=>{function e(o,r,i){return new T(ee(o,r,i,t))}return e},N=oe();window.Motion={animate:N};})();
+</script>
+<script>// The motion runtime. Walks the DOM, reads the marks, dispatches.
+// Extracted verbatim from the system this library was lifted out of,
+// where it is held by a review script across eight pages and three
+// viewports. Behaviour is not re-derived here.
+//
+// Schema: cyberdeck.motion/1
+
+
+(function () {
+  'use strict';
+  var M = window.Motion;
+  var root = document.documentElement;
+
+  // Three ways to be still, and they all end here: the operator's OS
+  // preference, an explicit ?still=1 for a capture, and a missing engine.
+  // The last one matters -- if the vendor bundle fails to load, the page
+  // must be the static export, not a page stuck mid-transition.
+  var reduced = window.matchMedia
+    && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var asked = /[?&]still=1\b/.test(window.location.search)
+    || root.hasAttribute('data-motion-off');
+  var OFF = reduced || asked || !M || typeof M.animate !== 'function';
+
+  function ms(name, fallback) {
+    var raw = getComputedStyle(root).getPropertyValue(name).trim();
+    if (!raw) return fallback;
+    if (raw.slice(-2) === 'ms') return parseFloat(raw);
+    if (raw.slice(-1) === 's') return parseFloat(raw) * 1000;
+    return parseFloat(raw) || fallback;
+  }
+
+  var T = {};
+  function readTokens() {
+    T.enter = ms('--m-enter', 300);
+    T.leave = ms('--m-leave', 200);
+    T.flash = ms('--m-flash', 400);
+    T.decay = ms('--m-decay', 15000);
+    T.pulse = ms('--m-pulse', 2400);
+    T.step  = ms('--m-step', 18);
+  }
+
+  var running = [];
+  function play(el, keyframes, options) {
+    var handle = M.animate(el, keyframes, options);
+    running.push(handle);
+    return handle;
+  }
+
+  // Arrival. One enter, from slightly off and slightly faint, to exactly
+  // where Python drew it. Never the reverse: an element must not be left
+  // anywhere the static render did not put it.
+  function arrival(el) {
+    play(el, { opacity: [0, 1], transform: ['translateY(3px)', 'none'] },
+      { duration: T.enter / 1000, easing: 'ease-out' });
+  }
+
+  // Decay. The element starts at the emphasis its age has already used up
+  // and settles the rest of the way, so a value measured ten seconds into
+  // a fifteen second window arrives two thirds faded -- the motion is the
+  // remaining freshness, not a fresh animation over an old number.
+  function decayed(el) {
+    var spent = parseFloat(el.getAttribute('data-decay')) || 0;
+    var left = Math.max(0, 1 - spent);
+    if (left <= 0 || !T.decay) return;
+    play(el, { opacity: [1 - spent * 0.45, 1] },
+      { duration: (T.decay * left) / 1000, easing: 'ease-out' });
+  }
+
+  // Counting. Order is the payload's, not the DOM's guess at it, and the
+  // whole reveal is capped so a wall of two hundred cells does not take
+  // four seconds to admit it has two hundred cells.
+  function counted(el) {
+    var index = parseInt(el.getAttribute('data-index'), 10) || 0;
+    var total = parseInt(el.getAttribute('data-total'), 10) || 1;
+    // Floored as well as capped. A fleet console usually counts two or
+    // three of a thing, and at the raw step that whole reveal was over in
+    // fifty milliseconds -- a stagger nobody can see is not a stagger, it
+    // is three elements appearing at once with extra machinery. The floor
+    // makes small counts readable; the cap stops a wall of two hundred
+    // cells taking four seconds to admit it has two hundred cells.
+    var span = Math.max(T.enter * 0.6, Math.min(T.step * total, T.enter * 2));
+    play(el, { opacity: [0, 1] }, {
+      duration: T.enter / 1000, easing: 'ease-out',
+      delay: (span * (index / Math.max(total, 1))) / 1000,
+    });
+  }
+
+  // Traffic. The one loop, breathing at the producer's own interval, so a
+  // tightening cadence is visibly a tightening cadence. Clamped at both
+  // ends and only at the ends: under the floor it reads as a flicker
+  // rather than a rhythm, over the ceiling it reads as stopped. The clamp
+  // is a legibility bound on an honest number, not a rescaling of it, and
+  // an element that hits either end still carries the real interval in
+  // data-period for anything that wants to read it.
+  function trafficking(el) {
+    var period = parseFloat(el.getAttribute('data-period')) * 1000;
+    if (!(period > 0)) return;
+    period = Math.max(T.pulse / 4, Math.min(T.pulse * 4, period));
+    play(el, { opacity: [1, 0.45, 1] }, {
+      duration: period / 1000, repeat: Infinity, easing: 'ease-in-out',
+    });
+  }
+
+  // The poll clock. Starts where the measurement says it already is and
+  // takes exactly as long as the producer's remaining interval to finish,
+  // so the bar arriving at the end and the next poll being due are the
+  // same event rather than two things that drift apart.
+  function cycling(el) {
+    var spent = parseFloat(el.getAttribute('data-spent'));
+    var period = parseFloat(el.getAttribute('data-period'));
+    if (!(period > 0) || !(spent >= 0)) return;
+    if (el.getAttribute('data-cycle-axis') === 'rotate') {
+      // A dial rather than a bar. The radar's sweep sits at the angle the
+      // freshness put it and goes round once per poll interval, so the
+      // sweep an operator watches is the poll they are waiting for --
+      // which is the one thing a radar drawn as a still picture cannot
+      // say. Same clock, same refusals, different geometry.
+      var from = spent * 360;
+      // view-box, not fill-box. The origin the caller gives is a point in
+      // the drawing's own coordinate system -- the dial's centre -- and
+      // fill-box would have measured it against the wedge's bounding box
+      // instead, spinning the sweep around its own middle somewhere off
+      // in the corner of the panel.
+      var origin = el.getAttribute('data-cycle-origin');
+      el.style.transformBox = 'view-box';
+      el.style.transformOrigin = origin
+        ? origin.split(/\s+/).map(function (n) { return n + 'px'; }).join(' ')
+        : 'center';
+      var first = play(el, { rotate: [from + 'deg', '360deg'] },
+        { duration: period * (1 - spent), easing: 'linear' });
+      if (first && first.finished && first.finished.then) {
+        first.finished.then(function () {
+          play(el, { rotate: ['0deg', '360deg'] },
+            { duration: period, easing: 'linear', repeat: Infinity });
+        }, function () {});
+      }
+      return;
+    }
+    var bar = el.querySelector('i') || el;
+    // Linear, and this is the one place R11's ban on it is wrong. An
+    // eased clock runs fast in the middle and slow at the ends, which
+    // means the bar's position stops being the elapsed fraction -- the
+    // single thing it is here to report. Easing this would be the motion
+    // equivalent of a chart with an unlabelled y-axis.
+    // Two animations, not one repeating animation. A single repeating
+    // tween would restart every cycle at the position of the FIRST poll
+    // rather than at zero, so the second minute of a thirty second dial
+    // would begin fourteen percent through -- a clock that is right once
+    // and drifts forever after.
+    var first = play(bar, { transform: ['scaleX(' + spent + ')', 'scaleX(1)'] },
+      { duration: (period * (1 - spent)), easing: 'linear' });
+    if (first && first.finished && first.finished.then) {
+      first.finished.then(function () {
+        play(bar, { transform: ['scaleX(0)', 'scaleX(1)'] },
+          { duration: period, easing: 'linear', repeat: Infinity });
+      }, function () {});
+    }
+  }
+
+  // The shared duration formatter. This mirrors `durationWords` in
+  // src/marks.js, and test/marks.test.mjs runs the two against each
+  // other across a table of values -- a format that drifts between the
+  // markup and the browser would show up as a number that jumps the
+  // instant the page starts counting.
+  function words(seconds, style) {
+    if (style === 'tenths') return seconds.toFixed(1) + 'S';
+    seconds = Math.floor(seconds);
+    var pad = function (n) { return (n < 10 ? '0' : '') + n; };
+    if (style === 'tenths') return seconds.toFixed(1) + 'S';
+    if (style === 'lower') {
+      if (seconds < 60) return seconds + 's';
+      if (seconds < 3600) return Math.floor(seconds / 60) + 'm';
+      if (seconds < 86400) return Math.floor(seconds / 3600) + 'h '
+        + Math.floor((seconds % 3600) / 60) + 'm';
+      return Math.floor(seconds / 86400) + 'd '
+        + Math.floor((seconds % 86400) / 3600) + 'h';
+    }
+    if (seconds < 60) return seconds + 'S';
+    if (seconds < 3600) return Math.floor(seconds / 60) + 'M';
+    if (seconds < 86400) return Math.floor(seconds / 3600) + 'H '
+      + pad(Math.floor((seconds % 3600) / 60)) + 'M';
+    return Math.floor(seconds / 86400) + 'D '
+      + pad(Math.floor((seconds % 86400) / 3600)) + 'H';
+  }
+  window.__cyberdeckWords = words;   // read by the agreement test
+
+  // Every running counter on one interval. A timer each would drift apart
+  // and would also wake the page N times a second to do one page's worth
+  // of work; the numbers all advance on the same edge instead, so two
+  // counters showing the same measurement never disagree by a second.
+  var clocks = [];
+  var ticking = null;
+  function elapsing(el) {
+    var seconds = parseFloat(el.getAttribute('data-elapsed-seconds'));
+    if (!(seconds >= 0)) return;
+    var target = el.querySelector('[data-elapsed-text]') || el;
+    clocks.push({ el: el, target: target, base: seconds,
+                  rendered: target.textContent,
+                  style: el.getAttribute('data-style') || 'upper' });
+    if (ticking) return;
+    var origin = performance.now();
+    ticking = setInterval(function () {
+      var since = (performance.now() - origin) / 1000;
+      for (var i = 0; i < clocks.length; i++) {
+        var c = clocks[i];
+        var next = words(c.base + since, c.style);
+        // Written only when the words change. A counter in hours restates
+        // the same string 3599 times out of 3600, and rewriting text on
+        // every tick is how a still page ends up costing a screenful of
+        // layout a second.
+        if (c.target.textContent !== next) c.target.textContent = next;
+      }
+    }, 1000);
+    running.push({ cancel: function () {
+      if (ticking) { clearInterval(ticking); ticking = null; }
+      // Settling puts the words back to what Python wrote. This is the
+      // only kind that edits the document rather than compositing over
+      // it, so it is the only one that has to undo anything -- and if it
+      // did not, "a settled page is the rendered page" would quietly stop
+      // being true the moment a minute ticked over.
+      for (var i = 0; i < clocks.length; i++) {
+        clocks[i].target.textContent = clocks[i].rendered;
+      }
+      clocks.length = 0;
+    } });
+  }
+
+  // A path drawing itself. The dash pattern is set from the geometry's
+  // own measured length rather than a guess, so a short strand and a long
+  // one both draw fully and neither overshoots into a gap.
+  //
+  // Whatever the path already had on stroke-dasharray is put back at the
+  // end. Several drawings dash a line to mean "undelivered" or "nobody
+  // tried this", and a trace that cleared it would have quietly turned
+  // those into solid lines -- erasing a refusal by animating it.
+  function traced(el) {
+    // Every SVG geometry element, not just <path>. SVG2 put
+    // getTotalLength on SVGGeometryElement, so a rect and a circle both
+    // answer it -- and rects are most of what this system draws: the ICE
+    // walls, the corridor doorframes, the dive frames. Leaving them out
+    // of the selector meant the kind ran on almost nothing.
+    var SHAPES = 'path, line, polyline, polygon, rect, circle, ellipse';
+    var paths = el.tagName && /^(path|line|polyline|polygon|rect|circle|ellipse)$/i
+      .test(el.tagName) ? [el] : el.querySelectorAll(SHAPES);
+    var index = parseInt(el.getAttribute('data-index'), 10) || 0;
+    var total = parseInt(el.getAttribute('data-total'), 10) || 1;
+    var span = Math.max(T.enter * 0.6, Math.min(T.step * total, T.enter * 2));
+    var delay = (span * (index / Math.max(total, 1))) / 1000;
+    for (var i = 0; i < paths.length; i++) {
+      var path = paths[i];
+      if (!path.getTotalLength) continue;
+      var length = 0;
+      try { length = path.getTotalLength(); } catch (e) { continue; }
+      if (!(length > 0)) continue;
+      var restore = path.getAttribute('stroke-dasharray');
+      path.style.strokeDasharray = length + ' ' + length;
+      path.style.strokeDashoffset = String(length);
+      (function (node, was) {
+        var handle = play(node, { strokeDashoffset: [String(length), '0'] },
+          { duration: T.enter / 1000, easing: 'ease-out', delay: delay });
+        var done = function () {
+          node.style.strokeDashoffset = '';
+          node.style.strokeDasharray = was === null ? '' : was;
+        };
+        if (handle && handle.finished && handle.finished.then) {
+          handle.finished.then(done, done);
+        }
+      })(path, restore);
+    }
+  }
+
+  // A level draws itself out to where the measurement already put it.
+  // It scales rather than resizing, and it scales from zero to the
+  // rendered extent -- never past it and never to a rounder number --
+  // so the end of the animation and the static render are the same frame.
+  function levelled(el) {
+    var bar = el.querySelector('i') || el;
+    var axis = el.getAttribute('data-level-axis') || 'x';
+    if (axis === 'slide') {
+      // Some measurements are a position rather than an extent: the burn
+      // marker rides the point on its track that the percentage puts it
+      // at. Sliding it in from the start of the track draws that reading;
+      // scaling it would have grown the marker itself, which measures
+      // nothing.
+      var level = parseFloat(el.getAttribute('data-level')) || 0;
+      play(bar, { transform: ['translateX(' + (-100 * level) + '%)', 'none'] },
+        { duration: T.enter / 1000, easing: 'ease-out' });
+      return;
+    }
+    if (axis === 'fade') {
+      // Some measurements have no bar to grow. The context burn is grain
+      // closing in from the panel edges, and the honest reading of "this
+      // much is gone" is the grain arriving at the density Python already
+      // computed from the percentage -- not a bar drawn next to it.
+      play(bar, { opacity: [0, 1] },
+        { duration: T.enter / 1000, easing: 'ease-out' });
+      return;
+    }
+    // To the measured extent, named -- not to `none`. `none` is the
+    // identity transform, so animating to it threw away the inline
+    // scale the server wrote and every bar finished at full width: a
+    // twelve percent reading and an eighty-two percent reading drawn the
+    // same length, by the kind whose whole job is extent.
+    var level = parseFloat(el.getAttribute('data-level'));
+    if (!(level >= 0)) level = 1;
+    var fn = axis === 'y' ? 'scaleY' : 'scaleX';
+    play(bar, { transform: [fn + '(0)', fn + '(' + level + ')'] },
+      { duration: T.enter / 1000, easing: 'ease-out' });
+  }
+
+  var HANDLERS = {
+    arrive: arrival, decay: decayed, count: counted, level: levelled,
+    elapsed: elapsing, trace: traced, traffic: trafficking, cycle: cycling,
+  };
+
+  function start(scope) {
+    readTokens();
+    var nodes = (scope || document).querySelectorAll('[data-motion]');
+    for (var i = 0; i < nodes.length; i++) {
+      var el = nodes[i];
+      var kind = el.getAttribute('data-motion');
+      // `still` and `intent` are deliberately absent from HANDLERS. The
+      // first must never be touched; the second is CSS and needs no help.
+      var handler = HANDLERS[kind];
+      if (handler) { try { handler(el); } catch (e) { /* one bad mark
+        must not stop the rest of the page from settling */ } }
+    }
+  }
+
+  // What the review scripts call. Cancelling rather than finishing is the
+  // point: every animation above rests at the rendered geometry, so a
+  // cancelled page IS the static export. A `finish()` would have to agree
+  // with Python about the end state, and two descriptions of one truth is
+  // how they drift apart.
+  function settle() {
+    for (var i = 0; i < running.length; i++) {
+      try { running[i].cancel(); } catch (e) {}
+    }
+    running.length = 0;
+    if (document.getAnimations) {
+      var all = document.getAnimations();
+      for (var j = 0; j < all.length; j++) { try { all[j].cancel(); } catch (e) {} }
+    }
+    root.setAttribute('data-motion-off', '');
+  }
+
+  window.CyberdeckMotion = {
+    schema: 'cyberdeck.motion/1',
+    off: OFF,
+    settle: settle,
+    start: start,
+    count: function () { return running.length; },
+  };
+
+  if (!OFF) {
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', function () { start(); });
+    } else { start(); }
+  }
+})();
+</script>
+<script>
+// The marks. Every one of them answers the same question: is there
+// evidence for this motion, and if not, what do we say instead?
+//
+// A mark is a plain object of data attributes. That is the whole
+// interface. It carries no animation code, which is what lets a test
+// assert honesty without a browser, and what lets the same contract be
+// produced by a template, a server, or a React component without three
+// implementations drifting apart.
+//
+// The rule the whole library exists to hold:
+//
+//     Motion is a measurement or it does not happen.
+//
+// So there is no default. A number nobody supplied does not animate to
+// zero, or to a house tempo, or to a spinner. It is refused, and the
+// refusal is written down where a reviewer can read it.
+
+const SCHEMA = 'cyberdeck.motion/1';
+
+// A pulse is a claim about right now, so it needs a feed that is live --
+// not merely readable. `stale` means reached and old.
+const LIVE_STATES = ['live', 'measured_empty', 'stale'];
+const PULSING_STATES = ['live'];
+const ELAPSING_STATES = ['live'];
+
+const DURATION_STYLES = ['upper', 'lower', 'tenths'];
+
+const num = (value) => {
+  const fixed = Number(value).toFixed(3);
+  return fixed.replace(/0+$/, '').replace(/\.$/, '') || '0';
+};
+
+/** Declared stillness. The reason is the point.
+ *
+ * An element with no mark and an element whose mark was forgotten render
+ * identical HTML, and only one of them is correct. So the correct one
+ * says so, and a review can tell them apart. */
+const still = (reason) => ({
+  'data-motion': 'still',
+  'data-still-reason': String(reason),
+});
+
+/** Enter, once, because this changed at a time somebody recorded.
+ *
+ * "It probably just changed" would fire on every reload and teach an
+ * operator that movement means nothing. */
+function arrive(changedAt, now, { window: win = null } = {}) {
+  if (changedAt == null || now == null) return still('no change was timestamped');
+  const age = Number(now) - Number(changedAt);
+  if (age < 0) return still('change is stamped in the future');
+  if (win != null && age > Number(win)) return still('older than the arrival window');
+  return { 'data-motion': 'arrive', 'data-age': num(age) };
+}
+
+/** Settle from flash to rest across the real staleness window. The fade
+ * IS the age -- an operator who learns its shape reads staleness off the
+ * motion before reading the number. */
+function decay(ageSeconds, { window: win }) {
+  if (ageSeconds == null || !win) return still('age was not measured');
+  const fraction = Number(ageSeconds) / Number(win);
+  // Refused here rather than left for the runtime to notice and skip: a
+  // mark that says "animate me" and then quietly does nothing is exactly
+  // as unreadable as no mark at all.
+  if (fraction >= 1) return still('settled past the window');
+  return { 'data-motion': 'decay', 'data-decay': num(Math.max(0, fraction)) };
+}
+
+/** Reveal in payload order so the eye can count along. A stagger over a
+ * population nobody counted is a rhythm invented to look considered. */
+function count(index, total) {
+  if (index == null || total == null || total <= 0) return still('population was not counted');
+  if (index < 0 || index >= total) return still('index falls outside the count');
+  return {
+    'data-motion': 'count',
+    'data-index': String(Math.trunc(index)),
+    'data-total': String(Math.trunc(total)),
+  };
+}
+
+/** A measured quantity drawing itself out to its measured extent.
+ *
+ * `measured` is passed, never inferred from `value != null`, because the
+ * caller already knows the difference and an animation that re-derives it
+ * is a second opinion waiting to disagree with the first. An unmeasured
+ * quantity does not grow to zero: a bar at zero and a bar nobody filled
+ * in must never look alike, and motion is the loudest way to confuse them. */
+function level(value, ceiling, { measured, cite }) {
+  if (!measured || value == null || !ceiling) return still('quantity was not measured');
+  const fraction = Math.max(0, Math.min(1, Number(value) / Number(ceiling)));
+  return { 'data-motion': 'level', 'data-level': num(fraction), 'data-cite': cite };
+}
+
+/** The shared duration formatter. The runtime renders these too, and two
+ * implementations of one format is the drift this library refuses
+ * everywhere else -- so the test compares them across a table of values. */
+function durationWords(seconds, style = 'upper') {
+  if (seconds == null) return null;
+  if (style === 'tenths') return `${Number(seconds).toFixed(1)}S`;
+  const s = Math.trunc(seconds);
+  if (style === 'lower') {
+    if (s < 60) return `${s}s`;
+    if (s < 3600) return `${Math.floor(s / 60)}m`;
+    if (s < 86400) return `${Math.floor(s / 3600)}h ${Math.floor((s % 3600) / 60)}m`;
+    return `${Math.floor(s / 86400)}d ${Math.floor((s % 86400) / 3600)}h`;
+  }
+  if (s < 60) return `${s}S`;
+  if (s < 3600) return `${Math.floor(s / 60)}M`;
+  if (s < 86400) {
+    return `${Math.floor(s / 3600)}H ${String(Math.floor((s % 3600) / 60)).padStart(2, '0')}M`;
+  }
+  return `${Math.floor(s / 86400)}D ${String(Math.floor((s % 86400) / 3600)).padStart(2, '0')}H`;
+}
+
+/** A measured duration that keeps counting, because it is still true.
+ *
+ * A wait of five hours measured three seconds ago is five hours and three
+ * seconds now; freezing it at render is the less truthful option. Live
+ * sources only -- on a stale feed the clock stops, because a counter that
+ * still ticks claims somebody is still watching. */
+function elapsed(seconds, sourceState, { cite, style = 'upper', at = null }) {
+  if (!ELAPSING_STATES.includes(sourceState)) {
+    return still(`source is ${sourceState}; the clock stopped when the feed did`);
+  }
+  if (seconds == null) return still('no duration was measured');
+  const shape = DURATION_STYLES.includes(style) ? style : 'upper';
+  const mark = {
+    'data-motion': 'elapsed',
+    'data-elapsed-seconds': num(seconds),
+    'data-style': shape,
+    'data-cite': cite,
+  };
+  if (at != null) mark['data-at'] = num(at);
+  return mark;
+}
+
+/** A path drawn along its own length, because something travelled it.
+ *
+ * The refusal is why this is a kind rather than a flourish. Watching a
+ * line travel from origin to destination is the most convincing way a
+ * screen can say a thing arrived -- so a route that delivered nothing
+ * must not draw itself.
+ *
+ * `travelled` is passed, not guessed from the geometry. `order` and
+ * `total` stagger a set so a corridor draws in the order it is walked. */
+function trace(travelled, { cite, order = null, total = null }) {
+  if (!travelled) return still('nothing travelled this path');
+  const mark = { 'data-motion': 'trace', 'data-cite': cite };
+  if (order != null && total) {
+    mark['data-index'] = String(Math.trunc(order));
+    mark['data-total'] = String(Math.trunc(total));
+  }
+  return mark;
+}
+
+/** The one ambient loop, and the strictest gate here.
+ *
+ * The period is the producer's own interval, never a house tempo scaled
+ * by a reading -- that distinction is the whole difference between an
+ * indicator and an ornament. A measured zero is stillness, correctly,
+ * because nothing is happening out there either. */
+function traffic(periodSeconds, sourceState, { cite }) {
+  if (!PULSING_STATES.includes(sourceState)) return still(`source is ${sourceState}, not live`);
+  if (periodSeconds == null) return still('no interval was measured');
+  if (Number(periodSeconds) <= 0) return still('measured interval is zero');
+  return { 'data-motion': 'traffic', 'data-period': num(periodSeconds), 'data-cite': cite };
+}
+
+/** The same loop spent better: a poll indicator running the real clock.
+ *
+ * An overrun refuses. A poll due forty seconds ago that has not landed is
+ * the finding, and a bar that quietly wrapped and started again would
+ * erase it. */
+function cycle(spentSeconds, period, sourceState, { cite }) {
+  if (!PULSING_STATES.includes(sourceState)) return still(`source is ${sourceState}, not live`);
+  if (spentSeconds == null || period == null || Number(period) <= 0) {
+    return still('poll interval was not measured');
+  }
+  const spent = Number(spentSeconds) / Number(period);
+  if (spent < 0 || spent > 1) return still('poll is overdue');
+  return {
+    'data-motion': 'cycle',
+    'data-spent': num(spent),
+    'data-period': num(period),
+    'data-cite': cite,
+  };
+}
+
+/** Operator-caused motion. The operator is the producer, so this one
+ * proves nothing -- but it is still marked, so a review can tell
+ * interface response apart from a claim about the world. */
+const intent = (kind = 'hover') => ({
+  'data-motion': 'intent',
+  'data-intent': String(kind),
+});
+
+/** Render a mark as an HTML attribute string, for templates and servers
+ * that build markup as text rather than as elements. */
+function attrs(mark) {
+  const escape = (v) => String(v)
+    .replace(/&/g, '&amp;').replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+  return Object.entries(mark).map(([k, v]) => ` ${k}="${escape(v)}"`).join('');
+}
+
+// The trinity dial. A ratio drawn as an arc, and the arc IS the ratio.
+//
+// This began life as a canvas painting: an arc stroked to `ratio`, a tick
+// ring, a number in the middle, and a requestAnimationFrame loop growing
+// the sweep from zero. It looked correct and could not be audited. Pixels
+// carry no attributes, so nothing could ask the picture whether the
+// number behind it had been measured, and the growth animation would have
+// run just as confidently over a ratio nobody supplied.
+//
+// Redrawn as SVG, the same picture answers. The arc is an element, the
+// element wears a `level` mark, and a ratio with no measurement behind it
+// does not sweep to zero -- it declines to sweep, and says why.
+
+const TAU = Math.PI * 2;
+// Three quarters of a turn, opening at the bottom -- the gap is where a
+// dial admits it has ends.
+const START = Math.PI * 0.75;
+const SWEEP = Math.PI * 1.5;
+const TICKS = 24;
+
+const polar = (cx, cy, r, a) => [cx + r * Math.cos(a), cy + r * Math.sin(a)];
+
+function arcPath(cx, cy, r, from, to) {
+  const [x1, y1] = polar(cx, cy, r, from);
+  const [x2, y2] = polar(cx, cy, r, to);
+  const large = to - from > Math.PI ? 1 : 0;
+  return `M ${x1.toFixed(2)} ${y1.toFixed(2)} A ${r} ${r} 0 ${large} 1 `
+       + `${x2.toFixed(2)} ${y2.toFixed(2)}`;
+}
+
+/**
+ * @param {object} o
+ * @param {number|null} o.value    what was observed
+ * @param {number|null} o.ceiling  what it is out of
+ * @param {boolean} o.measured     whether anybody actually observed it
+ * @param {string} o.cite          the payload path the value came from
+ * @param {string} o.label         the name of the dial
+ * @param {string} [o.reading]     the text in the middle; defaults to value/ceiling
+ * @param {string} [o.tone]        'live' | 'warn' | 'unmeasured' -- a token group,
+ *                                 never a colour
+ */
+function gauge({ value, ceiling, measured, cite, label,
+                        reading = null, tone = 'live', size = 170 }) {
+  const mark = level(value, ceiling, { measured, cite });
+  const moving = mark['data-motion'] === 'level';
+  const cx = size / 2;
+  const cy = size / 2 + 6;
+  const r = size * 0.34;
+
+  // The arc is drawn to its full measured extent in the markup. The mark
+  // asks the runtime to draw it *out* to there; with no runtime, or with
+  // motion off, the reader still sees the correct ratio rather than an
+  // empty ring. Settling is the rendered page.
+  const fraction = moving ? Number(mark['data-level']) : 0;
+
+  const ticks = [];
+  for (let i = 0; i <= TICKS; i++) {
+    const a = START + (SWEEP * i) / TICKS;
+    const [x1, y1] = polar(cx, cy, r + 11, a);
+    const [x2, y2] = polar(cx, cy, r + 16, a);
+    ticks.push(`<line x1="${x1.toFixed(1)}" y1="${y1.toFixed(1)}" `
+             + `x2="${x2.toFixed(1)}" y2="${y2.toFixed(1)}"/>`);
+  }
+
+  const text = reading !== null ? reading
+    : (moving ? `${value}/${ceiling}` : 'UNMEASURED');
+
+  return `<figure class="cd-gauge" data-tone="${tone}"${moving ? '' : attrs(still(mark['data-still-reason']))}>
+  <svg viewBox="0 0 ${size} ${size}" width="${size}" height="${size}" role="img"
+       aria-label="${label}: ${text}">
+    <g class="cd-gauge-ticks">${ticks.join('')}</g>
+    <path class="cd-gauge-track" d="${arcPath(cx, cy, r, START, START + SWEEP)}"/>
+    ${moving
+      ? `<path class="cd-gauge-arc"${attrs(mark)} pathLength="1"
+             d="${arcPath(cx, cy, r, START, START + SWEEP)}"
+             style="stroke-dasharray:1;stroke-dashoffset:${(1 - fraction).toFixed(4)}"/>`
+      : `<path class="cd-gauge-arc cd-gauge-absent"
+             d="${arcPath(cx, cy, r, START, START + SWEEP * 0.04)}"/>`}
+    <text class="cd-gauge-read" x="${cx}" y="${cy + 9}" text-anchor="middle">${text}</text>
+  </svg>
+  <figcaption>${label}</figcaption>
+  ${moving ? '' : `<i class="cd-why">${mark['data-still-reason']}</i>`}
+</figure>`;
+}
+
+// The phosphor oscilloscope. One lane per subject, events on a real time
+// axis, and a beam that draws each lane once because the lane happened.
+//
+// As canvas this was a per-frame repaint with the trails faded by
+// compositing a translucent black rectangle over the whole picture --
+// genuinely the way a phosphor tube behaves, and genuinely unauditable.
+// The decay was a constant. Nothing tied it to how old anything was, and
+// a lane whose subject was never observed drew exactly like one that
+// completed.
+//
+// In SVG each lane is a path and each event a glyph, so the beam becomes
+// what it always was: a `trace`, staggered in the order the lanes are
+// read. A lane with no events does not draw, and says so.
+
+// Event kinds map to shapes, never to colour alone. A reader who cannot
+// distinguish the two greens still reads the run.
+const GLYPH = {
+  gate_passed: 'sealed', accepted: 'sealed',
+  canonical_blocked: 'blocked',
+  retry_authorized: 'retry', worker_retry_authorized: 'retry', operator_retry: 'retry',
+};
+const shapeOf = (kind) => GLYPH[kind] || 'mark';
+
+const at = (t) => (t instanceof Date ? t.getTime() : new Date(t).getTime());
+
+function glyph(x, y, kind) {
+  const shape = shapeOf(kind);
+  if (shape === 'sealed') {
+    return `<circle cx="${x}" cy="${y}" r="4.5"/><circle class="cd-riv-ring" cx="${x}" cy="${y}" r="8.5"/>`;
+  }
+  if (shape === 'blocked') return `<rect x="${x - 3.5}" y="${y - 6}" width="7" height="12"/>`;
+  if (shape === 'retry') {
+    return `<polygon points="${x},${y - 6} ${x + 5},${y + 5} ${x - 5},${y + 5}"/>`;
+  }
+  return `<rect x="${x - 2}" y="${y - 4}" width="4" height="8"/>`;
+}
+
+/**
+ * @param {object} o
+ * @param {Array} o.lanes  [{ id, attempt, state, events: [{ at, kind }] }]
+ * @param {string} o.cite  the payload path the events came from
+ * @param {number} [o.width] drawing width in user units
+ * @param {number} [o.staleAfter] seconds after which a finished lane has
+ *        settled; drives the `decay` on each lane's trail
+ */
+function river({ lanes, cite, width = 900, laneHeight = 66,
+                        gutter = 200, staleAfter = null, now = null }) {
+  if (!lanes || !lanes.length) {
+    return `<figure class="cd-river"${attrs(still('no lanes were observed'))}>
+  <i class="cd-why">no lanes were observed</i></figure>`;
+  }
+
+  const height = lanes.length * laneHeight + 24;
+  const right = width - 26;
+  const rows = lanes.map((lane, index) => {
+    const y = 20 + index * laneHeight + laneHeight / 2;
+    const events = lane.events || [];
+
+    // A lane with nothing on it is drawn as a lane, not omitted -- an
+    // absent row and an empty row must not look alike.
+    if (events.length < 2) {
+      return `<g class="cd-riv-lane" data-state="${lane.state}"${attrs(still('this lane has no run to draw'))}>
+        <text class="cd-riv-id" x="12" y="${y - 7}">${lane.id}</text>
+        <text class="cd-riv-state" x="12" y="${y + 7}">NO RUN OBSERVED</text>
+        <line class="cd-riv-empty" x1="${gutter}" y1="${y}" x2="${right}" y2="${y}"/>
+      </g>`;
+    }
+
+    const stamps = events.map((e) => at(e.at));
+    const t0 = Math.min(...stamps);
+    const t1 = Math.max(...stamps);
+    const span = Math.max(1, t1 - t0);
+    const px = (t) => gutter + ((at(t) - t0) / span) * (right - gutter);
+
+    // The trail fades by the lane's real age, not by a constant. With no
+    // clock supplied the fade is refused rather than invented.
+    const age = now === null ? null : (at(now) - t1) / 1000;
+    const trail = decay(age, { window: staleAfter });
+
+    const segments = events.slice(0, -1).map((e, i) => {
+      const blocked = e.kind === 'canonical_blocked';
+      return `<line class="cd-riv-seg" data-blocked="${blocked ? 1 : 0}" `
+           + `x1="${px(e.at).toFixed(1)}" y1="${y}" `
+           + `x2="${px(events[i + 1].at).toFixed(1)}" y2="${y}"/>`;
+    }).join('');
+
+    const marks = events.map((e, i) =>
+      `<g class="cd-riv-ev" data-kind="${shapeOf(e.kind)}"${attrs(count(i, events.length))}>`
+      + glyph(px(e.at).toFixed(1), y, e.kind) + '</g>').join('');
+
+    // The beam. It travels because the run happened; the stagger is the
+    // order the lanes are read, so the deck fills top to bottom.
+    const beam = trace(true, { cite, order: index, total: lanes.length });
+
+    const awaiting = lane.state === 'needs_human'
+      ? `<g class="cd-riv-await"${attrs(still('this lane is waiting on a person'))}>
+           <text x="${right}" y="${y - 12}" text-anchor="end">AWAITING OPERATOR</text></g>`
+      : '';
+
+    return `<g class="cd-riv-lane" data-state="${lane.state}"${attrs(trail)}>
+      <text class="cd-riv-id" x="12" y="${y - 7}">${lane.id}  A${lane.attempt}</text>
+      <text class="cd-riv-state" x="12" y="${y + 7}">${String(lane.state).toUpperCase()}</text>
+      <g class="cd-riv-run"${attrs(beam)}>${segments}</g>
+      ${marks}${awaiting}
+    </g>`;
+  });
+
+  return `<figure class="cd-river">
+  <svg viewBox="0 0 ${width} ${height}" width="100%" role="img"
+       aria-label="${lanes.length} lanes on a time axis">
+    <g class="cd-riv-axis"><line x1="${right}" y1="8" x2="${right}" y2="${height - 8}"/></g>
+    ${rows.join('')}
+  </svg>
+</figure>`;
+}
+
+// The globe stays canvas, and this file is the argument for why.
+//
+// A wireframe sphere is a few hundred arcs redrawn every frame while it
+// turns. That is the case canvas exists for: as SVG it would be several
+// hundred DOM nodes mutating sixty times a second, which is slower and no
+// more honest, because the shapes are a mesh rather than readings. The
+// mesh means "this is a globe". Only the endpoints mean anything.
+//
+// So the seam moves. The wrapper carries the marks, the endpoints are
+// real DOM on top of the bitmap where they can be marked and read, and
+// the rotation is gated: this component never spins on its own clock. It
+// asks the runtime, and the runtime asks whether the feed is live. An
+// unattended globe turning over a dead source is exactly the lie the
+// library exists to refuse -- and it is the easiest one to ship, because
+// a turning globe looks like health.
+
+/**
+ * @param {object} o
+ * @param {Array} o.endpoints  [{ id, lat, lon, workers, awaiting }]
+ * @param {string} o.cite      payload path the endpoints came from
+ * @param {number|null} o.periodSeconds  the producer's own refresh interval
+ * @param {string} o.sourceState 'live' | 'stale' | 'unavailable' | 'measured_empty'
+ */
+function globe({ endpoints, cite, periodSeconds = null,
+                        sourceState = 'unavailable', size = 420 }) {
+  // The turn is the one ambient loop, so it answers to `traffic`: a live
+  // feed and a measured interval, or the globe holds still.
+  const turn = traffic(periodSeconds, sourceState, { cite: 'source.refresh_ms' });
+  const turning = turn['data-motion'] === 'traffic';
+
+  if (!endpoints || !endpoints.length) {
+    return `<figure class="cd-globe"${attrs(still('no endpoint was observed'))}>
+  <i class="cd-why">no endpoint was observed</i></figure>`;
+  }
+
+  // Endpoints are readings, so they are elements, not paint. They sit in
+  // an SVG layer over the canvas -- marked, hit-testable, and readable by
+  // the same review that walks every other component.
+  const pins = endpoints.map((e, i) => {
+    const awaiting = Boolean(e.awaiting);
+    return `<g class="cd-globe-pin" data-awaiting="${awaiting ? 1 : 0}"
+      data-lat="${e.lat}" data-lon="${e.lon}"${attrs(count(i, endpoints.length))}>
+      <circle class="cd-globe-dot" r="4"/>
+      ${awaiting ? '<circle class="cd-globe-halo" r="9"/>' : ''}
+      <title>${e.id} · ${e.workers} workers</title>
+    </g>`;
+  }).join('');
+
+  // Arcs are membership, not traffic -- so they trace on the fact that a
+  // worker is placed there, and the label says which, because an arc
+  // between two points is the most convincing way to claim flow.
+  const arcs = endpoints.map((e, i) =>
+    `<path class="cd-globe-arc" data-endpoint="${e.id}"${attrs(
+      trace(e.workers > 0, { cite, order: i, total: endpoints.length }))}/>`).join('');
+
+  return `<figure class="cd-globe"${attrs(turn)} data-source-state="${sourceState}"
+        style="--cd-globe-size:${size}px">
+  <canvas class="cd-globe-mesh" width="${size}" height="${size}" aria-hidden="true"></canvas>
+  <svg class="cd-globe-layer" viewBox="0 0 ${size} ${size}" role="img"
+       aria-label="${endpoints.length} endpoints">${arcs}${pins}</svg>
+  <figcaption>${turning
+    ? 'ARCS ARE MEMBERSHIP, NOT TRAFFIC'
+    : `NOT TURNING — ${turn['data-still-reason']}`}</figcaption>
+</figure>`;
+}
+
+/** Paint the mesh, and only ever when the wrapper says it may turn.
+ *
+ * The rotation reads its rate off the same measured period the wrapper
+ * was marked with, so there is no house tempo to drift from the producer,
+ * and a wrapper that refused leaves this drawing a still sphere. */
+function paintGlobe(figure) {
+  const canvas = figure.querySelector('.cd-globe-mesh');
+  const layer = figure.querySelector('.cd-globe-layer');
+  if (!canvas || !layer) return;
+  const size = canvas.width;
+  const R = size * 0.42;
+  const cx = size / 2;
+  const cy = size / 2;
+  const ctx = canvas.getContext('2d');
+  const style = getComputedStyle(figure);
+  // Colours come off the tokens like everything else. A canvas cannot
+  // inherit a custom property, so it is read once and passed in.
+  const mesh = style.getPropertyValue('--cd-globe-mesh-colour').trim() || 'currentColor';
+
+  const turning = figure.getAttribute('data-motion') === 'traffic';
+  const period = Number(figure.getAttribute('data-period')) || 0;
+  // One full turn per measured interval. The rate IS the reading.
+  const rate = turning && period > 0 ? (Math.PI * 2) / (period * 60) : 0;
+  const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  // The library's off switch has to reach in here too. A canvas loop is
+  // outside the runtime's reach -- it owns Animation objects, and this
+  // owns a frame callback -- so settling stopped every marked element on
+  // the page and left this one turning. One control has to settle the
+  // whole page or it is not a control, so the loop reads the same flag
+  // the runtime sets rather than keeping its own idea of whether it is on.
+  const stopped = () => document.documentElement.hasAttribute('data-motion-off');
+  let rot = 0;
+
+  const project = (lat, lon) => {
+    const p = (lat * Math.PI) / 180;
+    const l = (lon * Math.PI) / 180 + rot;
+    return [cx + R * Math.cos(p) * Math.sin(l), cy - R * Math.sin(p),
+            Math.cos(p) * Math.cos(l)];
+  };
+
+  const draw = () => {
+    ctx.clearRect(0, 0, size, size);
+    ctx.strokeStyle = mesh;
+    ctx.lineWidth = 0.7;
+    for (let lat = -60; lat <= 60; lat += 30) {
+      ctx.beginPath();
+      for (let lon = 0; lon <= 360; lon += 4) {
+        const [x, y, z] = project(lat, lon);
+        if (z < 0) { ctx.moveTo(x, y); continue; }
+        ctx.lineTo(x, y);
+      }
+      ctx.stroke();
+    }
+    for (let lon = 0; lon < 360; lon += 30) {
+      ctx.beginPath();
+      for (let lat = -90; lat <= 90; lat += 4) {
+        const [x, y, z] = project(lat, lon);
+        if (z < 0) { ctx.moveTo(x, y); continue; }
+        ctx.lineTo(x, y);
+      }
+      ctx.stroke();
+    }
+    ctx.beginPath(); ctx.arc(cx, cy, R, 0, Math.PI * 2); ctx.stroke();
+
+    // The pins are DOM, so they are moved rather than painted.
+    layer.querySelectorAll('.cd-globe-pin').forEach((pin) => {
+      const [x, y, z] = project(Number(pin.dataset.lat), Number(pin.dataset.lon));
+      pin.setAttribute('transform', `translate(${x.toFixed(1)} ${y.toFixed(1)})`);
+      pin.style.opacity = z < 0 ? '0.18' : '1';
+    });
+
+    if (rate && !reduced && !stopped()) { rot += rate; requestAnimationFrame(draw); }
+  };
+  draw();
+
+  // And it has to come back when motion does, without a second control.
+  const observer = new MutationObserver(() => {
+    if (rate && !reduced && !stopped()) draw();
+  });
+  observer.observe(document.documentElement,
+    { attributes: true, attributeFilter: ['data-motion-off'] });
+}
+
+
+var stamp = function (n) { return new Date(1787000000000 + n * 60000).toISOString(); };
+
+document.getElementById('magi').innerHTML = [
+  gauge({ value: 18, ceiling: 18, measured: true, cite: 'coverage.observed',
+          label: 'Casper \u00b7 coverage', tone: 'live' }),
+  gauge({ value: 15, ceiling: 18, measured: true, cite: 'proof.sealed',
+          label: 'Melchior \u00b7 proof', tone: 'warn' }),
+  gauge({ value: null, ceiling: 18, measured: false, cite: 'human.awaiting',
+          label: 'Balthasar \u00b7 human', tone: 'unmeasured' }),
+].join('');
+
+document.getElementById('river').innerHTML = river({
+  cite: 'sessions[].events', now: stamp(90), staleAfter: 7200, width: 980,
+  lanes: [
+    { id: 'b48d640bfa1c', attempt: 5, state: 'needs_human', events: [
+      {at:stamp(0),kind:'created'},{at:stamp(8),kind:'claimed'},{at:stamp(26),kind:'canonical_blocked'},
+      {at:stamp(52),kind:'operator_retry'},{at:stamp(78),kind:'canonical_blocked'}]},
+    { id: '27cd1cb398b4', attempt: 3, state: 'done', events: [
+      {at:stamp(2),kind:'created'},{at:stamp(30),kind:'claimed'},{at:stamp(48),kind:'retry_authorized'},
+      {at:stamp(66),kind:'gate_passed'},{at:stamp(84),kind:'accepted'}]},
+    { id: '922a17533a48', attempt: 2, state: 'done', events: [
+      {at:stamp(4),kind:'created'},{at:stamp(40),kind:'canonical_blocked'},{at:stamp(70),kind:'gate_passed'},
+      {at:stamp(86),kind:'accepted'}]},
+    { id: '954f35a6c77e', attempt: 3, state: 'needs_human', events: [
+      {at:stamp(6),kind:'created'},{at:stamp(22),kind:'claimed'},{at:stamp(44),kind:'canonical_blocked'},
+      {at:stamp(74),kind:'operator_retry'}]},
+    { id: '0000deadbeef', attempt: 1, state: 'queued', events: [] },
+  ],
+});
+
+var EPS = [
+  { id:'dell-local', lat:41, lon:-74, workers:18, awaiting:false },
+  { id:'gb10',       lat:51, lon:0,   workers:0,  awaiting:true },
+  { id:'orin',       lat:35, lon:139, workers:4,  awaiting:false },
+  { id:'spark-472e', lat:-33, lon:151, workers:2, awaiting:false },
+];
+document.getElementById('globes').innerHTML =
+  globe({ endpoints:EPS, cite:'placements[].host', periodSeconds:6, sourceState:'live', size:320 })
++ globe({ endpoints:EPS, cite:'placements[].host', periodSeconds:6, sourceState:'stale', size:320 });
+Array.prototype.forEach.call(document.querySelectorAll('.cd-globe'), paintGlobe);
+
+window.CyberdeckMotion.start();
+var el = function (id) { return document.getElementById(id); };
+function report() {
+  var anims = document.getAnimations();
+  el('r-a').textContent = anims.length;
+  el('r-m').textContent = document.querySelectorAll('[data-motion]').length;
+  el('r-s').textContent = document.querySelectorAll('[data-motion="still"]').length;
+  var lying = 0;
+  anims.forEach(function (a) {
+    var t = a.effect && a.effect.target;
+    if (t && t.closest && t.closest('[data-motion="still"]')) lying++;
+  });
+  el('r-l').textContent = lying;
+}
+setInterval(report, 400); report();
+var off = false;
+el('kill').addEventListener('click', function (e) {
+  off = !off;
+  e.currentTarget.textContent = off ? 'Motion on' : 'Motion off';
+  el('r-st').innerHTML = '<small>' + (off ? 'STILL' : 'RUNNING') + '</small>';
+  if (off) { window.CyberdeckMotion.settle();
+             document.documentElement.setAttribute('data-motion-off',''); }
+  else { document.documentElement.removeAttribute('data-motion-off');
+         window.CyberdeckMotion.start(); }
+  report();
+});
+el('replay').addEventListener('click', function () {
+  window.CyberdeckMotion.settle();
+  document.documentElement.removeAttribute('data-motion-off');
+  window.CyberdeckMotion.start();
+  off = false; el('kill').textContent = 'Motion off';
+  el('r-st').innerHTML = '<small>RUNNING</small>';
+  report();
+});
+</script>
+
+</body></html>

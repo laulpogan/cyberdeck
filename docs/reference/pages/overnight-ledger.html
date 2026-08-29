@@ -1,0 +1,229 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<!-- Preserved from the published Claude artifact "Overnight Ledger".
+     Source: https://claude.ai/code/artifact/d13c0ad4-e5ac-4d05-b261-d78ead9f0c63
+     The artifact host frame runtime has been removed; nothing else is edited.
+     Self-contained apart from Google Fonts. -->
+</head>
+<body>
+<title>Overnight Ledger</title>
+<style>
+  :root{
+    --ground:#f3ede3; --panel:#fbf7f0; --rule:#ded2c0;
+    --ink:#241a0f; --body:#4a3f33; --muted:#8a7c6a;
+    --accent:#b87d0d; --accent-soft:#f0dfb6;
+    --good:#4f7a33; --warn:#b4670f; --bad:#9c352c;
+    --mono:ui-monospace,"SF Mono",SFMono-Regular,Menlo,Consolas,monospace;
+    --sans:"Iowan Old Style","Palatino Linotype",Palatino,Georgia,serif;
+  }
+  @media (prefers-color-scheme:dark){
+    :root:not([data-theme="light"]){
+      --ground:#14100b; --panel:#1d1811; --rule:#3a3025;
+      --ink:#f0e6d6; --body:#cbbca8; --muted:#8d7f6d;
+      --accent:#dda32a; --accent-soft:#3a2d13;
+      --good:#8ab861; --warn:#dd9433; --bad:#d4645a;
+    }
+  }
+  :root[data-theme="dark"]{
+    --ground:#14100b; --panel:#1d1811; --rule:#3a3025;
+    --ink:#f0e6d6; --body:#cbbca8; --muted:#8d7f6d;
+    --accent:#dda32a; --accent-soft:#3a2d13;
+    --good:#8ab861; --warn:#dd9433; --bad:#d4645a;
+  }
+  *{box-sizing:border-box}
+  body{
+    background:var(--ground); color:var(--body);
+    font-family:var(--sans); font-size:17px; line-height:1.6;
+    margin:0; padding:3.5rem 1.5rem 6rem;
+  }
+  .wrap{max-width:60rem; margin:0 auto; display:flex; flex-direction:column; gap:3.5rem}
+  h1,h2,h3,.k{font-family:var(--mono); color:var(--ink); text-wrap:balance}
+  h1{font-size:1.5rem; letter-spacing:-.01em; margin:0 0 .3rem; font-weight:600}
+  h2{font-size:.78rem; letter-spacing:.14em; text-transform:uppercase;
+     color:var(--muted); font-weight:600; margin:0 0 1.1rem;
+     padding-bottom:.5rem; border-bottom:1px solid var(--rule)}
+  h3{font-size:1rem; margin:0 0 .3rem; font-weight:600}
+  p{margin:0 0 1rem; max-width:62ch}
+  p:last-child{margin-bottom:0}
+  .sub{color:var(--muted); font-family:var(--mono); font-size:.8rem}
+  .num{font-variant-numeric:tabular-nums}
+
+  /* hero */
+  .hero{background:var(--panel); border:1px solid var(--rule); border-radius:3px;
+        padding:2rem 2rem 1.75rem}
+  .big{font-family:var(--mono); font-size:clamp(3.2rem,11vw,5.5rem); line-height:.92;
+       color:var(--accent); font-weight:600; letter-spacing:-.03em;
+       font-variant-numeric:tabular-nums}
+  .hero p{margin-top:1rem}
+
+  /* bars */
+  .bars{display:flex; flex-direction:column; gap:.55rem}
+  .bar{display:grid; grid-template-columns:13rem 1fr 5.5rem; gap:.9rem;
+       align-items:center; font-family:var(--mono); font-size:.8rem}
+  .bar .lab{color:var(--body); text-align:right}
+  .track{background:var(--rule); border-radius:2px; height:1.4rem; overflow:hidden}
+  .fill{height:100%; background:var(--muted); border-radius:2px}
+  .bar.hi .lab{color:var(--ink); font-weight:600}
+  .bar.hi .fill{background:var(--accent)}
+  .val{color:var(--muted); text-align:right; font-variant-numeric:tabular-nums}
+  .bar.hi .val{color:var(--ink)}
+
+  /* entries */
+  .list{display:flex; flex-direction:column; gap:1.4rem}
+  .item{display:grid; grid-template-columns:5.5rem 1fr; gap:1.1rem; align-items:start}
+  .tag{font-family:var(--mono); font-size:.66rem; letter-spacing:.09em;
+       text-transform:uppercase; padding:.22rem .45rem; border-radius:2px;
+       text-align:center; border:1px solid currentColor; white-space:nowrap}
+  .t-fix{color:var(--good)} .t-open{color:var(--warn)} .t-broke{color:var(--bad)}
+  .item p{font-size:.95rem; margin:0}
+  .sha{font-family:var(--mono); font-size:.75rem; color:var(--muted)}
+
+  table{width:100%; border-collapse:collapse; font-family:var(--mono); font-size:.82rem}
+  .scroll{overflow-x:auto}
+  th{text-align:left; font-weight:600; color:var(--muted); font-size:.7rem;
+     letter-spacing:.1em; text-transform:uppercase; padding:0 .8rem .5rem 0;
+     border-bottom:1px solid var(--rule)}
+  td{padding:.55rem .8rem .55rem 0; border-bottom:1px solid var(--rule); color:var(--body)}
+  td.n{text-align:right; font-variant-numeric:tabular-nums; color:var(--ink)}
+  tr:last-child td{border-bottom:none}
+  strong{color:var(--ink); font-weight:600}
+  em{color:var(--ink); font-style:italic}
+  footer{color:var(--muted); font-family:var(--mono); font-size:.72rem;
+         border-top:1px solid var(--rule); padding-top:1rem}
+  @media (max-width:640px){
+    .bar{grid-template-columns:1fr 4.5rem; }
+    .bar .track{grid-column:1/-1; order:3}
+    .bar .lab{text-align:left}
+    .item{grid-template-columns:1fr; gap:.4rem}
+    .tag{justify-self:start}
+  }
+</style>
+
+<div class="wrap">
+
+<header>
+  <h1>Overnight Ledger</h1>
+  <div class="sub">fleet-hud + foundry-boss &middot; 18 Aug 2026, midnight to 18:45</div>
+</header>
+
+<section class="hero">
+  <div class="big num">8.2%</div>
+  <p><strong>39,733 lines changed in the product repo today. 3,259 of them touched the
+  dashboard.</strong> That is why you cannot see what changed &mdash; the work is real and it is
+  landing, just almost entirely somewhere you never look.</p>
+</section>
+
+<section>
+  <h2>Where the 39,733 lines went</h2>
+  <div class="bars">
+    <div class="bar"><div class="lab">qa fixtures</div><div class="track"><div class="fill" style="width:100%"></div></div><div class="val">11,639</div></div>
+    <div class="bar"><div class="lab">docs &amp; theory essays</div><div class="track"><div class="fill" style="width:88%"></div></div><div class="val">10,203</div></div>
+    <div class="bar"><div class="lab">screenshots &amp; payloads</div><div class="track"><div class="fill" style="width:59%"></div></div><div class="val">6,872</div></div>
+    <div class="bar"><div class="lab">daemons (bin/)</div><div class="track"><div class="fill" style="width:26%"></div></div><div class="val">3,080</div></div>
+    <div class="bar"><div class="lab">other</div><div class="track"><div class="fill" style="width:19%"></div></div><div class="val">2,163</div></div>
+    <div class="bar"><div class="lab">tests</div><div class="track"><div class="fill" style="width:18%"></div></div><div class="val">2,043</div></div>
+    <div class="bar hi"><div class="lab">dashboard views</div><div class="track"><div class="fill" style="width:15%"></div></div><div class="val">1,702</div></div>
+    <div class="bar hi"><div class="lab">dashboard skins</div><div class="track"><div class="fill" style="width:13%"></div></div><div class="val">1,557</div></div>
+    <div class="bar"><div class="lab">proposals</div><div class="track"><div class="fill" style="width:4%"></div></div><div class="val">474</div></div>
+  </div>
+  <p style="margin-top:1.5rem">The single largest additions were a QA pipeline record (10,211 lines
+  across two fixtures), a payload snapshot (5,207), and six essays on colony theory &mdash;
+  <em>EASIM_SPEC</em>, <em>ANT_COLONIES_TO_ARTIFICIAL_ORGANISMS</em>, <em>EOSV_SYNTHESIS</em> and
+  three more, together about 9,500 lines. The fleet spent a quarter of the day writing about
+  itself.</p>
+</section>
+
+<section>
+  <h2>The surface, specifically</h2>
+  <p>The skin named <span class="k">delivery_ticker &mdash; &ldquo;landings only&rdquo;</span>
+  renders a worker roster, not landings. Every one of the eight skins shows sessions, states and
+  queues. <strong>Nothing in the product shows what shipped.</strong> The dashboard is an
+  instrument pointed at the fleet, not at its output &mdash; so a day of heavy delivery looks
+  identical to a day of none.</p>
+</section>
+
+<section>
+  <h2>What I changed</h2>
+  <div class="list">
+    <div class="item"><div class="tag t-fix">fixed</div><div>
+      <h3>db-medic was corrupting the board it repaired</h3>
+      <p>Ran from three call sites with no mutex, so concurrent repairs raced on one WAL database.
+      Every corruption landed on a five-minute boundary, where the schedules collide. Also bailed
+      out before its own rebuild in the one case that needed it, and lost whole tables to
+      <span class="k">SELECT *</span> on a damaged page. A rowid scan recovered 874 of 875 tasks.</p>
+      <div class="sha">d4c4de3</div></div></div>
+
+    <div class="item"><div class="tag t-fix">fixed</div><div>
+      <h3>The mission had no path to the swarm</h3>
+      <p>The scoper reads VISION and DESIGN_BAR to decide what gets built. It had fired
+      <strong>once in 24 hours</strong> &mdash; one planner card stuck at 23.7h held the single
+      scope slot, and queue depth counted 158 cards that were all stale. Editing VISION now
+      actually steers the fleet.</p>
+      <div class="sha">666d765 &middot; fd5e7c3</div></div></div>
+
+    <div class="item"><div class="tag t-fix">fixed</div><div>
+      <h3>Nothing could see a worker that was alive but not converging</h3>
+      <p>Every check tested whether a worker was <em>dead</em>. The 23.7h planner had written its
+      log five minutes earlier, so all of them called it healthy. Now measured by log
+      <em>growth</em>, not mtime &mdash; and it never touches a card that is still growing.</p>
+      <div class="sha">407a16b &middot; c329a36</div></div></div>
+
+    <div class="item"><div class="tag t-fix">fixed</div><div>
+      <h3>A unit could fail every 30 seconds forever, unnoticed</h3>
+      <p>Twelve units failed 523 times in ninety minutes with nothing carding it. meta-floor
+      watches only four core daemons; unit-medic repairs only one failure mode. Five cards filed
+      on the first run.</p>
+      <div class="sha">b3b0ef1</div></div></div>
+
+    <div class="item"><div class="tag t-fix">fixed</div><div>
+      <h3>hive-health was flooding the board and writing to it by hand</h3>
+      <p>18 near-identical cards in ninety minutes, inserted straight into <span class="k">kanban.db</span>
+      with raw SQL &mdash; a second writer on the database that corrupted three times today. Its
+      dedup query had Python inside the SQL string, so it always threw and always filed.</p>
+      <div class="sha">10867df</div></div></div>
+
+    <div class="item"><div class="tag t-broke">i broke</div><div>
+      <h3>My own quality gate stopped all delivery for an hour</h3>
+      <p>I added a colour-token ratchet that failed in both directions. A worker migrated
+      <span class="k">reach_view.py</span> from 12 literals to 0 &mdash; exactly what its card asked
+      &mdash; and that success turned trunk red. Eleven branches took GATE-HOLD and commits fell
+      from 31/hour to 7. Then fixing trunk wasn't enough: the gate cached verdicts against the
+      branch sha alone, so a HOLD outlived its cause permanently.</p>
+      <div class="sha">9311288 &middot; 1a19a36 &middot; 50c8c7a</div></div></div>
+  </div>
+</section>
+
+<section>
+  <h2>What the fleet built for itself</h2>
+  <p>It reads a ledger of confirmed failures now, and it acted on one within the hour:
+  <span class="k">claim.py</span>, described in its own commit as <em>&ldquo;the colony's first
+  brake on duplicate builds&rdquo;</em> &mdash; filed because I recorded that four separate daemons
+  were monitoring CPU load and two were tracking OOM kills. Also today: a stale-card detector, a
+  cadence auditor comparing timer period to service duration, and a systemd medic.</p>
+</section>
+
+<section>
+  <h2>Still open</h2>
+  <div class="scroll"><table>
+    <thead><tr><th>item</th><th>evidence</th><th class="n">scale</th></tr></thead>
+    <tbody>
+      <tr><td>Sensors nothing reads</td><td>state files written fresh, consumed by no page</td><td class="n">82 of 177</td></tr>
+      <tr><td>Raw writers on the board DB</td><td>runtime-budget.py, assignee-guard.py bypass the CLI</td><td class="n">2</td></tr>
+      <tr><td>Dispatcher ignores engine capacity</td><td>static per-profile cap vs ~34 real slots</td><td class="n">101 running</td></tr>
+      <tr><td>Engines saturated</td><td>requests queued, all reason=capacity</td><td class="n">125 waiting</td></tr>
+      <tr><td>Swap nearly exhausted</td><td>visible on the HUD right now</td><td class="n">7.6 / 8.0 GiB</td></tr>
+    </tbody>
+  </table></div>
+</section>
+
+<footer>
+  228 substantive commits in fleet-hud, spread evenly across all 19 hours &mdash; it ran all night.
+  foundry-boss: 181 files, +7,140 / &minus;505.
+</footer>
+
+</div>
+
+</body></html>

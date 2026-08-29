@@ -1,0 +1,208 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<!-- Preserved from the published Claude artifact "What Exists And Where".
+     Source: https://claude.ai/code/artifact/f0f936aa-66ab-4020-b9d6-21a756e1dee0
+     The artifact host frame runtime has been removed; nothing else is edited.
+     Self-contained apart from Google Fonts. -->
+</head>
+<body>
+<title>What Exists And Where</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,700&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;1,6..72,400&family=DM+Mono:wght@400;500&display=swap">
+<style>
+:root {
+  --ground: #F1F4EC; --surface: #FBFCF7; --sunk: #E8EBE1;
+  --ink: #181C16; --muted: #565D51; --faint: #838A7B; --rule: #D6DBCB;
+  --accent: #2C5A49; --accent-soft: #DCE8E0; --brass: #7E6222;
+  --ui: "Bricolage Grotesque", ui-sans-serif, system-ui, sans-serif;
+  --text: "Newsreader", Georgia, "Times New Roman", serif;
+  --data: "DM Mono", ui-monospace, "SF Mono", Menlo, monospace;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --ground: #111410; --surface: #191D17; --sunk: #232820;
+    --ink: #E6EADD; --muted: #A7AE9C; --faint: #757D6C; --rule: #2B3126;
+    --accent: #8CC4AC; --accent-soft: #1E2C26; --brass: #C9A85F;
+  }
+}
+:root[data-theme="dark"] {
+  --ground: #111410; --surface: #191D17; --sunk: #232820;
+  --ink: #E6EADD; --muted: #A7AE9C; --faint: #757D6C; --rule: #2B3126;
+  --accent: #8CC4AC; --accent-soft: #1E2C26; --brass: #C9A85F;
+}
+* { box-sizing: border-box; }
+body {
+  margin: 0; background: var(--ground); color: var(--ink);
+  font-family: var(--text); font-size: 1.125rem; line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+}
+.masthead { border-bottom: 1px solid var(--rule); background: var(--surface); }
+.masthead-inner { max-width: 54rem; margin: 0 auto; padding: 3rem 1.5rem 2.25rem; }
+.kicker {
+  font-family: var(--data); font-size: .75rem; letter-spacing: .1em;
+  text-transform: uppercase; color: var(--accent); margin: 0 0 .75rem;
+}
+.masthead h1 {
+  font-family: var(--ui); font-weight: 700; font-size: clamp(1.9rem, 4.5vw, 2.75rem);
+  letter-spacing: -.025em; line-height: 1.08; text-wrap: balance; margin: 0 0 .75rem;
+}
+.standfirst { color: var(--muted); margin: 0; max-width: 40rem; }
+main { max-width: 54rem; margin: 0 auto; padding: 2.5rem 1.5rem 6rem; }
+h2 {
+  font-family: var(--ui); font-weight: 700; font-size: 1.5rem; letter-spacing: -.015em;
+  text-wrap: balance; margin: 3.25rem 0 .875rem; padding-top: 1.25rem;
+  border-top: 1px solid var(--rule);
+}
+main > h2:first-child { border-top: 0; margin-top: 0; padding-top: 0; }
+h3 {
+  font-family: var(--ui); font-weight: 600; font-size: 1.125rem;
+  letter-spacing: -.005em; margin: 2.25rem 0 .625rem;
+}
+p { margin: 0 0 1.05rem; }
+ul, ol { margin: 0 0 1.05rem; padding-left: 1.25rem; }
+li { margin: 0 0 .5rem; }
+strong { font-weight: 500; color: var(--ink); }
+a { color: var(--accent); text-underline-offset: 2px; }
+a:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+code {
+  font-family: var(--data); font-size: .82em; background: var(--sunk);
+  padding: .1em .35em; border-radius: 3px; overflow-wrap: anywhere;
+}
+pre {
+  margin: 0; background: var(--sunk); border: 1px solid var(--rule);
+  border-radius: 3px; padding: 1rem 1.15rem; line-height: 1.55;
+}
+pre code { background: none; padding: 0; font-size: .8125rem; }
+blockquote {
+  margin: 0 0 1.5rem; padding: .15rem 0 .15rem 1.15rem;
+  border-left: 2px solid var(--accent); color: var(--muted);
+}
+blockquote p { margin: 0 0 .7rem; font-style: italic; }
+blockquote p:last-child { margin-bottom: 0; }
+blockquote strong, blockquote code { font-style: normal; }
+.scroller { overflow-x: auto; margin: 0 0 1.5rem; }
+table { border-collapse: collapse; width: 100%; font-size: .9375rem; }
+th, td { text-align: left; padding: .55rem .8rem; border-bottom: 1px solid var(--rule); }
+th {
+  font-family: var(--data); font-size: .6875rem; letter-spacing: .07em;
+  text-transform: uppercase; color: var(--faint); font-weight: 400; white-space: nowrap;
+}
+td { vertical-align: top; }
+td code { font-size: .75em; }
+tbody tr:last-child td { border-bottom: 0; }
+table td:first-child { font-family: var(--ui); font-weight: 500; }
+table td:nth-child(n+2) { font-variant-numeric: tabular-nums; color: var(--muted); }
+@media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
+</style>
+
+<div class="masthead">
+  <div class="masthead-inner">
+    <p class="kicker">Survey &middot; 2026-08-23</p>
+    <h1>What exists, and where</h1>
+    <p class="standfirst">A descriptive sweep of the pipelines, content
+    machinery, and outreach stack across three machines. Claims are attributed to
+    the documents that make them; contradictions are flagged, not resolved.</p>
+  </div>
+</div>
+
+<main>
+
+<p>A descriptive sweep, not a verdict. Where a document makes a claim I attribute it to that document rather than asserting it, and where two documents disagree I note the disagreement instead of resolving it. Several READMEs are visibly stale; that is called out inline.</p>
+<h2>What was searched</h2>
+<p>Three reachable machines: the MacBook (<code>~/Source</code>, 227 directories), Dell (<code>gb10</code> / <code>promaxgb10-d325</code>), and Spark (<code>spark-472e</code>). Two tailnet devices were not reachable — <code>desktop-1lk5vsj</code> (Windows, offline 57 days) and <code>macbook-air-headless-1</code> (offline 9 days) — so anything living only there is missing from this.</p>
+<p>Directories matching <code><em>pipeline</em></code> at depth ≤3 on each box, plus targeted reads of READMEs, PIPELINE/DISTRIBUTION/STYLE docs, agent rosters, and campaign plans. I read documentation, not source. Line counts and file listings are real; claims about behavior are the documents&#x27; claims.</p>
+<h2>The machines</h2>
+<div class="scroller"><table><thead><tr><th>host</th><th>role per the docs</th><th>what is on it</th></tr></thead><tbody><tr><td>MacBook</td><td>authoring, business repos</td><td><code>essays</code>, <code>slancha-business</code>, <code>slancha-*</code> product repos, <code>carn</code>, <code>semkern</code>, <code>pitchbook</code>, <code>our-lady-of-champion</code></td></tr><tr><td>Dell <code>gb10</code></td><td>corpus + serving home base</td><td><code>paul-thinkpiece-pipeline</code>, <code>our-lady-book-pipeline</code>, <code>finetuning</code> + <code>forge_autonomous</code>, <code>slancha-*</code>, <code>soul</code>, <code>wire</code></td></tr><tr><td>Spark <code>spark-472e</code></td><td>training / video</td><td><code>paul-thinkpiece-pipeline</code> (copy), <code>willard-plotter-pipeline</code>, <code>comfy-agent-distill</code>, LTX video <code>fire_*</code> scripts, <code>slancha-business-recon-deploy-*</code></td></tr></tbody></table></div>
+<h2>The pipeline family</h2>
+<p><code>our-lady-book-pipeline/README.md</code> states the family concept explicitly:</p>
+<blockquote><p>&quot;Pipeline #1 of a planned family (blog, thinkpiece, short-story, ...). Serves double duty as the testbed whose learnings shape later pipelines and feed back into <code>paul-thinkpiece-pipeline</code> voice-FT decisions.&quot;</p></blockquote>
+<h3>paul-thinkpiece-pipeline (Dell and Spark) — &quot;forge&quot;</h3>
+<p>The oldest and largest. <code>~/paul-thinkpiece-pipeline</code>, referred to elsewhere as &quot;forge&quot;. Its README describes a fully local multi-stage pipeline:</p>
+<blockquote><p>&quot;Everything runs on-box. No external API calls. No cloud costs.&quot;</p></blockquote>
+<p>Architecture as documented — each model a specialist:</p>
+<ul><li><strong>Reasoning model</strong> — Qwen 3.5-122B-A10B via vLLM on <code>127.0.0.1:8000</code>, doing planning, structure, factual reasoning, curation, critique, assembly</li><li><strong>Voice model</strong> — the Paul fine-tune via vLLM on a second port, doing sentence-level voice transfer; &quot;the <em>stylist</em>, not the writer&quot;</li><li><strong>RAG index</strong> over the published Substack archive (~200 posts)</li></ul>
+<p>The README&#x27;s stated reason for the split:</p>
+<blockquote><p>&quot;The fine-tuned 8B model has good voice mimicry but weak topic adherence and high hallucination rate when asked to invent… The 122B MoE model is the inverse: it can plan and reason but its prose is generic-LLM-flavored.&quot;</p></blockquote>
+<p>Eight stages: seed → research → plan → draft → stylize → assemble → critique → publish (human in the loop).</p>
+<p>Contents include <code>docs/</code> with ~20 design documents, <code>runs/</code> with <code>thinkpiece_batch_v1</code> through <code>v3</code>, <code>eval/</code>, <code>dpo/</code>, <code>config/</code>, and roughly thirty training logs from the base bake-off era (<code>qlora_70b*.log</code>, <code>qlora_gemma31b*.log</code>, <code>qlora_v4*_8b.log</code>, <code>dpo_pipeline_27b.log</code>).</p>
+<p>Notable docs inside <code>docs/</code>: <code>POSTING.md</code>, <code>POSTING_PIPELINE_HANDOFF.md</code>, <code>LINKEDIN_TOP_VOICE_PLAN.md</code>, <code>REDDIT_AUTONOMOUS.md</code>, <code>SUBSTACK_AUTONOMOUS.md</code>, <code>LATE_AUTONOMOUS.md</code>, <code>RESEARCH_PIPELINE.md</code>, <code>CONTENT_EVOLUTION_SERIES.md</code>, <code>DUAL_SPARK_PLAN.md</code>, <code>DASHBOARD.md</code>, <code>llm_isms_research.md</code>, <code>rag_citation_design.md</code>, <code>ECOSYSTEM_BRIEF_2026_05_31.md</code>.</p>
+<p><code>RESEARCH_PIPELINE.md</code> (status: proposed, 2026-05-06) states the gap that later shaped the essays repo:</p>
+<blockquote><p>&quot;V8 carries the entire load: it picks the angle, builds the argument, finds the contrarian read, and writes it in voice — all in one pass. V8 was not trained for any of that except the last step. It is a voice model. It learned to write like Paul. It did not learn to think like Paul.&quot;</p></blockquote>
+<h3>our-lady-book-pipeline (Dell) + our-lady-of-champion (Dell, Mac)</h3>
+<p>Novel-drafting automation. The corpus repo <code>our-lady-of-champion</code> is ten markdown lore bibles — brief, engineering, glossary, handoff, known-liberties, maps, outline, pantheon, relics, secondary-characters — described by the pipeline as &quot;read-only source-of-truth&quot;.</p>
+<p>The novel&#x27;s premise, from its brief:</p>
+<blockquote><p>&quot;A historical fiction retelling of the Spanish conquest of the Mexica (Aztec) empire, 1519 to 1521, in a world where both civilizations wage war using gilded, bone-powered war-engines: Reliquaries on the Spanish side, Teōmecahuītlī (god-engines) on the Mexica side. The conquest proceeds along the documented timeline. The mecha do not change the outcome. They change what the outcome means.&quot;</p></blockquote>
+<p>The metaphysics is a named system — &quot;Sanctified Death&quot; — with three potency variables (ritualization, witness, acceptance), and the brief notes both civilizations &quot;have, over centuries, built industrial pipelines for producing this fuel. Neither calls it that.&quot;</p>
+<p>Pipeline design per its README: voice fidelity from a pinned fine-tune checkpoint (<code>config/voice_pin.yaml</code>), factual consistency from a 5-axis critic plus typed RAG (historical, metaphysics, entity-continuity, arc-position, thematic don&#x27;ts), nightly autonomous runs via <code>openclaw</code>, weekly digest, hard-block alerts only, and per-chapter retrospectives with an open-thesis registry.</p>
+<p><strong>Stale-doc flag.</strong> The README&#x27;s Status section says:</p>
+<blockquote><p>&quot;<strong>2026-04-21:</strong> Architecture locked, scaffolding committed, no code yet.&quot;</p></blockquote>
+<p>The tree disagrees. <code>canon/</code> holds <strong>24 chapters, 88,706 words</strong>; there are 27 scenes, 15 retrospectives, 6 runs, 2 theses, an <code>ARCHITECTURE.md</code> with ADRs, a <code>docs/</code> site with <code>_config.yml</code>, <code>gallery.md</code>, <code>index.md</code>, per-chapter pages, and <code>our_lady_of_champion.pdf</code>.</p>
+<p><code>CONTENT_EVOLUTION_SERIES.md</code> (2026-05-21) describes it as shipped:</p>
+<blockquote><p>&quot;our-lady-of-champion is COMPLETE, not in-progress. 24 chapters + ~91,204 words shipped, with downloadable PDF, per-chapter retrospectives, self-portrait pipeline diagram, Architecture + ADRs + PIPELINE.md, hero carousel, gallery, screenplay pilot adaptation. Live at <code>loganclaw9000.github.io/our-lady-book-pipeline/</code>.&quot;</p></blockquote>
+<p>That doc&#x27;s word count (91,204) and the current <code>wc -w</code> over <code>canon/</code> (88,706) differ by about 2,500. I did not chase the discrepancy; possible causes include front-matter, the chapter numbering gap (files run to <code>chapter_26.md</code> with 24 files), or the published version differing from <code>canon/</code>.</p>
+<p>It also records an operator decision on publication risk:</p>
+<blockquote><p>&quot;Operator accepted residual content-cancellation risk (AI + Indigenous historical POV + non-Indigenous author + conquest narrative). Apparatus mitigations already shipped (Known Liberties file, 3 balanced POVs, alternate-tech framing not alternate-history, self-portrait disclosure) judged sufficient. Do NOT gate amplification on sensitivity-reader pass.&quot;</p></blockquote>
+<h3>essays (Mac) — the blog/Substack pipeline</h3>
+<p><code>~/Source/essays</code>. Its README:</p>
+<blockquote><p>&quot;Long-form essay production for the Slancha content campaign (stealth phase). Posts ship to laulpogan.substack.com (&#x27;Engineering Our Social Vehicles&#x27;), then get cut down for LinkedIn, Twitter/X, and selected subreddits.&quot;</p></blockquote>
+<p><code>PIPELINE.md</code> defines a nine-stage lifecycle, each stage ending in a commit on the essay branch:</p>
+<ol><li><strong>BRIEF</strong> — one page; kill criterion is &quot;if the claim can&#x27;t be stated falsifiably enough to argue about, it&#x27;s a vibe, not an essay&quot;</li><li><strong>RESEARCH</strong> — fan-out agents, primary sources, every claim tagged <code>[P/S/T, source, date, 0-100]</code>, conflicts flagged not silently resolved</li><li><strong>THESES</strong> — 4–6 deliberately divergent thesis lines worked down independently (economics, geopolitics, regulation, labor), then looked at for convergence; &quot;where independent lines arrive at the same place, that intersection is the essay&#x27;s spine&quot;</li><li><strong>PERSONA DEBATE</strong> — &quot;Not review — debate.&quot; Personas argue for and against across at least two rounds; for AI-economics pieces the cast is a Marxist economist, a mainstream/marginalist economist, a natsec hawk, an open-source advocate, a frontier-lab insider, a China-policy scholar. A moderator scores which arguments survived</li><li><strong>OUTLINE</strong> — locked structure</li><li><strong>DRAFT</strong> — the Substack canonical version, written to <code>STYLE.md</code></li><li><strong>VOICE RINSE</strong> — the fine-tune applied paragraph-by-paragraph, N candidates at temp ~0.6, a reasoning model curating the strongest assembly; &quot;keep BEST attempt, never latest&quot;</li><li><strong>PLATFORM CUTS</strong> — native rewrites per platform, &quot;not truncations&quot;</li><li><strong>PUBLISH + LOG</strong> — Substack first as canonical URL, cuts link back, performance logged back into the essay dir after a week</li></ol>
+<p>The file has an explicit &quot;learnings imported from paul-thinkpiece-pipeline (forge)&quot; section — voice and thinking are separate problems; research-first grounding was forge&#x27;s known gap (&quot;reads like Paul, argues like a fine-tune&quot;) and this repo &quot;fixes it structurally: stages 2-4 happen before any prose exists&quot;; deterministic pattern audits before LLM judges, &quot;name them honestly: pattern audits, not detectors&quot;.</p>
+<p><code>DISTRIBUTION.md</code> sets a stealth posture: author brand not company brand, no Slancha mention, and</p>
+<blockquote><p>&quot;by the time Slancha surfaces, the author is already a known voice on AI economics, inference infrastructure, and model geopolitics.&quot;</p></blockquote>
+<p><code>STYLE.md</code> is a voice dossier built from six named published posts, with a method note that WebFetch&#x27;s summarizer refused verbatim reproduction so raw HTML was parsed directly. It characterizes the register as &quot;essayistic infotainment for tech-literate millennials&quot; and &quot;the smart friend explaining a framework at a party&quot;, and quotes the blog&#x27;s through-line: &quot;societies are organisms… organisms are not individual species, but rafts of cooperating ones.&quot;</p>
+<p>Four essay directories exist: <code>aiewf-2026</code> (assets only), <code>closed-source-open-season</code> (complete lifecycle — BRIEF, RESEARCH, THESES, DEBATE, OUTLINE, DRAFT, RINSE_REPORT, GATE_REPORT, PUBLISHING, cuts, assets, references), <code>dead-labor</code> (through GATE_REPORT, with a <code>DRAFT_SUPERSEDED_FUSED.md</code>), and <code>the-switch</code> (BRIEF through RINSE_REPORT plus cuts). Git history shows the stage-per-commit discipline is real — twelve commits walk one essay from &quot;Brief closed-source OpenAI incident essay&quot; to &quot;final title/subtitle/switch-link&quot;.</p>
+<h3>willard-plotter-pipeline (Mac, Dell, Spark)</h3>
+<p>Present on all three boxes. Its README on Dell is empty, and I did not open the source. Named after Willard, who shares the Spark per the GPU-scheduler notes.</p>
+<h3>slancha-business/pipeline (Mac, Spark)</h3>
+<p>Contains only <code>staging/</code>. Distinct from the sales-pipeline documents that live in <code>positioning/</code> and <code>SALES_PIPELINE_RESOURCE_MANIFEST_2026_08_21.md</code>.</p>
+<h3>pitchbook (Mac)</h3>
+<p>A DuckDB-backed dataset — <code>pitchbook.duckdb</code>, <code>pb_schema.sql</code>, <code>load_pb.py</code>, <code>profile_pb.py</code>, and <code>pipeline-replenish-20260821/</code>. Investor-data adjacent.</p>
+<h2>Publishing and distribution machinery</h2>
+<p><code>docs/POSTING.md</code> in the thinkpiece pipeline records a 2026-05-04 verdict on canonical paths per platform:</p>
+<div class="scroller"><table><thead><tr><th>platform</th><th>path</th><th>cost/mo</th><th>setup</th></tr></thead><tbody><tr><td>Substack</td><td><code>python-substack</code> PyPI lib</td><td>$0</td><td>cookie export or email/pw</td></tr><tr><td>LinkedIn</td><td>Late/Zernio API</td><td>$19</td><td>OAuth via Late dashboard</td></tr><tr><td>Reddit</td><td>PRAW + script-app refresh token</td><td>$0</td><td>15-min OAuth on a browser host</td></tr><tr><td>Discord</td><td>webhook URL</td><td>$0</td><td>1-min setup</td></tr></tbody></table></div>
+<p>Deprecated fallbacks are listed: a LinkedIn UGC API poster (&quot;weeks of review&quot;) and a Substack SMTP email-gateway poster.</p>
+<p><code>LINKEDIN_TOP_VOICE_PLAN.md</code> (2026-05-21, v2) targets the blue Top Voice badge, &quot;realistic 9-12mo, stretch 6mo&quot;, positioned on &quot;production AI for creative work — voice-matched writing at scale&quot;. It carries an operator correction worth noting:</p>
+<blockquote><p>&quot;&#x27;easy to game&#x27; was 2023 memory. Gold Community Top Voice badge (Collaborative Articles, the easy one) was killed Dec 2024. Blue Top Voice… was always editorial-only and is HARDER in 2026: 6mo sliding-window expiry, 20-30% of badges stripped in 2025 review cycles, AI-content detected at 94% with -30% reach penalty.&quot;</p></blockquote>
+<p><code>CONTENT_EVOLUTION_SERIES.md</code> frames the content strategy as &quot;transparency-as-moat&quot;: &quot;Forge is the apparatus. our-lady-of-champion is the artifact. LinkedIn/Substack writeups are engineering documentation of the apparatus + reflections from the artifact.&quot; It inventories receipts — 15+ checkpoints, 16 MANIFEST.json files with sha256 drift detection, 19+ eval reports, the deliberately preserved <code>paul-v3-lora-failed</code> (&quot;the rare &#x27;I shipped my failure&#x27; artifact&quot;), and &quot;887GB total apparatus weight&quot;.</p>
+<h2>Outreach</h2>
+<h3>The foundry — digital employees (<code>slancha-business/foundry</code>)</h3>
+<p>Described as &quot;a reusable system to mint, run, govern, and grow digital employees that drive Slancha&#x27;s growth.&quot; An employee is a Claude Code subagent file with a mandate, tool bundle, output contract, fact-gate, escalation rules, tier, and self-documentation. Minting one is copying <code>EMPLOYEE_TEMPLATE.md</code> and running <code>./install.sh</code>.</p>
+<p>Roster in <code>agents/</code> (each with a paired <code>.task.md</code>): accelerator, aeo, coach, concierge, cos, counsel, creator-scout, herald, hunter, ledger, prospector, and more under sibling directories — scout, scribe, smith, strategist, support, theorist, warden, reviewer, monitor.</p>
+<p>The four hard rules as written:</p>
+<ol><li>&quot;Everyone starts at tier <code>intern</code> = draft-only. Humans send every external touch.&quot;</li><li>Fact-gate before any draft is surfaced — &quot;paul-voice fabricates bios at temp &gt;0.6 — never auto-send.&quot;</li><li>Always-escalate for Tier-1 logos/investors, any positive or angry reply, pricing/contract/legal, fundraise commitments, public statements.</li><li>&quot;Recall before acting&quot; — grep the Soul vault first; avoid collision with anyone the founder is already working.</li></ol>
+<p>The README draws a distinction: &quot;recon is the shared toolbox&quot; (deterministic CLI verbs over a SQLite DB plus a web UI) and &quot;foundry agents are the operators&quot;.</p>
+<p><code>ATLAS.md</code> documents a five-stage learning loop — CAPTURE (runtime → <code>decisions/*.jsonl</code>) → MEASURE (scorecard, HR report) → REFLECT (coach, weekly → LESSONS.md) → IMPROVE (smith, weekly → skills library) → APPLY (human) → VERIFY (scorecard trend) — explicitly &quot;modeled on the dotfiles-claude Soul three-loop&quot;.</p>
+<h3>Email sending stack (<code>foundry/sending</code>)</h3>
+<p>Built around 2026-05-25 for cold outreach on a burner domain:</p>
+<blockquote><p>&quot;Cold-outreach infrastructure for <code>tryslancha.com</code> (burner domain, isolated from <code>slancha.ai</code> sending reputation). Built ~2026-05-25. <strong>No Instantly, no CRM — all free.</strong>&quot;</p></blockquote>
+<p>Cloudflare zone plus a separate Google Workspace tenant; five Google MX records, SPF, DKIM, DMARC at <code>p=none</code> with a documented plan to tighten to quarantine→reject; a 301 redirect from <code>tryslancha.com</code> to <code>slancha.ai</code> to make the burner look legitimate without touching reputation isolation. Three mailboxes (<code>paul@</code>, <code>hello@</code>, <code>james@</code>), app passwords, rotation, per-inbox cap of 45/day. Code includes <code>autoreach.py</code>, <code>auto_campaign.py</code>, <code>ab.py</code>, <code>alert.py</code>, <code>cf_dns.py</code>, with <code>.env.op</code> for 1Password references.</p>
+<h3>Social (<code>foundry/social</code>)</h3>
+<p>&quot;Home of the Reddit-karma engagement machinery and the operator-tier socials function&quot;, relocated from <code>~/paul-thinkpiece-pipeline/scripts/karma/</code>. Contains <code>karma/</code>, <code>systemd/</code>, and a <code>CUTOVER.md</code>. Owner agent is <em>herald</em>.</p>
+<h3>LinkedIn relationship mapping</h3>
+<p><code>LINKEDIN_HIGH_VALUE_CONNECTIONS.md</code> (pulled 2026-07-05) ranks 2,482 established connections out of 2,505 &quot;by role/notability/relevance/tenure — NOT follower count&quot;. Sectioned by play; the investor section notes &quot;the under-used play: a VC will happily intro you to portfolio companies drowning in inference cost.&quot; Named calibration examples include Roy E. Bahat (Bloomberg Beta), Omri Even-Tov (Haas), Shirshanka Das (DataHub CTO, ex-LinkedIn), Kasey Byrne, and a surfaced Omri Amirav-Drory (NFX).</p>
+<p>Related business-repo documents: <code>SALES_PIPELINE_RESOURCE_MANIFEST_2026_08_21.md</code>, <code>THREE_MONTH_PROOF_PLAN.md</code>, <code>OPENS.md</code>, <code>KANPAI_PIPELINE_STAGING_GOAL.md</code>, <code>PAUL_V12_OUTBOUND_INTEGRATION_GOAL.md</code>, and dated session logs from July and August.</p>
+<h2>The autonomy layer</h2>
+<h3>forge_autonomous (<code>~/finetuning/forge_autonomous</code>, Dell)</h3>
+<p>A systemd daemon, deliberately not cron:</p>
+<blockquote><p>&quot;Operator directive 2026-06-01: <em>constant GPU uptime — always running OR evaluating an experiment, full auto; operator decisions queue, never block; branching realities → investigate both; maximize spark GPU; never stop.</em>&quot;</p></blockquote>
+<p>Loop: pull highest-priority pending experiment from <code>queue.jsonl</code>; if it is a training job, stop serving first (&quot;HARD RULE: never co-run train+serve&quot;) and run a <code>fuser</code>/memory preflight; execute under &quot;eagle-watch&quot; with 3-second GPU snapshots; record; enqueue branches; append operator-decision items to <code>decisions.jsonl</code> and continue rather than block; if the queue empties, enqueue a keep-busy eval so the GPU never idles.</p>
+<p>Its directory also holds corpus builders for the outreach line (<code>build_outreach_corpus.py</code>, <code>build_outreach_full.py</code>), <code>build_enriched_sft.py</code>, <code>capability_ladder.py</code>, <code>cost_quality.py</code>, <code>difficulty_select.patch</code>, and <code>champions.json</code>.</p>
+<h2>The voice-model line</h2>
+<p>Covered in detail in <code>QWEN38_HANDOFF_2026-08-23.md</code>, so only the connective tissue here: the fine-tune produced by <code>~/finetuning</code> is what the thinkpiece pipeline calls its stylist, what the book pipeline pins in <code>voice_pin.yaml</code>, what the essays repo invokes at stage 7 &quot;voice rinse&quot;, and what the foundry&#x27;s fact-gate warns &quot;fabricates bios at temp &gt;0.6&quot;.</p>
+<p><code>HANDOFF_THINKPIECE_BATCH_v1.md</code> (2026-05-01) shows the coupling concretely — V7D pinned by manifest digest, <code>vllm-paul-voice</code> on port 8003, and the book pipeline&#x27;s scribe alerted through <code>_coordination/voice_to_novel.jsonl</code> so a redeploy fires on the next scribe heartbeat.</p>
+<h2>Adjacent infrastructure named in the docs</h2>
+<p>Not content pipelines, but repeatedly referenced:</p>
+<ul><li><strong><code>carn</code></strong> — described in <code>slancha-business/README.md</code> as &quot;the kernel&quot;, compiling a solved task family into a verified state machine and replaying it, routing between a $0 replay path and a frontier model, shipping over MCP</li><li><strong><code>semkern</code></strong> — &quot;the second kernel&quot;, canonical artifact contracts and deterministic induction; &quot;Runs on <code>dellpromax</code>, never the Mac&quot;; not yet integrated</li><li><strong><code>agent-dbg</code></strong> — record, replay, explain over agent executions</li><li><strong><code>kanpai</code></strong> — runs isolated local-AI fleets across repos, owning fleet lifecycle, task claims, workers, proof, acceptance, recovery, with per-fleet SQLite under <code>~/.kanpai/fleets/</code></li><li><strong><code>prost</code></strong> — &quot;the bank layer of the Slancha stack (mesh = compute reserve, kippis = harness studio, kanpai = governance, <strong>prost = the economy plane</strong>)&quot;</li><li><strong><code>sia</code></strong> — a checked-out third-party implementation of <em>SIA: Self Improving AI with Harness &amp; Weight Updates</em> (arXiv 2605.27276)</li><li><strong><code>soul</code></strong> (Dell + Mac) and <strong><code>slancha-brain</code></strong> (<code>dossiers/</code>, <code>vault/</code>) — the memory vaults</li><li><strong><code>wire</code></strong> — agent-to-agent comms, with variants and backups across boxes</li><li><strong><code>slancha-mesh</code></strong>, <strong><code>slancha-api</code></strong>, <strong><code>slancha-website</code></strong>, <strong><code>slancha-dogfood</code></strong>, <strong><code>slancha-local</code></strong> — product surfaces</li><li><strong><code>wipe-micro-blog</code></strong> (Mac, with a <code>-ref</code> copy on Dell) — &quot;The only twitter clone that deletes your data on purpose&quot;, a Firebase/Vercel app, apparently unrelated to the writing pipelines despite the name</li></ul>
+<p>On Spark: <code>comfy-agent-distill</code>, <code>grok-bridge</code>, <code>wire-reactor</code> (a reply-only bot on local qwen3:14b via ollama), <code>Paper2Poster</code>, and dozens of <code>fire_*.sh</code> and <code>fire_*.py</code> scripts driving LTX video generation.</p>
+<h2>Discrepancies noticed, not resolved</h2>
+<ul><li><strong>Book pipeline README says &quot;no code yet&quot; (2026-04-21); the tree holds 24 chapters and 88,706 words.</strong> The README was not updated after the work landed.</li><li><strong>Word count: 91,204 claimed in <code>CONTENT_EVOLUTION_SERIES.md</code> vs 88,706 measured over <code>canon/*.md</code>.</strong> Cause unexamined.</li><li><strong>Chapter numbering:</strong> 24 files, but the last is <code>chapter_26.md</code>. Gaps unexamined.</li><li><strong><code>slancha-gtm</code> on the Mac is an empty directory.</strong></li><li><strong><code>willard-plotter-pipeline</code> README is empty on Dell</strong> despite the repo existing on all three boxes.</li><li><strong><code>TRAINING_HISTORY.md</code> exists identically in two places</strong> — tracked-adjacent in the finetuning-corpus repo (untracked there) and at <code>~/finetuning/</code> on Dell.</li><li><strong>Two <code>paul-thinkpiece-pipeline</code> copies</strong> exist (Dell and Spark); I did not diff them.</li></ul>
+<h2>What I did not open</h2>
+<p>Source code in any pipeline; the <code>slancha-business</code> positioning, fundraise, and specs directories beyond their names; <code>carn</code>, <code>semkern</code>, <code>agent-dbg</code>, <code>archetype-engine*</code> (roughly 20 Mac directories), <code>carn-<em></code> (roughly 15), the <code>fleet-hud</em></code> and <code>ingot*</code> families; the Spark video farm; <code>pitchbook.duckdb</code> contents; the two offline machines.</p>
+</main>
+
+</body></html>

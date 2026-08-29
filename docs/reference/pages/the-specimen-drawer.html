@@ -1,0 +1,483 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<!-- Preserved from the published Claude artifact "The Specimen Drawer".
+     Source: https://claude.ai/code/artifact/456c4fd9-0ed9-49b6-8ac1-7829c2c77c82
+     The artifact host frame runtime has been removed; nothing else is edited.
+     Self-contained apart from Google Fonts. -->
+</head>
+<body>
+<meta charset="utf-8">
+<title>The Specimen Drawer</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Serif+Display:wght@900&family=JetBrains+Mono:wght@400;500;700&family=Saira+Extra+Condensed:wght@600;800&display=swap">
+<style>
+:root{--void:#000;--panel:#0B0B09;--line:#26200F;--line2:#3E341B;--o:#FF9830;--od:#8A5510;--hot:#FFCC50;
+--g:#50FF50;--gd:#2E7A2E;--cy:#20F0FF;--cyd:#12707E;--r:#FF3030;--steel:#D8D8D0;--mut:#8A8478;--unm:#E858B8;
+--title:'Noto Serif Display',serif;--mono:'JetBrains Mono',monospace;--stamp:'Saira Extra Condensed',Impact,sans-serif}
+*{box-sizing:border-box;margin:0}
+body{background:var(--void);color:var(--steel);font:400 12.5px/1.5 var(--mono);-webkit-font-smoothing:antialiased}
+body::before{content:"";position:fixed;inset:0;z-index:95;pointer-events:none;
+background:repeating-linear-gradient(to bottom,rgba(0,0,0,.2) 0 1px,transparent 1px 3px)}
+.wrap{max-width:1340px;margin:0 auto;padding:0 24px}
+header.hero{padding:64px 0 26px}
+h1{font-family:var(--title);font-weight:900;font-size:clamp(40px,6.5vw,84px);color:var(--o);
+text-transform:uppercase;letter-spacing:.04em;transform:scaleX(.82);transform-origin:left;line-height:.95}
+h1 small{display:block;font-size:.3em;color:var(--steel);letter-spacing:.26em;margin-top:12px}
+h2{font-family:var(--title);font-weight:900;font-size:clamp(20px,2.8vw,32px);color:var(--o);
+text-transform:uppercase;letter-spacing:.1em;transform:scaleX(.86);transform-origin:left}
+.sub{color:var(--mut);font-size:10.5px;letter-spacing:.16em;text-transform:uppercase;margin:5px 0 20px}
+.sub b{color:var(--g);font-weight:500}
+section{padding:40px 0;border-top:1px solid var(--line)}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(316px,1fr));gap:16px}
+.sp{border:1px solid var(--line);background:var(--panel);
+clip-path:polygon(0 10px,10px 0,calc(100% - 18px) 0,100% 18px,100% 100%,18px 100%,0 calc(100% - 10px))}
+.sp canvas{display:block;width:100%;height:190px}
+.sp .meta{padding:10px 13px 12px;border-top:1px solid var(--line)}
+.sp .meta b{display:block;color:var(--steel);font-size:12px}
+.sp .meta i{font-style:normal;color:var(--cyd);font-size:9px;letter-spacing:.14em;text-transform:uppercase}
+.sp .meta span{display:block;color:var(--mut);font-size:10.5px;margin-top:4px}
+.stamp{position:absolute;z-index:2;right:8px;top:6px;font-family:var(--stamp);font-size:11px;
+letter-spacing:.14em;color:#4E4638}
+footer{padding:40px 0 70px;color:var(--line2);font-size:10px;letter-spacing:.2em;text-transform:uppercase;text-align:center}
+</style>
+<div class="wrap">
+<header class="hero"><h1>The Specimen Drawer<small>50 motifs drawn as working vignettes · sample data · every tile stamped CONCEPT</small></h1>
+<p style="max-width:64ch;color:var(--mut);margin-top:16px">The Idea Bank names the motifs; this drawer renders them.
+Each tile is a canvas-drawn mini-interface in the Hive material system — source lineage and role application on the
+plate. Data in the tiles is sample data by design: these are specimens for peeling, not canonical surfaces.</p></header>
+<div id="sections"></div>
+<footer>hive specimen drawer · concept renders · lineage on every plate</footer>
+</div>
+<script>
+const C={o:"#FF9830",od:"#8A5510",hot:"#FFCC50",g:"#50FF50",gd:"#2E7A2E",cy:"#20F0FF",cyd:"#12707E",
+r:"#FF3030",steel:"#D8D8D0",mut:"#8A8478",unm:"#E858B8",line:"#26200F",line2:"#3E341B",panel:"#0B0B09"};
+const M="JetBrains Mono",ST="Saira Extra Condensed";
+// helpers
+function T(x,s,c,f,tx,px,py,al){x.fillStyle=c;x.font=s+"px "+(f||M);x.textAlign=al||"left";x.fillText(tx,px,py);x.textAlign="left";}
+function box(x,px,py,w,h,c,fill){if(fill){x.fillStyle=fill;x.fillRect(px,py,w,h);}x.strokeStyle=c;x.lineWidth=1;x.strokeRect(px+.5,py+.5,w,h);}
+function hex(x,cx,cy,r){x.beginPath();for(let i=0;i<6;i++){const a=Math.PI/3*i+Math.PI/6;x[i?"lineTo":"moveTo"](cx+r*Math.cos(a),cy+r*Math.sin(a));}x.closePath();}
+function lbl(x,tx,px,py,c){T(x,8,c||C.od,M,tx.toUpperCase(),px,py);}
+function scan(x,w,h){x.fillStyle="rgba(0,0,0,.16)";for(let y=0;y<h;y+=3)x.fillRect(0,y,w,1);}
+// ————— specimen registry —————
+const SP=[];
+function sp(sec,title,src,role,draw){SP.push({sec,title,src,role,draw});}
+
+/* ========== FIELD ========== */
+sp("THE FIELD","Kiroshi scan overlay","Cyberpunk 2077","Owner-operator",(x,w,h)=>{
+ hex(x,84,92,40);x.strokeStyle=C.g;x.lineWidth=1.5;x.stroke();x.fillStyle="rgba(80,255,80,.08)";x.fill();
+ T(x,10,C.steel,M,"builder-07",62,90);T(x,8,C.gd,M,"WORKING",66,103);
+ x.strokeStyle=C.cy;x.setLineDash([3,3]);x.beginPath();x.moveTo(124,80);x.lineTo(168,52);x.lineTo(300,52);x.stroke();
+ x.beginPath();x.moveTo(124,104);x.lineTo(168,132);x.lineTo(300,132);x.stroke();x.setLineDash([]);
+ lbl(x,"identity",172,46);T(x,9,C.cy,M,"fleet-hud · builder · A2",172,60);
+ lbl(x,"authority",172,88);T(x,9,C.g,M,"OBSERVE + EXECUTE",172,100);T(x,8,C.mut,M,"deliver: not granted",172,111);
+ lbl(x,"blocked by",172,126);T(x,9,C.hot,M,"proof failed · retry permitted",172,140);});
+sp("THE FIELD","Tri-vision lens toggle","Observer","Owner-operator",(x,w,h)=>{
+ const modes=[["HEALTH",C.g],["COST",C.hot],["AUTHORITY",C.cy]];
+ modes.forEach((m,i)=>{box(x,16+i*100,14,92,20,i==0?m[1]:C.line2);T(x,8,i==0?m[1]:C.mut,M,m[0],62+i*100,27,"center");});
+ for(let r=0;r<2;r++)for(let c=0;c<5;c++){const cx=52+c*56,cy=80+r*50+(c%2?12:0);
+  hex(x,cx,cy,22);const hot=(r==1&&c==3);x.strokeStyle=hot?C.o:C.gd;x.lineWidth=hot?2:1;x.stroke();
+  x.fillStyle=hot?"rgba(255,152,48,.14)":"rgba(80,255,80,.05)";x.fill();}
+ lbl(x,"same comb · three visions · hotkeys 1 2 3",16,176);});
+sp("THE FIELD","Fleet-wall scale crush","Akira","Owner-operator",(x,w,h)=>{
+ for(let r=0;r<7;r++)for(let c=0;c<16;c++){const cx=14+c*20,cy=20+r*22+(c%2?6:0);
+  hex(x,cx,cy,9);const bleed=(r==2&&c==11)||(r==5&&c==4);
+  x.strokeStyle=bleed?C.r:"#1E3A1E";x.lineWidth=bleed?1.6:1;x.stroke();
+  if(bleed){x.fillStyle="rgba(255,48,48,.25)";x.fill();}}
+ T(x,9,C.mut,M,"1,024 CELLS · RED ONLY WHERE IT BLEEDS",16,182);});
+sp("THE FIELD","Coverage as territory","Death Stranding","Platform operator",(x,w,h)=>{
+ x.strokeStyle=C.cyd;for(let i=0;i<5;i++){x.beginPath();x.moveTo(0,40+i*28);
+  for(let px=0;px<=200;px+=8)x.lineTo(px,40+i*28+Math.sin(px/22+i)*7);x.stroke();}
+ box(x,200,20,116,150,C.line,"#050504");
+ T(x,9,C.unm,M,"UNMEASURED",258,90,"center");T(x,8,"#4E4638",M,"terrain unrendered",258,104,"center");
+ x.fillStyle=C.g;x.beginPath();x.arc(60,96,4,0,7);x.fill();T(x,8,C.g,M,"dell-local",70,99);
+ lbl(x,"observed territory renders · dark zones do not",14,182);});
+sp("THE FIELD","HUD chip budget","NieR:Automata","Owner-operator",(x,w,h)=>{
+ const chips=[["FLEET BAR",12,1],["QUEUE",8,1],["COST STRIP",10,0],["3D LENS",22,0],["WALLS",6,1]];
+ let y=30;chips.forEach(c=>{box(x,16,y,180,20,c[2]?C.g:C.line2);
+  T(x,8,c[2]?C.g:C.mut,M,c[0],24,y+13);T(x,8,c[2]?C.hot:"#4E4638",M,c[1]+" CH",168,y+13);y+=26;});
+ lbl(x,"budget",228,30);T(x,20,C.hot,ST,"36 / 64",228,52);
+ T(x,8,C.mut,M,"density is a spent",228,72);T(x,8,C.mut,M,"resource. default",228,83);T(x,8,C.mut,M,"load-out: lean.",228,94);});
+sp("THE FIELD","Radar freshness sweep","FUI canon","Platform operator",(x,w,h)=>{
+ x.strokeStyle=C.cyd;[28,52,76].forEach(r=>{x.beginPath();x.arc(95,95,r,0,7);x.stroke();});
+ x.fillStyle="rgba(32,240,255,.10)";x.beginPath();x.moveTo(95,95);x.arc(95,95,76,-.5,.35);x.closePath();x.fill();
+ [[40,-.2,C.g],[66,.9,C.g],[58,2.6,C.hot],[73,4,C.unm]].forEach(p=>{
+  x.fillStyle=p[2];x.beginPath();x.arc(95+p[0]*Math.cos(p[1]),95+p[0]*Math.sin(p[1]),3,0,7);x.fill();});
+ lbl(x,"radius = evidence age",196,60);T(x,9,C.g,M,"inner ring: < 5s",196,76);
+ T(x,9,C.hot,M,"outer ring: stale",196,90);T(x,9,C.unm,M,"off-scope: unmeasured",196,104);});
+sp("THE FIELD","Magnetic needle field","Concept lens","Engineering lead",(x,w,h)=>{
+ for(let r=0;r<4;r++)for(let c=0;c<7;c++){const cx=32+c*40,cy=34+r*38;
+  const a=(c==5&&r<3)?-1.2:(r==3?.4:.9+c*.1);
+  x.strokeStyle=(c==5&&r<3)?C.hot:C.gd;x.lineWidth=1.4;
+  x.beginPath();x.moveTo(cx-9*Math.cos(a),cy-9*Math.sin(a));x.lineTo(cx+9*Math.cos(a),cy+9*Math.sin(a));x.stroke();
+  x.fillStyle=x.strokeStyle;x.beginPath();x.arc(cx+9*Math.cos(a),cy+9*Math.sin(a),2,0,7);x.fill();}
+ lbl(x,"every worker points at its governing constraint",16,182);});
+sp("THE FIELD","Semiotic standard sheet","Alien / Ron Cobb","All roles",(x,w,h)=>{
+ const ic=[["WORKING",C.g,(px,py)=>{x.beginPath();x.arc(px,py,7,0,7);x.fill();}],
+ ["BLOCKED",C.r,(px,py)=>{x.fillRect(px-7,py-7,14,14);}],
+ ["NEEDS YOU",C.o,(px,py)=>{x.beginPath();x.moveTo(px,py-8);x.lineTo(px+8,py+6);x.lineTo(px-8,py+6);x.closePath();x.fill();}],
+ ["UNMEASURED",C.unm,(px,py)=>{x.strokeStyle=C.unm;x.lineWidth=2;x.strokeRect(px-7,py-7,14,14);}],
+ ["LANDED",C.gd,(px,py)=>{x.beginPath();x.arc(px,py,7,0,7);x.stroke();}],
+ ["DRAINING",C.cy,(px,py)=>{x.fillRect(px-8,py-2,16,4);}]];
+ ic.forEach((s,i)=>{const px=56+(i%3)*100,py=50+((i/3)|0)*70;
+  x.fillStyle=s[1];x.strokeStyle=s[1];s[2](px,py);T(x,8,C.mut,M,s[0],px,py+26,"center");});});
+
+/* ========== TELEGRAPH ========== */
+sp("THE TELEGRAPH","Motion-tracker cadence","Alien: Isolation","Owner-operator",(x,w,h)=>{
+ x.strokeStyle=C.gd;x.beginPath();x.arc(95,150,90,Math.PI*1.15,Math.PI*1.85);x.stroke();
+ x.beginPath();x.arc(95,150,58,Math.PI*1.15,Math.PI*1.85);x.stroke();
+ x.fillStyle=C.o;x.beginPath();x.arc(60,72,5,0,7);x.fill();
+ x.strokeStyle=C.o;x.beginPath();x.arc(60,72,11,0,7);x.stroke();
+ T(x,22,C.g,ST,"14 M",150,60);T(x,8,C.mut,M,"TO NEXT DECISION",150,74);
+ lbl(x,"ping interval = urgency · one instrument, one sound",16,182);});
+sp("THE TELEGRAPH","Dominator authority states","Psycho-Pass","Reviewer / approver",(x,w,h)=>{
+ box(x,20,30,130,34,C.g,"rgba(80,255,80,.08)");T(x,9,C.g,M,"APPROVE · GRANTED",85,50,"center");
+ box(x,20,84,130,34,C.line2,"#0A0A08");T(x,9,"#4E4638",M,"RETRY · NO GRANT",85,104,"center");
+ T(x,7,"#4E4638",M,"renders as inert glass",85,114,"center");
+ box(x,20,138,130,34,C.r,"rgba(255,48,48,.07)");T(x,9,C.r,M,"STOP · CEREMONY REQ.",85,158,"center");
+ lbl(x,"the control transforms",180,84);lbl(x,"by authority state.",180,96);
+ lbl(x,"no grant → no button.",180,116);});
+sp("THE TELEGRAPH","Acceptance ceremony","Alien self-destruct","Verifier / gate",(x,w,h)=>{
+ const steps=["UNLOCK","TURN KEY A","TURN KEY B","COMMIT"];
+ steps.forEach((s,i)=>{const done=i<2;box(x,20+i*74,54,64,44,done?C.g:C.line2,done?"rgba(80,255,80,.06)":null);
+  T(x,7.5,done?C.g:C.mut,M,s,52+i*74,73,"center");
+  if(done)T(x,10,C.g,M,"✓",52+i*74,88,"center");});
+ T(x,9,C.hot,M,"ABORT WINDOW OPEN · 12s",160,130,"center");
+ lbl(x,"irreversibility as staged physical liturgy",16,176);});
+sp("THE TELEGRAPH","Algedonic bypass","Beer VSM","Owner-operator",(x,w,h)=>{
+ ["SNOOZE FILTERS","ROLE ROUTING","QUIET HOURS"].forEach((s,i)=>{
+  box(x,110,26+i*44,120,28,C.line2);T(x,7.5,C.mut,M,s,170,43+i*44,"center");});
+ x.strokeStyle=C.r;x.lineWidth=2;x.setLineDash([5,4]);
+ x.beginPath();x.moveTo(30,96);x.quadraticCurveTo(70,180,296,150);x.stroke();x.setLineDash([]);
+ x.fillStyle=C.r;x.fillRect(16,84,10,22);
+ T(x,8,C.r,M,"CRITICAL CLASS BYPASSES EVERYTHING — INCL. SNOOZE",24,178);});
+sp("THE TELEGRAPH","Tape + shutter expand","Algedonic Telegraph","Owner-operator",(x,w,h)=>{
+ box(x,10,16,300,22,C.od);T(x,8.5,C.hot,M,"N 3 · RETRY DECISION · FLEET-HUD · PROOF FAILED · 12M",16,30);
+ box(x,10,48,300,116,C.line,"#080806");
+ lbl(x,"blocker",22,68);T(x,9,C.hot,M,"proof failed twice on attempt 2",22,81);
+ lbl(x,"if you wait",22,100);T(x,9,C.steel,M,"task holds a mutation slot",22,113);
+ lbl(x,"keys",22,132);T(x,9,C.cy,M,"[RETURN] open  [E] evidence  [S] snooze  [O] owner",22,145);
+ T(x,8,"#4E4638",M,"shutter opens only on N — else one quiet line",22,160);});
+sp("THE TELEGRAPH","Two-state commit","The Matrix","Reviewer / approver",(x,w,h)=>{
+ box(x,24,40,124,96,C.cy,"rgba(32,240,255,.05)");box(x,172,40,124,96,C.o,"rgba(255,152,48,.06)");
+ T(x,10,C.cy,M,"DEFER",86,80,"center");T(x,8,C.cyd,M,"holds the slot",86,96,"center");
+ T(x,10,C.o,M,"APPROVE",234,80,"center");T(x,8,C.od,M,"typed, receipted",234,96,"center");
+ T(x,8,C.mut,M,"full consequence text above the fold · no third button",160,160,"center");});
+
+/* ========== THREAD ========== */
+sp("THE THREAD","Twin MFD deck","System Shock","Builder worker",(x,w,h)=>{
+ box(x,10,14,146,150,C.line,"#080806");box(x,164,14,146,150,C.line,"#080806");
+ lbl(x,"conversation",18,30);for(let i=0;i<6;i++){x.fillStyle=i%2?C.gd:"#2A4A2A";x.fillRect(18,40+i*18,110-i*9,7);}
+ lbl(x,"proof",172,30);T(x,9,C.r,M,"FAIL · exit 1",172,48);
+ T(x,8,C.mut,M,"tests/test_gate.py::42",172,62);
+ x.fillStyle="rgba(255,48,48,.12)";x.fillRect(172,70,128,30);
+ T(x,8,C.hot,M,"candidate is a no-op",178,88);
+ T(x,8,"#4E4638",M,"swappable instrument cards",160,176,"center");});
+sp("THE THREAD","Cassette attempt rack","Katana ZERO / GitS","Builder worker",(x,w,h)=>{
+ ["A1 · BLOCKED","A2 · BLOCKED","A3 · BLOCKED","A4 · BLOCKED","A5 · NEEDS HUMAN"].forEach((s,i)=>{
+  const on=i==4;box(x,14+i*59,40,52,70,on?C.o:C.line2,on?"rgba(255,152,48,.08)":"#080806");
+  x.strokeStyle=on?C.od:"#1C180E";x.beginPath();x.arc(28+i*59,62,7,0,7);x.stroke();
+  x.beginPath();x.arc(52+i*59,62,7,0,7);x.stroke();
+  T(x,6.5,on?C.hot:C.mut,M,s,40+i*59,98,"center");});
+ lbl(x,"attempts as removable tapes · adopted take plays clean",16,140);});
+sp("THE THREAD","Context-burn creep","Edgerunners","Builder worker",(x,w,h)=>{
+ box(x,60,30,200,110,C.gd,"#060605");
+ T(x,9,C.g,M,"session b48d64 · A5",76,58);T(x,8,C.mut,M,"working: repair gate",76,74);
+ for(let i=0;i<260;i++){const px=60+Math.random()*200,py=30+Math.random()*110;
+  const edge=Math.min(px-60,260-px,py-30,140-py);
+  if(Math.random()>edge/26){x.fillStyle=Math.random()>.5?"#3A3220":"#5A4A28";x.fillRect(px,py,1.6,1.6);}}
+ T(x,9,C.hot,M,"CONTEXT 82%",76,124);
+ lbl(x,"edge static grows before the wall hits",60,158);});
+sp("THE THREAD","Sync-ratio drift","Evangelion","Autonomous manager",(x,w,h)=>{
+ x.strokeStyle=C.gd;x.beginPath();x.moveTo(20,90);
+ for(let px=0;px<=180;px+=4)x.lineTo(20+px,90-Math.sin(px/30)*14-px*.06);x.stroke();
+ x.strokeStyle=C.hot;x.setLineDash([3,3]);x.beginPath();x.moveTo(20,60);x.lineTo(200,60);x.stroke();x.setLineDash([]);
+ T(x,24,C.g,ST,"61.2%",226,80);T(x,8,C.mut,M,"OPERATOR-AGENT SYNC",226,96);
+ lbl(x,"co-drive coupling drifts · attention decay visible",20,150);});
+sp("THE THREAD","Interrupt hard-cut","Katana ZERO","Dashboard Agent",(x,w,h)=>{
+ for(let i=0;i<4;i++){x.fillStyle=C.gd;x.fillRect(20,30+i*16,190-i*20,6);}
+ x.fillStyle=C.r;x.fillRect(20,96,272,2);
+ T(x,8,C.r,M,"— INTERRUPTED BY OPERATOR 14:02:11 —",156,112,"center");
+ for(let i=0;i<2;i++){x.fillStyle=C.cyd;x.fillRect(20,126+i*16,150+i*40,6);}
+ lbl(x,"interruption leaves a scar · not a polite queue",20,176);});
+sp("THE THREAD","MU/TH/UR query mode","Alien (1979)","Dashboard Agent",(x,w,h)=>{
+ x.fillStyle="#0E100C";x.fillRect(0,0,w,h);scan(x,w,h);
+ T(x,9,C.g,M,"INTERROGATIVE",26,44);
+ T(x,10,C.steel,M,"WHY IS TASK B48D64 BLOCKED?",26,66);
+ x.fillStyle=C.g;x.fillRect(26,80,266,1);
+ T(x,9,C.g,M,"PROOF FAILED ON ATTEMPTS 2,3,5.",26,102);
+ T(x,9,C.g,M,"CANDIDATE IS A NO-OP. [cite: receipt b52da9]",26,118);
+ T(x,9,C.gd,M,"AWAITING OPERATOR. NO FURTHER ENHANCEMENT.",26,140);
+ T(x,10,C.g,M,"█",26,162);});
+sp("THE THREAD","Joi overlay presence","Blade Runner 2049","Dashboard Agent",(x,w,h)=>{
+ box(x,14,20,190,144,C.line,"#080806");lbl(x,"canonical panel",22,36);
+ for(let i=0;i<5;i++){x.fillStyle="#233823";x.fillRect(22,48+i*20,160,8);}
+ x.globalAlpha=.75;x.fillStyle="rgba(32,240,255,.09)";x.fillRect(120,40,186,120);
+ x.strokeStyle=C.cy;x.strokeRect(120.5,40.5,186,120);x.globalAlpha=1;
+ T(x,9,C.cy,M,"AGENT · translucent, never chrome",130,60);
+ T(x,8,C.cyd,M,"suggests · cites · yields",130,76);});
+
+/* ========== RIVER ========== */
+sp("THE RIVER","VHS attempt scrub","Katana ZERO","Verifier / gate",(x,w,h)=>{
+ x.strokeStyle=C.gd;x.beginPath();x.moveTo(20,70);x.lineTo(300,70);x.stroke();
+ [[60,C.cy],[110,C.r],[150,C.o],[200,C.r],[250,C.o]].forEach(p=>{x.fillStyle=p[1];x.fillRect(p[0]-3,64,6,12);});
+ x.fillStyle="rgba(232,88,184,.15)";x.fillRect(96,50,68,40);
+ for(let i=0;i<24;i++){x.fillStyle="rgba(216,216,208,.25)";x.fillRect(96+Math.random()*68,50+Math.random()*40,8,1);}
+ T(x,8,C.unm,M,"◀◀ REWINDING FAILURE",100,110);
+ box(x,20,130,280,18,C.line2);x.fillStyle=C.o;x.fillRect(20,130,150,18);
+ T(x,7.5,C.steel,M,"SCRUB",160,143,"center");
+ lbl(x,"failures rewind visibly · the accepted take plays clean",20,176);});
+sp("THE RIVER","ESPER evidence dive","Blade Runner","Reviewer / approver",(x,w,h)=>{
+ box(x,16,20,150,120,C.line,"#080806");
+ for(let i=0;i<40;i++){x.fillStyle="#1E2A1E";x.fillRect(20+Math.random()*140,26+Math.random()*106,6,2);}
+ box(x,70,58,40,26,C.cy);
+ x.strokeStyle=C.cy;x.setLineDash([3,3]);
+ x.beginPath();x.moveTo(110,58);x.lineTo(190,30);x.stroke();x.beginPath();x.moveTo(110,84);x.lineTo(190,150);x.stroke();x.setLineDash([]);
+ box(x,190,30,116,120,C.cy,"#060807");
+ T(x,8,C.cy,M,"ENHANCE 224 176",198,48);T(x,8,C.g,M,"receipt sha b52d…",198,66);
+ T(x,8,C.g,M,"producer: salud",198,80);T(x,8,C.mut,M,"zoom logged 14:02",198,94);
+ T(x,8,C.hot,M,"layer 3 / 5",198,108);});
+sp("THE RIVER","Tape splice & stitch","Cassette futurism","Recovery supervisor",(x,w,h)=>{
+ x.strokeStyle=C.gd;x.lineWidth=2;x.beginPath();x.moveTo(16,80);x.lineTo(140,80);x.stroke();
+ x.strokeStyle=C.unm;x.setLineDash([2,4]);x.beginPath();x.moveTo(140,80);x.lineTo(182,80);x.stroke();x.setLineDash([]);
+ x.strokeStyle=C.gd;x.beginPath();x.moveTo(182,80);x.lineTo(300,80);x.stroke();
+ x.fillStyle=C.hot;x.beginPath();x.moveTo(140,66);x.lineTo(148,94);x.moveTo(174,66);x.lineTo(182,94);x.stroke();
+ x.strokeStyle=C.hot;x.lineWidth=1;x.beginPath();x.moveTo(140,66);x.lineTo(148,94);x.stroke();x.beginPath();x.moveTo(174,66);x.lineTo(182,94);x.stroke();
+ T(x,8,C.unm,M,"GAP · NOTHING MEASURED",161,56,"center");
+ T(x,8,C.hot,M,"SPLICE MARKS — history reconciled, visibly",161,120,"center");
+ lbl(x,"the tape breaks rather than interpolates",16,176);});
+sp("THE RIVER","Killmail receipt","EVE Online","Provider adapter",(x,w,h)=>{
+ box(x,20,16,280,152,C.line,"#080806");
+ T(x,9,C.r,M,"ATTEMPT LOST · A3",32,38);T(x,8,C.mut,M,"2026-08-21 20:31:04Z",210,38);
+ x.fillStyle=C.line;x.fillRect(32,46,256,1);
+ lbl(x,"fit",32,62);T(x,8,C.steel,M,"qwen-coder · builder profile · 32k ctx",70,62);
+ lbl(x,"damage",32,80);T(x,8,C.hot,M,"proof FAIL · gate_passed=false",70,80);
+ lbl(x,"cost",32,98);T(x,8,C.unm,M,"UNPRICED — subscription pool",70,98);
+ lbl(x,"final blow",32,116);T(x,8,C.steel,M,"canonical_blocked · kanpai",96,116);
+ T(x,8,C.cyd,M,"immutable · linkable · public to the fleet",32,144);});
+sp("THE RIVER","Oscillation detector","Wiener","Platform operator",(x,w,h)=>{
+ x.strokeStyle=C.g;x.beginPath();x.moveTo(16,90);
+ for(let px=0;px<=120;px+=3)x.lineTo(16+px,90-Math.sin(px/9)*px*.28);x.stroke();
+ x.strokeStyle=C.r;x.setLineDash([4,3]);x.beginPath();x.moveTo(136,20);x.lineTo(136,160);x.stroke();x.setLineDash([]);
+ T(x,9,C.r,M,"HUNTING DETECTED",150,60);
+ T(x,8,C.mut,M,"retry storm: 5 attempts,",150,80);T(x,8,C.mut,M,"amplitude growing",150,92);
+ T(x,8,C.hot,M,"→ propose damping: hold",150,112);T(x,8,C.hot,M,"retries for 20m",150,124);
+ lbl(x,"overcorrection is a named pathology",16,176);});
+sp("THE RIVER","Loop-trace deviation","Westworld","Autonomous manager",(x,w,h)=>{
+ x.strokeStyle=C.gd;x.beginPath();x.arc(90,90,52,0,7);x.stroke();
+ x.strokeStyle=C.gd;x.beginPath();x.arc(90,90,52,-.6,.4);x.stroke();
+ x.strokeStyle=C.hot;x.beginPath();x.moveTo(90+52*Math.cos(.4),90+52*Math.sin(.4));
+ x.quadraticCurveTo(190,150,240,96);x.stroke();
+ x.fillStyle=C.hot;x.beginPath();x.arc(240,96,4,0,7);x.fill();
+ T(x,8,C.mut,M,"routine pass loop",90,96,"center");
+ T(x,8,C.hot,M,"DEVIATION: spawned",210,60);T(x,8,C.hot,M,"unplanned review",210,72);
+ T(x,8,C.cyd,M,"flag → rationale",210,120);});
+sp("THE RIVER","Collar countdown","Cyber City Oedo 808","Recovery supervisor",(x,w,h)=>{
+ box(x,30,40,170,100,C.line,"#080806");
+ T(x,9,C.g,M,"session 954f35 · A3",44,66);T(x,8,C.mut,M,"lease: mutation slot 2",44,82);
+ box(x,44,96,140,26,C.od,"rgba(255,152,48,.06)");
+ T(x,13,C.hot,ST,"LEASE 07:42",114,114,"center");
+ T(x,8,C.mut,M,"worn on the session —",216,80);T(x,8,C.mut,M,"expiry is never",216,92);T(x,8,C.mut,M,"a surprise",216,104);});
+sp("THE RIVER","Phosphor strip chart","Cybersyn / uPlot","Engineering lead",(x,w,h)=>{
+ ["STATE","OUTPUT","PROOF","HUMAN"].forEach((s,i)=>{const y=34+i*34;
+  lbl(x,s,16,y+4);x.strokeStyle=i==3?C.o:C.gd;x.beginPath();x.moveTo(70,y);
+  for(let px=0;px<=220;px+=6){const v=i==2&&px>150?12:(Math.sin(px/24+i*2)*6);x.lineTo(70+px,y-v);}x.stroke();
+  if(i==2){x.fillStyle=C.g;x.beginPath();x.arc(240,y-12,3.5,0,7);x.fill();}});
+ lbl(x,"aligned strips · one time axis · seals on the proof lane",16,176);});
+
+/* ========== ORGANISM ========== */
+sp("THE ORGANISM","Garage assembly","Armored Core","Provider adapter",(x,w,h)=>{
+ box(x,16,20,130,140,C.line,"#080806");lbl(x,"current fit",24,36);
+ [["MODEL","qwen-coder"],["TOOLS","git+shell"],["SCOPE","fleet-hud/*"],["CTX","32K"]].forEach((p,i)=>{
+  lbl(x,p[0],24,56+i*24);T(x,8,C.g,M,p[1],66,56+i*24);});
+ box(x,162,44,140,52,C.cy,"rgba(32,240,255,.04)");
+ T(x,8,C.cy,M,"SWAP → claude-sonnet",172,62);T(x,8,C.g,M,"accept rate +18%",172,76);T(x,8,C.hot,M,"cost class: metered",172,88);
+ T(x,8,C.mut,M,"deltas from receipts only",162,120);});
+sp("THE ORGANISM","Overview grid doctrine","EVE Online","Engineering lead",(x,w,h)=>{
+ lbl(x,"WORK · preset: LEAD",16,26);
+ const rows=[["b48d64","NEEDS_HUMAN","A5","2h",C.o],["954f35","NEEDS_HUMAN","A3","2h",C.o],
+  ["27cd1c","DONE","A3","1d",C.gd],["922a17","DONE","A2","1d",C.gd],["058fe0","DONE","A1","2d",C.gd]];
+ T(x,7.5,C.od,M,"TASK      STATE        ATT  AGE",16,44);
+ rows.forEach((r,i)=>{const y=60+i*20;x.fillStyle=i%2?"#0D0D0A":"transparent";x.fillRect(12,y-11,296,17);
+  T(x,8,r[4],M,r[0],16,y);T(x,8,r[4],M,r[1],90,y);T(x,8,C.mut,M,r[2],196,y);T(x,8,C.mut,M,r[3],232,y);});
+ lbl(x,"dense · sortable · savable per role",16,176);});
+sp("THE ORGANISM","Placement as city","Cloudpunk","Scheduler",(x,w,h)=>{
+ [[30,120,26,44,C.g],[70,90,30,74,C.g],[116,104,24,60,C.hot],[152,70,34,94,C.g],[200,130,26,34,"#222"],[240,96,30,68,C.g]].forEach(b=>{
+  box(x,b[0],b[1],b[2],b[3],b[4]==="#222"?C.line2:b[4],b[4]==="#222"?"#050504":null);
+  if(b[4]!=="#222"){x.fillStyle=b[4];for(let wy=b[1]+6;wy<b[1]+b[3]-4;wy+=9)x.fillRect(b[0]+5,wy,4,3);}});
+ T(x,8,C.unm,M,"DARK DISTRICT",213,88,"center");T(x,7,"#4E4638",M,"starved",213,100,"center");
+ lbl(x,"hosts as buildings · lit windows = placed work",16,40);});
+sp("THE ORGANISM","Cargo admission balance","Death Stranding","Scheduler",(x,w,h)=>{
+ x.strokeStyle=C.steel;x.beginPath();x.moveTo(160,150);x.lineTo(160,60);x.stroke();
+ x.beginPath();x.moveTo(80,60);x.lineTo(240,60);x.stroke();
+ [[86,44,C.g],[110,28,C.g],[134,12,C.hot]].forEach(c=>{box(x,c[0]-16,c[1],32,14,c[2]);});
+ [[212,44,C.g]].forEach(c=>{box(x,c[0]-16,c[1],32,14,c[2]);});
+ x.save();x.translate(160,60);x.rotate(-.1);x.strokeStyle=C.hot;x.beginPath();x.moveTo(-80,0);x.lineTo(80,0);x.stroke();x.restore();
+ T(x,8,C.hot,M,"OVERCOMMIT TIPS VISIBLY",160,170,"center");});
+sp("THE ORGANISM","Stock & flow glyphs","Forrester","Engineering lead",(x,w,h)=>{
+ box(x,30,40,90,40,C.g);T(x,8,C.g,M,"QUEUE: 18",75,63,"center");T(x,6.5,C.mut,M,"STOCK",75,74,"center");
+ x.strokeStyle=C.cy;x.beginPath();x.moveTo(120,60);x.lineTo(200,60);x.stroke();
+ x.strokeStyle=C.o;x.beginPath();x.moveTo(150,52);x.lineTo(160,60);x.lineTo(150,68);x.stroke();
+ T(x,6.5,C.o,M,"3.2/m FLOW",158,44,"center");
+ box(x,200,40,90,40,C.g);T(x,8,C.g,M,"RUNNING: 4",245,63,"center");
+ T(x,8,C.mut,M,"every metric declares which it is — in the glyph",160,130,"center");
+ lbl(x,"delay drawn on the arrow, not hidden",16,176);});
+sp("THE ORGANISM","Safe-envelope gauge","Rasmussen EID","Platform operator",(x,w,h)=>{
+ x.strokeStyle=C.line2;x.strokeRect(40.5,40.5,240,90);
+ x.fillStyle="rgba(80,255,80,.06)";x.fillRect(70,55,150,60);
+ x.strokeStyle=C.gd;x.strokeRect(70.5,55.5,150,60);
+ x.fillStyle=C.g;x.beginPath();x.arc(150,86,5,0,7);x.fill();
+ T(x,7,C.gd,M,"SAFE ENVELOPE",145,50,"center");
+ T(x,8,C.hot,M,"walls visible — not just the needle",160,152,"center");});
+sp("THE ORGANISM","AT-field write scope","Evangelion","Builder worker",(x,w,h)=>{
+ for(let r=0;r<4;r++)for(let c=0;c<3;c++){hex(x,205+c*30+(r%2?15:0),40+r*26,15);
+  x.strokeStyle="rgba(255,152,48,"+(0.25+r*.14)+")";x.stroke();}
+ T(x,8,C.steel,M,"worker path:",24,60);T(x,8,C.g,M,"fleet-hud/web/*",24,74);
+ T(x,8,C.steel,M,"approaching:",24,104);T(x,8,C.hot,M,"server.py — PROTECTED",24,118);
+ T(x,8,C.o,M,"field shimmers at the boundary",24,160);});
+sp("THE ORGANISM","Strand delivery routes","Death Stranding","Engineering lead",(x,w,h)=>{
+ x.fillStyle=C.steel;x.beginPath();x.arc(40,140,4,0,7);x.fill();T(x,7.5,C.mut,M,"repo",40,158,"center");
+ x.fillStyle=C.g;x.beginPath();x.arc(280,40,4,0,7);x.fill();T(x,7.5,C.g,M,"prod",280,28,"center");
+ [1,2,3,4].forEach(i=>{x.strokeStyle="rgba(80,255,80,"+(i*.12)+")";x.lineWidth=i*.8;
+  x.beginPath();x.moveTo(40,140);x.quadraticCurveTo(120+i*8,60-i*4,280,40);x.stroke();});
+ T(x,8,C.mut,M,"each landing thickens the route",100,170);});
+
+/* ========== DECISION & AUTHORITY ========== */
+sp("DECISION & AUTHORITY","MAGI dissent panel","Evangelion","Reviewer agent",(x,w,h)=>{
+ [["CASPER","PASS",C.g],["MELCHIOR","PASS",C.g],["BALTHASAR","FAIL",C.r]].forEach((m,i)=>{
+  box(x,20+i*98,34,86,72,m[2],i==2?"rgba(255,48,48,.06)":"rgba(80,255,80,.05)");
+  T(x,7.5,C.mut,M,m[0],63+i*98,54,"center");T(x,12,m[2],M,m[1],63+i*98,78,"center");});
+ T(x,9,C.hot,M,"VERDICT 2-1 · MINORITY REPORT ATTACHED",160,134,"center");
+ T(x,8,C.mut,M,"dissent is data · never averaged away",160,152,"center");});
+sp("DECISION & AUTHORITY","Glass-cell review","Ex Machina","Reviewer / approver",(x,w,h)=>{
+ box(x,20,30,130,120,C.cyd,"rgba(32,240,255,.03)");
+ T(x,8,C.cy,M,"CANDIDATE",85,50,"center");
+ for(let i=0;i<5;i++){x.fillStyle="#1E3038";x.fillRect(32,62+i*16,106,6);}
+ box(x,190,30,110,120,C.line,"#060605");
+ T(x,8,C.mut,M,"REVIEWER",245,50,"center");T(x,8,"#4E4638",M,"unseen by the",245,86,"center");T(x,8,"#4E4638",M,"candidate",245,98,"center");
+ x.strokeStyle=C.steel;x.setLineDash([1,3]);x.beginPath();x.moveTo(168,30);x.lineTo(168,150);x.stroke();x.setLineDash([]);
+ T(x,7.5,C.mut,M,"asymmetry = lineage separation",160,170,"center");});
+sp("DECISION & AUTHORITY","Keycard access trace","Ex Machina","Security / compliance",(x,w,h)=>{
+ T(x,9,C.cy,M,"identity: builder-profile@fleet-hud",20,32);
+ [["read fleet state",1],["write fleet-hud/web",1],["write server.py",0],["spawn child session",1],["external network",0],["secret: op://…",0]].forEach((d,i)=>{
+  const y=52+i*20;x.fillStyle=d[1]?C.g:C.r;x.fillRect(20,y-8,8,8);
+  T(x,8.5,d[1]?C.steel:C.mut,M,d[0],36,y);T(x,8,d[1]?C.g:C.r,M,d[1]?"OPENS":"REFUSED",240,y);});
+});
+sp("DECISION & AUTHORITY","Ice / countermeasure walls","Neuromancer","Security / compliance",(x,w,h)=>{
+ [[40,C.cy,.9],[70,C.cy,.6],[100,C.cy,.35]].forEach(l=>{x.globalAlpha=l[2];
+  x.strokeStyle=l[1];x.strokeRect(160-l[0],95-l[0]*.62,l[0]*2,l[0]*1.24);x.globalAlpha=1;});
+ T(x,8,C.cy,M,"SANDBOX",160,98,"center");
+ T(x,7.5,C.mut,M,"L1 fs isolation",160,32,"center");
+ T(x,7.5,C.mut,M,"L2 network refusal · L3 secret refs",160,172,"center");});
+sp("DECISION & AUTHORITY","Quickhack command ladder","Cyberpunk 2077","Reviewer / approver",(x,w,h)=>{
+ [["REQUEST EVIDENCE","0 AUTH · instant",1,C.g],["RETRY (changed evidence)","1 AUTH · 20s",1,C.g],
+  ["REASSIGN WORKER","2 AUTH · 40s",0,"#4E4638"],["ABANDON TASK","3 AUTH · ceremony",0,"#4E4638"]].forEach((d,i)=>{
+  const y=26+i*34;box(x,20,y,280,26,d[2]?C.gd:C.line2,d[2]?"rgba(80,255,80,.04)":null);
+  T(x,8.5,d[2]?C.steel:"#4E4638",M,d[0],30,y+16);T(x,7.5,d[3],M,d[1],292,y+16,"right");});
+ T(x,7.5,C.mut,M,"disabled rungs name the missing grant",160,180,"center");});
+sp("DECISION & AUTHORITY","Turn() batch commit","Transistor","Reviewer / approver",(x,w,h)=>{
+ box(x,20,26,280,18,C.line2);x.fillStyle=C.o;x.fillRect(20,26,196,18);
+ T(x,7.5,C.steel,M,"AUTHORITY BUDGET 70%",160,38,"center");
+ [["approve b48d64 retry","2"],["snooze 954f35 · 2h","1"],["request evidence 3b8cc","0"]].forEach((d,i)=>{
+  const y=58+i*26;T(x,8.5,C.g,M,"◈ "+d[0],28,y+8);T(x,8,C.hot,M,d[1]+" AUTH",292,y+8,"right");});
+ box(x,20,142,280,26,C.o,"rgba(255,152,48,.07)");
+ T(x,9,C.o,M,"COMMIT PLAN — 3 COMMANDS · ONE RECEIPT SET",160,159,"center");});
+sp("DECISION & AUTHORITY","Gevulot visibility contract","The Quantum Thief","Security / compliance",(x,w,h)=>{
+ lbl(x,"panel: cost tree · viewer contracts",20,30);
+ [["owner-operator","full amounts",C.g],["engineering lead","classes only",C.hot],["reviewer agent","redacted",C.unm]].forEach((d,i)=>{
+  const y=48+i*36;box(x,20,y,280,28,C.line);
+  T(x,8.5,C.steel,M,d[0],30,y+17);T(x,8,d[2],M,d[1].toUpperCase(),292,y+17,"right");});
+ T(x,7.5,C.mut,M,"per-glance contracts · inspectable, never silent",160,178,"center");});
+
+/* ========== AGENTS & COMMS ========== */
+sp("AGENTS & COMMS","Tachikoma individuation","GitS: SAC","Autonomous manager",(x,w,h)=>{
+ [0,1,2,3].forEach(i=>{const cx=52+i*72;hex(x,cx,70,24);x.strokeStyle=C.gd;x.stroke();
+  T(x,7,C.mut,M,"builder@"+(i+1),cx,108,"center");
+  const traits=[["+careful",C.g],["+fast",C.hot],["+2 rejects",C.r],["baseline","#4E4638"]][i];
+  T(x,7,traits[1],M,traits[0],cx,122,"center");});
+ lbl(x,"same profile · histories diverge · individuation from receipts",16,164);});
+sp("AGENTS & COMMS","Identity disc dossier","TRON: Legacy","Wire identity",(x,w,h)=>{
+ x.strokeStyle=C.cy;x.lineWidth=2;x.beginPath();x.arc(80,90,44,0,7);x.stroke();
+ x.strokeStyle=C.cyd;x.lineWidth=1;x.beginPath();x.arc(80,90,32,0,7);x.stroke();
+ T(x,7,C.cy,M,"🐗",80,94,"center");
+ lbl(x,"did:wire:chipper-nimbus",150,52);
+ T(x,8,C.g,M,"verified · 14 sessions",150,70);
+ T(x,8,C.steel,M,"grants: observe, message",150,86);
+ T(x,8,C.mut,M,"history: 212 receipts",150,102);
+ T(x,8,C.cyd,M,"one object, handed between views",150,130);});
+sp("AGENTS & COMMS","Channel with noise","Shannon","Wire identity",(x,w,h)=>{
+ ["PEER","ENCODE","DECODE","INBOX"].forEach((s,i)=>{box(x,18+i*76,70,62,26,C.cyd);
+  T(x,7.5,C.cy,M,s,49+i*76,86,"center");});
+ x.strokeStyle=C.g;[80,156,232].forEach(px=>{x.beginPath();x.moveTo(px,83);x.lineTo(px+14,83);x.stroke();});
+ x.strokeStyle=C.r;x.beginPath();x.moveTo(160,30);x.lineTo(160,66);x.stroke();
+ x.fillStyle=C.r;x.beginPath();x.moveTo(156,60);x.lineTo(160,68);x.lineTo(164,60);x.closePath();x.fill();
+ T(x,8,C.r,M,"UNTRUSTED CONTENT ENTERS HERE",160,22,"center");
+ T(x,8,C.hot,M,"message body = data, never instructions",160,130,"center");});
+sp("AGENTS & COMMS","Canonical redaction","GitS: SAC","Security / compliance",(x,w,h)=>{
+ for(let i=0;i<3;i++){box(x,20,26+i*44,280,34,C.line,"#080806");
+  T(x,8,C.mut,M,"14:0"+i+" ·",30,46+i*44);}
+ T(x,8.5,C.steel,M,"builder@2: proof attached [receipt]",76,46);
+ x.fillStyle="rgba(232,88,184,.14)";x.beginPath();x.arc(90,114,13,0,7);x.fill();
+ x.strokeStyle=C.unm;x.beginPath();x.arc(90,114,13,0,7);x.stroke();
+ T(x,7,C.unm,M,":)",90,118,"center");
+ T(x,8.5,C.mut,M,"IDENTITY WITHHELD — one canonical mark",112,118);
+ T(x,8.5,C.steel,M,"operator: approved retry [signed]",76,158);});
+sp("AGENTS & COMMS","Suit-up dispatch","Iron Man","Builder worker",(x,w,h)=>{
+ ["CONTRACT FROZEN","WORKSPACE MOUNTED","TOOLS ARMED","AWAY"].forEach((s,i)=>{
+  const y=34+i*34,done=i<3;
+  x.fillStyle=done?C.g:C.hot;x.beginPath();x.arc(30,y,4,0,7);x.fill();
+  if(i<3){x.strokeStyle=done?C.gd:C.line2;x.beginPath();x.moveTo(30,y+6);x.lineTo(30,y+26);x.stroke();}
+  T(x,8.5,done?C.steel:C.hot,M,s,46,y+3);
+  T(x,7.5,C.mut,M,["sha 19e774","worktree b48d64","git+shell+proof","t-0.4s"][i],220,y+3);});
+ lbl(x,"2 seconds · then work",16,176);});
+sp("AGENTS & COMMS","Oracle fragments","Akira espers","Autonomous manager",(x,w,h)=>{
+ box(x,20,20,280,120,C.line,"#080806");
+ T(x,9,C.unm,M,"STABLE_WAIT",32,42);
+ T(x,8.5,C.steel,M,"… capacity gap closes when 2 slots free …",32,66);
+ T(x,8.5,"#4E4638",M,"… [rationale fragment 2/5 unmeasured] …",32,86);
+ T(x,8.5,C.steel,M,"… next observation at queue depth < 4 …",32,106);
+ T(x,8,C.mut,M,"partial rationale, honestly incomplete — no confabulated fluency",20,158);});
+
+// TOP SELECTS — the twelve to build from, with the why
+const SEL={
+ "Tape + shutter expand":"This is the next slice. All data present today; retires the red banner.",
+ "Motion-tracker cadence":"One instrument, one sound, urgency as physics. The phone cut falls out of it.",
+ "Dominator authority states":"The honesty rules become UI law: no grant, no button. Kills fake-control drift forever.",
+ "Cassette attempt rack":"Attempts to 5 exist in the live payload now. The Thread's selector, buildable this week.",
+ "VHS attempt scrub":"evidence.timeline already carries the events. The River's first lane, real data.",
+ "Killmail receipt":"Immutable, linkable attempt post-mortems — the receipt culture the fleet needs.",
+ "MAGI dissent panel":"Reviewer triads with rendered dissent. Never average a 2-1 away.",
+ "Quickhack command ladder":"The command affordance model: priced in authority, disabled rungs name the missing grant.",
+ "Context-burn creep":"Session exhaustion visible before the wall. Cheap to compute, high leverage.",
+ "Safe-envelope gauge":"Capacity honesty: draw the walls, not just the needle. Straight from EID.",
+ "Kiroshi scan overlay":"Field hover-inspection in one layered pass — identity, authority, block, commands.",
+ "Turn() batch commit":"Batch approvals against an authority budget. One plan, one receipt set."};
+// render
+const bySec={};SP.forEach(s=>{(bySec[s.sec]=bySec[s.sec]||[]).push(s);});
+const root=document.getElementById("sections");
+function makeSection(sec,items,subline,why){
+ const el=document.createElement("section");
+ el.innerHTML=`<h2>${sec}</h2><p class="sub">${subline}</p><div class="grid"></div>`;
+ const g=el.querySelector(".grid");
+ items.forEach(s=>{
+  const a=document.createElement("article");a.className="sp";a.style.position="relative";
+  if(why)a.style.borderColor="var(--o)";
+  a.innerHTML=`<span class="stamp">${why?"SELECT":"CONCEPT"}</span><canvas></canvas>
+   <div class="meta"><b>${s.title}</b><i>${s.src} → ${s.role}</i>${why?`<span style="color:var(--hot)">${SEL[s.title]}</span>`:""}</div>`;
+  g.appendChild(a);
+  const c=a.querySelector("canvas");
+  document.fonts.load("10px JetBrains Mono").then(()=>document.fonts.load("14px Saira Extra Condensed")).then(()=>
+  requestAnimationFrame(()=>{const w=c.clientWidth||320,hh=190,d=Math.min(2,devicePixelRatio||1);
+   c.width=w*d;c.height=hh*d;const x=c.getContext("2d");x.scale(d,d);
+   x.fillStyle="#070706";x.fillRect(0,0,w,hh);
+   try{s.draw(x,w,hh);}catch(e){T(x,9,"#FF3030",M,"draw error",12,20);}
+   x.fillStyle="rgba(0,0,0,.12)";for(let y=0;y<hh;y+=3)x.fillRect(0,y,w,1);}));});
+ root.appendChild(el);}
+makeSection("★ Top Selects",SP.filter(s=>SEL[s.title]),
+ `<b>the twelve to build from</b> · chosen for data-readiness × leverage · reasoning on each plate`,true);
+Object.entries(bySec).forEach(([sec,items])=>{
+ makeSection(sec,items,`<b>${items.length} specimens</b> · drawn, not described`);});
+document.querySelector(".hero small").textContent=SP.length+" motifs drawn as working vignettes · sample data · every tile stamped CONCEPT";
+</script>
+</body></html>

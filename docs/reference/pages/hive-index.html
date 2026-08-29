@@ -1,0 +1,348 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<!-- Preserved from the published Claude artifact "Hive Index".
+     Source: https://claude.ai/code/artifact/828ce3b4-4d3c-4c8f-a0a2-a48d646d3f55
+     The artifact host frame runtime has been removed; nothing else is edited.
+     Self-contained apart from Google Fonts. -->
+</head>
+<body>
+<title>Hive Index</title>
+<style>
+:root{
+  --ground:#EDEFF1; --panel:#F7F8F9; --panel-2:#E3E7EA;
+  --ink:#16191C; --ink-2:#4A5257; --ink-3:#7C868C;
+  --rule:#CFD5D9; --rule-2:#DEE3E6;
+  --accent:#9E5A14; --accent-soft:#F0E2D2;
+  --ok:#2E7D4F; --warn:#9A7000; --crit:#A93227; --idle:#7C868C;
+  --mono:ui-monospace,SFMono-Regular,"SF Mono",Menlo,Consolas,monospace;
+  --sans:-apple-system,BlinkMacSystemFont,"Segoe UI",ui-sans-serif,sans-serif;
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){
+    --ground:#12161A; --panel:#191E23; --panel-2:#222A30;
+    --ink:#DFE5E9; --ink-2:#A3AEB5; --ink-3:#727D85;
+    --rule:#2B333A; --rule-2:#232B31;
+    --accent:#E09A4E; --accent-soft:#31251A;
+    --ok:#5DBE86; --warn:#D6AB3C; --crit:#E0705F; --idle:#727D85;
+  }
+}
+:root[data-theme="dark"]{
+  --ground:#12161A; --panel:#191E23; --panel-2:#222A30;
+  --ink:#DFE5E9; --ink-2:#A3AEB5; --ink-3:#727D85;
+  --rule:#2B333A; --rule-2:#232B31;
+  --accent:#E09A4E; --accent-soft:#31251A;
+  --ok:#5DBE86; --warn:#D6AB3C; --crit:#E0705F; --idle:#727D85;
+}
+*{box-sizing:border-box}
+body{
+  margin:0; background:var(--ground); color:var(--ink);
+  font-family:var(--sans); font-size:15px; line-height:1.55;
+  -webkit-font-smoothing:antialiased;
+}
+a{color:var(--accent)}
+.wrap{max-width:1180px; margin:0 auto; padding:0 24px 96px}
+
+/* ---- masthead ---- */
+header.mast{border-bottom:1px solid var(--rule); padding:40px 0 22px; margin-bottom:34px}
+.eyebrow{
+  font-family:var(--mono); font-size:11px; letter-spacing:.16em; text-transform:uppercase;
+  color:var(--ink-3); margin:0 0 14px;
+}
+h1{
+  font-family:var(--mono); font-weight:600; font-size:clamp(30px,5.2vw,46px);
+  letter-spacing:-.02em; margin:0 0 12px; text-wrap:balance;
+}
+.dek{margin:0; max-width:64ch; color:var(--ink-2); font-size:16px}
+.mastfacts{
+  display:flex; flex-wrap:wrap; gap:0 30px; margin-top:24px;
+  font-family:var(--mono); font-size:12.5px; color:var(--ink-2);
+}
+.mastfacts b{color:var(--ink); font-weight:600; font-variant-numeric:tabular-nums}
+
+/* ---- layout ---- */
+.cols{display:grid; grid-template-columns:172px 1fr; gap:44px; align-items:start}
+nav.rail{position:sticky; top:24px}
+nav.rail ol{list-style:none; margin:0; padding:0; display:flex; flex-direction:column; gap:2px}
+nav.rail a{
+  display:block; padding:6px 10px; border-radius:3px; text-decoration:none;
+  font-family:var(--mono); font-size:12px; color:var(--ink-2);
+  border-left:2px solid transparent;
+}
+nav.rail a:hover{background:var(--panel); color:var(--ink); border-left-color:var(--accent)}
+nav.rail a:focus-visible{outline:2px solid var(--accent); outline-offset:1px}
+
+section{margin-bottom:52px; scroll-margin-top:24px}
+h2{
+  font-family:var(--mono); font-size:13px; font-weight:600; letter-spacing:.1em;
+  text-transform:uppercase; color:var(--ink); margin:0 0 4px;
+  padding-bottom:9px; border-bottom:1px solid var(--rule);
+}
+.sub{margin:9px 0 18px; color:var(--ink-2); font-size:13.5px; max-width:72ch}
+
+/* ---- rows ---- */
+.rows{display:flex; flex-direction:column; gap:1px; background:var(--rule-2); border:1px solid var(--rule-2)}
+.row{
+  display:grid; grid-template-columns:1fr auto; gap:12px; align-items:center;
+  background:var(--panel); padding:11px 14px 11px 12px; border-left:3px solid var(--idle);
+}
+.row.is-ok{border-left-color:var(--ok)}
+.row.is-warn{border-left-color:var(--warn)}
+.row.is-crit{border-left-color:var(--crit)}
+.row.is-ref{border-left-color:var(--rule)}
+.row .name{font-family:var(--mono); font-size:13.5px; color:var(--ink)}
+.row .name a{text-decoration:none; border-bottom:1px solid var(--accent-soft)}
+.row .name a:hover{border-bottom-color:var(--accent)}
+.row .note{display:block; font-family:var(--sans); font-size:12.5px; color:var(--ink-2); margin-top:2px}
+.chip{
+  font-family:var(--mono); font-size:10.5px; letter-spacing:.09em; text-transform:uppercase;
+  padding:3px 7px; border-radius:2px; white-space:nowrap;
+  background:var(--panel-2); color:var(--ink-2);
+}
+.chip.ok{color:var(--ok)} .chip.warn{color:var(--warn)} .chip.crit{color:var(--crit)}
+
+/* ---- grid cards ---- */
+.grid{display:grid; grid-template-columns:repeat(auto-fill,minmax(215px,1fr)); gap:1px; background:var(--rule-2); border:1px solid var(--rule-2)}
+.cell{background:var(--panel); padding:13px 14px}
+.cell .k{font-family:var(--mono); font-size:13px; color:var(--ink)}
+.cell .v{font-family:var(--mono); font-size:11.5px; color:var(--ink-3); margin-top:3px; font-variant-numeric:tabular-nums}
+
+/* ---- meters ---- */
+.meter{height:5px; background:var(--panel-2); margin-top:7px; overflow:hidden}
+.meter i{display:block; height:100%; background:var(--accent)}
+.meter i.full{background:var(--crit)}
+
+/* ---- tables ---- */
+.scroll{overflow-x:auto}
+table{border-collapse:collapse; width:100%; font-family:var(--mono); font-size:12.5px}
+th,td{text-align:left; padding:8px 12px; border-bottom:1px solid var(--rule-2); white-space:nowrap}
+th{
+  font-size:10.5px; letter-spacing:.09em; text-transform:uppercase;
+  color:var(--ink-3); font-weight:600; border-bottom:1px solid var(--rule);
+}
+td.n{text-align:right; font-variant-numeric:tabular-nums}
+tbody tr:hover{background:var(--panel)}
+
+.callout{
+  border-left:3px solid var(--accent); background:var(--panel);
+  padding:13px 16px; font-size:13.5px; color:var(--ink-2);
+}
+.callout b{color:var(--ink)}
+footer{margin-top:56px; padding-top:18px; border-top:1px solid var(--rule); font-family:var(--mono); font-size:11.5px; color:var(--ink-3)}
+@media (max-width:760px){
+  .cols{grid-template-columns:1fr; gap:0}
+  nav.rail{position:static; margin-bottom:34px}
+  nav.rail ol{flex-direction:row; flex-wrap:wrap}
+}
+</style>
+
+<div class="wrap">
+<header class="mast">
+  <p class="eyebrow">fleet-hud &middot; foundry-boss &middot; host dell</p>
+  <h1>Hive Index</h1>
+  <p class="dek">Every surface the swarm has built, and which of them are actually live. Links marked <span class="chip ok">live</span> are reachable now on the tailnet. Everything else is source or reference.</p>
+  <div class="mastfacts">
+    <span><b>664</b> commits on build/v1</span>
+    <span><b>270</b> today</span>
+    <span><b>621</b> cards</span>
+    <span><b>154</b> timers</span>
+    <span><b>138</b> daemons</span>
+    <span><b>41,256</b> traces</span>
+    <span>snapshot <b>2026-08-18 10:30 PT</b></span>
+  </div>
+</header>
+
+<div class="cols">
+<nav class="rail" aria-label="Sections">
+  <ol>
+    <li><a href="#open">Open these</a></li>
+    <li><a href="#serving">Serving</a></li>
+    <li><a href="#engines">Engines</a></li>
+    <li><a href="#mesh">Sensor mesh</a></li>
+    <li><a href="#board">Board</a></li>
+    <li><a href="#theory">Theory set</a></li>
+    <li><a href="#source">Product source</a></li>
+    <li><a href="#tonight">Tonight's fixes</a></li>
+  </ol>
+</nav>
+
+<main>
+
+<section id="open">
+  <h2>Open these</h2>
+  <p class="sub">Eight skins render the same fleet state through different lenses. All served off port 8003 on the tailnet, all reachable right now.</p>
+  <div class="rows">
+    <div class="row is-ok"><span class="name"><a href="http://100.126.134.125:8003/?skin=console">console</a><span class="note">Default. Dense operator readout — cards, workers, engines in one screen.</span></span><span class="chip ok">live</span></div>
+    <div class="row is-ok"><span class="name"><a href="http://100.126.134.125:8003/?skin=console_focus">console_focus</a><span class="note">Console stripped to what is moving right now.</span></span><span class="chip ok">live</span></div>
+    <div class="row is-ok"><span class="name"><a href="http://100.126.134.125:8003/?skin=town">town</a><span class="note">The fleet as a place: workers as residents, lanes as streets.</span></span><span class="chip ok">live</span></div>
+    <div class="row is-ok"><span class="name"><a href="http://100.126.134.125:8003/?skin=pipeline">pipeline</a><span class="note">Cards by stage — plan, implement, critique, merge.</span></span><span class="chip ok">live</span></div>
+    <div class="row is-ok"><span class="name"><a href="http://100.126.134.125:8003/?skin=crew">crew</a><span class="note">Per-worker view: which bee holds which card, and for how long.</span></span><span class="chip ok">live</span></div>
+    <div class="row is-ok"><span class="name"><a href="http://100.126.134.125:8003/?skin=ticker">ticker</a><span class="note">Event stream. Built for a wall display.</span></span><span class="chip ok">live</span></div>
+    <div class="row is-ok"><span class="name"><a href="http://100.126.134.125:8003/?skin=delivery_ticker">delivery_ticker</a><span class="note">Ticker filtered to landings only — commits and merges.</span></span><span class="chip ok">live</span></div>
+    <div class="row is-ok"><span class="name"><a href="http://100.126.134.125:8003/?skin=raw">raw</a><span class="note">Unstyled state dump. The debugging skin.</span></span><span class="chip ok">live</span></div>
+  </div>
+  <p class="sub" style="margin-top:20px">Standalone pages and the JSON surface behind every skin:</p>
+  <div class="grid">
+    <div class="cell"><div class="k"><a href="http://100.126.134.125:8003/engines">/engines</a></div><div class="v">capacity per engine</div></div>
+    <div class="cell"><div class="k"><a href="http://100.126.134.125:8003/pulse">/pulse</a></div><div class="v">heartbeat history</div></div>
+    <div class="cell"><div class="k"><a href="http://100.126.134.125:8003/reach">/reach</a></div><div class="v">external reach scans</div></div>
+    <div class="cell"><div class="k"><a href="http://100.126.134.125:8003/healthz">/healthz</a></div><div class="v">liveness probe</div></div>
+    <div class="cell"><div class="k">/api/fleet</div><div class="v">whole-fleet state</div></div>
+    <div class="cell"><div class="k">/api/agents</div><div class="v">worker roster</div></div>
+    <div class="cell"><div class="k">/api/engines</div><div class="v">slots, queues, caps</div></div>
+    <div class="cell"><div class="k">/api/pipeline</div><div class="v">cards by stage</div></div>
+    <div class="cell"><div class="k">/api/economy</div><div class="v">token and slot spend</div></div>
+    <div class="cell"><div class="k">/api/sessions</div><div class="v">live agent sessions</div></div>
+    <div class="cell"><div class="k">/api/pulse</div><div class="v">heartbeat series</div></div>
+    <div class="cell"><div class="k">/api/mayor</div><div class="v">town-skin backing data</div></div>
+    <div class="cell"><div class="k">/api/peek</div><div class="v">worker log tail</div></div>
+    <div class="cell"><div class="k">/api/report</div><div class="v">delivery summary</div></div>
+    <div class="cell"><div class="k">/api/ask</div><div class="v">ask the fleet a question</div></div>
+  </div>
+</section>
+
+<section id="serving">
+  <h2>Serving</h2>
+  <p class="sub">What listens on dell, and whether anything is on the other end. The gap worth knowing about is Langfuse: the instance is healthy and receiving nothing.</p>
+  <div class="rows">
+    <div class="row is-ok"><span class="name">8003 &mdash; HUD origin<span class="note">The real server, bound 0.0.0.0. This is the port every link above uses.</span></span><span class="chip ok">http 200</span></div>
+    <div class="row is-warn"><span class="name">8004 &mdash; TLS front<span class="note">Maps <code>/</code> to port 9119 and only <code>/hud</code> to 8003. Probing 8004 root looks like an outage when the HUD is fine.</span></span><span class="chip warn">partial map</span></div>
+    <div class="row is-ok"><span class="name"><a href="https://dellpromax.taila93596.ts.net:3443/">3443 &mdash; Langfuse</a><span class="note">41,256 traces. The traced path is LiteLLM on :4000, which carries <code>success_callback: ["langfuse"]</code>. The full dell pool &mdash; 22 hermes profiles &mdash; was repointed onto it 2026-08-18. Verified end to end on two profiles' real configs: traces <code>015f8a5a</code> (bee5) and <code>c462d46b</code> (qa).</span></span><span class="chip ok">receiving</span></div>
+    <div class="row is-ok"><span class="name">4000 &mdash; LiteLLM front door<span class="note">The Langfuse seam. Routes <code>dot-backbone</code>, <code>vision</code>, <code>deepseek-v4-flash</code>, <code>mesh</code>, <code>ablit</code>, and <code>fleet-worker</code>. Tool-calling verified through it end to end.</span></span><span class="chip ok">serving</span></div>
+    <div class="row is-ok"><span class="name">3100 &mdash; Langfuse web (internal)<span class="note">Container port behind the 3443 proxy.</span></span><span class="chip ok">up</span></div>
+    <div class="row is-ok"><span class="name">8011 &mdash; vLLM (dell)<span class="note">The local inference engine. 32 slots.</span></span><span class="chip ok">serving</span></div>
+  </div>
+</section>
+
+<section id="engines">
+  <h2>Engines</h2>
+  <p class="sub">Four pools, three reachable. Every reachable pool is at zero free admissions with 76 requests queued behind them — the fleet is inference-bound, not idea-bound.</p>
+  <div class="scroll">
+  <table>
+    <thead><tr><th>pool</th><th>host</th><th>runtime</th><th class="n">cap</th><th class="n">running</th><th class="n">waiting</th><th class="n">free</th><th>utilization</th></tr></thead>
+    <tbody>
+      <tr><td>dell</td><td>localhost:8011</td><td>vLLM, util 0.86</td><td class="n">32</td><td class="n">32</td><td class="n">10</td><td class="n">0</td><td><div class="meter"><i class="full" style="width:100%"></i></div></td></tr>
+      <tr><td>gb10</td><td>100.91.57.17:8899</td><td>vLLM (gb10 + spark-472e, one cluster)</td><td class="n">16</td><td class="n">15</td><td class="n">25</td><td class="n">0</td><td><div class="meter"><i class="full" style="width:94%"></i></div></td></tr>
+      <tr><td>orin</td><td>100.75.218.21:8014</td><td>llama.cpp MoE, 2 slots &times; 65,536 tok</td><td class="n">2</td><td class="n">2</td><td class="n">0</td><td class="n">0</td><td><div class="meter"><i class="full" style="width:100%"></i></div></td></tr>
+      <tr><td>muse</td><td>100.75.218.21:8013</td><td>muse-glimmer</td><td class="n">0</td><td class="n">&mdash;</td><td class="n">&mdash;</td><td class="n">0</td><td><span class="chip crit">unreachable</span></td></tr>
+    </tbody>
+  </table>
+  </div>
+  <p class="sub" style="margin-top:16px">dell ran 12 concurrent sequences against a <code>max-num-seqs</code> of 32 &mdash; KV cache was 98.2% full with 56 requests queued and 804 preemptions, so admitted work was being evicted and recomputed. Raising <code>--gpu-memory-utilization</code> from 0.75 to 0.86 took KV blocks from 845 to 1063 and concurrency from 12 to 32, with preemptions at 2. <code>--kv-cache-dtype fp8</code> would have been the bigger win on paper and is a documented dead end on sm_120: no FLASH_ATTN path, so vLLM silently falls back to FlashInfer, whose vendored CCCL rejects this nvcc pairing &mdash; and it fails after <code>/health</code> already returns 200.</p>
+  <p class="sub" style="margin-top:16px">Orin ran 8 slots at 16,384 tokens each — below hermes' 64,000 minimum, so every card it took failed instantly. Dropping to <code>-np 2</code> gave 65,536 per slot and it started delivering.</p>
+</section>
+
+<section id="mesh">
+  <h2>Sensor mesh</h2>
+  <p class="sub">154 systemd timers. The families are not decoration — each one is a different way the hive notices something about itself.</p>
+  <div class="grid">
+    <div class="cell"><div class="k">reach</div><div class="v">36 timers &middot; external surface scans</div><div class="meter"><i style="width:100%"></i></div></div>
+    <div class="cell"><div class="k">sense</div><div class="v">20 timers &middot; internal state probes</div><div class="meter"><i style="width:56%"></i></div></div>
+    <div class="cell"><div class="k">organ</div><div class="v">15 timers &middot; host vitals: disk, thermal, load</div><div class="meter"><i style="width:42%"></i></div></div>
+    <div class="cell"><div class="k">hive</div><div class="v">7 timers &middot; spawn, watch, cadence</div><div class="meter"><i style="width:19%"></i></div></div>
+    <div class="cell"><div class="k">foundry</div><div class="v">6 timers &middot; beacon and roster</div><div class="meter"><i style="width:17%"></i></div></div>
+    <div class="cell"><div class="k">scar</div><div class="v">4 timers &middot; auto-commit, repair monitor</div><div class="meter"><i style="width:11%"></i></div></div>
+    <div class="cell"><div class="k">compound</div><div class="v">3 timers &middot; compounding pulse</div><div class="meter"><i style="width:8%"></i></div></div>
+    <div class="cell"><div class="k">meta / memory / converge</div><div class="v">6 timers &middot; reflection lanes</div><div class="meter"><i style="width:17%"></i></div></div>
+  </div>
+  <p class="sub" style="margin-top:20px">The load-bearing daemons, and whether their timer is armed:</p>
+  <div class="rows">
+    <div class="row is-ok"><span class="name">self-heal<span class="note">Unblocks, reclaims, cards outages. The one that keeps the loop alive — and the one most able to eat it.</span></span><span class="chip ok">active</span></div>
+    <div class="row is-ok"><span class="name">auto-merge<span class="note">Merges every ready branch into trunk, no gate. Cards conflicts for a worker to own.</span></span><span class="chip ok">active</span></div>
+    <div class="row is-ok"><span class="name">scoper<span class="note">Generates the work. This is what makes the loop autonomous rather than a queue I fill.</span></span><span class="chip ok">active</span></div>
+    <div class="row is-ok"><span class="name">db-medic<span class="note">Board integrity. Now refuses to replace a DB that passes integrity_check.</span></span><span class="chip ok">active</span></div>
+    <div class="row is-ok"><span class="name">meta-floor<span class="note">Safety floor: reverts a broken <code>bin/</code> and files a report. 93 cards filed means <code>bin/</code> broke 93 times.</span></span><span class="chip ok">active</span></div>
+    <div class="row is-ok"><span class="name">meta-merge &middot; hive-watch &middot; tender &middot; agy-lane &middot; reach-daemon &middot; scar-auto-commit<span class="note">Merge lanes, worker supervision, card tending, external reach, 5-minute checkpoint commits.</span></span><span class="chip ok">active</span></div>
+    <div class="row is-warn"><span class="name">hive-spawn &middot; metacog<span class="note">Timers report inactive — invoked by another lane rather than scheduled. Worth confirming the caller.</span></span><span class="chip warn">not scheduled</span></div>
+  </div>
+</section>
+
+<section id="board">
+  <h2>Board</h2>
+  <p class="sub">One hermes kanban board, <code>fleet-hud</code>, 607 cards. The scoper writes them; workers claim them; auto-merge lands them.</p>
+  <div class="grid">
+    <div class="cell"><div class="k">253</div><div class="v">done</div></div>
+    <div class="cell"><div class="k">71</div><div class="v">running</div></div>
+    <div class="cell"><div class="k">88</div><div class="v">ready</div></div>
+    <div class="cell"><div class="k">64</div><div class="v">todo</div></div>
+    <div class="cell"><div class="k">131</div><div class="v">blocked</div></div>
+    <div class="cell"><div class="k">464</div><div class="v">git branches</div></div>
+  </div>
+  <p class="sub" style="margin-top:16px">Card authorship is the autonomy test. Of the active cards: meta-floor 93, backlog-import 58, hive 16, hive-spawn 13, meta-merge 7, plus scoper, metacog, qa, archivist and refile. Cards authored by me: 18 of 223.</p>
+</section>
+
+<section id="theory">
+  <h2>Theory set</h2>
+  <p class="sub">Eight documents, 10,203 lines, on <code>build/v1</code> under <code>docs/</code>. Each carries a provenance header naming its position in the set. They are a <b>tiebreak, not a task source</b> — the planner reads them to settle a design argument, never to generate a deliverable.</p>
+  <div class="scroll">
+  <table>
+    <thead><tr><th>document</th><th class="n">lines</th><th>what it settles</th></tr></thead>
+    <tbody>
+      <tr><td>EOSV_SYNTHESIS.md</td><td class="n">1557</td><td>the through-line across the whole set</td></tr>
+      <tr><td>ANT_COLONIES_TO_ARTIFICIAL_ORGANISMS.md</td><td class="n">1776</td><td>biological precedent for stigmergic coordination</td></tr>
+      <tr><td>DESIGN_SPACE_AND_LADDER.md</td><td class="n">1542</td><td>where a given design sits, and what the next rung is</td></tr>
+      <tr><td>EASIM_SPEC.md</td><td class="n">2408</td><td>simulator design &mdash; specified, deliberately not built</td></tr>
+      <tr><td>ECOLOGICAL_AGENT_SYSTEMS.md</td><td class="n">958</td><td>the prospectus framing</td></tr>
+      <tr><td>COLONY_MECHANISMS.md</td><td class="n">870</td><td>the mechanism catalogue</td></tr>
+      <tr><td>COLONY_ROLES.md</td><td class="n">793</td><td>role differentiation among workers</td></tr>
+      <tr><td>EOSV_RESEARCH_PROGRAM.md</td><td class="n">299</td><td>open questions, ranked</td></tr>
+    </tbody>
+  </table>
+  </div>
+  <p class="sub" style="margin-top:16px">Nine more docs are operational rather than theoretical: <code>AGENT_FLEET_OS_V2.md</code> (4578 lines), <code>SPEC.md</code>, <code>BUILD.md</code>, <code>DEPLOY.md</code>, <code>PUSH.md</code>, <code>FLEET_TOWN_SPEC.md</code>, <code>DESIGN_BAR.md</code>, <code>UI-CONTRACT.md</code>, <code>VISION.md</code>.</p>
+</section>
+
+<section id="source">
+  <h2>Product source</h2>
+  <p class="sub">Two repos. <code>fleet-hud</code> is the product on trunk <code>build/v1</code>; <code>foundry-boss</code> is the supervisor on <code>main</code>.</p>
+  <div class="grid">
+    <div class="cell"><div class="k">29 modules</div><div class="v">fleet-hud/*.py</div></div>
+    <div class="cell"><div class="k">8 skins</div><div class="v">skins/ &mdash; one per lens</div></div>
+    <div class="cell"><div class="k">v2 design system</div><div class="v">tokens, density, semantic, components, reference</div></div>
+    <div class="cell"><div class="k">138 daemons</div><div class="v">foundry-boss/bin/</div></div>
+    <div class="cell"><div class="k">17 docs</div><div class="v">fleet-hud/docs/</div></div>
+    <div class="cell"><div class="k">664 commits</div><div class="v">build/v1, 270 today</div></div>
+  </div>
+  <p class="sub" style="margin-top:16px">Notable modules: <code>server.py</code> and <code>server_live.py</code> (serving), <code>driver.py</code> and <code>spawn.py</code> (worker control), <code>economy.py</code> (spend accounting), <code>hierarchy.py</code> and <code>hive_view.py</code> (structure), <code>telemetry.py</code>, <code>store.py</code>, <code>contracts.py</code>.</p>
+</section>
+
+<section id="tonight">
+  <h2>Tonight's fixes</h2>
+  <p class="sub">All of these were the same class of bug: a plausible proxy standing in for the thing it was meant to measure.</p>
+  <div class="rows">
+    <div class="row is-ok"><span class="name">meta-floor was reverting bin/ because recovery was working<span class="note">The floor under self-modification decided the recovery path was broken by grepping self-heal's <b>own stdout</b> for <code>traceback|command not found|syntax error|no such file</code> &mdash; but printing those strings while reporting a broken worker is exactly what self-heal does. At 3 hits it ran <code>git checkout $last -- bin/</code>, reverting every daemon in the fleet. 94 cards, 85 unresolved, effectively all <code>self-heal(3errs)</code>. This is also why hand-applied fixes kept vanishing from disk minutes after landing, and why <code>block --reason</code> came back after being fixed. Now counts only failures systemd reports about the unit.</span></span><span class="chip ok">root cause</span></div>
+    <div class="row is-ok"><span class="name">82 phantom cards closed<span class="note">Triaged by body: 83 carried only the <code>(Nerrs)</code> signal with no real defect; 2 were genuine and left open for the fleet. Board <code>ready</code> went 88 &rarr; 6, <code>done</code> 264 &rarr; 346.</span></span><span class="chip ok">cleared</span></div>
+    <div class="row is-ok"><span class="name">self-heal liveness &rarr; log mtime<span class="note">Was <code>pgrep -f "task $id"</code>. 63 worker logs were being written inside 10 minutes while pgrep found zero processes — so self-heal reclaimed live workers, stripping the assignee off one card 4 times in an hour while its log grew past 80KB. Now: a log touched inside 15 min means the worker is working.</span></span><span class="chip ok">fixed</span></div>
+    <div class="row is-ok"><span class="name">block reason is positional<span class="note"><code>block --reason</code> exits 2 with a usage dump, swallowed by <code>&gt;/dev/null</code> at all three call sites. So the "stop after 3 reclaims" cutoff never fired and the reclaim loop had no exit. Failure is now audible.</span></span><span class="chip ok">fixed</span></div>
+    <div class="row is-ok"><span class="name">HUD boot crash, 161 restarts<span class="note">A commit declared <code>skins/v2/reference.py</code> and <code>lint.py</code> in the package surface without shipping either. Dangling imports killed the server at boot. Imports removed; self-heal now re-probes after restart and cards the outage with the traceback.</span></span><span class="chip ok">fixed</span></div>
+    <div class="row is-ok"><span class="name">board DB corruption, 4 events<span class="note">Swapping a WAL-mode SQLite file while processes hold it open corrupts the replacement. db-medic now REINDEXes in place, refuses to replace a DB passing integrity_check, and prunes quarantines to the newest 3 (they had reached 25GB). Final repair with zero open handles: 867/867 rows recovered.</span></span><span class="chip ok">fixed</span></div>
+    <div class="row is-ok"><span class="name">metacog single-flight guard<span class="note">Keyed on <code>created_by</code> instead of <code>assignee</code>, so 10 writers ran concurrently under a one-writer lock.</span></span><span class="chip ok">fixed</span></div>
+    <div class="row is-ok"><span class="name">Orin slot geometry<span class="note">8 slots at 16,384 tokens, below hermes' 64,000 floor — every card failed on admission. <code>-np 2</code> gives 65,536 per slot.</span></span><span class="chip ok">fixed</span></div>
+    <div class="row is-ok"><span class="name">hive/ branch conflicts never carded<span class="note">The conflict-carding loop only walked <code>refs/heads/wt</code>. 34 commits sat stranded on <code>hive/</code> branches with nothing filed.</span></span><span class="chip ok">fixed</span></div>
+    <div class="row is-warn"><span class="name">a merge that would have deleted 136 daemons<span class="note">An old <code>hive/hand</code> branch was mid-merge into <code>main</code> with 27 unmerged paths, its incoming side deleting nearly all of <code>bin/</code>. The 5-minute auto-commit daemon concluded it with <code>git add -A</code>, which staged the on-disk files and so kept all 138. Correct outcome, reached by luck. Worth a guard.</span></span><span class="chip warn">survived</span></div>
+    <div class="row is-ok"><span class="name">Langfuse wired to the fleet<span class="note">It was never "receiving nothing" &mdash; 41,176 traces were already there, and LiteLLM had carried <code>success_callback: ["langfuse"]</code> with keys in its own <code>.env</code> all along. The real gap was that <b>nothing routed through LiteLLM</b>: all 51 hermes profiles pointed straight at :8011/:8899/:8014, so the one path with the callback was the one path nobody used. bee5&ndash;8 now route via :4000 under a <code>fleet-worker</code> alias, and a probe on bee5's real config landed trace <code>015f8a5a</code>.</span></span><span class="chip ok">wired</span></div>
+    <div class="row is-ok"><span class="name">dell concurrency 12 &rarr; 32<span class="note">util 0.75 &rarr; 0.86. KV blocks 845 &rarr; 1063, queue 56 &rarr; 10, preemptions 804 &rarr; 2. 0.92 was asked for and does not fit: the co-resident services (chatterbox, xtts, ltx, sunshine) hold 8,154 MiB, and 0.92 would have overcommitted the card.</span></span><span class="chip ok">fixed</span></div>
+    <div class="row is-ok"><span class="name">merge guard on the auto-commit daemon<span class="note">The daemon that concluded today's dangerous merge now refuses while <code>MERGE_HEAD</code>, a rebase, or unmerged index entries exist, leaving conflicts to auto-merge and meta-merge, which abort and card them. Proven on a modify-vs-delete conflict. Separately, <code>memory-sync.sh</code> guarded with <code>[ -d .git/MERGE_HEAD ]</code> &mdash; MERGE_HEAD is a file, so that test had never once fired.</span></span><span class="chip ok">fixed</span></div>
+    <div class="row is-ok"><span class="name">swallowed CLI failures now card themselves<span class="note">The reclaim spiral survived because a daemon's argparse rejection went into <code>/dev/null</code>, and a human reading the journal is what found it. <code>cli_failure_card.py</code> reads the journal instead, attributes each rejection to the emitting unit, and files one card per unit per hour. It caught two defects in itself during testing &mdash; including printing the very signature it greps for, which made it card self-heal every 60s.</span></span><span class="chip ok">fixed</span></div>
+    <div class="row is-ok"><span class="name">Langfuse expanded to the whole dell pool<span class="note">22 profiles on the traced path after the 4-profile slice held delivery for ~50 minutes. Every proxied profile verified to request a model LiteLLM actually serves (0 mismatches). Takes effect per worker spawn, so traces ramp as workers recycle.</span></span><span class="chip ok">wired</span></div>
+    <div class="row is-warn"><span class="name">gb10's 24 profiles still direct<span class="note">Untraced by choice &mdash; gb10's LiteLLM route (<code>deepseek-v4-flash</code>) already carries the majority of traced traffic from another caller, so the marginal gain is smaller and the blast radius larger.</span></span><span class="chip warn">next</span></div>
+  </div>
+</section>
+
+<div class="callout" style="margin-bottom:20px">
+  <b>Every root cause found today was a proxy.</b> Each one was a plausible stand-in for the thing it claimed to measure, and each was wrong in the same direction &mdash; confidently reporting a state that was not the case. Liveness read <em>process presence</em> where it needed <em>log mtime</em>. Daemon health read <em>the daemon's own stdout</em> where it needed <em>systemd's exit status</em>. Merge safety read <em>nothing</em> where it needed <em>MERGE_HEAD</em>. CLI success read <em>nothing</em>, because the exit code went to <code>/dev/null</code>.
+</div>
+
+<div class="callout">
+  <b>Reading this page in a year.</b> The links only resolve on the tailnet — <code>100.126.134.125</code> is dell. Counts are a 2026-08-18 09:30 PT snapshot of a system that writes ~270 commits a day, so treat every number as a shape, not a value. What should still be true: eight skins over one board, four engine pools, a scoper that writes its own work, and log mtime as the only liveness signal anyone should trust.
+</div>
+
+</main>
+</div>
+
+<footer>fleet-hud @ build/v1 &middot; foundry-boss @ main &middot; host dell &middot; snapshot 2026-08-18 09:30 PT</footer>
+</div>
+
+</body></html>

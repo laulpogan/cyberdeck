@@ -1,0 +1,1067 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<!-- Preserved from the published Claude artifact "Motion Is a Measurement".
+     Source: https://claude.ai/code/artifact/8c380322-9999-43d8-9ea0-8818c4e4eb46
+     The artifact host frame runtime has been removed; nothing else is edited.
+     Self-contained apart from Google Fonts. -->
+</head>
+<body>
+<title>Motion Is a Measurement</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;600&family=Saira+Extra+Condensed:wght@300;500;700&display=swap">
+<style>
+:root {
+  --void-base: #F4EBDD;
+  --void-warm: #F0E5D4;
+  --void-panel: #EADCC8;
+  --void-raised: #E0CFB7;
+  --amber: #924300;
+  --amber-dim: #733B14;
+  --amber-hot: #B94D00;
+  --amber-fill: rgba(146, 67, 0, 0.10);
+  --data: #166534;
+  --data-dim: #2F6B3B;
+  --data-faint: rgba(22, 101, 52, 0.08);
+  --data-fill: rgba(22, 101, 52, 0.12);
+  --wire: #006675;
+  --wire-dim: #315F66;
+  --wire-glow: rgba(0, 102, 117, 0.12);
+  --alert: #AD2117;
+  --alert-dim: #8F1D15;
+  --alert-hot: #A51D14;
+  --alert-fill: rgba(173, 33, 23, 0.13);
+  --warn: #715600;
+  --unknown: #960060;
+  --ink: #241A14;
+  --muted: #665448;
+  --faint: rgba(36, 26, 20, 0.07);
+  --line: rgba(36, 26, 20, 0.18);
+
+  --void: var(--void-base);
+  --panel: var(--void-panel);
+  --raised: var(--void-raised);
+  --sys: 'JetBrains Mono', ui-monospace, 'Cascadia Mono', Consolas, monospace;
+  --stamp: 'Saira Extra Condensed', 'Haettenschweiler', Impact, sans-serif;
+}
+:root:not([data-theme="light"]) {
+  @media (prefers-color-scheme: dark) { }
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+  --void-base: #000000;
+  --void-warm: #080807;
+  --void-panel: #0C0C0A;
+  --void-raised: #111110;
+  --amber: #FF9830;
+  --amber-dim: #C87020;
+  --amber-hot: #FFCC50;
+  --amber-fill: rgba(255, 152, 48, 0.08);
+  --data: #50FF50;
+  --data-dim: #30BB30;
+  --data-faint: rgba(80, 255, 80, 0.06);
+  --data-fill: rgba(80, 255, 80, 0.1);
+  --wire: #20F0FF;
+  --wire-dim: #10A0B0;
+  --wire-glow: rgba(32, 240, 255, 0.12);
+  --alert: #FF3030;
+  --alert-dim: #CC2020;
+  --alert-hot: #FF5050;
+  --alert-fill: rgba(255, 48, 48, 0.15);
+  --warn: #FFE820;
+  --unknown: #F030C0;
+  --ink: #D8D8D0;
+  --muted: #888880;
+  --faint: rgba(200, 200, 192, 0.06);
+  --line: rgba(200, 200, 192, 0.12);
+
+    --void: var(--void-base);
+    --panel: var(--void-panel);
+    --raised: var(--void-raised);
+  }
+}
+:root[data-theme="dark"] {
+  --void-base: #000000;
+  --void-warm: #080807;
+  --void-panel: #0C0C0A;
+  --void-raised: #111110;
+  --amber: #FF9830;
+  --amber-dim: #C87020;
+  --amber-hot: #FFCC50;
+  --amber-fill: rgba(255, 152, 48, 0.08);
+  --data: #50FF50;
+  --data-dim: #30BB30;
+  --data-faint: rgba(80, 255, 80, 0.06);
+  --data-fill: rgba(80, 255, 80, 0.1);
+  --wire: #20F0FF;
+  --wire-dim: #10A0B0;
+  --wire-glow: rgba(32, 240, 255, 0.12);
+  --alert: #FF3030;
+  --alert-dim: #CC2020;
+  --alert-hot: #FF5050;
+  --alert-fill: rgba(255, 48, 48, 0.15);
+  --warn: #FFE820;
+  --unknown: #F030C0;
+  --ink: #D8D8D0;
+  --muted: #888880;
+  --faint: rgba(200, 200, 192, 0.06);
+  --line: rgba(200, 200, 192, 0.12);
+
+  --void: var(--void-base);
+  --panel: var(--void-panel);
+  --raised: var(--void-raised);
+}
+
+
+:root {
+  --m-enter: 300ms;
+  --m-leave: 200ms;
+  --m-flash: 400ms;
+  --m-decay: 15s;
+  --m-pulse: 2400ms;
+  --m-step: 18ms;
+  --m-ease-out: cubic-bezier(0.2, 0, 0.13, 1);
+  --m-ease-in: cubic-bezier(0.7, 0, 1, 0.6);
+  --m-ease-loop: cubic-bezier(0.37, 0, 0.63, 1);
+}
+
+/* Operator response. These are the only transitions written in CSS rather
+   than driven from the runtime, because they have to survive the runtime
+   never loading -- an interface that stops responding to a hover when a
+   script fails to parse feels broken in a way a missing flourish does
+   not. */
+[data-motion="intent"] {
+  transition: opacity var(--m-enter) var(--m-ease-out),
+              color var(--m-enter) var(--m-ease-out),
+              border-color var(--m-enter) var(--m-ease-out),
+              background-color var(--m-leave) var(--m-ease-in);
+}
+
+/* The contact age, one shape on every deck. */
+.hv-contact { color:var(--muted); font-size:9px; letter-spacing:.14em; }
+.hv-contact[data-measured="0"] { color:var(--unknown); }
+
+/* A declared stillness is not a styling hook -- it exists so the tests and
+   the review scripts can see it -- but it does one useful thing: it wins
+   over anything that tries to animate it later. */
+[data-motion="still"] { animation: none !important; transition: none !important; }
+
+/* The operator asked for no motion, so there is none, and nothing is
+   half-faded waiting for a script to finish it. Every kind above rests at
+   the geometry Python already rendered, so switching motion off is not a
+   second design -- it is this page with the runtime never having run. */
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    --m-enter: 0ms; --m-leave: 0ms; --m-flash: 0ms;
+    --m-decay: 0ms; --m-pulse: 0ms; --m-step: 0ms;
+  }
+  [data-motion] { animation: none !important; transition: none !important; }
+}
+
+
+* { box-sizing: border-box; }
+body {
+  margin: 0; background: var(--void); color: var(--ink);
+  font-family: var(--sys); font-size: 12px; line-height: 1.65;
+  -webkit-font-smoothing: antialiased;
+}
+.wrap { max-width: 1140px; margin: 0 auto; padding: 0 20px 96px; }
+
+/* ------------------------------------------------------------ masthead */
+.mast { padding: 72px 0 40px; border-bottom: 1px solid var(--line); }
+.eyebrow {
+  font-family: var(--stamp); font-size: 13px; font-weight: 500;
+  letter-spacing: .42em; text-transform: uppercase; color: var(--wire);
+  margin: 0 0 18px;
+}
+h1 {
+  font-family: var(--stamp); font-weight: 700;
+  font-size: clamp(46px, 11vw, 118px); line-height: .84;
+  letter-spacing: -.005em; text-transform: uppercase;
+  margin: 0; text-wrap: balance; color: var(--ink);
+}
+h1 em { font-style: normal; color: var(--amber); }
+.lede {
+  margin: 26px 0 0; max-width: 62ch; font-size: 13px; color: var(--muted);
+}
+.lede strong { color: var(--ink); font-weight: 600; }
+
+/* --------------------------------------------------------------- rack */
+.rackbar {
+  position: sticky; top: 0; z-index: 20;
+  display: flex; flex-wrap: wrap; gap: 10px 18px; align-items: center;
+  padding: 12px 0; margin: 0 0 8px;
+  background: color-mix(in srgb, var(--void) 92%, transparent);
+  backdrop-filter: blur(6px);
+  border-bottom: 1px solid var(--line);
+}
+.rackbar b {
+  font-family: var(--stamp); letter-spacing: .3em; font-size: 12px;
+  color: var(--muted); text-transform: uppercase; font-weight: 500;
+}
+.rackbar .spacer { flex: 1 1 auto; }
+button.ctl {
+  font: inherit; font-size: 10px; letter-spacing: .18em;
+  text-transform: uppercase; cursor: pointer;
+  min-height: 34px; padding: 0 14px;
+  color: var(--wire); background: transparent;
+  border: 1px solid var(--wire-dim);
+  transition: background 200ms cubic-bezier(.7,0,1,.6),
+              color 300ms cubic-bezier(.2,0,.13,1);
+}
+button.ctl:hover, button.ctl:focus-visible {
+  background: var(--wire-glow); color: var(--ink);
+}
+button.ctl[aria-pressed="true"] { color: var(--unknown); border-color: var(--unknown); }
+button.ctl:focus-visible { outline: 2px solid var(--amber); outline-offset: 2px; }
+#state { font-size: 10px; letter-spacing: .16em; color: var(--muted); }
+#state b { color: var(--data); font-weight: 400; }
+#state[data-off="1"] b { color: var(--unknown); }
+
+/* ---------------------------------------------------------------- bays */
+.bay {
+  display: grid; gap: 18px;
+  padding: 34px 0; border-bottom: 1px solid var(--line);
+}
+.bay-head { display: grid; gap: 6px; }
+/* Quiet, but a marker you can actually find. At --raised it was one
+   shade off the ground in dark and invisible in both. */
+.bay-ix {
+  font-family: var(--stamp); font-size: 44px; line-height: .8;
+  font-weight: 700; color: var(--muted); opacity: .38;
+  letter-spacing: -.02em;
+}
+.bay h3 {
+  font-family: var(--stamp); font-weight: 500; font-size: 30px;
+  letter-spacing: .2em; text-transform: uppercase; margin: -34px 0 0 56px;
+  color: var(--amber);
+}
+.bay-q { margin: 0 0 0 56px; font-size: 13px; color: var(--ink); max-width: 60ch; }
+.bay-ev {
+  margin: 2px 0 0 56px; font-size: 10px; letter-spacing: .1em;
+  color: var(--muted);
+}
+.bay-ev::before { content: "NEEDS "; color: var(--wire-dim); }
+.bay-note { margin: 0; max-width: 74ch; font-size: 12px; color: var(--muted); }
+.bay-note em { color: var(--ink); font-style: normal; }
+
+.bay-pair { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+@media (max-width: 760px) { .bay-pair { grid-template-columns: 1fr; } }
+.cell { margin: 0; display: grid; gap: 0; border: 1px solid var(--line); }
+.cell figcaption {
+  padding: 7px 12px; border-bottom: 1px solid var(--line);
+  background: var(--panel);
+  font-size: 9px; letter-spacing: .22em; color: var(--muted);
+}
+.cell[data-side="none"] figcaption { color: var(--unknown); }
+.reasons {
+  list-style: none; margin: 0; padding: 10px 12px 12px;
+  display: grid; gap: 5px;
+  border-top: 1px dashed var(--line); background: var(--panel);
+}
+.reasons li {
+  font-size: 9.5px; letter-spacing: .09em; color: var(--unknown);
+  display: flex; gap: 7px; align-items: baseline;
+}
+.reasons li::before {
+  content: "STILL"; flex: none;
+  font-size: 8px; letter-spacing: .2em; color: var(--muted);
+}
+.reasons:empty { display: none; }
+
+.show-wall { color: var(--data); max-width: 100%; height: auto; }
+.show-wall.show-dead { color: var(--unknown); }
+.stage svg { max-width: 100%; height: auto; }
+.stage .dc-corridorgram { color: var(--alert); }
+.stage .og-strandgram { color: var(--unknown); }
+.stage .fd-radargram { color: var(--wire); }
+.stage .fd-radargram .fd-blip { color: var(--data); }
+.stage .fd-nosweep { color: var(--unknown); }
+.stage .dc-doorframe[data-state="not_reached"],
+.stage .og-route[data-delivered="0"] { color: var(--unknown); }
+
+.cell .stage {
+  padding: 22px 16px; min-height: 104px;
+  display: flex; flex-wrap: wrap; gap: 10px;
+  align-items: center; align-content: center;
+  background: var(--raised);
+}
+
+/* ------------------------------------------------------- the specimens */
+.chip {
+  display: inline-flex; align-items: baseline; gap: 7px;
+  padding: 7px 11px; border: 1px solid var(--wire-dim);
+  color: var(--wire); font-size: 11px; letter-spacing: .1em;
+  background: var(--wire-glow);
+}
+.chip i { font-style: normal; font-size: 9px; color: var(--muted); }
+.refused {
+  color: var(--unknown); border-color: var(--unknown);
+  border-style: dashed; background: transparent;
+}
+.refused .why::before { content: attr(data-why); }
+.pip {
+  display: block; width: 13px; height: 15px;
+  clip-path: polygon(50% 0, 100% 25%, 100% 75%, 50% 100%, 0 75%, 0 25%);
+  background: var(--data);
+}
+.meter {
+  display: grid; gap: 4px; width: 100%; max-width: 210px;
+}
+.meter > i {
+  display: block; height: 11px; width: 100%;
+  transform-origin: left center;
+  background: var(--amber); opacity: .55;
+  border-right: 2px solid var(--amber); box-sizing: border-box;
+}
+.meter { border: 0; padding: 0; }
+.meter > em {
+  font-style: normal; font-size: 9px; letter-spacing: .14em;
+  color: var(--muted);
+}
+.meter.refused > i { background: transparent; border-right: 0;
+  transform: none !important;
+  border: 1px dashed var(--unknown); }
+.meter.refused > em { color: var(--unknown); }
+.clock {
+  display: grid; gap: 2px; padding: 8px 14px;
+  border-left: 2px solid var(--data);
+}
+.clock > b {
+  font-weight: 400; font-size: 19px; color: var(--data);
+  font-variant-numeric: tabular-nums; letter-spacing: .02em;
+}
+.clock > i {
+  font-style: normal; font-size: 9px; letter-spacing: .18em;
+  color: var(--muted);
+}
+.clock.refused { border-left-color: var(--unknown); }
+.clock.refused > b { color: var(--unknown); }
+.beat {
+  display: inline-block; padding: 8px 13px;
+  border: 1px solid var(--amber); color: var(--amber);
+  font-size: 11px; letter-spacing: .16em; background: var(--amber-fill);
+}
+.beat.refused { color: var(--unknown); border-color: var(--unknown);
+  border-style: dashed; background: transparent; }
+.track {
+  display: block; width: 100%; max-width: 320px; height: 12px;
+  border: 1px solid var(--line); background: var(--void);
+}
+.track > i {
+  display: block; height: 100%; width: 100%;
+  transform-origin: left center; background: var(--wire); opacity: .42;
+  border-right: 2px solid var(--wire); box-sizing: border-box;
+}
+.track.refused { border-style: dashed; border-color: var(--unknown); }
+.track-cap {
+  flex-basis: 100%; font-size: 9px; letter-spacing: .16em; color: var(--muted);
+}
+.track.refused ~ .track-cap { color: var(--unknown); }
+button.verb, span.verb {
+  font: inherit; font-size: 10px; letter-spacing: .18em;
+  min-height: 34px; padding: 0 15px; cursor: pointer;
+  color: var(--amber); background: var(--amber-fill);
+  border: 1px solid var(--amber-dim);
+}
+button.verb:hover, button.verb:focus-visible {
+  color: var(--amber-hot); border-color: var(--amber-hot);
+  background: transparent;
+}
+button.verb:focus-visible { outline: 2px solid var(--wire); outline-offset: 2px; }
+span.verb.refused { cursor: not-allowed; }
+
+/* ------------------------------------------------------------- closing */
+.close { padding: 44px 0 0; display: grid; gap: 26px; }
+.close h2 {
+  font-family: var(--stamp); font-weight: 500; font-size: 26px;
+  letter-spacing: .22em; text-transform: uppercase; margin: 0;
+  color: var(--wire);
+}
+.scroll { overflow-x: auto; }
+table { border-collapse: collapse; width: 100%; min-width: 560px; font-size: 11px; }
+th, td { text-align: left; padding: 9px 12px; border-bottom: 1px solid var(--line); }
+th { font-size: 9px; letter-spacing: .2em; color: var(--muted); font-weight: 400;
+     text-transform: uppercase; }
+td.n { font-variant-numeric: tabular-nums; }
+tr.pick td { color: var(--data); }
+tr.pick td:first-child::after { content: " ◂ CHOSEN"; color: var(--muted); font-size: 9px; }
+.foot { font-size: 10px; letter-spacing: .1em; color: var(--muted);
+        border-top: 1px solid var(--line); padding-top: 20px; }
+
+@media (prefers-reduced-motion: reduce) {
+  button.ctl, button.verb { transition: none; }
+}
+</style>
+
+<div class="wrap">
+<header class="mast">
+  <p class="eyebrow">Hive · the motion vocabulary</p>
+  <h1>Motion is a<br><em>measurement</em></h1>
+  <p class="lede">An operations console that never moves makes you check
+    whether it has frozen, and the checking is the cost. But motion is the
+    easiest lie a dashboard can tell — a sweep reads as scanning, a pulse
+    reads as traffic, and a <code>setInterval</code> will draw both over a
+    payload that has not changed since Tuesday.
+    <strong>So every animation here is a function of a number some producer
+    actually supplied, and when the number is missing the animation is
+    refused rather than defaulted.</strong>
+    Nine kinds, each shown beside its own refusal. Everything on this page
+    runs the engine and the runtime the product ships.</p>
+</header>
+
+<div class="rackbar">
+  <b>The rack</b>
+  <span id="state" data-off="0">MOTION <b>RUNNING</b> · <span id="count">0</span> ANIMATIONS · <span id="marks">0</span> MARKS</span>
+  <span class="spacer"></span>
+  <button type="button" class="ctl" id="replay">Replay entrances</button>
+  <button type="button" class="ctl" id="kill" aria-pressed="false">Motion off</button>
+</div>
+
+
+<section class="bay" id="bay-arrive">
+  <header class="bay-head">
+    <span class="bay-ix">A</span>
+    <h3>ARRIVE</h3>
+    <p class="bay-q">Did this change, and does anybody know when?</p>
+    <code class="bay-ev">an observed timestamp</code>
+  </header>
+  <div class="bay-pair">
+    <figure class="cell" data-side="has">
+      <figcaption><b>EVIDENCE PRESENT</b></figcaption>
+      <div class="stage"><span class="chip" data-motion="arrive" data-age="2">t-cred</span><span class="chip" data-motion="arrive" data-age="5">t-profile</span><span class="chip" data-motion="arrive" data-age="9">t-sweep</span></div>
+    </figure>
+    <figure class="cell" data-side="none">
+      <figcaption><b>EVIDENCE ABSENT</b></figcaption>
+      <div class="stage"><span class="chip refused" data-motion="still" data-still-reason="no change was timestamped">t-cred</span><span class="chip refused" data-motion="still" data-still-reason="no change was timestamped">t-profile</span><span class="chip refused" data-motion="still" data-still-reason="no change was timestamped">t-sweep</span></div>
+      <ul class="reasons" aria-label="Why this is still"></ul>
+    </figure>
+  </div>
+  <p class="bay-note">Things that changed enter. Things that did not, do not move — so movement carries the whole signal of <em>look here</em>. &ldquo;It probably just changed&rdquo; would fire on every reload and teach an operator that movement means nothing.</p>
+</section>
+<section class="bay" id="bay-decay">
+  <header class="bay-head">
+    <span class="bay-ix">B</span>
+    <h3>DECAY</h3>
+    <p class="bay-q">How old is this, really?</p>
+    <code class="bay-ev">a measured age against a stated window</code>
+  </header>
+  <div class="bay-pair">
+    <figure class="cell" data-side="has">
+      <figcaption><b>EVIDENCE PRESENT</b></figcaption>
+      <div class="stage"><span class="chip" data-motion="decay" data-decay="0.083">s-incident <i>1s old</i></span><span class="chip" data-motion="decay" data-decay="0.333">s-sibling <i>4s old</i></span><span class="chip" data-motion="decay" data-decay="0.75">s-quiet <i>9s old</i></span></div>
+    </figure>
+    <figure class="cell" data-side="none">
+      <figcaption><b>EVIDENCE ABSENT</b></figcaption>
+      <div class="stage"><span class="chip refused" data-motion="still" data-still-reason="age was not measured">s-incident <i>age unknown</i></span></div>
+      <ul class="reasons" aria-label="Why this is still"></ul>
+    </figure>
+  </div>
+  <p class="bay-note">The fade is the age. A value measured nine seconds into a twelve second window arrives three quarters settled — you can read staleness off the motion before you read the number. Past the window it is simply old, and old values sit still.</p>
+</section>
+<section class="bay" id="bay-count">
+  <header class="bay-head">
+    <span class="bay-ix">C</span>
+    <h3>COUNT</h3>
+    <p class="bay-q">How many of these are there?</p>
+    <code class="bay-ev">an index inside a real count</code>
+  </header>
+  <div class="bay-pair">
+    <figure class="cell" data-side="has">
+      <figcaption><b>EVIDENCE PRESENT</b></figcaption>
+      <div class="stage"><svg class="hv-draw show-wall" viewBox="0 0 170.2 36.92" width="578.68" height="125.52" preserveAspectRatio="xMinYMid meet" role="img" aria-label="Fifty-four counted cells revealing in the order the board was counted."><defs><pattern id="hive-hatch-unmeasured" width="6" height="6" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><line x1="0" y1="0" x2="0" y2="6" stroke="currentColor" stroke-width="1.4" opacity=".55"/></pattern><pattern id="hive-scanlines" width="3" height="3" patternUnits="userSpaceOnUse"><rect width="3" height="1" fill="currentColor" opacity=".14"/></pattern></defs><polygon points="9.7,7.8 5.2,10.4 0.7,7.8 0.7,2.6 5.2,0 9.7,2.6" fill="none" stroke="currentColor" stroke-width="0.8" opacity=".34" data-motion="count" data-index="0" data-total="54"/><polygon points="19.1,13.1 14.6,15.7 10.1,13.1 10.1,7.9 14.6,5.3 19.1,7.9" fill="none" stroke="currentColor" stroke-width="0.8" opacity=".34" data-motion="count" data-index="1" data-total="54"/><polygon points="28.5,7.8 24,10.4 19.5,7.8 19.5,2.6 24,0 28.5,2.6" fill="none" stroke="currentColor" stroke-width="0.8" opacity=".34" data-motion="count" data-index="2" data-total="54"/><polygon points="37.9,13.1 33.4,15.7 28.9,13.1 28.9,7.9 33.4,5.3 37.9,7.9" fill="none" stroke="currentColor" stroke-width="0.8" opacity=".34" data-motion="count" data-index="3" data-total="54"/><polygon points="47.3,7.8 42.8,10.4 38.3,7.8 38.3,2.6 42.8,0 47.3,2.6" fill="currentColor" stroke="currentColor" stroke-width="1.5" opacity=".85" class="hv-bleed" data-motion="count" data-index="4" data-total="54"/><polygon points="56.7,13.1 52.2,15.7 47.7,13.1 47.7,7.9 52.2,5.3 56.7,7.9" fill="none" stroke="currentColor" stroke-width="0.8" opacity=".34" data-motion="count" data-index="5" data-total="54"/><polygon points="66.1,7.8 61.6,10.4 57.1,7.8 57.1,2.6 61.6,0 66.1,2.6" fill="none" stroke="currentColor" stroke-width="0.8" opacity=".34" data-motion="count" data-index="6" data-total="54"/><polygon points="75.5,13.1 71,15.7 66.5,13.1 66.5,7.9 71,5.3 75.5,7.9" fill="none" stroke="currentColor" stroke-width="0.8" opacity=".34" data-motion="count" data-index="7" data-total="54"/><polygon points="84.9,7.8 80.4,10.4 75.9,7.8 75.9,2.6 80.4,0 84.9,2.6" fill="none" stroke="currentColor" stroke-width="0.8" opacity=".34" data-motion="count" data-index="8" data-total="54"/><polygon points="94.3,13.1 89.8,15.7 85.3,13.1 85.3,7.9 89.8,5.3 94.3,7.9" fill="none" stroke="currentColor" stroke-width="0.8" opacity=".34" data-motion="count" data-index="9" data-total="54"/><polygon points="103.7,7.8 99.2,10.4 94.7,7.8 94.7,2.6 99.2,0 103.7,2.6" fill="none" stroke="currentColor" stroke-width="0.8" opacity=".34" data-motion="count" data-index="10" data-total="54"/><polygon points="113.1,13.1 108.6,15.7 104.1,13.1 104.1,7.9 108.6,5.3 113.1,7.9" fill="currentColor" stroke="currentColor" stroke-width="1.5" opacity=".85" class="hv-bleed" data-motion="count" data-index="11" data-total="54"/><polygon points="122.5,7.8 118,10.4 113.5,7.8 113.5,2.6 118,0 122.5,2.6" fill="currentColor" stroke="currentColor" stroke-width="1.5" opacity=".85" class="hv-bleed" data-motion="count" data-index="12" data-total="54"/><polygon points="131.9,13.1 127.4,15.7 122.9,13.1 122.9,7.9 127.4,5.3 131.9,7.9" fill="none" stroke="currentColor" stroke-width="0.8" opacity=".34" data-motion="count" data-index="13" data-total="54"/><polygon points="141.3,7.8 136.8,10.4 132.3,7.8 132.3,2.6 136.8,0 141.3,2.6" fill="none" stroke="currentColor" stroke-width="0.8" opacity=".34" data-motion="count" data-index="14" data-total="54"/><polygon points="150.7,13.1 146.2,15.7 141.7,13.1 141.7,7.9 146.2,5.3 150.7,7.9" fill="none" stroke="currentColor" stroke-width="0.8" opacity=".34" data-motion="count" data-index="15" data-total="54"/><polygon points="160.1,7.8 155.6,10.4 151.1,7.8 151.1,2.6 155.6,0 160.1,2.6" fill="none" stroke="currentColor" stroke-width="0.8" opacity=".34" data-motion="count" data-index="16" data-total="54"/><polygon points="169.5,13.1 165,15.7 160.5,13.1 160.5,7.9 165,5.3 169.5,7.9" fill="none" stroke="currentColor" stroke-width="0.8" opacity=".34" data-motion="count" data-index="17" data-total="54"/><polygon points="9.7,18.41 5.2,21.01 0.7,18.41 0.7,13.21 5.2,10.61 9.7,13.21" fill="none" stroke="currentColor" stroke-width="0.8" opacity=".34" data-motion="count" data-index="18" data-total="54"/><polygon points="19.1,23.71 14.6,26.31 10.1,23.71 10.1,18.51 14.6,15.91 19.1,18.51" fill="none" stroke="currentColor" stroke-width="0.8" opacity=".34" data-motion="count" data-index="19" data-total="54"/><polygon points="28.5,18.41 24,21.01 19.5,18.41 19.5,13.21 24,10.61 28.5,13.21" fill="none" stroke="currentColor" stroke-width="0.8" opacity=".34" data-motion="count" data-index="20" data-total="54"/><polygon points="37.9,23.71 33.4,26.31 28.9,23.71 28.9,18.51 33.4,15.91 37.9,18.51" fill="none" stroke="currentColor" stroke-width="0.8" opacity=".34" data-motion="count" data-index="21" data-total="54"/><polygon points="47.3,18.41 42.8,21.01 38.3,18.41 38.3,13.21 42.8,10.61 47.3,13.21" fill="none" stroke="currentColor" stroke-width="0.8" opacity=".34" data-motion="count" data-index="22" data-total="54"/><polygon points="56.7,23.71 52.2,26.31 47.7,23.71 47.7,18.51 52.2,15.91 56.7,18.51" fill="none" stroke="currentColor" stroke-width="0.8" opacity=".34" data-motion="count" data-index="23" data-total="54"/><polygon points="66.1,18.41 61.6,21.01 57.1,18.41 57.1,13.21 61.6,10.61 66.1,13.21" fill="none" stroke="currentColor" stroke-width="0.8" opacity=".34" data-motion="count" data-index="24" data-total="54"/><polygon points="75.5,23.71 71,26.31 66.5,23.71 66.5,18.51 71,15.91 75.5,18.51" fill="none" stroke="currentColor" stroke-width="0.8" opacity=".34" data-motion="count" data-index="25" data-total="54"/><polygon points="84.9,18.41 80.4,21.01 75.9,18.41 75.9,13.21 80.4,10.61 84.9,13.21" fill="none" stroke="currentColor" stroke-width="0.8" opacity=".34" data-motion="count" data-index="26" data-total="54"/><polygon points="94.3,23.71 89.8,26.31 85.3,23.71 85.3,18.51 89.8,15.91 94.3,18.51" fill="currentColor" stroke="currentColor" stroke-width="1.5" opacity=".85" class="hv-bleed" data-motion="count" data-index="27" data-total="54"/><polygon points="103.7,18.41 99.2,21.01 94.7,18.41 94.7,13.21 99.2,10.61 103.7,13.21" fill="none" stroke="currentColor" stroke-width="0.8" opacity=".34" data-motion="count" data-index="28" data-total="54"/><polygon points="113.1,23.71 108.6,26.31 104.1,23.71 104.1,18.51 108.6,15.91 113.1,18.51" fill="none" stroke="currentColor" stroke-width="0.8" opacity=".34" data-motion="count" data-index="29" data-total="54"/><polygon points="122.5,18.41 118,21.01 113.5,18.41 113.5,13.21 118,10.61 122.5,13.21" fill="none" stroke="currentColor" stroke-width="0.8" opacity=".34" data-motion="count" data-index="30" data-total="54"/><polygon points="131.9,23.71 127.4,26.31 122.9,23.71 122.9,18.51 127.4,15.91 131.9,18.51" fill="none" stroke="currentColor" stroke-width="0.8" opacity=".34" data-motion="count" data-index="31" data-total="54"/><polygon points="141.3,18.41 136.8,21.01 132.3,18.41 132.3,13.21 136.8,10.61 141.3,13.21" fill="none" stroke="currentColor" stroke-width="0.8" opacity=".34" data-motion="count" data-index="32" data-total="54"/><polygon points="150.7,23.71 146.2,26.31 141.7,23.71 141.7,18.51 146.2,15.91 150.7,18.51" fill="none" stroke="currentColor" stroke-width="0.8" opacity=".34" data-motion="count" data-index="33" data-total="54"/><polygon points="160.1,18.41 155.6,21.01 151.1,18.41 151.1,13.21 155.6,10.61 160.1,13.21" fill="none" stroke="currentColor" stroke-width="0.8" opacity=".34" data-motion="count" data-index="34" data-total="54"/><polygon points="169.5,23.71 165,26.31 160.5,23.71 160.5,18.51 165,15.91 169.5,18.51" fill="none" stroke="currentColor" stroke-width="0.8" opacity=".34" data-motion="count" data-index="35" data-total="54"/><polygon points="9.7,29.01 5.2,31.61 0.7,29.01 0.7,23.81 5.2,21.21 9.7,23.81" fill="none" stroke="currentColor" stroke-width="0.8" opacity=".34" data-motion="count" data-index="36" data-total="54"/><polygon points="19.1,34.32 14.6,36.92 10.1,34.32 10.1,29.12 14.6,26.52 19.1,29.12" fill="none" stroke="currentColor" stroke-width="0.8" opacity=".34" data-motion="count" data-index="37" data-total="54"/><polygon points="28.5,29.01 24,31.61 19.5,29.01 19.5,23.81 24,21.21 28.5,23.81" fill="none" stroke="currentColor" stroke-width="0.8" opacity=".34" data-motion="count" data-index="38" data-total="54"/><polygon points="37.9,34.32 33.4,36.92 28.9,34.32 28.9,29.12 33.4,26.52 37.9,29.12" fill="none" stroke="currentColor" stroke-width="0.8" opacity=".34" data-motion="count" data-index="39" data-total="54"/><polygon points="47.3,29.01 42.8,31.61 38.3,29.01 38.3,23.81 42.8,21.21 47.3,23.81" fill="none" stroke="currentColor" stroke-width="0.8" opacity=".34" data-motion="count" data-index="40" data-total="54"/><polygon points="56.7,34.32 52.2,36.92 47.7,34.32 47.7,29.12 52.2,26.52 56.7,29.12" fill="currentColor" stroke="currentColor" stroke-width="1.5" opacity=".85" class="hv-bleed" data-motion="count" data-index="41" data-total="54"/><polygon points="66.1,29.01 61.6,31.61 57.1,29.01 57.1,23.81 61.6,21.21 66.1,23.81" fill="none" stroke="currentColor" stroke-width="0.8" opacity=".34" data-motion="count" data-index="42" data-total="54"/><polygon points="75.5,34.32 71,36.92 66.5,34.32 66.5,29.12 71,26.52 75.5,29.12" fill="none" stroke="currentColor" stroke-width="0.8" opacity=".34" data-motion="count" data-index="43" data-total="54"/><polygon points="84.9,29.01 80.4,31.61 75.9,29.01 75.9,23.81 80.4,21.21 84.9,23.81" fill="none" stroke="currentColor" stroke-width="0.8" opacity=".34" data-motion="count" data-index="44" data-total="54"/><polygon points="94.3,34.32 89.8,36.92 85.3,34.32 85.3,29.12 89.8,26.52 94.3,29.12" fill="none" stroke="currentColor" stroke-width="0.8" opacity=".34" data-motion="count" data-index="45" data-total="54"/><polygon points="103.7,29.01 99.2,31.61 94.7,29.01 94.7,23.81 99.2,21.21 103.7,23.81" fill="none" stroke="currentColor" stroke-width="0.8" opacity=".34" data-motion="count" data-index="46" data-total="54"/><polygon points="113.1,34.32 108.6,36.92 104.1,34.32 104.1,29.12 108.6,26.52 113.1,29.12" fill="none" stroke="currentColor" stroke-width="0.8" opacity=".34" data-motion="count" data-index="47" data-total="54"/><polygon points="122.5,29.01 118,31.61 113.5,29.01 113.5,23.81 118,21.21 122.5,23.81" fill="none" stroke="currentColor" stroke-width="0.8" opacity=".34" data-motion="count" data-index="48" data-total="54"/><polygon points="131.9,34.32 127.4,36.92 122.9,34.32 122.9,29.12 127.4,26.52 131.9,29.12" fill="none" stroke="currentColor" stroke-width="0.8" opacity=".34" data-motion="count" data-index="49" data-total="54"/><polygon points="141.3,29.01 136.8,31.61 132.3,29.01 132.3,23.81 136.8,21.21 141.3,23.81" fill="none" stroke="currentColor" stroke-width="0.8" opacity=".34" data-motion="count" data-index="50" data-total="54"/><polygon points="150.7,34.32 146.2,36.92 141.7,34.32 141.7,29.12 146.2,26.52 150.7,29.12" fill="none" stroke="currentColor" stroke-width="0.8" opacity=".34" data-motion="count" data-index="51" data-total="54"/><polygon points="160.1,29.01 155.6,31.61 151.1,29.01 151.1,23.81 155.6,21.21 160.1,23.81" fill="none" stroke="currentColor" stroke-width="0.8" opacity=".34" data-motion="count" data-index="52" data-total="54"/><polygon points="169.5,34.32 165,36.92 160.5,34.32 160.5,29.12 165,26.52 169.5,29.12" fill="none" stroke="currentColor" stroke-width="0.8" opacity=".34" data-motion="count" data-index="53" data-total="54"/></svg></div>
+    </figure>
+    <figure class="cell" data-side="none">
+      <figcaption><b>EVIDENCE ABSENT</b></figcaption>
+      <div class="stage"><svg class="hv-draw show-wall show-dead" viewBox="0 0 170.2 36.92" width="578.68" height="125.52" preserveAspectRatio="xMinYMid meet" aria-hidden="true" focusable="false"><defs><pattern id="hive-hatch-unmeasured" width="6" height="6" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><line x1="0" y1="0" x2="0" y2="6" stroke="currentColor" stroke-width="1.4" opacity=".55"/></pattern><pattern id="hive-scanlines" width="3" height="3" patternUnits="userSpaceOnUse"><rect width="3" height="1" fill="currentColor" opacity=".14"/></pattern></defs><g data-motion="still" data-still-reason="the board was not counted"><polygon points="9.7,7.8 5.2,10.4 0.7,7.8 0.7,2.6 5.2,0 9.7,2.6" fill="none" stroke="currentColor" stroke-width="0.8" opacity=".34"/><polygon points="19.1,13.1 14.6,15.7 10.1,13.1 10.1,7.9 14.6,5.3 19.1,7.9" fill="none" stroke="currentColor" stroke-width="0.8" opacity=".34"/><polygon points="28.5,7.8 24,10.4 19.5,7.8 19.5,2.6 24,0 28.5,2.6" fill="none" stroke="currentColor" stroke-width="0.8" opacity=".34"/><polygon points="37.9,13.1 33.4,15.7 28.9,13.1 28.9,7.9 33.4,5.3 37.9,7.9" fill="none" stroke="currentColor" stroke-width="0.8" opacity=".34"/><polygon points="47.3,7.8 42.8,10.4 38.3,7.8 38.3,2.6 42.8,0 47.3,2.6" fill="currentColor" stroke="currentColor" stroke-width="1.5" opacity=".85" class="hv-bleed"/><polygon points="56.7,13.1 52.2,15.7 47.7,13.1 47.7,7.9 52.2,5.3 56.7,7.9" fill="none" stroke="currentColor" stroke-width="0.8" opacity=".34"/><polygon points="66.1,7.8 61.6,10.4 57.1,7.8 57.1,2.6 61.6,0 66.1,2.6" fill="none" stroke="currentColor" stroke-width="0.8" opacity=".34"/><polygon points="75.5,13.1 71,15.7 66.5,13.1 66.5,7.9 71,5.3 75.5,7.9" fill="none" stroke="currentColor" stroke-width="0.8" opacity=".34"/><polygon points="84.9,7.8 80.4,10.4 75.9,7.8 75.9,2.6 80.4,0 84.9,2.6" fill="none" stroke="currentColor" stroke-width="0.8" opacity=".34"/><polygon points="94.3,13.1 89.8,15.7 85.3,13.1 85.3,7.9 89.8,5.3 94.3,7.9" fill="none" stroke="currentColor" stroke-width="0.8" opacity=".34"/><polygon points="103.7,7.8 99.2,10.4 94.7,7.8 94.7,2.6 99.2,0 103.7,2.6" fill="none" stroke="currentColor" stroke-width="0.8" opacity=".34"/><polygon points="113.1,13.1 108.6,15.7 104.1,13.1 104.1,7.9 108.6,5.3 113.1,7.9" fill="currentColor" stroke="currentColor" stroke-width="1.5" opacity=".85" class="hv-bleed"/><polygon points="122.5,7.8 118,10.4 113.5,7.8 113.5,2.6 118,0 122.5,2.6" fill="currentColor" stroke="currentColor" stroke-width="1.5" opacity=".85" class="hv-bleed"/><polygon points="131.9,13.1 127.4,15.7 122.9,13.1 122.9,7.9 127.4,5.3 131.9,7.9" fill="none" stroke="currentColor" stroke-width="0.8" opacity=".34"/><polygon points="141.3,7.8 136.8,10.4 132.3,7.8 132.3,2.6 136.8,0 141.3,2.6" fill="none" stroke="currentColor" stroke-width="0.8" opacity=".34"/><polygon points="150.7,13.1 146.2,15.7 141.7,13.1 141.7,7.9 146.2,5.3 150.7,7.9" fill="none" stroke="currentColor" stroke-width="0.8" opacity=".34"/><polygon points="160.1,7.8 155.6,10.4 151.1,7.8 151.1,2.6 155.6,0 160.1,2.6" fill="none" stroke="currentColor" stroke-width="0.8" opacity=".34"/><polygon points="169.5,13.1 165,15.7 160.5,13.1 160.5,7.9 165,5.3 169.5,7.9" fill="none" stroke="currentColor" stroke-width="0.8" opacity=".34"/><polygon points="9.7,18.41 5.2,21.01 0.7,18.41 0.7,13.21 5.2,10.61 9.7,13.21" fill="none" stroke="currentColor" stroke-width="0.8" opacity=".34"/><polygon points="19.1,23.71 14.6,26.31 10.1,23.71 10.1,18.51 14.6,15.91 19.1,18.51" fill="none" stroke="currentColor" stroke-width="0.8" opacity=".34"/><polygon points="28.5,18.41 24,21.01 19.5,18.41 19.5,13.21 24,10.61 28.5,13.21" fill="none" stroke="currentColor" stroke-width="0.8" opacity=".34"/><polygon points="37.9,23.71 33.4,26.31 28.9,23.71 28.9,18.51 33.4,15.91 37.9,18.51" fill="none" stroke="currentColor" stroke-width="0.8" opacity=".34"/><polygon points="47.3,18.41 42.8,21.01 38.3,18.41 38.3,13.21 42.8,10.61 47.3,13.21" fill="none" stroke="currentColor" stroke-width="0.8" opacity=".34"/><polygon points="56.7,23.71 52.2,26.31 47.7,23.71 47.7,18.51 52.2,15.91 56.7,18.51" fill="none" stroke="currentColor" stroke-width="0.8" opacity=".34"/><polygon points="66.1,18.41 61.6,21.01 57.1,18.41 57.1,13.21 61.6,10.61 66.1,13.21" fill="none" stroke="currentColor" stroke-width="0.8" opacity=".34"/><polygon points="75.5,23.71 71,26.31 66.5,23.71 66.5,18.51 71,15.91 75.5,18.51" fill="none" stroke="currentColor" stroke-width="0.8" opacity=".34"/><polygon points="84.9,18.41 80.4,21.01 75.9,18.41 75.9,13.21 80.4,10.61 84.9,13.21" fill="none" stroke="currentColor" stroke-width="0.8" opacity=".34"/><polygon points="94.3,23.71 89.8,26.31 85.3,23.71 85.3,18.51 89.8,15.91 94.3,18.51" fill="currentColor" stroke="currentColor" stroke-width="1.5" opacity=".85" class="hv-bleed"/><polygon points="103.7,18.41 99.2,21.01 94.7,18.41 94.7,13.21 99.2,10.61 103.7,13.21" fill="none" stroke="currentColor" stroke-width="0.8" opacity=".34"/><polygon points="113.1,23.71 108.6,26.31 104.1,23.71 104.1,18.51 108.6,15.91 113.1,18.51" fill="none" stroke="currentColor" stroke-width="0.8" opacity=".34"/><polygon points="122.5,18.41 118,21.01 113.5,18.41 113.5,13.21 118,10.61 122.5,13.21" fill="none" stroke="currentColor" stroke-width="0.8" opacity=".34"/><polygon points="131.9,23.71 127.4,26.31 122.9,23.71 122.9,18.51 127.4,15.91 131.9,18.51" fill="none" stroke="currentColor" stroke-width="0.8" opacity=".34"/><polygon points="141.3,18.41 136.8,21.01 132.3,18.41 132.3,13.21 136.8,10.61 141.3,13.21" fill="none" stroke="currentColor" stroke-width="0.8" opacity=".34"/><polygon points="150.7,23.71 146.2,26.31 141.7,23.71 141.7,18.51 146.2,15.91 150.7,18.51" fill="none" stroke="currentColor" stroke-width="0.8" opacity=".34"/><polygon points="160.1,18.41 155.6,21.01 151.1,18.41 151.1,13.21 155.6,10.61 160.1,13.21" fill="none" stroke="currentColor" stroke-width="0.8" opacity=".34"/><polygon points="169.5,23.71 165,26.31 160.5,23.71 160.5,18.51 165,15.91 169.5,18.51" fill="none" stroke="currentColor" stroke-width="0.8" opacity=".34"/><polygon points="9.7,29.01 5.2,31.61 0.7,29.01 0.7,23.81 5.2,21.21 9.7,23.81" fill="none" stroke="currentColor" stroke-width="0.8" opacity=".34"/><polygon points="19.1,34.32 14.6,36.92 10.1,34.32 10.1,29.12 14.6,26.52 19.1,29.12" fill="none" stroke="currentColor" stroke-width="0.8" opacity=".34"/><polygon points="28.5,29.01 24,31.61 19.5,29.01 19.5,23.81 24,21.21 28.5,23.81" fill="none" stroke="currentColor" stroke-width="0.8" opacity=".34"/><polygon points="37.9,34.32 33.4,36.92 28.9,34.32 28.9,29.12 33.4,26.52 37.9,29.12" fill="none" stroke="currentColor" stroke-width="0.8" opacity=".34"/><polygon points="47.3,29.01 42.8,31.61 38.3,29.01 38.3,23.81 42.8,21.21 47.3,23.81" fill="none" stroke="currentColor" stroke-width="0.8" opacity=".34"/><polygon points="56.7,34.32 52.2,36.92 47.7,34.32 47.7,29.12 52.2,26.52 56.7,29.12" fill="currentColor" stroke="currentColor" stroke-width="1.5" opacity=".85" class="hv-bleed"/><polygon points="66.1,29.01 61.6,31.61 57.1,29.01 57.1,23.81 61.6,21.21 66.1,23.81" fill="none" stroke="currentColor" stroke-width="0.8" opacity=".34"/><polygon points="75.5,34.32 71,36.92 66.5,34.32 66.5,29.12 71,26.52 75.5,29.12" fill="none" stroke="currentColor" stroke-width="0.8" opacity=".34"/><polygon points="84.9,29.01 80.4,31.61 75.9,29.01 75.9,23.81 80.4,21.21 84.9,23.81" fill="none" stroke="currentColor" stroke-width="0.8" opacity=".34"/><polygon points="94.3,34.32 89.8,36.92 85.3,34.32 85.3,29.12 89.8,26.52 94.3,29.12" fill="none" stroke="currentColor" stroke-width="0.8" opacity=".34"/><polygon points="103.7,29.01 99.2,31.61 94.7,29.01 94.7,23.81 99.2,21.21 103.7,23.81" fill="none" stroke="currentColor" stroke-width="0.8" opacity=".34"/><polygon points="113.1,34.32 108.6,36.92 104.1,34.32 104.1,29.12 108.6,26.52 113.1,29.12" fill="none" stroke="currentColor" stroke-width="0.8" opacity=".34"/><polygon points="122.5,29.01 118,31.61 113.5,29.01 113.5,23.81 118,21.21 122.5,23.81" fill="none" stroke="currentColor" stroke-width="0.8" opacity=".34"/><polygon points="131.9,34.32 127.4,36.92 122.9,34.32 122.9,29.12 127.4,26.52 131.9,29.12" fill="none" stroke="currentColor" stroke-width="0.8" opacity=".34"/><polygon points="141.3,29.01 136.8,31.61 132.3,29.01 132.3,23.81 136.8,21.21 141.3,23.81" fill="none" stroke="currentColor" stroke-width="0.8" opacity=".34"/><polygon points="150.7,34.32 146.2,36.92 141.7,34.32 141.7,29.12 146.2,26.52 150.7,29.12" fill="none" stroke="currentColor" stroke-width="0.8" opacity=".34"/><polygon points="160.1,29.01 155.6,31.61 151.1,29.01 151.1,23.81 155.6,21.21 160.1,23.81" fill="none" stroke="currentColor" stroke-width="0.8" opacity=".34"/><polygon points="169.5,34.32 165,36.92 160.5,34.32 160.5,29.12 165,26.52 169.5,29.12" fill="none" stroke="currentColor" stroke-width="0.8" opacity=".34"/></g></svg><span class="chip refused" data-motion="still" data-still-reason="population was not counted">UNCOUNTED</span></div>
+      <ul class="reasons" aria-label="Why this is still"></ul>
+    </figure>
+  </div>
+  <p class="bay-note">The wall reveals cell by cell in the order the board was counted, so the eye crosses it the way the crush intends rather than being handed the finished field with the bleeding cells already located. A board nobody enumerated gets no wall at all &mdash; an empty grid is a measured zero, and this is the component where that lie would be least survivable.</p>
+</section>
+<section class="bay" id="bay-level">
+  <header class="bay-head">
+    <span class="bay-ix">D</span>
+    <h3>LEVEL</h3>
+    <p class="bay-q">How much of it?</p>
+    <code class="bay-ev">a measured quantity and its ceiling</code>
+  </header>
+  <div class="bay-pair">
+    <figure class="cell" data-side="has">
+      <figcaption><b>EVIDENCE PRESENT</b></figcaption>
+      <div class="stage"><span class="meter" data-motion="level" data-level="0.12" data-cite="telemetry.context_percent"><i style="transform:scaleX(0.12)"></i><em>12%</em></span><span class="meter" data-motion="level" data-level="0.47" data-cite="telemetry.context_percent"><i style="transform:scaleX(0.47)"></i><em>47%</em></span><span class="meter" data-motion="level" data-level="0.82" data-cite="telemetry.context_percent"><i style="transform:scaleX(0.82)"></i><em>82%</em></span></div>
+    </figure>
+    <figure class="cell" data-side="none">
+      <figcaption><b>EVIDENCE ABSENT</b></figcaption>
+      <div class="stage"><span class="meter refused" data-motion="still" data-still-reason="quantity was not measured"><i style="transform:scaleX(0)"></i><em>UNMEASURED</em></span></div>
+      <ul class="reasons" aria-label="Why this is still"></ul>
+    </figure>
+  </div>
+  <p class="bay-note">The growth is not decoration over a number — it is the number. Which is exactly why an unmeasured quantity may not grow to zero: on this console a bar at nought and a bar nobody filled in must never look alike, and motion is the loudest way to make them look alike.</p>
+</section>
+<section class="bay" id="bay-elapsed">
+  <header class="bay-head">
+    <span class="bay-ix">E</span>
+    <h3>ELAPSED</h3>
+    <p class="bay-q">How long ago?</p>
+    <code class="bay-ev">a measured duration on a live source</code>
+  </header>
+  <div class="bay-pair">
+    <figure class="cell" data-side="has">
+      <figcaption><b>EVIDENCE PRESENT</b></figcaption>
+      <div class="stage"><span class="clock" data-motion="elapsed" data-elapsed-seconds="3" data-style="tenths" data-cite="source.freshness_ms"><b data-elapsed-text>3.0S</b><i>SINCE CONTACT</i></span><span class="clock" data-motion="elapsed" data-elapsed-seconds="47" data-style="upper" data-cite="sessions[].last_state_change_age_seconds"><b data-elapsed-text>47S</b><i>WAITING</i></span><span class="clock" data-motion="elapsed" data-elapsed-seconds="18300" data-style="lower" data-cite="sessions[].evidence.state_age"><b data-elapsed-text>5h 5m</b><i>IN THIS STATE</i></span></div>
+    </figure>
+    <figure class="cell" data-side="none">
+      <figcaption><b>EVIDENCE ABSENT</b></figcaption>
+      <div class="stage"><span class="clock refused" data-motion="still" data-still-reason="source is stale; the clock stopped when the feed did"><b>5H 05M</b><i>WAITING · FEED STALE</i></span></div>
+      <ul class="reasons" aria-label="Why this is still"></ul>
+    </figure>
+  </div>
+  <p class="bay-note">The only kind that keeps a number moving. A wait of five hours measured three seconds ago is five hours and three seconds now, so freezing it at the render was the less truthful of the two options. On a feed gone stale the clock stops — a counter still ticking claims somebody is still watching.</p>
+</section>
+<section class="bay" id="bay-trace">
+  <header class="bay-head">
+    <span class="bay-ix">F</span>
+    <h3>TRACE</h3>
+    <p class="bay-q">Did something actually travel this?</p>
+    <code class="bay-ev">the fact that something travelled it</code>
+  </header>
+  <div class="bay-pair">
+    <figure class="cell" data-side="has">
+      <figcaption><b>EVIDENCE PRESENT</b></figcaption>
+      <div class="stage"><svg class="hv-draw dc-corridorgram" viewBox="0 0 294 96" width="367.5" height="120" preserveAspectRatio="xMinYMid meet" role="img" aria-label="The doors in order. You get as far as the first one held shut; every door past it is dashed because nobody tried it."><defs><pattern id="hive-hatch-unmeasured" width="6" height="6" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><line x1="0" y1="0" x2="0" y2="6" stroke="currentColor" stroke-width="1.4" opacity=".55"/></pattern><pattern id="hive-scanlines" width="3" height="3" patternUnits="userSpaceOnUse"><rect width="3" height="1" fill="currentColor" opacity=".14"/></pattern></defs><line x1="0" y1="74" x2="294" y2="74" stroke="currentColor" stroke-width="1"/><g class="dc-doorframe" data-state="open" data-motion="trace" data-cite="doors[].state" data-index="0" data-total="7"><rect x="4" y="18" width="30" height="56" fill="none" stroke="currentColor" stroke-width="1"/></g><g class="dc-doorleaf" data-motion="trace" data-cite="doors[].state" data-index="0" data-total="7"><line x1="34" y1="18" x2="42" y2="66" stroke="currentColor" stroke-width="1.4"/></g><text x="19" y="88" font-size="6.5" text-anchor="middle" fill="currentColor">EFFECTIVE</text><g class="dc-doorframe" data-state="open" data-motion="trace" data-cite="doors[].state" data-index="1" data-total="7"><rect x="46" y="18" width="30" height="56" fill="none" stroke="currentColor" stroke-width="1"/></g><g class="dc-doorleaf" data-motion="trace" data-cite="doors[].state" data-index="1" data-total="7"><line x1="76" y1="18" x2="84" y2="66" stroke="currentColor" stroke-width="1.4"/></g><text x="61" y="88" font-size="6.5" text-anchor="middle" fill="currentColor">OPERATOR </text><g class="dc-doorframe" data-state="open" data-motion="trace" data-cite="doors[].state" data-index="2" data-total="7"><rect x="88" y="18" width="30" height="56" fill="none" stroke="currentColor" stroke-width="1"/></g><g class="dc-doorleaf" data-motion="trace" data-cite="doors[].state" data-index="2" data-total="7"><line x1="118" y1="18" x2="126" y2="66" stroke="currentColor" stroke-width="1.4"/></g><text x="103" y="88" font-size="6.5" text-anchor="middle" fill="currentColor">OPERATOR </text><g class="dc-doorframe" data-state="open" data-motion="trace" data-cite="doors[].state" data-index="3" data-total="7"><rect x="130" y="18" width="30" height="56" fill="none" stroke="currentColor" stroke-width="1"/></g><g class="dc-doorleaf" data-motion="trace" data-cite="doors[].state" data-index="3" data-total="7"><line x1="160" y1="18" x2="168" y2="66" stroke="currentColor" stroke-width="1.4"/></g><text x="145" y="88" font-size="6.5" text-anchor="middle" fill="currentColor">COMMAND A</text><g class="dc-doorframe" data-state="open" data-motion="trace" data-cite="doors[].state" data-index="4" data-total="7"><rect x="172" y="18" width="30" height="56" fill="none" stroke="currentColor" stroke-width="1"/></g><g class="dc-doorleaf" data-motion="trace" data-cite="doors[].state" data-index="4" data-total="7"><line x1="202" y1="18" x2="210" y2="66" stroke="currentColor" stroke-width="1.4"/></g><text x="187" y="88" font-size="6.5" text-anchor="middle" fill="currentColor">KANPAI VE</text><g class="dc-doorframe" data-state="shut" data-motion="trace" data-cite="doors[].state" data-index="5" data-total="7"><rect x="214" y="18" width="30" height="56" fill="none" stroke="currentColor" stroke-width="2"/></g><g class="dc-doorbar" data-motion="trace" data-cite="doors[].state" data-index="5" data-total="7"><line x1="214" y1="70" x2="244" y2="70" stroke="currentColor" stroke-width="3"/></g><text x="229" y="88" font-size="6.5" text-anchor="middle" fill="currentColor">SUBJECT P</text><g class="dc-doorframe" data-state="not_reached" data-motion="still" data-still-reason="nothing travelled this path"><rect x="256" y="18" width="30" height="56" fill="none" stroke="currentColor" stroke-width="1" stroke-dasharray="3 3"/></g><text x="271" y="88" font-size="6.5" text-anchor="middle" fill="currentColor">ACCEPTANC</text></svg></div>
+    </figure>
+    <figure class="cell" data-side="none">
+      <figcaption><b>EVIDENCE ABSENT</b></figcaption>
+      <div class="stage"><svg class="hv-draw og-strandgram" viewBox="0 0 420 124" width="462" height="136.4" preserveAspectRatio="xMinYMid meet" role="img" aria-label="Each route thickens once per landing on it. An undelivered route stays dashed."><defs><pattern id="hive-hatch-unmeasured" width="6" height="6" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><line x1="0" y1="0" x2="0" y2="6" stroke="currentColor" stroke-width="1.4" opacity=".55"/></pattern><pattern id="hive-scanlines" width="3" height="3" patternUnits="userSpaceOnUse"><rect width="3" height="1" fill="currentColor" opacity=".14"/></pattern></defs><g class="og-route" data-delivered="0" data-motion="still" data-still-reason="nothing travelled this path"><path d="M 96 22 Q 210 10 324 22" fill="none" stroke="currentColor" stroke-width="1" stroke-dasharray="4 3"/></g><circle cx="96" cy="22" r="3" fill="currentColor" stroke="currentColor" stroke-width="1"/><circle cx="324" cy="22" r="3" fill="none" stroke="currentColor" stroke-width="1"/><text x="90" y="26" font-size="8" text-anchor="end" fill="currentColor">hermes</text><text x="330" y="26" font-size="8" text-anchor="start" fill="currentColor">dellpromax</text><text x="210" y="8" font-size="7.5" text-anchor="middle" fill="currentColor" opacity=".75">qwen3-coder-30b</text><g class="og-route" data-delivered="0" data-motion="still" data-still-reason="nothing travelled this path"><path d="M 96 52 Q 210 40 324 52" fill="none" stroke="currentColor" stroke-width="1" stroke-dasharray="4 3"/></g><circle cx="96" cy="52" r="3" fill="currentColor" stroke="currentColor" stroke-width="1"/><circle cx="324" cy="52" r="3" fill="none" stroke="currentColor" stroke-width="1"/><text x="90" y="56" font-size="8" text-anchor="end" fill="currentColor">codex</text><text x="330" y="56" font-size="8" text-anchor="start" fill="currentColor">spark-472e</text><text x="210" y="38" font-size="7.5" text-anchor="middle" fill="currentColor" opacity=".75">glm-4.6</text><g class="og-route" data-delivered="0" data-motion="still" data-still-reason="nothing travelled this path"><path d="M 96 82 Q 210 70 324 82" fill="none" stroke="currentColor" stroke-width="1" stroke-dasharray="4 3"/></g><circle cx="96" cy="82" r="3" fill="currentColor" stroke="currentColor" stroke-width="1"/><circle cx="324" cy="82" r="3" fill="none" stroke="currentColor" stroke-width="1"/><text x="90" y="86" font-size="8" text-anchor="end" fill="currentColor">hermes</text><text x="330" y="86" font-size="8" text-anchor="start" fill="currentColor">dellpromax</text><text x="210" y="68" font-size="7.5" text-anchor="middle" fill="currentColor" opacity=".75">qwen3-coder-30b</text></svg></div>
+      <ul class="reasons" aria-label="Why this is still"></ul>
+    </figure>
+  </div>
+  <p class="bay-note">The kind the drawings needed, and the sharpest refusal in the set. Watching a line travel from origin to destination is the most convincing way a console can say a thing arrived &mdash; so the corridor draws as far as the door that held and the six behind it stay dashed and still, and not one of these three strands draws at all, because not one of them delivered.</p>
+</section>
+<section class="bay" id="bay-traffic">
+  <header class="bay-head">
+    <span class="bay-ix">G</span>
+    <h3>TRAFFIC</h3>
+    <p class="bay-q">Is anything happening right now?</p>
+    <code class="bay-ev">a live source and a measured interval</code>
+  </header>
+  <div class="bay-pair">
+    <figure class="cell" data-side="has">
+      <figcaption><b>EVIDENCE PRESENT</b></figcaption>
+      <div class="stage"><span class="beat" data-motion="traffic" data-period="0.8" data-cite="oldest_wait_seconds">TICK 0.8S</span><span class="beat" data-motion="traffic" data-period="1.6" data-cite="oldest_wait_seconds">TICK 1.6S</span><span class="beat" data-motion="traffic" data-period="3.2" data-cite="oldest_wait_seconds">TICK 3.2S</span></div>
+    </figure>
+    <figure class="cell" data-side="none">
+      <figcaption><b>EVIDENCE ABSENT</b></figcaption>
+      <div class="stage"><span class="beat refused" data-motion="still" data-still-reason="source is stale, not live">NO CADENCE</span></div>
+      <ul class="reasons" aria-label="Why this is still"></ul>
+    </figure>
+  </div>
+  <p class="bay-note">The single ambient loop the spec allows, breathing at the producer&rsquo;s own interval rather than a house tempo scaled by a reading. Watch the cadence tighten and you are watching the measured wait tighten. A pulsing panel over frozen data is the lie in its purest form.</p>
+</section>
+<section class="bay" id="bay-cycle">
+  <header class="bay-head">
+    <span class="bay-ix">H</span>
+    <h3>CYCLE</h3>
+    <p class="bay-q">Is this feed still being polled?</p>
+    <code class="bay-ev">a measured poll interval and position in it</code>
+  </header>
+  <div class="bay-pair">
+    <figure class="cell" data-side="has">
+      <figcaption><b>EVIDENCE PRESENT</b></figcaption>
+      <div class="stage"><svg class="hv-draw fd-radargram" viewBox="0 0 204 204" width="204" height="204" preserveAspectRatio="xMinYMid meet" role="img" aria-label="Blips placed by evidence age. Unmeasured ages sit outside the dial rather than in the centre or on the rim."><defs><pattern id="hive-hatch-unmeasured" width="6" height="6" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><line x1="0" y1="0" x2="0" y2="6" stroke="currentColor" stroke-width="1.4" opacity=".55"/></pattern><pattern id="hive-scanlines" width="3" height="3" patternUnits="userSpaceOnUse"><rect width="3" height="1" fill="currentColor" opacity=".14"/></pattern></defs><circle cx="90" cy="90" r="26" fill="none" stroke="currentColor" stroke-width="1" data-motion="count" data-index="0" data-total="3"/><circle cx="90" cy="90" r="50" fill="none" stroke="currentColor" stroke-width="1" data-motion="count" data-index="1" data-total="3"/><circle cx="90" cy="90" r="74" fill="none" stroke="currentColor" stroke-width="1" data-motion="count" data-index="2" data-total="3"/><circle cx="90" cy="90" r="84" fill="none" stroke="currentColor" stroke-width="1" stroke-dasharray="3 4"/><g class="fd-sweepwedge" data-motion="cycle" data-spent="0.14" data-period="30" data-cite="source.freshness_ms" data-cycle-axis="rotate" data-cycle-origin="90 90"><path d="M 90 90 L 148.77 29.98 A 84 84 0 0 1 171.47 69.55 Z" fill="currentColor" opacity=".12" stroke="none"/><line x1="90" y1="90" x2="171.47" y2="69.55" stroke="currentColor" stroke-width="1.2"/></g><g class="fd-blip" data-motion="count" data-index="0" data-total="3"><circle cx="90" cy="10" r="3.4" fill="currentColor" stroke="currentColor" stroke-width="1"/></g><g class="fd-blip" data-motion="count" data-index="1" data-total="3"><circle cx="133.3" cy="115" r="3.4" fill="currentColor" stroke="currentColor" stroke-width="1"/></g><g class="fd-blip" data-motion="count" data-index="2" data-total="3"><circle cx="25.91" cy="127" r="3.4" fill="currentColor" stroke="currentColor" stroke-width="1"/></g><text x="93" y="62" font-size="6" text-anchor="start" fill="currentColor" opacity=".7">&lt; 1M</text><text x="93" y="38" font-size="6" text-anchor="start" fill="currentColor" opacity=".7">&lt; 5M</text><text x="93" y="14" font-size="6" text-anchor="start" fill="currentColor" opacity=".7">&lt; 1H</text></svg></div>
+    </figure>
+    <figure class="cell" data-side="none">
+      <figcaption><b>EVIDENCE ABSENT</b></figcaption>
+      <div class="stage"><svg class="hv-draw fd-radargram" viewBox="0 0 204 204" width="204" height="204" preserveAspectRatio="xMinYMid meet" role="img" aria-label="Blips placed by evidence age. Unmeasured ages sit outside the dial rather than in the centre or on the rim."><defs><pattern id="hive-hatch-unmeasured" width="6" height="6" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><line x1="0" y1="0" x2="0" y2="6" stroke="currentColor" stroke-width="1.4" opacity=".55"/></pattern><pattern id="hive-scanlines" width="3" height="3" patternUnits="userSpaceOnUse"><rect width="3" height="1" fill="currentColor" opacity=".14"/></pattern></defs><circle cx="90" cy="90" r="26" fill="none" stroke="currentColor" stroke-width="1" data-motion="count" data-index="0" data-total="3"/><circle cx="90" cy="90" r="50" fill="none" stroke="currentColor" stroke-width="1" data-motion="count" data-index="1" data-total="3"/><circle cx="90" cy="90" r="74" fill="none" stroke="currentColor" stroke-width="1" data-motion="count" data-index="2" data-total="3"/><circle cx="90" cy="90" r="84" fill="none" stroke="currentColor" stroke-width="1" stroke-dasharray="3 4"/><g class="fd-nosweep" data-motion="still" data-still-reason="the feed is not live, so nothing sweeps"><text x="90" y="86" font-size="9" text-anchor="middle" fill="currentColor">NO SWEEP</text><text x="90" y="97" font-size="6.5" text-anchor="middle" fill="currentColor" opacity=".75">SOURCE UNAVAILABLE</text></g><text x="93" y="62" font-size="6" text-anchor="start" fill="currentColor" opacity=".7">&lt; 1M</text><text x="93" y="38" font-size="6" text-anchor="start" fill="currentColor" opacity=".7">&lt; 5M</text><text x="93" y="14" font-size="6" text-anchor="start" fill="currentColor" opacity=".7">&lt; 1H</text></svg></div>
+      <ul class="reasons" aria-label="Why this is still"></ul>
+    </figure>
+  </div>
+  <p class="bay-note">The radar sits at the angle its own freshness put it and goes round once per poll interval, so what you are watching turn is the poll you are waiting for &mdash; the one thing a radar drawn as a still picture cannot say. Nothing about it can be faked, because the period is the period. Beside it, the same instrument on a feed that is not live: same dial, same rings, no wedge, and it says which. A sweep that quietly started another lap would have hidden that.</p>
+</section>
+<section class="bay" id="bay-intent">
+  <header class="bay-head">
+    <span class="bay-ix">I</span>
+    <h3>INTENT</h3>
+    <p class="bay-q">Did the operator just do something?</p>
+    <code class="bay-ev">none — the operator is the producer</code>
+  </header>
+  <div class="bay-pair">
+    <figure class="cell" data-side="has">
+      <figcaption><b>EVIDENCE PRESENT</b></figcaption>
+      <div class="stage"><button type="button" class="verb" data-motion="intent" data-intent="hover">RETRY</button><button type="button" class="verb" data-motion="intent" data-intent="hover">RELEASE</button><button type="button" class="verb" data-motion="intent" data-intent="hover">HOLD</button></div>
+    </figure>
+    <figure class="cell" data-side="none">
+      <figcaption><b>EVIDENCE ABSENT</b></figcaption>
+      <div class="stage"><span class="verb refused" data-motion="still" data-still-reason="the operator has no authority here">NO GRANT</span></div>
+      <ul class="reasons" aria-label="Why this is still"></ul>
+    </figure>
+  </div>
+  <p class="bay-note">The one kind that never has to prove anything. Written in CSS rather than the runtime, so hover and focus keep responding even when the script never parses — an interface that stops answering feels broken in a way a missing flourish does not.</p>
+</section>
+
+<section class="close">
+  <h2>Stillness is declared</h2>
+  <p class="bay-note">Every dashed magenta cell above is a real refusal
+    carrying a real reason, written into the markup by the same functions
+    that write the moving ones. That matters because a region with no
+    motion mark and a region whose mark was <em>forgotten</em> render
+    identical HTML — so the correct one says why it is not moving, and the
+    test suite can tell them apart.</p>
+
+  <h2>The engine</h2>
+  <p class="bay-note">Four candidates, built against the real surface and
+    measured rather than taken from vendor claims. The deciding column is
+    mechanism: Motion and native WAAPI hand real <code>Animation</code>
+    objects to the browser, so an element&rsquo;s resting appearance stays
+    whatever the server rendered. The other two write inline style from a
+    JS tick and would have needed a second description of every rest
+    state.</p>
+  <div class="scroll"><table>
+    <thead><tr><th>Candidate</th><th>Gzip</th><th>Mechanism</th><th>Note</th></tr></thead>
+    <tbody>
+      <tr class="pick"><td>Motion <code>mini</code> 13.1.1</td><td class="n">3.1 kb</td>
+        <td>21 browser-owned animations</td><td>MIT</td></tr>
+      <tr><td>Native WAAPI</td><td class="n">0 kb</td><td>identical mechanism</td>
+        <td>The real runner-up; lost on knowledge, not bytes</td></tr>
+      <tr><td>anime.js 4.5.0</td><td class="n">20.1 kb</td>
+        <td>inline style, per frame</td><td>MIT; 6.4&times; for the same picture</td></tr>
+      <tr><td>Motion full</td><td class="n">23.1 kb</td><td>mini + stagger/inView/scroll</td>
+        <td>stagger is arithmetic; inView is IntersectionObserver</td></tr>
+      <tr><td>GSAP 3.15.0 core</td><td class="n">28.3 kb</td>
+        <td>inline style, per frame</td><td>Free, but not OSS</td></tr>
+    </tbody>
+  </table></div>
+
+  <h2>Off is the rendered page</h2>
+  <p class="bay-note">Every kind rests at the geometry the server already
+    drew, so cancelling is settling. <em>Motion off</em> above, the
+    operator&rsquo;s system preference, a <code>?still=1</code> in the URL
+    and a vendor bundle that fails to load all land on the identical page —
+    not a second design, and not a page frozen part-way into an entrance.
+    The review script proves it by comparing the markup before and
+    after.</p>
+
+  <p class="foot">Engine: Motion 13.1.1 <code>mini</code>, MIT, 3.1 kb
+    gzipped · Runtime and marks: <code>hive_motion.py</code> ·
+    Palette: <code>skins/nerv/tokens.py</code>, both themes ·
+    Demo durations are shortened so every kind is legible in one glance;
+    the refusals are exactly the ones the product makes.</p>
+</section>
+</div>
+
+<script>(()=>{var h=()=>{};function M(t){let e;return()=>(e===void 0&&(e=t()),e)}var B=t=>t;var d=t=>t*1e3,g=t=>t/1e3;var D=t=>Array.isArray(t)&&typeof t[0]=="number";var K=(t,e,o=10)=>{let r="",i=Math.max(Math.round(e/o),2);for(let m=0;m<i;m++)r+=Math.round(t(m/(i-1))*1e4)/1e4+", ";return`linear(${r.substring(0,r.length-2)})`};var te=t=>t!==null;function z(t,{repeat:e,repeatType:o="loop"},r,i=1){let m=t.filter(te),c=i<0||e&&o!=="loop"&&e%2===1?0:m.length-1;return!c||r===void 0?m[c]:r}var V=class{constructor(){this.updateFinished()}get finished(){return this._finished}updateFinished(){this._finished=new Promise(e=>{this.resolve=e})}notifyFinished(){this.resolve()}then(e,o){return this.finished.then(e,o)}};function P(t){for(let e=1;e<t.length;e++)t[e]??(t[e]=t[e-1])}var S=t=>t.startsWith("--");function j(t,e,o){S(e)?t.style.setProperty(e,o):t.style[e]=o}var q={};function A(t,e){let o=M(t);return()=>q[e]??o()}var H=A(()=>window.ScrollTimeline!==void 0,"scrollTimeline");var E=A(()=>{try{document.createElement("div").animate({opacity:0},{easing:"linear(0, 1)"})}catch{return!1}return!0},"linearEasing");var x=([t,e,o,r])=>`cubic-bezier(${t}, ${e}, ${o}, ${r})`;var w={linear:"linear",ease:"ease",easeIn:"ease-in",easeOut:"ease-out",easeInOut:"ease-in-out",circIn:x([0,.65,.55,1]),circOut:x([.55,0,1,.45]),backIn:x([.31,.01,.66,-.59]),backOut:x([.33,1.53,.69,.99])};function C(t,e){if(t)return typeof t=="function"?E()?K(t,e):"ease-out":D(t)?x(t):Array.isArray(t)?t.map(o=>C(o,e)||w.easeOut):w[t]}function $(t,e,o,{delay:r=0,duration:i=300,repeat:m=0,repeatType:u="loop",ease:c="easeOut",times:s}={},n=void 0){let a={[e]:o};s&&(a.offset=s);let l=C(c,i);Array.isArray(l)&&(a.easing=l);let p={delay:r,duration:i,easing:Array.isArray(l)?"linear":l,fill:"both",iterations:m+1,direction:u==="reverse"?"alternate":"normal"};return n&&(p.pseudoElement=n),t.animate(a,p)}function _(t){return typeof t=="function"&&"applyToOptions"in t}function U({type:t,...e}){return _(t)&&E()?t.applyToOptions(e):(e.duration??(e.duration=300),e.ease??(e.ease="easeOut"),e)}var y=class extends V{constructor(e){if(super(),this.finishedTime=null,this.isStopped=!1,this.manualStartTime=null,!e)return;let{element:o,name:r,keyframes:i,pseudoElement:m,allowFlatten:u=!1,finalKeyframe:c,onComplete:s}=e;this.isPseudoElement=!!m,this.allowFlatten=u,this.options=e,h(typeof e.type!="string",`Mini animate() doesn't support "type" as a string.`,"mini-spring");let n=U(e);this.animation=$(o,r,i,n,m),n.autoplay===!1&&this.animation.pause(),this.animation.onfinish=()=>{if(this.finishedTime=this.time,!m){let a=z(i,this.options,c,this.speed);this.updateMotionValue&&this.updateMotionValue(a),j(o,r,a),this.animation.cancel()}s?.(),this.notifyFinished()}}play(){this.isStopped||(this.manualStartTime=null,this.animation.play(),this.state==="finished"&&this.updateFinished())}pause(){this.animation.pause()}complete(){this.animation.finish?.()}cancel(){try{this.animation.cancel()}catch{}}stop(){if(this.isStopped)return;this.isStopped=!0;let{state:e}=this;e==="idle"||e==="finished"||(this.updateMotionValue?this.updateMotionValue():this.commitStyles(),this.isPseudoElement||this.cancel())}commitStyles(){let e=this.options?.element;!this.isPseudoElement&&e?.isConnected&&this.animation.commitStyles?.()}get duration(){let e=this.animation.effect?.getComputedTiming?.().duration||0;return g(Number(e))}get iterationDuration(){let{delay:e=0}=this.options||{};return this.duration+g(e)}get time(){return g(Number(this.animation.currentTime)||0)}set time(e){let o=this.finishedTime!==null;this.manualStartTime=null,this.finishedTime=null,this.animation.currentTime=d(e),o&&this.animation.pause()}get speed(){return this.animation.playbackRate}set speed(e){e<0&&(this.finishedTime=null),this.animation.playbackRate=e}get state(){return this.finishedTime!==null?"finished":this.animation.playState}get startTime(){return this.manualStartTime??Number(this.animation.startTime)}set startTime(e){this.manualStartTime=this.animation.startTime=e}attachTimeline({timeline:e,rangeStart:o,rangeEnd:r,observe:i}){return this.allowFlatten&&this.animation.effect?.updateTiming({easing:"linear"}),this.animation.onfinish=null,e&&H()?(this.animation.timeline=e,o&&(this.animation.rangeStart=o),r&&(this.animation.rangeEnd=r),B):i(this)}};var b=class{constructor(e){this.stop=()=>this.runAll("stop"),this.animations=e.filter(Boolean)}get finished(){return Promise.all(this.animations.map(e=>e.finished))}getAll(e){return this.animations[0][e]}setAll(e,o){for(let r=0;r<this.animations.length;r++)this.animations[r][e]=o}attachTimeline(e){let o=this.animations.map(r=>r.attachTimeline(e));return()=>{o.forEach((r,i)=>{r&&r(),this.animations[i].stop()})}}get time(){return this.getAll("time")}set time(e){this.setAll("time",e)}get speed(){return this.getAll("speed")}set speed(e){this.setAll("speed",e)}get state(){return this.getAll("state")}get startTime(){return this.getAll("startTime")}get duration(){return Z(this.animations,"duration")}get iterationDuration(){return Z(this.animations,"iterationDuration")}runAll(e){this.animations.forEach(o=>o[e]())}play(){this.runAll("play")}pause(){this.runAll("pause")}cancel(){this.runAll("cancel")}complete(){this.runAll("complete")}};function Z(t,e){let o=0;for(let r=0;r<t.length;r++){let i=t[r][e];i!==null&&i>o&&(o=i)}return o}var T=class extends b{then(e,o){return this.finished.finally(e).then(()=>{})}};var J=new WeakMap,F=(t,e="")=>`${t}:${e}`;function I(t){let e=J.get(t);return e||(e=new Map,J.set(t,e)),e}function X(t,e){if(t?.inherit&&e){let{inherit:o,...r}=t;return{...e,...r}}return t}function R(t,e){let o=t?.[e]??t?.default??t;return o!==t?X(o,t):o}var Y=["borderTopLeftRadius","borderTopRightRadius","borderBottomRightRadius","borderBottomLeftRadius"];var Q=new Set(["borderWidth","borderTopWidth","borderRightWidth","borderBottomWidth","borderLeftWidth","borderRadius",...Y,"width","maxWidth","height","maxHeight","top","right","bottom","left","inset","insetBlock","insetBlockStart","insetBlockEnd","insetInline","insetInlineStart","insetInlineEnd","padding","paddingTop","paddingRight","paddingBottom","paddingLeft","paddingBlock","paddingBlockStart","paddingBlockEnd","paddingInline","paddingInlineStart","paddingInlineEnd","margin","marginTop","marginRight","marginBottom","marginLeft","marginBlock","marginBlockStart","marginBlockEnd","marginInline","marginInlineStart","marginInlineEnd","fontSize","backgroundPositionX","backgroundPositionY"]);function k(t,e){for(let o=0;o<t.length;o++)typeof t[o]=="number"&&Q.has(e)&&(t[o]=t[o]+"px")}function O(t,e,o){if(t==null)return[];if(t instanceof EventTarget)return[t];if(typeof t=="string"){let r=document;e&&(r=e.current);let i=o?.[t]??r.querySelectorAll(t);return i?Array.from(i):[]}return Array.from(t).filter(r=>r!=null)}function v(t,e){let o=window.getComputedStyle(t);return S(e)?o.getPropertyValue(e):o[e]}function ee(t,e,o,r){if(t==null)return[];let i=O(t,r),m=i.length;h(!!m,"No valid elements provided.","no-valid-elements");let u=[];for(let s=0;s<m;s++){let n=i[s],a={...o};typeof a.delay=="function"&&(a.delay=a.delay(s,m));for(let l in e){let p=e[l];Array.isArray(p)||(p=[p]);let f={...R(a,l)};f.duration&&(f.duration=d(f.duration)),f.delay&&(f.delay=d(f.delay));let L=I(n),W=F(l,f.pseudoElement||""),G=L.get(W);G&&G.stop(),u.push({map:L,key:W,unresolvedKeyframes:p,options:{...f,element:n,name:l,allowFlatten:!a.type&&!a.ease}})}}for(let s=0;s<u.length;s++){let{unresolvedKeyframes:n,options:a}=u[s],{element:l,name:p,pseudoElement:f}=a;!f&&n[0]===null&&(n[0]=v(l,p)),P(n),k(n,p),!f&&n.length<2&&n.unshift(v(l,p)),a.keyframes=n}let c=[];for(let s=0;s<u.length;s++){let{map:n,key:a,options:l}=u[s],p=new y(l);n.set(a,p),p.finished.finally(()=>n.delete(a)),c.push(p)}return c}var oe=t=>{function e(o,r,i){return new T(ee(o,r,i,t))}return e},N=oe();window.Motion={animate:N};})();
+</script>
+<script>
+(function () {
+  'use strict';
+  var M = window.Motion;
+  var root = document.documentElement;
+
+  // Three ways to be still, and they all end here: the operator's OS
+  // preference, an explicit ?still=1 for a capture, and a missing engine.
+  // The last one matters -- if the vendor bundle fails to load, the page
+  // must be the static export, not a page stuck mid-transition.
+  var reduced = window.matchMedia
+    && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var asked = /[?&]still=1\b/.test(window.location.search)
+    || root.hasAttribute('data-motion-off');
+  var OFF = reduced || asked || !M || typeof M.animate !== 'function';
+
+  function ms(name, fallback) {
+    var raw = getComputedStyle(root).getPropertyValue(name).trim();
+    if (!raw) return fallback;
+    if (raw.slice(-2) === 'ms') return parseFloat(raw);
+    if (raw.slice(-1) === 's') return parseFloat(raw) * 1000;
+    return parseFloat(raw) || fallback;
+  }
+
+  var T = {};
+  function readTokens() {
+    T.enter = ms('--m-enter', 300);
+    T.leave = ms('--m-leave', 200);
+    T.flash = ms('--m-flash', 400);
+    T.decay = ms('--m-decay', 15000);
+    T.pulse = ms('--m-pulse', 2400);
+    T.step  = ms('--m-step', 18);
+  }
+
+  var running = [];
+  function play(el, keyframes, options) {
+    var handle = M.animate(el, keyframes, options);
+    running.push(handle);
+    return handle;
+  }
+
+  // Arrival. One enter, from slightly off and slightly faint, to exactly
+  // where Python drew it. Never the reverse: an element must not be left
+  // anywhere the static render did not put it.
+  function arrival(el) {
+    play(el, { opacity: [0, 1], transform: ['translateY(3px)', 'none'] },
+      { duration: T.enter / 1000, easing: 'ease-out' });
+  }
+
+  // Decay. The element starts at the emphasis its age has already used up
+  // and settles the rest of the way, so a value measured ten seconds into
+  // a fifteen second window arrives two thirds faded -- the motion is the
+  // remaining freshness, not a fresh animation over an old number.
+  function decayed(el) {
+    var spent = parseFloat(el.getAttribute('data-decay')) || 0;
+    var left = Math.max(0, 1 - spent);
+    if (left <= 0 || !T.decay) return;
+    play(el, { opacity: [1 - spent * 0.45, 1] },
+      { duration: (T.decay * left) / 1000, easing: 'ease-out' });
+  }
+
+  // Counting. Order is the payload's, not the DOM's guess at it, and the
+  // whole reveal is capped so a wall of two hundred cells does not take
+  // four seconds to admit it has two hundred cells.
+  function counted(el) {
+    var index = parseInt(el.getAttribute('data-index'), 10) || 0;
+    var total = parseInt(el.getAttribute('data-total'), 10) || 1;
+    // Floored as well as capped. A fleet console usually counts two or
+    // three of a thing, and at the raw step that whole reveal was over in
+    // fifty milliseconds -- a stagger nobody can see is not a stagger, it
+    // is three elements appearing at once with extra machinery. The floor
+    // makes small counts readable; the cap stops a wall of two hundred
+    // cells taking four seconds to admit it has two hundred cells.
+    var span = Math.max(T.enter * 0.6, Math.min(T.step * total, T.enter * 2));
+    play(el, { opacity: [0, 1] }, {
+      duration: T.enter / 1000, easing: 'ease-out',
+      delay: (span * (index / Math.max(total, 1))) / 1000,
+    });
+  }
+
+  // Traffic. The one loop, breathing at the producer's own interval, so a
+  // tightening cadence is visibly a tightening cadence. Clamped at both
+  // ends and only at the ends: under the floor it reads as a flicker
+  // rather than a rhythm, over the ceiling it reads as stopped. The clamp
+  // is a legibility bound on an honest number, not a rescaling of it, and
+  // an element that hits either end still carries the real interval in
+  // data-period for anything that wants to read it.
+  function trafficking(el) {
+    var period = parseFloat(el.getAttribute('data-period')) * 1000;
+    if (!(period > 0)) return;
+    period = Math.max(T.pulse / 4, Math.min(T.pulse * 4, period));
+    play(el, { opacity: [1, 0.45, 1] }, {
+      duration: period / 1000, repeat: Infinity, easing: 'ease-in-out',
+    });
+  }
+
+  // The poll clock. Starts where the measurement says it already is and
+  // takes exactly as long as the producer's remaining interval to finish,
+  // so the bar arriving at the end and the next poll being due are the
+  // same event rather than two things that drift apart.
+  function cycling(el) {
+    var spent = parseFloat(el.getAttribute('data-spent'));
+    var period = parseFloat(el.getAttribute('data-period'));
+    if (!(period > 0) || !(spent >= 0)) return;
+    if (el.getAttribute('data-cycle-axis') === 'rotate') {
+      // A dial rather than a bar. The radar's sweep sits at the angle the
+      // freshness put it and goes round once per poll interval, so the
+      // sweep an operator watches is the poll they are waiting for --
+      // which is the one thing a radar drawn as a still picture cannot
+      // say. Same clock, same refusals, different geometry.
+      var from = spent * 360;
+      // view-box, not fill-box. The origin the caller gives is a point in
+      // the drawing's own coordinate system -- the dial's centre -- and
+      // fill-box would have measured it against the wedge's bounding box
+      // instead, spinning the sweep around its own middle somewhere off
+      // in the corner of the panel.
+      var origin = el.getAttribute('data-cycle-origin');
+      el.style.transformBox = 'view-box';
+      el.style.transformOrigin = origin
+        ? origin.split(/\s+/).map(function (n) { return n + 'px'; }).join(' ')
+        : 'center';
+      var first = play(el, { rotate: [from + 'deg', '360deg'] },
+        { duration: period * (1 - spent), easing: 'linear' });
+      if (first && first.finished && first.finished.then) {
+        first.finished.then(function () {
+          play(el, { rotate: ['0deg', '360deg'] },
+            { duration: period, easing: 'linear', repeat: Infinity });
+        }, function () {});
+      }
+      return;
+    }
+    var bar = el.querySelector('i') || el;
+    // Linear, and this is the one place R11's ban on it is wrong. An
+    // eased clock runs fast in the middle and slow at the ends, which
+    // means the bar's position stops being the elapsed fraction -- the
+    // single thing it is here to report. Easing this would be the motion
+    // equivalent of a chart with an unlabelled y-axis.
+    // Two animations, not one repeating animation. A single repeating
+    // tween would restart every cycle at the position of the FIRST poll
+    // rather than at zero, so the second minute of a thirty second dial
+    // would begin fourteen percent through -- a clock that is right once
+    // and drifts forever after.
+    var first = play(bar, { transform: ['scaleX(' + spent + ')', 'scaleX(1)'] },
+      { duration: (period * (1 - spent)), easing: 'linear' });
+    if (first && first.finished && first.finished.then) {
+      first.finished.then(function () {
+        play(bar, { transform: ['scaleX(0)', 'scaleX(1)'] },
+          { duration: period, easing: 'linear', repeat: Infinity });
+      }, function () {});
+    }
+  }
+
+  // The shared duration formatter. This mirrors `duration_words` in this
+  // module, and tests/test_hive_motion.py runs the two against each other
+  // across a table of values -- a format that drifts between the server
+  // and the browser would show up as a number that jumps the instant the
+  // page starts counting.
+  function words(seconds, style) {
+    if (style === 'tenths') return seconds.toFixed(1) + 'S';
+    seconds = Math.floor(seconds);
+    var pad = function (n) { return (n < 10 ? '0' : '') + n; };
+    if (style === 'tenths') return seconds.toFixed(1) + 'S';
+    if (style === 'lower') {
+      if (seconds < 60) return seconds + 's';
+      if (seconds < 3600) return Math.floor(seconds / 60) + 'm';
+      if (seconds < 86400) return Math.floor(seconds / 3600) + 'h '
+        + Math.floor((seconds % 3600) / 60) + 'm';
+      return Math.floor(seconds / 86400) + 'd '
+        + Math.floor((seconds % 86400) / 3600) + 'h';
+    }
+    if (seconds < 60) return seconds + 'S';
+    if (seconds < 3600) return Math.floor(seconds / 60) + 'M';
+    if (seconds < 86400) return Math.floor(seconds / 3600) + 'H '
+      + pad(Math.floor((seconds % 3600) / 60)) + 'M';
+    return Math.floor(seconds / 86400) + 'D '
+      + pad(Math.floor((seconds % 86400) / 3600)) + 'H';
+  }
+  window.__hiveWords = words;   // read by the agreement test
+
+  // Every running counter on one interval. A timer each would drift apart
+  // and would also wake the page N times a second to do one page's worth
+  // of work; the numbers all advance on the same edge instead, so two
+  // counters showing the same measurement never disagree by a second.
+  var clocks = [];
+  var ticking = null;
+  function elapsing(el) {
+    var seconds = parseFloat(el.getAttribute('data-elapsed-seconds'));
+    if (!(seconds >= 0)) return;
+    var target = el.querySelector('[data-elapsed-text]') || el;
+    clocks.push({ el: el, target: target, base: seconds,
+                  rendered: target.textContent,
+                  style: el.getAttribute('data-style') || 'upper' });
+    if (ticking) return;
+    var origin = performance.now();
+    ticking = setInterval(function () {
+      var since = (performance.now() - origin) / 1000;
+      for (var i = 0; i < clocks.length; i++) {
+        var c = clocks[i];
+        var next = words(c.base + since, c.style);
+        // Written only when the words change. A counter in hours restates
+        // the same string 3599 times out of 3600, and rewriting text on
+        // every tick is how a still page ends up costing a screenful of
+        // layout a second.
+        if (c.target.textContent !== next) c.target.textContent = next;
+      }
+    }, 1000);
+    running.push({ cancel: function () {
+      if (ticking) { clearInterval(ticking); ticking = null; }
+      // Settling puts the words back to what Python wrote. This is the
+      // only kind that edits the document rather than compositing over
+      // it, so it is the only one that has to undo anything -- and if it
+      // did not, "a settled page is the rendered page" would quietly stop
+      // being true the moment a minute ticked over.
+      for (var i = 0; i < clocks.length; i++) {
+        clocks[i].target.textContent = clocks[i].rendered;
+      }
+      clocks.length = 0;
+    } });
+  }
+
+  // A path drawing itself. The dash pattern is set from the geometry's
+  // own measured length rather than a guess, so a short strand and a long
+  // one both draw fully and neither overshoots into a gap.
+  //
+  // Whatever the path already had on stroke-dasharray is put back at the
+  // end. Several drawings dash a line to mean "undelivered" or "nobody
+  // tried this", and a trace that cleared it would have quietly turned
+  // those into solid lines -- erasing a refusal by animating it.
+  function traced(el) {
+    // Every SVG geometry element, not just <path>. SVG2 put
+    // getTotalLength on SVGGeometryElement, so a rect and a circle both
+    // answer it -- and rects are most of what this system draws: the ICE
+    // walls, the corridor doorframes, the dive frames. Leaving them out
+    // of the selector meant the kind ran on almost nothing.
+    var SHAPES = 'path, line, polyline, polygon, rect, circle, ellipse';
+    var paths = el.tagName && /^(path|line|polyline|polygon|rect|circle|ellipse)$/i
+      .test(el.tagName) ? [el] : el.querySelectorAll(SHAPES);
+    var index = parseInt(el.getAttribute('data-index'), 10) || 0;
+    var total = parseInt(el.getAttribute('data-total'), 10) || 1;
+    var span = Math.max(T.enter * 0.6, Math.min(T.step * total, T.enter * 2));
+    var delay = (span * (index / Math.max(total, 1))) / 1000;
+    for (var i = 0; i < paths.length; i++) {
+      var path = paths[i];
+      if (!path.getTotalLength) continue;
+      var length = 0;
+      try { length = path.getTotalLength(); } catch (e) { continue; }
+      if (!(length > 0)) continue;
+      var restore = path.getAttribute('stroke-dasharray');
+      path.style.strokeDasharray = length + ' ' + length;
+      path.style.strokeDashoffset = String(length);
+      (function (node, was) {
+        var handle = play(node, { strokeDashoffset: [String(length), '0'] },
+          { duration: T.enter / 1000, easing: 'ease-out', delay: delay });
+        var done = function () {
+          node.style.strokeDashoffset = '';
+          node.style.strokeDasharray = was === null ? '' : was;
+        };
+        if (handle && handle.finished && handle.finished.then) {
+          handle.finished.then(done, done);
+        }
+      })(path, restore);
+    }
+  }
+
+  // A level draws itself out to where the measurement already put it.
+  // It scales rather than resizing, and it scales from zero to the
+  // rendered extent -- never past it and never to a rounder number --
+  // so the end of the animation and the static render are the same frame.
+  function levelled(el) {
+    var bar = el.querySelector('i') || el;
+    var axis = el.getAttribute('data-level-axis') || 'x';
+    if (axis === 'slide') {
+      // Some measurements are a position rather than an extent: the burn
+      // marker rides the point on its track that the percentage puts it
+      // at. Sliding it in from the start of the track draws that reading;
+      // scaling it would have grown the marker itself, which measures
+      // nothing.
+      var level = parseFloat(el.getAttribute('data-level')) || 0;
+      play(bar, { transform: ['translateX(' + (-100 * level) + '%)', 'none'] },
+        { duration: T.enter / 1000, easing: 'ease-out' });
+      return;
+    }
+    if (axis === 'fade') {
+      // Some measurements have no bar to grow. The context burn is grain
+      // closing in from the panel edges, and the honest reading of "this
+      // much is gone" is the grain arriving at the density Python already
+      // computed from the percentage -- not a bar drawn next to it.
+      play(bar, { opacity: [0, 1] },
+        { duration: T.enter / 1000, easing: 'ease-out' });
+      return;
+    }
+    // To the measured extent, named -- not to `none`. `none` is the
+    // identity transform, so animating to it threw away the inline
+    // scale the server wrote and every bar finished at full width: a
+    // twelve percent reading and an eighty-two percent reading drawn the
+    // same length, by the kind whose whole job is extent.
+    var level = parseFloat(el.getAttribute('data-level'));
+    if (!(level >= 0)) level = 1;
+    var fn = axis === 'y' ? 'scaleY' : 'scaleX';
+    play(bar, { transform: [fn + '(0)', fn + '(' + level + ')'] },
+      { duration: T.enter / 1000, easing: 'ease-out' });
+  }
+
+  var HANDLERS = {
+    arrive: arrival, decay: decayed, count: counted, level: levelled,
+    elapsed: elapsing, trace: traced, traffic: trafficking, cycle: cycling,
+  };
+
+  function start(scope) {
+    readTokens();
+    var nodes = (scope || document).querySelectorAll('[data-motion]');
+    for (var i = 0; i < nodes.length; i++) {
+      var el = nodes[i];
+      var kind = el.getAttribute('data-motion');
+      // `still` and `intent` are deliberately absent from HANDLERS. The
+      // first must never be touched; the second is CSS and needs no help.
+      var handler = HANDLERS[kind];
+      if (handler) { try { handler(el); } catch (e) { /* one bad mark
+        must not stop the rest of the page from settling */ } }
+    }
+  }
+
+  // What the review scripts call. Cancelling rather than finishing is the
+  // point: every animation above rests at the rendered geometry, so a
+  // cancelled page IS the static export. A `finish()` would have to agree
+  // with Python about the end state, and two descriptions of one truth is
+  // how they drift apart.
+  function settle() {
+    for (var i = 0; i < running.length; i++) {
+      try { running[i].cancel(); } catch (e) {}
+    }
+    running.length = 0;
+    if (document.getAnimations) {
+      var all = document.getAnimations();
+      for (var j = 0; j < all.length; j++) { try { all[j].cancel(); } catch (e) {} }
+    }
+    root.setAttribute('data-motion-off', '');
+  }
+
+  window.HiveMotion = {
+    schema: 'hive.motion/1',
+    off: OFF,
+    settle: settle,
+    start: start,
+    count: function () { return running.length; },
+  };
+
+  if (!OFF) {
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', function () { start(); });
+    } else { start(); }
+  }
+})();
+</script>
+<script>
+(function () {
+  var state = document.getElementById('state');
+  var countEl = document.getElementById('count');
+  var marksEl = document.getElementById('marks');
+  var kill = document.getElementById('kill');
+  var replay = document.getElementById('replay');
+
+  // The refusal reasons are already in the markup -- read them out rather
+  // than restating them, so this page cannot disagree with the mark.
+  document.querySelectorAll('.cell[data-side="none"]').forEach(function (cell) {
+    var list = cell.querySelector('.reasons');
+    if (!list) return;
+    var seen = {};
+    cell.querySelectorAll('[data-still-reason]').forEach(function (el) {
+      var why = el.dataset.stillReason;
+      if (seen[why]) return;
+      seen[why] = true;
+      var li = document.createElement('li');
+      li.textContent = why;
+      list.appendChild(li);
+    });
+  });
+
+  function report() {
+    marksEl.textContent = document.querySelectorAll('[data-motion]').length;
+    countEl.textContent = document.getAnimations().length;
+  }
+  setInterval(report, 500); report();
+
+  var off = false;
+  kill.addEventListener('click', function () {
+    off = !off;
+    kill.setAttribute('aria-pressed', String(off));
+    kill.textContent = off ? 'Motion on' : 'Motion off';
+    state.dataset.off = off ? '1' : '0';
+    state.querySelector('b').textContent = off ? 'STILL' : 'RUNNING';
+    if (off) { window.HiveMotion.settle(); }
+    else { document.documentElement.removeAttribute('data-motion-off');
+           window.HiveMotion.start(); }
+    report();
+  });
+
+  replay.addEventListener('click', function () {
+    window.HiveMotion.settle();
+    document.documentElement.removeAttribute('data-motion-off');
+    window.HiveMotion.start();
+    off = false; kill.setAttribute('aria-pressed', 'false');
+    kill.textContent = 'Motion off'; state.dataset.off = '0';
+    state.querySelector('b').textContent = 'RUNNING';
+    report();
+  });
+})();
+</script>
+
+</body></html>

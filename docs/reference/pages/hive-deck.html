@@ -1,0 +1,311 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<!-- Preserved from the published Claude artifact "HIVE // DECK".
+     Source: https://claude.ai/code/artifact/889450dc-cfa5-460b-b338-bf44aac05785
+     The artifact host frame runtime has been removed; nothing else is edited.
+     Self-contained apart from Google Fonts. -->
+</head>
+<body>
+<title>HIVE // DECK</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Serif+Display:wght@900&family=JetBrains+Mono:wght@400;500;700&family=Saira+Extra+Condensed:wght@600;800&display=swap">
+<style>
+:root{
+  --void:#000;--panel:#0A0A08;--line:#2A2416;--line2:#453A1E;
+  --o:#FF9830;--od:#8A5510;--hot:#FFCC50;
+  --g:#50FF50;--gd:#1E7A1E;--cy:#20F0FF;--cyd:#0E6B7C;
+  --r:#FF3030;--steel:#D8D8D0;--mut:#8A8478;--unm:#E858B8;
+  --title:'Noto Serif Display',serif;--mono:'JetBrains Mono',monospace;--stamp:'Saira Extra Condensed',Impact,sans-serif;
+}
+*{box-sizing:border-box;margin:0}
+body{background:var(--void);color:var(--steel);font:400 13px/1.5 var(--mono);overflow-x:hidden;-webkit-font-smoothing:antialiased}
+
+/* ——— CRT stack: scanlines, beam, vignette, flicker ——— */
+body::before{content:"";position:fixed;inset:0;z-index:95;pointer-events:none;
+  background:repeating-linear-gradient(to bottom,rgba(0,0,0,.25) 0 1px,transparent 1px 3px)}
+body::after{content:"";position:fixed;inset:0;z-index:96;pointer-events:none;
+  background:radial-gradient(ellipse at 50% 42%,transparent 52%,rgba(0,0,0,.66) 100%)}
+.beam{position:fixed;left:0;right:0;height:120px;z-index:94;pointer-events:none;
+  background:linear-gradient(to bottom,transparent,rgba(80,255,80,.05) 45%,rgba(80,255,80,.09) 50%,rgba(80,255,80,.05) 55%,transparent);
+  animation:beam 7s linear infinite}
+@keyframes beam{from{top:-140px}to{top:110%}}
+.flick{animation:flick 4.9s steps(1) infinite}
+@keyframes flick{0%,96%{opacity:1}97%{opacity:.86}98%{opacity:1}99%{opacity:.93}}
+
+/* ——— augmented-ui-style notched frames ——— */
+.aug{position:relative;background:var(--panel);border:1px solid var(--line);
+  clip-path:polygon(0 14px,14px 0,calc(100% - 26px) 0,100% 26px,100% 100%,26px 100%,0 calc(100% - 14px));}
+.aug::before{content:"";position:absolute;inset:0;pointer-events:none;
+  background:linear-gradient(135deg,var(--o) 0 2px,transparent 2px) top left/16px 16px no-repeat,
+             linear-gradient(315deg,var(--o) 0 2px,transparent 2px) bottom right/28px 28px no-repeat;opacity:.9}
+.aug-c{border-color:var(--cyd)}
+.aug-c::before{background:linear-gradient(135deg,var(--cy) 0 2px,transparent 2px) top left/16px 16px no-repeat,
+             linear-gradient(315deg,var(--cy) 0 2px,transparent 2px) bottom right/28px 28px no-repeat}
+
+/* ——— rgb-split heading + decode ——— */
+.rgb{position:relative;color:var(--o)}
+.rgb::before,.rgb::after{content:attr(data-t);position:absolute;inset:0;opacity:.5;pointer-events:none}
+.rgb::before{color:#FF3060;transform:translateX(-1.5px)}
+.rgb::after{color:#20F0FF;transform:translateX(1.5px)}
+.glitch{animation:gl .18s steps(2) 3}
+@keyframes gl{0%{transform:translate(0)}25%{transform:translate(-3px,1px) skewX(-2deg)}50%{transform:translate(2px,-1px)}75%{transform:translate(-1px,0) skewX(1deg)}}
+
+.wrap{max-width:1240px;margin:0 auto;padding:0 26px}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:22px}
+h2.rgb{font-family:var(--title);font-weight:900;font-size:clamp(24px,3.2vw,38px);
+  text-transform:uppercase;letter-spacing:.1em;transform:scaleX(.85);transform-origin:left}
+.sub{color:var(--mut);letter-spacing:.16em;font-size:10.5px;text-transform:uppercase;margin:6px 0 22px}
+.sub b{color:var(--g);font-weight:500}
+section{padding:60px 0}
+canvas{display:block;width:100%}
+.pad{padding:18px 20px}
+.lab{font-size:10px;letter-spacing:.22em;color:var(--od);text-transform:uppercase}
+
+/* ——— hero / boot ——— */
+.hero{min-height:88vh;display:flex;flex-direction:column;justify-content:center;padding:70px 0 30px;position:relative}
+.hero h1{font-family:var(--title);font-weight:900;font-size:clamp(52px,9vw,120px);line-height:.9;
+  color:var(--o);text-transform:uppercase;letter-spacing:.04em;transform:scaleX(.8);transform-origin:left}
+.hero h1 small{display:block;font-size:.3em;color:var(--steel);letter-spacing:.3em;margin-top:16px}
+.bootlog{margin-top:34px;font-size:11.5px;color:var(--gd);min-height:120px;letter-spacing:.04em}
+.bootlog b{color:var(--g);font-weight:500}
+.bootlog i{color:var(--unm);font-style:normal}
+.statline{display:flex;gap:26px;flex-wrap:wrap;margin-top:26px;font-size:11px;letter-spacing:.14em;color:var(--mut)}
+.statline b{color:var(--hot);font-weight:500}
+
+/* ——— telegraph ribbon ——— */
+.tg{position:sticky;top:0;z-index:97;background:rgba(0,0,0,.92);border-bottom:1px solid var(--od);
+  backdrop-filter:blur(2px)}
+.tg-in{display:flex;gap:18px;align-items:center;max-width:1240px;margin:0 auto;padding:7px 26px;overflow:hidden;white-space:nowrap}
+.tg-k{font-family:var(--stamp);font-size:21px;color:var(--hot)}
+.tg-k b{border:1px solid var(--o);padding:0 7px;margin-right:5px;color:var(--o)}
+.tg-t{font-size:11.5px;color:var(--steel);letter-spacing:.05em;animation:crawl 36s linear infinite}
+.tg-t em{font-style:normal;color:var(--o)}
+@keyframes crawl{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+
+/* ——— MAGI gauge row ——— */
+.magi{display:grid;grid-template-columns:repeat(3,1fr);gap:22px}
+.magi .aug{text-align:center;padding:20px 12px 16px}
+.magi b{display:block;font-family:var(--stamp);font-size:19px;letter-spacing:.12em;color:var(--o)}
+.magi span{font-size:10px;color:var(--mut);letter-spacing:.14em}
+
+/* ——— deck strip ——— */
+.deckframe{border:2px solid var(--line2);border-radius:10px;padding:14px 14px 20px;background:#050504;
+  box-shadow:0 0 0 6px #0A0A08,0 0 44px rgba(255,152,48,.06) inset}
+.deckscreen{overflow:hidden;border:1px solid var(--line)}
+.deck-note{display:flex;justify-content:space-between;gap:20px;color:var(--mut);font-size:10.5px;
+  letter-spacing:.14em;margin-top:10px;text-transform:uppercase}
+.stanza{padding:90px 0 40px;text-align:center}
+.stanza p{font-family:var(--title);font-weight:900;font-size:clamp(16px,2.2vw,24px);line-height:2;color:var(--mut)}
+.stanza b{color:var(--steel)}.stanza .o{color:var(--o)}.stanza .g{color:var(--g)}.stanza .c{color:var(--cy)}
+footer{padding:20px 0 60px;text-align:center;color:var(--line2);font-size:10px;letter-spacing:.2em;text-transform:uppercase}
+@media(max-width:900px){.grid2,.magi{grid-template-columns:1fr}.hero{min-height:auto}}
+@media(prefers-reduced-motion:reduce){*{animation:none!important}.tg-t{transform:none}}
+</style>
+<div class="beam"></div>
+
+<div class="tg"><div class="tg-in"><span class="tg-k"><b>N</b>3</span><div class="tg-t" id="tgt"></div></div></div>
+
+<div class="wrap flick">
+<header class="hero">
+  <h1 class="glitch">Hive<small>// Deck · fleet operations instrument · all data canonical</small></h1>
+  <div class="bootlog" id="boot"></div>
+  <div class="statline">
+    <span>SRC <b>SALUD-AGENT-HEALTH-V1</b></span><span>COVERAGE <b>18/18</b></span>
+    <span>EVENTS <b>118</b></span><span>DECISIONS <b>3</b></span><span>INVENTED MARKS <b>0</b></span>
+  </div>
+</header>
+
+<section>
+  <h2 class="rgb" data-t="MAGI CONSENSUS">MAGI Consensus</h2>
+  <p class="sub">Trinity dial · each ring is a measured ratio, not a mood · <b>third ring reads the human bottleneck</b></p>
+  <div class="magi">
+    <div class="aug"><canvas id="m1" height="170"></canvas><b>CASPER · COVERAGE</b><span>18 OF 18 SUBJECTS OBSERVED</span></div>
+    <div class="aug"><canvas id="m2" height="170"></canvas><b>MELCHIOR · PROOF</b><span>15 OF 18 SEALED</span></div>
+    <div class="aug"><canvas id="m3" height="170"></canvas><b>BALTHASAR · HUMAN</b><span>3 OF 18 AWAIT AN OPERATOR</span></div>
+  </div>
+</section>
+
+<section>
+  <h2 class="rgb" data-t="THE GLOBE">The Globe</h2>
+  <p class="sub">Encom lineage · one real endpoint — <b>dell-local</b> — carrying all 18 workers · arcs are membership, not traffic</p>
+  <div class="aug aug-c"><canvas id="globe" height="430"></canvas></div>
+</section>
+
+<section>
+  <h2 class="rgb" data-t="THE RIVER">The River — phosphor</h2>
+  <p class="sub">Oscilloscope tape · beam draws each lane, phosphor decays behind it · <b>every mark is a canonical event</b> · unresolved lanes end in magenta</p>
+  <div class="aug"><canvas id="scope" height="520"></canvas></div>
+</section>
+
+<section>
+  <h2 class="rgb" data-t="DECK MODE">Deck Mode</h2>
+  <p class="sub">The cyberdeck cut · 1280×400 ultrawide, touch-first, glanceable at arm's length · <b>Telegraph + Field only</b> — a deck is a pager, not a workstation</p>
+  <div class="deckframe"><div class="deckscreen"><canvas id="deck" height="300"></canvas></div>
+  <div class="deck-note"><span>RPI · FRAMEDECK CLASS</span><span>44PX TARGETS · NO HOVER</span><span>DIMMABLE PHOSPHOR</span></div></div>
+</section>
+
+<div class="stanza"><p>
+Quiet is <b>black</b>. Evidence emits <b class="g">light</b>.<br>
+Pressure bends the <b class="o">field</b>. Human need crosses the <b class="o">telegraph</b>.<br>
+Time braids into <b class="g">proof</b>. The organization reveals its nerves <b class="c">only when touched</b>.
+</p></div>
+<footer>hive // deck · concept render · lineage: edex-ui · encom-boardroom · augmented-ui · ghostty-shaders · cool-retro-term</footer>
+</div>
+
+<script>
+const DATA={"field":[{"id":"058fe0851309@1","board":"canary-alpha","state":"done","attempt":1,"needs":false},{"id":"922a17533a48@2","board":"canary-alpha","state":"done","attempt":2,"needs":false},{"id":"4b4dd27fc187@1","board":"canary-beta","state":"done","attempt":1,"needs":false},{"id":"62e07f3b88ff@1","board":"fleet-hud","state":"done","attempt":1,"needs":false},{"id":"0cce3d752e70@2","board":"fleet-hud","state":"done","attempt":2,"needs":false},{"id":"09a6e36cbb97@1","board":"hive-self-build","state":"done","attempt":1,"needs":false},{"id":"e5c858350a40@1","board":"hive-self-build","state":"done","attempt":1,"needs":false},{"id":"6501a1a5d45e@1","board":"hive-self-build","state":"done","attempt":1,"needs":false},{"id":"17a057c8e775@1","board":"hive-self-build","state":"done","attempt":1,"needs":false},{"id":"616a255d8b0c@1","board":"hive-self-build","state":"done","attempt":1,"needs":false},{"id":"584ff908f24e@1","board":"hive-self-build","state":"done","attempt":1,"needs":false},{"id":"0f752974be01@1","board":"hive-self-build","state":"done","attempt":1,"needs":false},{"id":"41f812ed7399@1","board":"hive-self-build","state":"done","attempt":1,"needs":false},{"id":"27cd1cb398b4@3","board":"hive-self-build","state":"done","attempt":3,"needs":false},{"id":"b48d640bfa1c@5","board":"hive-self-build","state":"needs_human","attempt":5,"needs":true},{"id":"1e6e69324f96@1","board":"kanpai-merge-repair","state":"done","attempt":1,"needs":false},{"id":"3b8ccfff0f5e@1","board":"slancha-pipeline-staging","state":"needs_human","attempt":1,"needs":true},{"id":"954f35a6c77e@3","board":"slancha-pipeline-staging","state":"needs_human","attempt":3,"needs":true}],"tape":[{"rank":1,"title":"Compiled story data acceptance_contract fail check disproves acc","state":"NEEDS HUMAN","reason":"worker failed","task":"b48d640bfa1c"},{"rank":2,"title":"Implement Shard exactly as KANPAI_PIPELINE_STAGING_GOAL md speci","state":"NEEDS HUMAN","reason":"worker failed","task":"3b8ccfff0f5e"},{"rank":3,"title":"Implement Shard exactly as KANPAI_PIPELINE_STAGING_GOAL md speci","state":"NEEDS HUMAN","reason":"worker failed","task":"954f35a6c77e"}],"river":[{"id":"hive-self-build-86d16f31-b48d640bfa1c@5","task":"hive-self-build-86d16f31-b48d640bfa1c","board":"hive-self-build-86d16f31","attempt":5,"state":"needs_human","title":"[HIVE-STORY HIVE-T1-010@1 19e774a976c6cae2d3dbe8ee23bd6d82f17045ac0b06f64a2c695c","proof":"NOT_RUN","events":[{"at":"2026-08-22T09:35:13.296587+00:00","kind":"created"},{"at":"2026-08-22T09:35:15.075886+00:00","kind":"claimed"},{"at":"2026-08-22T09:50:16.779906+00:00","kind":"worker_retry_authorized"},{"at":"2026-08-22T09:50:20.972227+00:00","kind":"claimed"},{"at":"2026-08-22T09:50:20.981949+00:00","kind":"canonical_blocked"},{"at":"2026-08-22T09:50:48.406753+00:00","kind":"operator_retry"},{"at":"2026-08-22T09:50:51.018886+00:00","kind":"claimed"},{"at":"2026-08-22T10:05:52.664616+00:00","kind":"canonical_blocked"},{"at":"2026-08-22T15:36:22.435606+00:00","kind":"operator_retry"},{"at":"2026-08-22T15:36:27.447953+00:00","kind":"claimed"},{"at":"2026-08-22T15:37:40.067655+00:00","kind":"candidate_submitted"},{"at":"2026-08-22T15:37:40.076751+00:00","kind":"canonical_blocked"},{"at":"2026-08-22T16:06:11.300800+00:00","kind":"operator_retry"},{"at":"2026-08-22T16:06:15.831249+00:00","kind":"claimed"},{"at":"2026-08-22T16:21:17.404576+00:00","kind":"canonical_blocked"}]},{"id":"hive-self-build-86d16f31-27cd1cb398b4@3","task":"hive-self-build-86d16f31-27cd1cb398b4","board":"hive-self-build-86d16f31","attempt":3,"state":"done","title":"[HIVE-STORY HIVE-T1-009@1 77e666377cb95fbef8afd5a2118c0fe2e1325d44b9867637f6d3d5","proof":"PASSED","events":[{"at":"2026-08-22T08:57:40.374807+00:00","kind":"created"},{"at":"2026-08-22T08:57:42.489052+00:00","kind":"claimed"},{"at":"2026-08-22T09:12:44.192959+00:00","kind":"canonical_blocked"},{"at":"2026-08-22T09:17:12.858614+00:00","kind":"operator_retry"},{"at":"2026-08-22T09:19:04.051616+00:00","kind":"claimed"},{"at":"2026-08-22T09:19:04.058164+00:00","kind":"canonical_blocked"},{"at":"2026-08-22T09:21:04.052168+00:00","kind":"operator_retry"},{"at":"2026-08-22T09:21:04.197623+00:00","kind":"claimed"},{"at":"2026-08-22T09:29:22.334172+00:00","kind":"candidate_submitted"},{"at":"2026-08-22T09:29:23.210253+00:00","kind":"gate_passed"},{"at":"2026-08-22T09:29:23.223625+00:00","kind":"accepted"}]},{"id":"canary-alpha-b6d9e6e1-922a17533a48@2","task":"canary-alpha-b6d9e6e1-922a17533a48","board":"canary-alpha-b6d9e6e1","attempt":2,"state":"done","title":"First test that /home/dellpromax/.kanpai/fleets/canary-beta-5034ca9e/config.toml","proof":"PASSED","events":[{"at":"2026-08-21T20:41:46.830310+00:00","kind":"created"},{"at":"2026-08-21T20:41:51.798197+00:00","kind":"claimed"},{"at":"2026-08-21T20:43:56.742001+00:00","kind":"candidate_submitted"},{"at":"2026-08-21T20:43:56.750173+00:00","kind":"retry_authorized"},{"at":"2026-08-21T20:43:56.848673+00:00","kind":"canonical_blocked"},{"at":"2026-08-21T20:45:13.595115+00:00","kind":"operator_retry"},{"at":"2026-08-21T20:45:15.473108+00:00","kind":"claimed"},{"at":"2026-08-21T20:46:36.019587+00:00","kind":"candidate_submitted"},{"at":"2026-08-21T20:46:36.042031+00:00","kind":"gate_passed"},{"at":"2026-08-21T20:46:53.290557+00:00","kind":"accepted"}]},{"id":"fleet-hud-91b3623a-0cce3d752e70@2","task":"fleet-hud-91b3623a-0cce3d752e70","board":"fleet-hud-91b3623a","attempt":2,"state":"done","title":"Add docs/KANPAI_LIFECYCLE.md. Document the exact kanpai fleet status fleet-hud, ","proof":"PASSED","events":[{"at":"2026-08-21T20:25:32.109819+00:00","kind":"created"},{"at":"2026-08-21T20:25:34.684014+00:00","kind":"claimed"},{"at":"2026-08-21T20:27:37.844156+00:00","kind":"candidate_submitted"},{"at":"2026-08-21T20:27:38.017104+00:00","kind":"retry_authorized"},{"at":"2026-08-21T20:27:39.740094+00:00","kind":"canonical_blocked"},{"at":"2026-08-21T20:28:18.080389+00:00","kind":"operator_retry"},{"at":"2026-08-21T20:28:19.794223+00:00","kind":"claimed"},{"at":"2026-08-21T20:30:38.904997+00:00","kind":"candidate_submitted"},{"at":"2026-08-21T20:30:39.158864+00:00","kind":"gate_passed"},{"at":"2026-08-21T20:31:41.072513+00:00","kind":"accepted"}]},{"id":"slancha-pipeline-staging-6a4c5917-954f35a6c77e@3","task":"slancha-pipeline-staging-6a4c5917-954f35a6c77e","board":"slancha-pipeline-staging-6a4c5917","attempt":3,"state":"needs_human","title":"Implement Shard 2 exactly as KANPAI_PIPELINE_STAGING_GOAL.md specifies. Build th","proof":"NOT_RUN","events":[{"at":"2026-08-21T20:46:55.680039+00:00","kind":"created"},{"at":"2026-08-21T20:54:55.796946+00:00","kind":"claimed"},{"at":"2026-08-21T20:59:56.215385+00:00","kind":"canonical_blocked"},{"at":"2026-08-21T21:01:42.711097+00:00","kind":"operator_retry"},{"at":"2026-08-21T21:01:46.079417+00:00","kind":"claimed"},{"at":"2026-08-21T21:06:46.436849+00:00","kind":"canonical_blocked"},{"at":"2026-08-21T21:12:11.248461+00:00","kind":"operator_retry"},{"at":"2026-08-21T21:12:14.906796+00:00","kind":"claimed"},{"at":"2026-08-21T21:27:15.877708+00:00","kind":"canonical_blocked"}]},{"id":"canary-alpha-b6d9e6e1-058fe0851309@1","task":"canary-alpha-b6d9e6e1-058fe0851309","board":"canary-alpha-b6d9e6e1","attempt":1,"state":"done","title":"Replace the entire contents of value.txt with alpha-ready followed by one newlin","proof":"PASSED","events":[{"at":"2026-08-21T20:24:13.155764+00:00","kind":"created"},{"at":"2026-08-21T20:24:13.276605+00:00","kind":"claimed"},{"at":"2026-08-21T20:24:49.538284+00:00","kind":"candidate_submitted"},{"at":"2026-08-21T20:24:49.561934+00:00","kind":"gate_passed"},{"at":"2026-08-21T20:25:04.367282+00:00","kind":"accepted"}]},{"id":"canary-beta-5034ca9e-4b4dd27fc187@1","task":"canary-beta-5034ca9e-4b4dd27fc187","board":"canary-beta-5034ca9e","attempt":1,"state":"done","title":"Replace the entire contents of value.txt with beta-ready followed by one newline","proof":"PASSED","events":[{"at":"2026-08-21T20:24:13.201527+00:00","kind":"created"},{"at":"2026-08-21T20:24:13.278188+00:00","kind":"claimed"},{"at":"2026-08-21T20:24:47.532226+00:00","kind":"candidate_submitted"},{"at":"2026-08-21T20:24:47.553037+00:00","kind":"gate_passed"},{"at":"2026-08-21T20:25:04.425395+00:00","kind":"accepted"}]}],"thread":{"task":"hive-self-build-86d16f31-b48d640bfa1c","attempt":5,"state":"needs_human","title":"[HIVE-STORY HIVE-T1-010@1 19e774a976c6cae2d3dbe8ee23bd6d82f17045ac0b06f64a2c695cc834354330","git":{"branch":"kanpai/hive-self-build-86d16f31/b48d640bfa1c","changed_files":["erver.py"],"commits_ahead":0,"commits_behind":0,"index_state":"DIRTY","repository":"/home/dellpromax/Source/fleet-hud-self-build-b0","worktree":"/home/dellpromax/.kanpai/fleets/hive-self-build-86d16f31/worktrees/b48d640bfa1c","worktree_state":"OK"},"proof":{"failure_summary":"candidate is a no-op","result":"candidate is a no-op","state":"NOT_RUN"},"retry":{"attempt":5,"permitted":true,"reason":"worker failed"},"profile":"mender"},"source":{"schema":"salud-agent-health-v1","coverage":{"observed":18,"expected":18},"totals":{"done":15,"needs_human":3}}};
+const RM=matchMedia("(prefers-reduced-motion: reduce)").matches;
+const CV=(id,h)=>{const c=document.getElementById(id);const w=c.parentNode.clientWidth||c.clientWidth;
+  const d=Math.min(2,devicePixelRatio||1);c.width=w*d;c.height=h*d;c.style.height=h+"px";
+  const x=c.getContext("2d");x.scale(d,d);return[x,w,h,c];};
+const C={o:"#FF9830",hot:"#FFCC50",g:"#50FF50",gd:"#1E7A1E",cy:"#20F0FF",cyd:"#0E6B7C",
+  r:"#FF3030",unm:"#E858B8",mut:"#8A8478",line:"#2A2416",steel:"#D8D8D0"};
+
+/* Telegraph crawl — real items, doubled for seamless loop */
+{const t=DATA.tape.map(t=>`<em>${String(t.rank).padStart(2,"0")}</em> ${t.state} · ${t.reason.toUpperCase()} · ${t.task}`).join("&nbsp;&nbsp;·&nbsp;&nbsp;");
+document.getElementById("tgt").innerHTML=t+"&nbsp;&nbsp;·&nbsp;&nbsp;"+t;}
+
+/* Boot log — decode-in, real facts only; final state identical without motion */
+{const lines=[
+ ["SALUD LINK","canonical health feed · schema salud-agent-health-v1","b"],
+ ["SWEEP","18/18 subjects observed · freshness 2.1s","b"],
+ ["KANPAI","mutation authority present · no typed command supplied","b"],
+ ["TIMELINE","118 events · 9 canonical kinds · attempts to 5","b"],
+ ["GAPS","org-directory, delegation, capacity, cost: UNMEASURED","i"],
+ ["RENDER","every mark below is data · every absence printed","b"]];
+const el=document.getElementById("boot");
+const rowHTML=l=>`<div>▸ ${l[0].padEnd(9," ")} <${l[2]}>${l[1]}</${l[2]}></div>`;
+if(RM){el.innerHTML=lines.map(rowHTML).join("");}
+else{let i=0;const step=()=>{if(i>=lines.length)return;
+  const l=lines[i],d=document.createElement("div");el.appendChild(d);
+  const full=`▸ ${l[0].padEnd(9," ")} `;let j=0;const txt=l[1];
+  const tick=()=>{j+=3;d.innerHTML=full+`<${l[2]}>`+txt.slice(0,j)+(j<txt.length?"█":"")+`</${l[2]}>`;
+    if(j<txt.length)setTimeout(tick,14);else{i++;setTimeout(step,90);}};tick();};
+  setTimeout(step,300);}}
+
+/* MAGI trinity — arc gauges from measured ratios */
+function gauge(id,ratio,col,label){
+  const [x,w,h]=CV(id,170),cx=w/2,cy=h/2+8,R=58;
+  let p=ratio;
+  const draw=()=>{x.clearRect(0,0,w,h);
+    x.lineWidth=10;x.strokeStyle="#181410";
+    x.beginPath();x.arc(cx,cy,R,Math.PI*.75,Math.PI*2.25);x.stroke();
+    x.strokeStyle=col;x.shadowColor=col;x.shadowBlur=12;
+    x.beginPath();x.arc(cx,cy,R,Math.PI*.75,Math.PI*(.75+1.5*p));x.stroke();
+    x.shadowBlur=0;
+    // tick ring
+    x.strokeStyle="#332B18";x.lineWidth=1;
+    for(let i=0;i<=24;i++){const a=Math.PI*(.75+1.5*i/24);
+      x.beginPath();x.moveTo(cx+(R+12)*Math.cos(a),cy+(R+12)*Math.sin(a));
+      x.lineTo(cx+(R+17)*Math.cos(a),cy+(R+17)*Math.sin(a));x.stroke();}
+    x.fillStyle=col;x.font="700 26px JetBrains Mono";x.textAlign="center";
+    x.fillText(label,cx,cy+8);
+    if(!RM&&p<ratio){p=Math.min(ratio,p+.02);requestAnimationFrame(draw);}};
+  draw();
+  if(!RM){const io=new IntersectionObserver(e=>{if(e[0].isIntersecting){p=0;draw();io.disconnect();}});
+    io.observe(document.getElementById(id));}
+}
+gauge("m1",18/18,C.g,"18/18");
+gauge("m2",15/18,C.o,"15/18");
+gauge("m3",3/18,C.unm,"3/18");
+
+/* Globe — wireframe sphere, session points, membership arcs to dell-local */
+{const [x,w,h,c]=CV("globe",430),cx=w/2,cy=h/2,R=Math.min(h*.42,w*.3);
+ const boards=[...new Set(DATA.field.map(s=>s.board))];
+ let rot=0;
+ const P=(lat,lon,r)=>{const la=lat*Math.PI/180,lo=lon*Math.PI/180+rot;
+   return{x:cx+r*Math.cos(la)*Math.sin(lo),y:cy-r*Math.sin(la),z:Math.cos(la)*Math.cos(lo)};};
+ const pts=DATA.field.map((s,i)=>({s,lat:-50+((i*37)%100),lon:(i*61)%360}));
+ const draw=()=>{x.fillStyle="rgba(0,0,0,.34)";x.fillRect(0,0,w,h);
+   // graticule
+   x.strokeStyle="rgba(32,240,255,.16)";x.lineWidth=1;
+   for(let la=-60;la<=60;la+=30){x.beginPath();
+     for(let lo=0;lo<=360;lo+=6){const p=P(la,lo,R);if(p.z>0)x.lineTo(p.x,p.y);else x.moveTo(p.x,p.y);}x.stroke();}
+   for(let lo=0;lo<360;lo+=30){x.beginPath();
+     for(let la=-88;la<=88;la+=4){const p=P(la,lo,R);if(p.z>0)x.lineTo(p.x,p.y);else x.moveTo(p.x,p.y);}x.stroke();}
+   x.strokeStyle="rgba(32,240,255,.5)";x.beginPath();x.arc(cx,cy,R,0,7);x.stroke();
+   // dell-local pole
+   const hub=P(18,140,R);
+   if(hub.z>0){x.fillStyle=C.cy;x.shadowColor=C.cy;x.shadowBlur=14;
+     x.beginPath();x.arc(hub.x,hub.y,5,0,7);x.fill();x.shadowBlur=0;
+     x.fillStyle=C.cy;x.font="500 10px JetBrains Mono";x.textAlign="left";
+     x.fillText("DELL-LOCAL · 18 WORKERS",hub.x+12,hub.y-6);}
+   // session points + arcs
+   pts.forEach(p=>{const q=P(p.lat,p.lon,R);
+     const on=p.s.state==="needs_human";
+     if(q.z>0&&hub.z>0){x.strokeStyle=on?"rgba(255,152,48,.5)":"rgba(30,122,30,.30)";
+       x.beginPath();const mx=(q.x+hub.x)/2,my=(q.y+hub.y)/2-40;
+       x.moveTo(q.x,q.y);x.quadraticCurveTo(mx,my,hub.x,hub.y);x.stroke();}
+     if(q.z>0){x.fillStyle=on?C.o:C.gd;
+       x.beginPath();x.arc(q.x,q.y,on?4:2.5,0,7);x.fill();
+       if(on){x.strokeStyle=C.o;x.beginPath();x.arc(q.x,q.y,8,0,7);x.stroke();}}});
+   x.fillStyle="#3A3220";x.font="9px JetBrains Mono";x.textAlign="center";
+   x.fillText("ORANGE POINTS AWAIT AN OPERATOR · ARCS = PLACEMENT MEMBERSHIP · ONE ENDPOINT IS THE WHOLE TRUTH TODAY",cx,h-14);
+   if(!RM){rot+=.004;requestAnimationFrame(draw);}};
+ draw();}
+
+/* River — phosphor oscilloscope lanes, beam sweeps once, trails persist */
+{const rows=DATA.river,[x,w,h]=CV("scope",520);
+ const L=200,Rm=26,laneH=(h-60)/rows.length;
+ const KC={created:C.mut,claimed:C.cy,candidate_submitted:C.steel,gate_passed:C.g,accepted:C.g,
+   retry_authorized:C.o,worker_retry_authorized:C.o,canonical_blocked:C.r,operator_retry:C.o};
+ const lanes=rows.map((r,i)=>{const y=40+i*laneH+laneH/2;
+   const ts=r.events.map(e=>+new Date(e.at));const t0=Math.min(...ts),t1=Math.max(...ts),span=Math.max(1,t1-t0);
+   return{r,y,px:t=>L+((+new Date(t)-t0)/span)*(w-L-Rm)};});
+ let sweep=1.06;
+ const draw=()=>{x.fillStyle="rgba(0,0,0,.28)";x.fillRect(0,0,w,h); // phosphor decay
+   const lim=L+(w-L-Rm)*Math.min(1,sweep);
+   lanes.forEach(({r,y,px})=>{
+     x.fillStyle=r.state==="needs_human"?C.o:C.mut;x.font="500 10px JetBrains Mono";x.textAlign="left";
+     x.fillText(r.task.slice(-12)+"  A"+r.attempt,12,y-8);
+     x.fillStyle="#453A1E";x.font="9px JetBrains Mono";x.fillText(r.state.toUpperCase(),12,y+6);
+     x.lineWidth=2;
+     for(let j=0;j<r.events.length-1;j++){const a=px(r.events[j].at),b=Math.min(lim,px(r.events[j+1].at));
+       if(b<=a)continue;const blocked=r.events[j].kind==="canonical_blocked";
+       x.strokeStyle=blocked?"rgba(255,48,48,.55)":"rgba(80,255,80,.4)";
+       x.beginPath();x.moveTo(a,y);x.lineTo(b,y);x.stroke();}
+     r.events.forEach(e=>{const ex=px(e.at);if(ex>lim)return;const col=KC[e.kind]||C.unm;
+       x.fillStyle=col;x.shadowColor=col;x.shadowBlur=8;
+       if(e.kind==="gate_passed"||e.kind==="accepted"){x.beginPath();x.arc(ex,y,5,0,7);x.fill();
+         x.shadowBlur=0;x.strokeStyle=col;x.lineWidth=1;x.beginPath();x.arc(ex,y,9,0,7);x.stroke();}
+       else if(e.kind==="canonical_blocked"){x.fillRect(ex-4,y-6,8,12);x.shadowBlur=0;}
+       else if(e.kind.includes("retry")){x.beginPath();x.moveTo(ex,y-6);x.lineTo(ex+5,y+5);x.lineTo(ex-5,y+5);x.closePath();x.fill();x.shadowBlur=0;}
+       else{x.fillRect(ex-2,y-4,4,8);x.shadowBlur=0;}});
+     if(r.state==="needs_human"&&lim>=px(r.events[r.events.length-1].at)){
+       const ex=px(r.events[r.events.length-1].at);
+       x.strokeStyle=C.unm;x.setLineDash([3,5]);x.lineWidth=2;
+       x.beginPath();x.moveTo(ex+10,y);x.lineTo(w-Rm,y);x.stroke();x.setLineDash([]);
+       x.fillStyle=C.unm;x.font="9px JetBrains Mono";x.textAlign="right";
+       x.fillText("AWAITING OPERATOR",w-Rm,y-8);x.textAlign="left";}});
+   if(!RM&&sweep<1.05){ // beam line
+     x.strokeStyle="rgba(80,255,80,.8)";x.lineWidth=1;
+     x.beginPath();x.moveTo(lim,26);x.lineTo(lim,h-20);x.stroke();
+     sweep+=.006;requestAnimationFrame(draw);}};
+ draw();
+ if(!RM){const io=new IntersectionObserver(e=>{if(e[0].isIntersecting){sweep=0;draw();io.disconnect();}});
+   io.observe(document.getElementById("scope"));}}
+
+/* Deck mode — 1280x400-class strip: telegraph line + comb, huge targets */
+{const [x,w,h]=CV("deck",300);
+ x.fillStyle="#030302";x.fillRect(0,0,w,h);
+ // top telegraph
+ x.fillStyle=C.o;x.font="700 15px JetBrains Mono";x.textAlign="left";
+ x.fillText("N 3 · "+DATA.tape[0].state+" · "+DATA.tape[0].reason.toUpperCase()+" · "+DATA.tape[0].task,20,34);
+ x.strokeStyle="#2A2416";x.beginPath();x.moveTo(0,52);x.lineTo(w,52);x.stroke();
+ // fat comb: hexes 56px across the strip
+ const R2=40,dx=R2*1.74,dy=R2*1.52,cols=Math.floor((w-70)/dx);
+ const hex=(cx,cy,r)=>{x.beginPath();for(let i=0;i<6;i++){const a=Math.PI/3*i+Math.PI/6;
+   x[i?"lineTo":"moveTo"](cx+r*Math.cos(a),cy+r*Math.sin(a));}x.closePath();};
+ DATA.field.forEach((s,i)=>{const col=i%cols,row=(i/cols)|0;
+   const cx=48+col*dx+(row%2?dx/2:0),cy=112+row*dy;if(cy>h-34)return;
+   const on=s.state==="needs_human";
+   hex(cx,cy,R2-3);x.fillStyle=on?"rgba(255,152,48,.2)":"rgba(46,158,46,.1)";x.fill();
+   x.strokeStyle=on?C.o:C.gd;x.lineWidth=on?2.5:1;x.stroke();
+   x.fillStyle=on?C.hot:"#4E4A3E";x.font="500 11px JetBrains Mono";x.textAlign="center";
+   x.fillText(on?"NEEDS YOU":s.attempt>1?"A"+s.attempt:"OK",cx,cy+4);});
+ x.fillStyle="#453A1E";x.font="9px JetBrains Mono";x.textAlign="right";
+ x.fillText("TAP A CELL → FULL HIVE ON THE BIG SCREEN",w-16,h-12);}
+</script>
+</body></html>

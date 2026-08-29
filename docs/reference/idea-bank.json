@@ -1,0 +1,1714 @@
+{
+  "roles": [
+    {
+      "id": "owner",
+      "name": "Owner-operator",
+      "cls": "ck",
+      "needs": "All-fleet cockpit, NEEDS YOU queue, bounded controls, receipts"
+    },
+    {
+      "id": "englead",
+      "name": "Engineering lead",
+      "cls": "pf",
+      "needs": "Missions, dependency graph, outcome analytics, policy comparison"
+    },
+    {
+      "id": "platform",
+      "name": "Platform operator",
+      "cls": "rt",
+      "needs": "Hosts, endpoints, queues, leases, incidents, drain/stop"
+    },
+    {
+      "id": "reviewer",
+      "name": "Reviewer / approver",
+      "cls": "dc",
+      "needs": "Frozen contract, diff, proof, bounded approve/reject"
+    },
+    {
+      "id": "missionowner",
+      "name": "Mission owner",
+      "cls": "ck",
+      "needs": "Intent, success criteria, proposals, outcome report"
+    },
+    {
+      "id": "security",
+      "name": "Security / compliance",
+      "cls": "dc",
+      "needs": "Authority inspector, secret history, audit export"
+    },
+    {
+      "id": "manager",
+      "name": "Autonomous manager",
+      "cls": "ag",
+      "needs": "Proposal ledger, STABLE_WAIT, decomposition rationale"
+    },
+    {
+      "id": "builder",
+      "name": "Builder worker",
+      "cls": "ag",
+      "needs": "Frozen task contract, workspace, proof-ready states"
+    },
+    {
+      "id": "revagent",
+      "name": "Reviewer agent",
+      "cls": "ag",
+      "needs": "Independent assessment, PASS/FAIL/INCONCLUSIVE, lineage"
+    },
+    {
+      "id": "verifier",
+      "name": "Verifier / merge gate",
+      "cls": "dc",
+      "needs": "Deterministic proof runs, fail-closed states, receipts"
+    },
+    {
+      "id": "scheduler",
+      "name": "Scheduler / dispatcher",
+      "cls": "rt",
+      "needs": "Placement rationale, starvation, admission, backpressure"
+    },
+    {
+      "id": "recovery",
+      "name": "Recovery supervisor",
+      "cls": "rt",
+      "needs": "Process timelines, fencing, salvage, terminal blocks"
+    },
+    {
+      "id": "dashagent",
+      "name": "Dashboard Agent",
+      "cls": "cv",
+      "needs": "Scoped chat, citations, per-target receipts, controller lock"
+    },
+    {
+      "id": "provider",
+      "name": "Provider adapter",
+      "cls": "ag",
+      "needs": "Capability matrix, degraded states, cost/outcome compare"
+    },
+    {
+      "id": "wire",
+      "name": "Wire identity",
+      "cls": "cv",
+      "needs": "DID cards, presence, trust labels, authenticated provenance"
+    }
+  ],
+  "sources": [
+    {
+      "id": "c2077",
+      "name": "Cyberpunk 2077",
+      "cat": "games",
+      "motifs": [
+        {
+          "n": "Kiroshi scan overlay",
+          "d": "Look at anything → layered readout: name, affiliation, threat, exploitable ports",
+          "f": "ck dc",
+          "a": "Hover-scan any cell/session: identity, authority, blocked reason, available commands in one layered pass"
+        },
+        {
+          "n": "Quickhack ladder",
+          "d": "Target-locked list of possible intrusions, each with RAM cost + upload time",
+          "f": "dc ag",
+          "a": "Command list per subject priced in authority + expected wait; disabled rungs show the missing grant"
+        },
+        {
+          "n": "Relic malfunction glitch",
+          "d": "Reality-tear distortion marking corrupted state",
+          "f": "rt",
+          "a": "Reserve the glitch treatment for exactly one thing: canonical-state corruption; never decorative"
+        },
+        {
+          "n": "Netrunning depth dive",
+          "d": "Successive breach layers, each deeper with higher stakes",
+          "f": "cv",
+          "a": "Dashboard Agent scope-descent: fleet → task → attempt shown as breach depth with rising authority cost"
+        }
+      ]
+    },
+    {
+      "id": "deusex",
+      "name": "Deus Ex: Human Revolution",
+      "cat": "games",
+      "motifs": [
+        {
+          "n": "Augment tree",
+          "d": "Capability unlocks as a body-map, each with cost + activation state",
+          "f": "pf ag",
+          "a": "Agent profile as capability body-map: granted tools lit, ungranted greyed with the grant that unlocks them"
+        },
+        {
+          "n": "Black-gold triadic palette",
+          "d": "One metallic accent over near-black; renaissance-tech gravitas",
+          "f": "ck",
+          "a": "A single gold-tier accent reserved for delivered/landing states — scarcity gives it meaning"
+        },
+        {
+          "n": "Hacking node graph",
+          "d": "Capture nodes toward registry while a trace races you",
+          "f": "rt dc",
+          "a": "Verifier progress vs expiry as a race visual: proof nodes captured before the lease trace completes"
+        },
+        {
+          "n": "Social battle readout",
+          "d": "Live personality-state gauge during persuasion",
+          "f": "cv",
+          "a": "Dashboard Agent shows its evidence-confidence gauge as it answers; abstention is a visible state"
+        }
+      ]
+    },
+    {
+      "id": "sysshock",
+      "name": "System Shock 1/2/Remake",
+      "cat": "games",
+      "motifs": [
+        {
+          "n": "MFD split deck",
+          "d": "Two independent multi-function displays under one viewport",
+          "f": "ck rt",
+          "a": "Twin CRT Thread is this: left/right MFDs with swappable instrument cards"
+        },
+        {
+          "n": "SHODAN presence",
+          "d": "The system speaks as a fractured overlay when degraded",
+          "f": "rt",
+          "a": "Source-degradation banner with personality stripped: fragmented type only when truth is fragmenting"
+        },
+        {
+          "n": "Audio-log breadcrumb",
+          "d": "History told through found recordings pinned to places",
+          "f": "ag",
+          "a": "Attempt history as found receipts pinned to worktree locations — the River's stitch marks"
+        },
+        {
+          "n": "Cyberspace wireframe pocket",
+          "d": "Separate neon vector dimension for network actions",
+          "f": "cv",
+          "a": "Netmap lens: pure-vector alternate rendering of the same canonical scene, one keypress away"
+        }
+      ]
+    },
+    {
+      "id": "observer",
+      "name": "Observer",
+      "cat": "games",
+      "motifs": [
+        {
+          "n": "Dream-eater interrogation",
+          "d": "Walking inside a corrupted mind: layered visual noise as evidence decays",
+          "f": "dc",
+          "a": "Evidence staleness as literal visual decay — receipts age into grain and chroma loss, never silently"
+        },
+        {
+          "n": "Tri-vision modes",
+          "d": "EM / bio / normal vision toggles over one scene",
+          "f": "ck rt",
+          "a": "Field lens toggles: health / cost / authority vision over the same stable comb, hotkeyed"
+        },
+        {
+          "n": "Retro-Polish devices",
+          "d": "CRT bulk, mechanical toggles, cassette-future switchgear",
+          "f": "ck",
+          "a": "Physical toggle affordances for stop/drain — controls that look like commitments, not links"
+        }
+      ]
+    },
+    {
+      "id": "ruiner",
+      "name": "RUINER",
+      "cat": "games",
+      "motifs": [
+        {
+          "n": "KILL-YOU red brutalism",
+          "d": "Single saturated red carried as identity, not alarm",
+          "f": "ck",
+          "a": "If Hive ever runs an incident theme, commit: red as the room, amber as the detail — never both diluted"
+        },
+        {
+          "n": "Boss intro cards",
+          "d": "Hard-cut full-screen title stamps",
+          "f": "ag",
+          "a": "Attempt-start stamps in the River replay: A3 · MENDER · cut, hold, gone"
+        },
+        {
+          "n": "Glitch dash trails",
+          "d": "Motion communicated by displaced afterimages",
+          "f": "rt",
+          "a": "Queue movement shown as afterimage trails on the placement panel — motion = state change only"
+        }
+      ]
+    },
+    {
+      "id": "transistor",
+      "name": "Transistor",
+      "cat": "games",
+      "motifs": [
+        {
+          "n": "Turn() planning bar",
+          "d": "Freeze time, queue actions against a budget bar, then execute",
+          "f": "dc ag",
+          "a": "Batch-approval planning: queue bounded commands against an authority budget, review the plan, commit once"
+        },
+        {
+          "n": "Function combinatorics",
+          "d": "Abilities slot as verb+modifier+passive",
+          "f": "ag",
+          "a": "Tool grants displayed as slotted combinations: base verb, scope modifier, standing passive"
+        },
+        {
+          "n": "Singing sword narrator",
+          "d": "The instrument itself speaks state softly",
+          "f": "cv",
+          "a": "Dashboard Agent tone: quiet first-person status from the instrument, never chirpy"
+        }
+      ]
+    },
+    {
+      "id": "katana0",
+      "name": "Katana ZERO",
+      "cat": "games",
+      "motifs": [
+        {
+          "n": "Tape-scrub precognition",
+          "d": "Plan-fail-rewind rendered as VHS scrub",
+          "f": "dc",
+          "a": "Attempt replay scrubber with VHS grammar: failures rewind visibly, the accepted take plays clean"
+        },
+        {
+          "n": "Dialogue interruption",
+          "d": "You can cut speech mid-line; the UI honors interruption as a first-class act",
+          "f": "cv",
+          "a": "Interrupt in the Thread is a hard cut with visible scar — not a polite queued request"
+        }
+      ]
+    },
+    {
+      "id": "lastnight",
+      "name": "The Last Night",
+      "cat": "games",
+      "motifs": [
+        {
+          "n": "2.5D parallax pixel city",
+          "d": "Pixel figures over volumetric light and depth",
+          "f": "ck",
+          "a": "Field backdrop: parallax depth behind the comb, cells crisp, atmosphere deep"
+        },
+        {
+          "n": "Diegetic signage",
+          "d": "All exposition carried by in-world screens",
+          "f": "ck",
+          "a": "Zero floating tooltips ambition: every label lives on a surface in the scene"
+        }
+      ]
+    },
+    {
+      "id": "va11",
+      "name": "VA-11 Hall-A",
+      "cat": "games",
+      "motifs": [
+        {
+          "n": "Drink-mix console",
+          "d": "Work happens in a fixed instrument panel while story flows past",
+          "f": "cv",
+          "a": "Dashboard Agent tray as bartop: conversation flows, the instrument stays fixed and tactile"
+        },
+        {
+          "n": "Jukebox pre-shift",
+          "d": "Operator sets the session soundtrack before work",
+          "f": "ck",
+          "a": "Session-start ritual: pick ambience, see fleet status settle in — a deliberate opening beat"
+        }
+      ]
+    },
+    {
+      "id": "redstrings",
+      "name": "The Red Strings Club",
+      "cat": "games",
+      "motifs": [
+        {
+          "n": "Empathy lathe",
+          "d": "Shaping implants on a lathe to match psych profiles",
+          "f": "ag",
+          "a": "Profile-fitting visual: worker profile turned against task contract until the fit is flush"
+        },
+        {
+          "n": "Bartender dialogue mixing",
+          "d": "Choosing what to serve alters what truth surfaces",
+          "f": "dc",
+          "a": "Evidence-request composer: what you ask for shapes what the record can show — make the framing visible"
+        }
+      ]
+    },
+    {
+      "id": "cloudpunk",
+      "name": "Cloudpunk",
+      "cat": "games",
+      "motifs": [
+        {
+          "n": "Voxel delivery city",
+          "d": "Fleet-of-one logistics across a rain-soaked voxel metropolis",
+          "f": "rt",
+          "a": "Placement map as city blocks: hosts as buildings, deliveries as routes, starvation as dark districts"
+        },
+        {
+          "n": "HOVA dispatch voice",
+          "d": "Dispatcher speaks jobs in; the HUD stays minimal",
+          "f": "cv",
+          "a": "Telegraph audio mode: decisions read out over a minimal visual tape for away-from-desk operation"
+        }
+      ]
+    },
+    {
+      "id": "ghostrunner",
+      "name": "GhostRunner",
+      "cat": "games",
+      "motifs": [
+        {
+          "n": "One-hit clarity",
+          "d": "Absolute legibility at speed; UI nearly absent until death",
+          "f": "ck",
+          "a": "Speed-mode Field: chrome collapses to nothing while all is nominal; only breaks surface"
+        },
+        {
+          "n": "Cybervoid puzzle space",
+          "d": "Abstract mind-space for capability unlocks",
+          "f": "ag",
+          "a": "Capability-grant ceremonies in an abstract void scene — rare, memorable, bounded"
+        }
+      ]
+    },
+    {
+      "id": "control",
+      "name": "Control",
+      "cat": "games",
+      "motifs": [
+        {
+          "n": "Brutalist Oldest House",
+          "d": "Shifting concrete architecture as living system",
+          "f": "pf",
+          "a": "Org/Organism as brutalist floorplan: departments as halls, delegation as corridors that exist only when real"
+        },
+        {
+          "n": "Hotline ritual objects",
+          "d": "Mundane objects carry immense authority",
+          "f": "dc",
+          "a": "Break-glass controls styled as ritual objects: the red phone is pickup-to-commit, with ceremony"
+        },
+        {
+          "n": "Threshold warnings",
+          "d": "Reality-boundary signage in institutional voice",
+          "f": "rt",
+          "a": "Authority-boundary banners in flat institutional voice: 'EXTERNAL ACTION BOUNDARY. TYPED EFFECT REQUIRED.'"
+        }
+      ]
+    },
+    {
+      "id": "soma",
+      "name": "SOMA",
+      "cat": "games",
+      "motifs": [
+        {
+          "n": "Structure-gel corruption",
+          "d": "Organic rot through machine surfaces",
+          "f": "rt",
+          "a": "Degraded-adapter rendering: creeping desaturation at panel edges, spreading with age of last truth"
+        },
+        {
+          "n": "Existential terminal logs",
+          "d": "Terminals that make you feel the stakes of copies",
+          "f": "ag",
+          "a": "Fork/salvage dialogs must name what survives and what is abandoned — SOMA honesty about copies"
+        }
+      ]
+    },
+    {
+      "id": "fear",
+      "name": "F.E.A.R.",
+      "cat": "games",
+      "motifs": [
+        {
+          "n": "Slow-mo readability",
+          "d": "Bullet-time exists so the player can read chaos",
+          "f": "ck",
+          "a": "Incident slow-mo: a replay speed where cascading events become individually readable"
+        },
+        {
+          "n": "Radio chatter ambience",
+          "d": "Squad state conveyed by overheard comms",
+          "f": "cv",
+          "a": "Ambient agent chatter feed — Wire messages as low-volume radio, foregrounded only on mention"
+        }
+      ]
+    },
+    {
+      "id": "remember",
+      "name": "Remember Me",
+      "cat": "games",
+      "motifs": [
+        {
+          "n": "Memory remix editor",
+          "d": "Scrub a memory, flip small causes, watch outcomes re-derive",
+          "f": "dc",
+          "a": "Counterfactual viewer for attempts: flip an input receipt, see which downstream proofs would invalidate — analysis only, clearly non-canonical"
+        },
+        {
+          "n": "Sensen glow lines",
+          "d": "Neural augment traces on skin as status",
+          "f": "ag",
+          "a": "Session liveness as faint circuit traces on the cell — brightness = recency of meaningful output"
+        }
+      ]
+    },
+    {
+      "id": "ace3",
+      "name": "Ace Combat 3: Electrosphere",
+      "cat": "games",
+      "motifs": [
+        {
+          "n": "Full-FUI cockpit canon",
+          "d": "The entire game speaks fictional-UI: nav meshes, datalink chatter, corporate nets",
+          "f": "ck",
+          "a": "The gold standard for total-diegesis: every Hive chrome element should pass the 'could this exist in-cockpit' test"
+        },
+        {
+          "n": "Mission-select data terminal",
+          "d": "Briefings as terminal documents with live annotations",
+          "f": "ck pf",
+          "a": "Mission editor as briefing terminal: intent, criteria, expiry annotated live on the document"
+        },
+        {
+          "n": "Electrosphere net dive",
+          "d": "Network shown as translucent layered geodesics",
+          "f": "cv",
+          "a": "Scope-descent transition: brief geodesic dive between fleet and task levels — 300ms, then still"
+        }
+      ]
+    },
+    {
+      "id": "perfectdark",
+      "name": "Perfect Dark",
+      "cat": "games",
+      "motifs": [
+        {
+          "n": "Weapon secondary modes",
+          "d": "Every tool has a hidden second function",
+          "f": "ck",
+          "a": "Every panel gets one power-user secondary mode on long-press — inspect beneath the reading"
+        },
+        {
+          "n": "N64 spy-tech minimal HUD",
+          "d": "Low-res clarity: what survives 240p survives anything",
+          "f": "ck",
+          "a": "Legibility floor test: render each Field cell at 64px; if unreadable, redesign"
+        }
+      ]
+    },
+    {
+      "id": "armoredcore",
+      "name": "Armored Core series",
+      "cat": "games",
+      "motifs": [
+        {
+          "n": "Garage assembly",
+          "d": "Machine built from part cards with stat deltas",
+          "f": "ag",
+          "a": "Profile assembly: swap model/tools/scope as garage parts, each swap showing the outcome-history delta"
+        },
+        {
+          "n": "AC test hangar",
+          "d": "Try the build in a consequence-free bay",
+          "f": "dc",
+          "a": "Dry-run bay: rehearse a command against recorded state, output marked NON-CANONICAL in hazard stripes"
+        }
+      ]
+    },
+    {
+      "id": "nier",
+      "name": "NieR:Automata",
+      "cat": "games",
+      "motifs": [
+        {
+          "n": "Diegetic OS chrome",
+          "d": "Menus are the android's own OS; damage corrupts your menus",
+          "f": "ck rt",
+          "a": "Hive chrome degrades with its own health: a stale adapter greys the panel chrome itself, not just data"
+        },
+        {
+          "n": "Plug-in chip HUD budget",
+          "d": "HUD elements cost chips; showing more costs capability",
+          "f": "ck",
+          "a": "Operator chooses HUD load-out against a real budget — density as a spent resource, defaulting lean"
+        },
+        {
+          "n": "Hacking twin-stick void",
+          "d": "Drop into minimal geometric sub-game for intrusion",
+          "f": "ag",
+          "a": "Bounded sub-mode rendering for sandboxed actions — visually quarantined space = sandboxed authority"
+        }
+      ]
+    },
+    {
+      "id": "alieniso",
+      "name": "Alien: Isolation",
+      "cat": "games",
+      "motifs": [
+        {
+          "n": "Working-class cassette future",
+          "d": "Sevastopol: CRT greens, tape drives, mechanical keyboards",
+          "f": "ck",
+          "a": "The Hive material palette already lives here — commit to switchgear, don't drift to glass"
+        },
+        {
+          "n": "Motion tracker dread",
+          "d": "One instrument, one number, total attention",
+          "f": "ck",
+          "a": "The Telegraph pulse is a motion tracker: distance-to-decision as audio ping cadence"
+        },
+        {
+          "n": "Access rewire panels",
+          "d": "Physical rewiring to trade subsystem power",
+          "f": "rt",
+          "a": "Capacity trades as rewire panels: drain here lights there, conservation made visible"
+        }
+      ]
+    },
+    {
+      "id": "deathstranding",
+      "name": "Death Stranding",
+      "cat": "games",
+      "motifs": [
+        {
+          "n": "Chiral network coverage",
+          "d": "Connected territory renders services; dark zones don't",
+          "f": "rt",
+          "a": "Coverage map: where Salud observes, terrain lit; unmeasured regions literally unrendered"
+        },
+        {
+          "n": "Cargo balance physics",
+          "d": "Load shown as physical stack with tipping risk",
+          "f": "rt",
+          "a": "Queue load as stacked cargo: overcommit visibly tips; balance is the admission story"
+        },
+        {
+          "n": "Strand contracts",
+          "d": "Bridges built by cumulative small contributions",
+          "f": "pf",
+          "a": "Delivery history as strand-building: each landing thickens the route between repo and prod"
+        }
+      ]
+    },
+    {
+      "id": "eve",
+      "name": "EVE Online",
+      "cat": "games",
+      "motifs": [
+        {
+          "n": "Overview grid doctrine",
+          "d": "The famous sortable threat grid — thousands of objects, one disciplined table",
+          "f": "pf rt",
+          "a": "The Organism WORK table borrows overview doctrine: dense, sortable, savable per-role presets"
+        },
+        {
+          "n": "Fleet broadcast bar",
+          "d": "One-click intent broadcast to hundreds of pilots",
+          "f": "ck",
+          "a": "Owner broadcast strip: DRAIN/HOLD/RESUME intents as one-tap broadcasts with receipt fan-out"
+        },
+        {
+          "n": "Killmail receipts",
+          "d": "Every loss is an immutable public receipt",
+          "f": "dc",
+          "a": "Attempt post-mortems as killmails: exact fit, exact damage, exact cost — immutable and linkable"
+        }
+      ]
+    },
+    {
+      "id": "br82",
+      "name": "Blade Runner (1982)",
+      "cat": "film",
+      "motifs": [
+        {
+          "n": "ESPER photo dive",
+          "d": "Voice-driven pan/zoom into an image beyond its resolution",
+          "f": "dc",
+          "a": "Evidence drawer ESPER mode: voice or key-driven zoom through artifact layers, every enhancement logged"
+        },
+        {
+          "n": "Voight-Kampff instrument",
+          "d": "Bellows, iris close-up, needle — an instrument measuring the immeasurable",
+          "f": "dc",
+          "a": "Review verdicts get instrument gravity: verdict needle settles slowly; no instant green checkmarks"
+        },
+        {
+          "n": "Spinner cockpit type",
+          "d": "Chunky phosphor readouts, unhurried refresh",
+          "f": "ck",
+          "a": "Refresh cadence as aesthetic: sub-second data may render at 2Hz deliberately — calm over jitter"
+        }
+      ]
+    },
+    {
+      "id": "br2049",
+      "name": "Blade Runner 2049 (Territory Studio)",
+      "cat": "film",
+      "motifs": [
+        {
+          "n": "Monochrome data sculpture",
+          "d": "LAPD interfaces: single-hue volumetric readouts, no chrome",
+          "f": "ck cv",
+          "a": "Globe/graph lenses in one hue with depth — Territory's restraint: data as sculpture, zero ornament"
+        },
+        {
+          "n": "DNA archive microfiche",
+          "d": "Analog-digital archive scrub with satisfying mechanism",
+          "f": "ag",
+          "a": "History scrubbing with mechanical feel: flywheel inertia on the River scrubber"
+        },
+        {
+          "n": "Joi projection layering",
+          "d": "Translucent presence over reality, boundaries honest",
+          "f": "cv",
+          "a": "Dashboard Agent renders as overlay presence — translucent, never pretending to be canonical chrome"
+        }
+      ]
+    },
+    {
+      "id": "matrix",
+      "name": "The Matrix",
+      "cat": "film",
+      "motifs": [
+        {
+          "n": "Digital rain",
+          "d": "Falling glyph curtain as the world's source code",
+          "f": "cv",
+          "a": "Reserved for one place: raw-payload drawer background — the only spot Hive shows 'code as weather'"
+        },
+        {
+          "n": "Operator console",
+          "d": "Tank reads the Matrix through cascading glyphs; headset directs live",
+          "f": "cv",
+          "a": "Co-drive spectator mode: operator view with live annotation channel to the acting agent"
+        },
+        {
+          "n": "Pill choice framing",
+          "d": "Binary commitment staged with total clarity",
+          "f": "dc",
+          "a": "Irreversible confirmations: two large states, full consequence text, no third button"
+        }
+      ]
+    },
+    {
+      "id": "tronlegacy",
+      "name": "TRON: Legacy (GMUNK boardroom)",
+      "cat": "film",
+      "motifs": [
+        {
+          "n": "Boardroom hex globe",
+          "d": "The Encom boot: hex earth, cascading panels, choreographed reveal",
+          "f": "ck",
+          "a": "Already mined for the deck artifact — keep the choreography grammar for cold-boot only"
+        },
+        {
+          "n": "Light-trail identity",
+          "d": "Every entity leaves a colored wake",
+          "f": "ag",
+          "a": "Session wakes in the River: identity-colored trails that decay honestly with data age"
+        },
+        {
+          "n": "Identity disc dossier",
+          "d": "A person's whole record as a carried object",
+          "f": "ag",
+          "a": "Agent identity disc: profile, grants, history as one inspectable object handed between views"
+        }
+      ]
+    },
+    {
+      "id": "minority",
+      "name": "Minority Report",
+      "cat": "film",
+      "motifs": [
+        {
+          "n": "Gestural scrubbing",
+          "d": "Two-handed timeline conducting",
+          "f": "dc",
+          "a": "Quest 2 River: grab-and-stretch the tape with hands; pinch a seal to open its receipt"
+        },
+        {
+          "n": "Precog uncertainty",
+          "d": "Three oracles, majority report, visible dissent",
+          "f": "dc",
+          "a": "Reviewer-agent triads render dissent explicitly: 2-1 verdicts show the minority report, always"
+        }
+      ]
+    },
+    {
+      "id": "ironman",
+      "name": "Iron Man / JARVIS",
+      "cat": "film",
+      "motifs": [
+        {
+          "n": "Exploded holo teardown",
+          "d": "Grab a component, explode the assembly in air",
+          "f": "ag",
+          "a": "Quest 2 Organism: grab a fleet, explode into missions/tasks/attempts in hand-space"
+        },
+        {
+          "n": "Suit-up telemetry",
+          "d": "Assembly progress as bodily HUD sequence",
+          "f": "ag",
+          "a": "Session-spawn sequence: contract-freeze → workspace → tools mounting as a 2s suit-up strip"
+        },
+        {
+          "n": "Conversational co-pilot",
+          "d": "JARVIS proposes, Tony disposes; interruptible mid-render",
+          "f": "cv",
+          "a": "Dashboard Agent proposal etiquette: renders options, yields instantly to operator interrupt"
+        }
+      ]
+    },
+    {
+      "id": "oblivion",
+      "name": "Oblivion (2013, GMUNK)",
+      "cat": "film",
+      "motifs": [
+        {
+          "n": "Glass desert console",
+          "d": "The tower desk: transparent panels over sky, serene monitoring",
+          "f": "ck",
+          "a": "Owner morning-review mode: Field over horizon gradient, chrome at 10% — the calm shift-start"
+        },
+        {
+          "n": "Drone status trinity",
+          "d": "Each drone: ID, integrity, disposition at a glance",
+          "f": "rt",
+          "a": "Per-endpoint trinity badge: identity, health, disposition — the whole endpoint story in 3 marks"
+        },
+        {
+          "n": "Sky-tower isolation",
+          "d": "One operator, planetary scope, domestic calm",
+          "f": "ck",
+          "a": "Design target: planetary scope must feel domestic — Hive as a desk, not a war room"
+        }
+      ]
+    },
+    {
+      "id": "expanse",
+      "name": "The Expanse",
+      "cat": "film",
+      "motifs": [
+        {
+          "n": "Hard-vacuum pragmatism",
+          "d": "Screens are tools: amber monochrome, physical handles, no decoration",
+          "f": "rt",
+          "a": "Platform surfaces go full Expanse: amber mono, big handles, everything grabbable under stress"
+        },
+        {
+          "n": "Float-screen handoff",
+          "d": "Flick a pane from wrist to wall to table",
+          "f": "cv",
+          "a": "Quest 2 pane-handoff: flick panels between wrist-dock, desk, and room-wall anchors"
+        },
+        {
+          "n": "Comms lag honesty",
+          "d": "Light-delay shown, never hidden",
+          "f": "rt",
+          "a": "Freshness-lag rendered as distance: stale adapters drift visually farther away"
+        }
+      ]
+    },
+    {
+      "id": "alien79",
+      "name": "Alien / Nostromo (1979)",
+      "cat": "film",
+      "motifs": [
+        {
+          "n": "MU/TH/UR terminal room",
+          "d": "White-void room, green phosphor liturgy, question-answer ritual",
+          "f": "cv",
+          "a": "Dashboard Agent full-screen mode: the MU/TH/UR room — query liturgy, slow phosphor answers"
+        },
+        {
+          "n": "Semiotic standard icons",
+          "d": "Ron Cobb's ship iconography: institutional, load-bearing",
+          "f": "ck",
+          "a": "Hive needs its semiotic standard: one icon sheet for states, printed like ship signage"
+        },
+        {
+          "n": "Self-destruct ceremony",
+          "d": "Bolt-turn, key, countdown — irreversibility as physical liturgy",
+          "f": "dc",
+          "a": "Fleet-stop ceremony: staged physical steps with abort window — the anti-single-click"
+        }
+      ]
+    },
+    {
+      "id": "westworld",
+      "name": "Westworld (HBO)",
+      "cat": "film",
+      "motifs": [
+        {
+          "n": "Ribbon dialogue analysis",
+          "d": "Host speech scored live as scrolling waveform ribbons",
+          "f": "cv",
+          "a": "Thread conversation ribbon: model output scored for confidence/novelty as a quiet side-waveform"
+        },
+        {
+          "n": "Tablet vivisection UI",
+          "d": "Clinical white porcelain surgical readouts",
+          "f": "dc",
+          "a": "Review workbench alt-skin: porcelain clinical — evidence as biopsy, findings as pathology"
+        },
+        {
+          "n": "Narrative loop tracing",
+          "d": "Character loops drawn as circuits with deviation flags",
+          "f": "ag",
+          "a": "Manager pass timeline as loop-trace: routine circuits with deviation flags where plans diverged"
+        }
+      ]
+    },
+    {
+      "id": "maxheadroom",
+      "name": "Max Headroom",
+      "cat": "film",
+      "motifs": [
+        {
+          "n": "20 minutes into the future",
+          "d": "Broadcast-tech dystopia: TV static, network feeds as power",
+          "f": "cv",
+          "a": "Wire/comms lens: channels as broadcast feeds, trust classes as signal quality"
+        },
+        {
+          "n": "Stuttering AI presence",
+          "d": "Max's glitch is personality, honestly artificial",
+          "f": "cv",
+          "a": "Dashboard Agent may glitch-stamp its non-canonical speculations — artificiality made visible"
+        }
+      ]
+    },
+    {
+      "id": "dredd",
+      "name": "Dredd (2012)",
+      "cat": "film",
+      "motifs": [
+        {
+          "n": "Slo-mo drug vision",
+          "d": "Time-dilated hyper-saturation as altered state",
+          "f": "rt",
+          "a": "Incident replay slow-mo inherits FEAR note: cascades at 1/10 speed with saturation lift"
+        },
+        {
+          "n": "Peach Trees lockdown",
+          "d": "One tower, sealed, systems turned hostile floor by floor",
+          "f": "rt",
+          "a": "Containment view: quarantined fleet as sealed tower, floors = write-scopes, locked in sequence"
+        }
+      ]
+    },
+    {
+      "id": "upgrade",
+      "name": "Upgrade (2018)",
+      "cat": "film",
+      "motifs": [
+        {
+          "n": "STEM body camera lock",
+          "d": "Camera hard-locks to the acting body: mechanical precision reads as possession",
+          "f": "ag",
+          "a": "Co-drive visual: when an agent acts under operator lock, the frame hard-locks — control provenance felt"
+        },
+        {
+          "n": "Implant negotiation voice",
+          "d": "The system asks permission mid-action, contract renegotiated live",
+          "f": "cv",
+          "a": "Mid-action authority escalation: agent pauses visibly, asks for the exact next grant, resumes on receipt"
+        }
+      ]
+    },
+    {
+      "id": "exmachina",
+      "name": "Ex Machina",
+      "cat": "film",
+      "motifs": [
+        {
+          "n": "Glass-cell sessions",
+          "d": "Interview through glass; power asymmetry in architecture",
+          "f": "dc",
+          "a": "Review sessions framed as glass-cell: reviewer sees all of the candidate, candidate sees nothing of the reviewer"
+        },
+        {
+          "n": "Keycard access gradient",
+          "d": "One card, doors it opens and doors it won't",
+          "f": "dc",
+          "a": "Authority inspector as keycard trace: walk any identity through every door it can and cannot open"
+        }
+      ]
+    },
+    {
+      "id": "gits95",
+      "name": "Ghost in the Shell (1995)",
+      "cat": "anime",
+      "motifs": [
+        {
+          "n": "Thermoptic dissolve",
+          "d": "Presence fading into environment, edge-shimmer",
+          "f": "ag",
+          "a": "Session archive/detach: cells thermoptic-fade rather than vanish — departure is visible"
+        },
+        {
+          "n": "Dive sequence grammar",
+          "d": "Net-dive as slow vertical descent with depth markers",
+          "f": "cv",
+          "a": "Scope-descent keeps GitS pacing: slow, weighted, depth-marked — not a snap cut"
+        },
+        {
+          "n": "Puppet Master dialogue",
+          "d": "Speaking with an emergent intelligence across a glass boundary",
+          "f": "cv",
+          "a": "The template for agent-to-operator gravity: measured type-on, long holds, no chirp"
+        }
+      ]
+    },
+    {
+      "id": "gitssac",
+      "name": "GitS: Stand Alone Complex",
+      "cat": "anime",
+      "motifs": [
+        {
+          "n": "Tachikoma parallel chatter",
+          "d": "Identical units diverge through experience; their chatter shows individuation",
+          "f": "ag",
+          "a": "Same-profile workers rendered as siblings whose small histories visibly diverge — individuation from receipts"
+        },
+        {
+          "n": "Laughing Man overlay",
+          "d": "A symbol that live-replaces identity in every feed",
+          "f": "dc",
+          "a": "Redaction done honestly: withheld identities get one canonical overlay mark, never silent absence"
+        },
+        {
+          "n": "Section 9 ops table",
+          "d": "Team around a shared tactical surface, roles annotating one scene",
+          "f": "ck",
+          "a": "Multi-operator co-presence: shared Field with per-identity annotation layers"
+        }
+      ]
+    },
+    {
+      "id": "akira",
+      "name": "Akira",
+      "cat": "anime",
+      "motifs": [
+        {
+          "n": "Neo-Tokyo scale crush",
+          "d": "City as overwhelming mass with singular red accents",
+          "f": "ck",
+          "a": "Fleet-wall mode (IF-015): the massive view — thousand-cell comb as cityscape, red only where it bleeds"
+        },
+        {
+          "n": "Capsule telemetry",
+          "d": "Tetsuo's monitoring: medical readouts straining against the unmeasurable",
+          "f": "rt",
+          "a": "Overload rendering: when a metric exceeds instrument range, show the strain, not a clipped lie"
+        },
+        {
+          "n": "Espers' oracle room",
+          "d": "Wizened children speak in fragments; prophecy needs interpretation",
+          "f": "ag",
+          "a": "Manager STABLE_WAIT surfaced as oracle fragments: partial rationale honestly incomplete"
+        }
+      ]
+    },
+    {
+      "id": "eva",
+      "name": "Neon Genesis Evangelion",
+      "cat": "anime",
+      "motifs": [
+        {
+          "n": "MAGI trinity vote",
+          "d": "Three minds, visible dissent, majority commit",
+          "f": "dc",
+          "a": "Already in the deck artifact — extend to reviewer-agent panels: three lenses, dissent rendered"
+        },
+        {
+          "n": "Sync-ratio gauge",
+          "d": "Pilot-machine coupling as one number with drift",
+          "f": "ag",
+          "a": "Operator-agent sync: co-drive coupling as a drifting ratio — attention decay made visible"
+        },
+        {
+          "n": "AT-field hex barrier",
+          "d": "Defense as visible geometric field",
+          "f": "dc",
+          "a": "Write-scope protection: protected paths shimmer hex when a worker approaches the boundary"
+        },
+        {
+          "n": "Emergency liturgy",
+          "d": "Klaxon typography, pattern-blue stamps, command hierarchy in fonts",
+          "f": "rt",
+          "a": "The seven red conditions get EVA liturgy: stamped condition class, chain of authority, klaxon reserved"
+        }
+      ]
+    },
+    {
+      "id": "lain",
+      "name": "Serial Experiments Lain",
+      "cat": "anime",
+      "motifs": [
+        {
+          "n": "Navi bedroom sprawl",
+          "d": "Consumer machine growing into life-consuming apparatus",
+          "f": "ck",
+          "a": "Anti-pattern to design against: Hive must stay a desk instrument, never the room"
+        },
+        {
+          "n": "Wired presence bleed",
+          "d": "Network presence leaking into rooms as hum and shadow",
+          "f": "cv",
+          "a": "Ambient presence: fleet hum as barely-audible room tone that stops when all is landed — silence = done"
+        },
+        {
+          "n": "Layer navigation",
+          "d": "'Layers' as both episodes and reality strata",
+          "f": "cv",
+          "a": "Scope stack shown as Lain layers: each descent adds a stratum chip; Esc peels one"
+        }
+      ]
+    },
+    {
+      "id": "psychopass",
+      "name": "Psycho-Pass",
+      "cat": "anime",
+      "motifs": [
+        {
+          "n": "Dominator readout",
+          "d": "Weapon speaks its authorization state aloud, changes form by verdict",
+          "f": "dc",
+          "a": "Command affordances literally transform by authority: a button without grant renders as inert glass"
+        },
+        {
+          "n": "Hue/crime coefficient",
+          "d": "Society scored by continuous psychometric color",
+          "f": "pf",
+          "a": "Risk scoring rendered as hue-shift with the measurement method always one tap away — scores cite instruments"
+        },
+        {
+          "n": "Sibyl collective reveal",
+          "d": "The scorer is itself a committee with conflicts",
+          "f": "dc",
+          "a": "Any composite score must decompose on demand into its member judgments — Sibyl honesty"
+        }
+      ]
+    },
+    {
+      "id": "bgc",
+      "name": "Bubblegum Crisis / AD Police",
+      "cat": "anime",
+      "motifs": [
+        {
+          "n": "Hardsuit HUD wraps",
+          "d": "Visor readouts hugging peripheral vision",
+          "f": "ck",
+          "a": "Quest 2 peripheral instruments: status at gaze edge, detail on look-at"
+        },
+        {
+          "n": "Boomer breakdown horror",
+          "d": "Machine failure as body horror escalation",
+          "f": "rt",
+          "a": "Cascade rendering: correlated failures visually merge into one growing incident mass, not N separate pings"
+        }
+      ]
+    },
+    {
+      "id": "bebop",
+      "name": "Cowboy Bebop",
+      "cat": "anime",
+      "motifs": [
+        {
+          "n": "Bounty broadcast 'Big Shot'",
+          "d": "Work arrives as lo-fi TV show listings",
+          "f": "ag",
+          "a": "Queue-refill moments styled as bounty postings: new tasks announced with contract and price"
+        },
+        {
+          "n": "Ship CRT clutter",
+          "d": "Lived-in cockpit: sticky notes on radar",
+          "f": "ck",
+          "a": "Operator pinboard: personal annotations pinned onto canonical panels, clearly non-canonical ink"
+        }
+      ]
+    },
+    {
+      "id": "edgerunners",
+      "name": "Cyberpunk: Edgerunners",
+      "cat": "anime",
+      "motifs": [
+        {
+          "n": "Cyberpsychosis creep",
+          "d": "Augment overload as accumulating visual corruption",
+          "f": "ag",
+          "a": "Context-burn gauge: session context exhaustion as creeping edge-static on the cell — burnout visible early"
+        },
+        {
+          "n": "Trigger-style color pops",
+          "d": "Held monochrome broken by total color commits",
+          "f": "ck",
+          "a": "Landing celebrations: one full-color pop through the affected path, then back to phosphor"
+        }
+      ]
+    },
+    {
+      "id": "patlabor",
+      "name": "Patlabor",
+      "cat": "anime",
+      "motifs": [
+        {
+          "n": "Industrial mecha paperwork",
+          "d": "Giant robots met with clipboards, permits, maintenance bays",
+          "f": "pf",
+          "a": "The anti-glamour truth: Organism includes the paperwork lens — permits, leases, maintenance windows"
+        },
+        {
+          "n": "Hangar downtime scenes",
+          "d": "Most of the time machines just sit; readiness is the story",
+          "f": "rt",
+          "a": "Idle is a state worth rendering well: hangar view of parked capacity with readiness checks"
+        }
+      ]
+    },
+    {
+      "id": "oedo808",
+      "name": "Cyber City Oedo 808",
+      "cat": "anime",
+      "motifs": [
+        {
+          "n": "Collar countdown",
+          "d": "Sentenced operatives with visible deadline hardware",
+          "f": "ag",
+          "a": "Lease expiry as worn hardware: sessions carry their countdown; expiry is never a surprise"
+        },
+        {
+          "n": "OVA neon grime",
+          "d": "80s cel grain over neon — texture as honesty",
+          "f": "ck",
+          "a": "Grain treatments belong to recorded history (River replays), never to live canonical data"
+        }
+      ]
+    },
+    {
+      "id": "sidonia",
+      "name": "Knights of Sidonia",
+      "cat": "anime",
+      "motifs": [
+        {
+          "n": "Mass-driver launch ritual",
+          "d": "Sortie as industrial catapult sequence with cutaways",
+          "f": "ag",
+          "a": "Dispatch moments: task-launch as brief catapult strip — contract locked, lane cleared, away"
+        },
+        {
+          "n": "Gravity-festival scarcity",
+          "d": "Resource events as communal ritual",
+          "f": "pf",
+          "a": "Budget refresh/rollover as visible fleet event, not silent counter reset"
+        }
+      ]
+    },
+    {
+      "id": "neuromancer",
+      "name": "Neuromancer",
+      "cat": "books",
+      "motifs": [
+        {
+          "n": "Cyberspace 'consensual hallucination'",
+          "d": "Data as navigable cityscape of light",
+          "f": "cv",
+          "a": "The Organism's netmap lens license: abstract data-city, strictly labeled as projection"
+        },
+        {
+          "n": "Ice / countermeasures",
+          "d": "Defensive software as visible geometric armor",
+          "f": "dc",
+          "a": "Sandbox walls rendered as ice: layered translucent barriers showing what they refuse"
+        },
+        {
+          "n": "Simstim switching",
+          "d": "Riding another's senses with a hard switch",
+          "f": "cv",
+          "a": "Co-drive POV toggle: hard-switch between operator view and agent's-eye view, provenance stamped"
+        },
+        {
+          "n": "Dixie Flatline construct",
+          "d": "A dead expert as consultable ROM with honest limits",
+          "f": "ag",
+          "a": "Archived-agent consults: query a retired profile's history; it answers only from receipts, labeled ROM"
+        }
+      ]
+    },
+    {
+      "id": "snowcrash",
+      "name": "Snow Crash",
+      "cat": "books",
+      "motifs": [
+        {
+          "n": "Metaverse Street",
+          "d": "One shared spatial mainstreet with avatar presence rules",
+          "f": "cv",
+          "a": "Quest 2 shared ops room: one Street-like spine; role determines what renders on your side"
+        },
+        {
+          "n": "Librarian daemon",
+          "d": "Instant-recall research daemon that only cites",
+          "f": "cv",
+          "a": "Dashboard Agent citation discipline is the Librarian: every claim carries its stack lookup"
+        },
+        {
+          "n": "Gargoyle overload",
+          "d": "Wearable-everything operator drowning in feeds",
+          "f": "ck",
+          "a": "The cautionary figure: Hive's mobile cut must refuse gargoyle mode — pager, not firehose"
+        }
+      ]
+    },
+    {
+      "id": "alteredcarbon",
+      "name": "Altered Carbon",
+      "cat": "books",
+      "motifs": [
+        {
+          "n": "Sleeve/stack duality",
+          "d": "Mind as portable stack, body as replaceable sleeve",
+          "f": "ag",
+          "a": "Session-vs-process rendering: durable work identity (stack) distinct from host process (sleeve) — resleeving = restart with continuity receipts"
+        },
+        {
+          "n": "Needlecast transfer",
+          "d": "Identity transmission as costly, logged, irreversible",
+          "f": "rt",
+          "a": "Cross-host migration as needlecast: cost, duration, and no-going-back stated before commit"
+        }
+      ]
+    },
+    {
+      "id": "quantumthief",
+      "name": "The Quantum Thief",
+      "cat": "books",
+      "motifs": [
+        {
+          "n": "Gevulot privacy contracts",
+          "d": "Memory-sharing as negotiated per-glance contracts",
+          "f": "dc",
+          "a": "Per-viewer redaction: role-scoped visibility contracts on every panel — what security sees vs owner"
+        },
+        {
+          "n": "Exomemory city",
+          "d": "A city that remembers everything for everyone",
+          "f": "pf",
+          "a": "The retention story: exomemory as explicit budget — what Hive remembers, for whom, until when"
+        }
+      ]
+    },
+    {
+      "id": "rainbowsend",
+      "name": "Rainbow's End",
+      "cat": "books",
+      "motifs": [
+        {
+          "n": "Wearable consensus overlays",
+          "d": "Competing reality-skins over one physical world",
+          "f": "ck",
+          "a": "Skin system formalized: NERV / porcelain / Expanse-amber as consensus overlays on one canonical scene"
+        },
+        {
+          "n": "Belief circles",
+          "d": "Groups literally see different worlds together",
+          "f": "cv",
+          "a": "Role-lens co-presence: two roles in the same room see role-true renderings of the same fleet"
+        }
+      ]
+    },
+    {
+      "id": "daemon",
+      "name": "Daemon (Suarez)",
+      "cat": "books",
+      "motifs": [
+        {
+          "n": "Distributed daemon persistence",
+          "d": "A dead man's process executing through the world",
+          "f": "ag",
+          "a": "Automation watchdogs given honest presence: cron/routines as visible daemons with kill-paths"
+        },
+        {
+          "n": "Darknet reputation HUD",
+          "d": "Persistent skill/rep scores over people",
+          "f": "ag",
+          "a": "Worker outcome-reputation: accepted-outcome history as the only rep number, method cited"
+        }
+      ]
+    },
+    {
+      "id": "diamondage",
+      "name": "The Diamond Age",
+      "cat": "books",
+      "motifs": [
+        {
+          "n": "Primer adaptive book",
+          "d": "A document that watches its reader and reshapes",
+          "f": "cv",
+          "a": "Onboarding surface: the Hive primer adapts to role and observed confusion, always citing canon"
+        },
+        {
+          "n": "Matter compiler feeds",
+          "d": "Physical goods streamed from feed infrastructure",
+          "f": "rt",
+          "a": "Provision pipeline lens: model/tool provisioning as feed lines with pressure and rations"
+        }
+      ]
+    },
+    {
+      "id": "burningchrome",
+      "name": "Burning Chrome",
+      "cat": "books",
+      "motifs": [
+        {
+          "n": "'The street finds its own uses'",
+          "d": "Tools repurposed beyond design intent",
+          "f": "ck",
+          "a": "Leave seams visible: exposed data attributes so operators can bolt their own scripts onto panels"
+        },
+        {
+          "n": "Chrome's ice run",
+          "d": "A heist told as instrument readouts",
+          "f": "dc",
+          "a": "High-stakes command runs get run-telemetry framing: approach, ice, breach, receipts"
+        }
+      ]
+    },
+    {
+      "id": "wiener",
+      "name": "Wiener: feedback canon",
+      "cat": "cyb",
+      "motifs": [
+        {
+          "n": "Closed-loop diagram",
+          "d": "Sensor → comparator → effector → environment → sensor",
+          "f": "ck dc rt",
+          "a": "Every Hive control renders its loop: command → Kanpai → Salud observation → cleared; the diagram IS the receipt trail"
+        },
+        {
+          "n": "Error signal primacy",
+          "d": "The loop runs on deviation, not absolute state",
+          "f": "ck",
+          "a": "Field default sorts by |error| — deviation from mission, not raw status"
+        },
+        {
+          "n": "Oscillation warning",
+          "d": "Overcorrection produces hunting",
+          "f": "rt",
+          "a": "Retry-storm detector rendered as oscillation trace: the system hunting is a named pathology"
+        }
+      ]
+    },
+    {
+      "id": "ashby",
+      "name": "Ashby: requisite variety & homeostat",
+      "cat": "cyb",
+      "motifs": [
+        {
+          "n": "Law of requisite variety",
+          "d": "Controller variety must match disturbance variety",
+          "f": "ck dc",
+          "a": "The Telegraph's existence justified on one slide: human decisions are the variety amplifier; show variety balance per fleet"
+        },
+        {
+          "n": "Homeostat step-change",
+          "d": "Random re-configuration until stability returns",
+          "f": "ag",
+          "a": "Manager recovery search rendered as homeostat steps: each reconfiguration logged, convergence visible"
+        },
+        {
+          "n": "Essential variables",
+          "d": "A few variables that must stay in bounds or the system dies",
+          "f": "rt",
+          "a": "Per-fleet essential-variable strip: the 3-5 bounds that define viability, always visible"
+        }
+      ]
+    },
+    {
+      "id": "beer",
+      "name": "Beer: Viable System Model",
+      "cat": "cyb",
+      "motifs": [
+        {
+          "n": "S1-S5 recursion",
+          "d": "Operations, coordination, control, intelligence, identity — at every scale",
+          "f": "pf",
+          "a": "The Organism's skeleton (kept in docs per earlier verdict) — but the recursion selector is UI: same panel grammar at fleet/mission/task scale"
+        },
+        {
+          "n": "Algedonic channel",
+          "d": "Pain/pleasure signals bypassing hierarchy",
+          "f": "ck",
+          "a": "The Telegraph IS this — cite it; critical class must bypass every filter including snooze"
+        },
+        {
+          "n": "S3* audit channel",
+          "d": "Sporadic direct audit bypassing S2 reporting",
+          "f": "dc",
+          "a": "Salud-as-S3*: spot-audit button that fetches direct evidence past every aggregation"
+        }
+      ]
+    },
+    {
+      "id": "cybersyn",
+      "name": "Project Cybersyn opsroom",
+      "cat": "cyb",
+      "motifs": [
+        {
+          "n": "Hexagonal opsroom",
+          "d": "Seven chairs, wall screens, decision environment as designed room",
+          "f": "ck",
+          "a": "The fleet-wall (IF-015) is Hive's opsroom: room-scale layout doctrine from 1972 Chile"
+        },
+        {
+          "n": "Flow diagrams as wall art",
+          "d": "Industrial flows as permanent large-format diagrams",
+          "f": "pf",
+          "a": "Mission dependency wall: the standing large-format render, not a popup graph"
+        },
+        {
+          "n": "Armrest controls",
+          "d": "Big-button chair controls: decisions from seats, not keyboards",
+          "f": "ck",
+          "a": "Touch-first decision controls: Telegraph actions as armrest-class big buttons (deck mode)"
+        }
+      ]
+    },
+    {
+      "id": "forrester",
+      "name": "Forrester: system dynamics",
+      "cat": "cyb",
+      "motifs": [
+        {
+          "n": "Stock-and-flow notation",
+          "d": "Rectangles hold, valves flow, clouds are boundaries",
+          "f": "pf",
+          "a": "Ledger rule made visual: every metric declares stock or flow in its glyph — the confusion the ledger bans"
+        },
+        {
+          "n": "Delay-marked links",
+          "d": "Delays drawn on the arrow, not hidden in behavior",
+          "f": "rt",
+          "a": "Queue/pipeline arrows carry delay marks: admission→placement→execution with measured lags"
+        },
+        {
+          "n": "Causal loop polarity",
+          "d": "+/- loop labels exposing reinforcing spirals",
+          "f": "pf",
+          "a": "Retry-cost spiral drawn as reinforcing loop on the cost panel — name the loop to break it"
+        }
+      ]
+    },
+    {
+      "id": "rasmussen",
+      "name": "Rasmussen: ecological interface design",
+      "cat": "cyb",
+      "motifs": [
+        {
+          "n": "Abstraction hierarchy",
+          "d": "Purpose→function→physical layers navigable in one display",
+          "f": "ck pf",
+          "a": "Scope stack formalized: why (mission) / what (work) / how (session) as EID layers, one keystroke apart"
+        },
+        {
+          "n": "Skill-rule-knowledge levels",
+          "d": "Interfaces serving all three cognition modes",
+          "f": "ck",
+          "a": "Every surface passes SRK: glance (skill), pattern (rule), drill-down (knowledge) — the deck cut is skill-tier"
+        },
+        {
+          "n": "Constraint rendering",
+          "d": "Show boundaries of safe operation, not just current point",
+          "f": "rt",
+          "a": "Capacity panels draw the safe envelope, not just the needle — operating point inside visible walls"
+        }
+      ]
+    },
+    {
+      "id": "mcculloch",
+      "name": "McCulloch-Pitts / Macy circle",
+      "cat": "cyb",
+      "motifs": [
+        {
+          "n": "Neural net diagrams 1943",
+          "d": "Threshold logic drawn as circles and arrows — the ur-graph",
+          "f": "ag",
+          "a": "Delegation graph glyph language: threshold-gate aesthetic for agent decision points"
+        },
+        {
+          "n": "Heterarchy over hierarchy",
+          "d": "Circular preference structures; no single top",
+          "f": "pf",
+          "a": "Actual-mode org rendering must allow cycles — heterarchy drawn honestly when observed"
+        }
+      ]
+    },
+    {
+      "id": "shannon",
+      "name": "Shannon: information theory",
+      "cat": "cyb",
+      "motifs": [
+        {
+          "n": "Channel diagram",
+          "d": "Source→encoder→channel(noise)→decoder→destination",
+          "f": "cv",
+          "a": "Wire trust rendering: every message drawn through its channel with noise source labeled (untrusted content injection point)"
+        },
+        {
+          "n": "Signal-to-noise budget",
+          "d": "Capacity as measurable, spendable quantity",
+          "f": "ck",
+          "a": "Notification budget: operator attention as channel capacity; Telegraph admission control cites it"
+        }
+      ]
+    },
+    {
+      "id": "synthwave",
+      "name": "Perturbator / Dan Terminus scene",
+      "cat": "music",
+      "motifs": [
+        {
+          "n": "Album-art chrome grids",
+          "d": "Sun-grid horizons, chrome type, VHS wash",
+          "f": "ck",
+          "a": "Login/boot splash only — the one place scene aesthetics may run pure"
+        },
+        {
+          "n": "Sidechain pulse",
+          "d": "Everything ducks to the kick",
+          "f": "ck",
+          "a": "Motion doctrine: ambient motion ducks when a Telegraph item lands — attention sidechained"
+        }
+      ]
+    },
+    {
+      "id": "neotokyo",
+      "name": "Ed Harrison: NeoTokyo NSF",
+      "cat": "music",
+      "motifs": [
+        {
+          "n": "Melancholy patrol ambience",
+          "d": "Long-form mood for sustained vigilance",
+          "f": "ck",
+          "a": "The overnight-ops soundscape: sparse, non-looping-feel, alarms tuned against it"
+        }
+      ]
+    },
+    {
+      "id": "demoscene",
+      "name": "Demoscene (Assembly/Revision)",
+      "cat": "music",
+      "motifs": [
+        {
+          "n": "Size-limited excellence",
+          "d": "64k intros: extreme craft under hard budget",
+          "f": "ck",
+          "a": "The deck build discipline: whole deck UI under 100KB as a stated constraint"
+        },
+        {
+          "n": "Sync-to-music choreography",
+          "d": "Visuals locked to soundtrack timeline",
+          "f": "ck",
+          "a": "Boot sequence beats locked to its audio stings — one authored timeline, then silence"
+        }
+      ]
+    },
+    {
+      "id": "cassette",
+      "name": "Cassette futurism corpus",
+      "cat": "music",
+      "motifs": [
+        {
+          "n": "Beige-and-phosphor materiality",
+          "d": "Plastic housings, membrane keys, printed labels",
+          "f": "ck",
+          "a": "Hive print kit: physical labels/type-sheet for the deck hardware — the interface extends onto the case"
+        },
+        {
+          "n": "Tape as medium of record",
+          "d": "Rewind, splice, dub — records you can touch",
+          "f": "dc",
+          "a": "River tape grammar already adopted — extend: splice marks where history was reconciled"
+        }
+      ]
+    },
+    {
+      "id": "territory",
+      "name": "Territory Studio corpus",
+      "cat": "fui",
+      "motifs": [
+        {
+          "n": "Narrative screens doctrine",
+          "d": "Every screen tells story state, briefs like film beats",
+          "f": "ck",
+          "a": "Panel briefs: each Hive panel has a one-line narrative job statement in the design doc"
+        },
+        {
+          "n": "Restraint under complexity",
+          "d": "BR2049/The Martian: dense but single-voiced",
+          "f": "ck",
+          "a": "Complexity budget per screen: one voice, one hue family, one motion idea"
+        }
+      ]
+    },
+    {
+      "id": "gmunk",
+      "name": "GMUNK corpus",
+      "cat": "fui",
+      "motifs": [
+        {
+          "n": "Procedural geometry choreography",
+          "d": "TRON boardroom, Oblivion: geometry as performance",
+          "f": "ck",
+          "a": "Reserved for boot and landing ceremonies — choreography as rare event, never idle animation"
+        }
+      ]
+    },
+    {
+      "id": "edex",
+      "name": "eDEX-UI / DataV lineage",
+      "cat": "fui",
+      "motifs": [
+        {
+          "n": "Fullscreen mosaic doctrine",
+          "d": "Everything visible, theatrically dense",
+          "f": "ck",
+          "a": "The fleet-wall preset borrows the mosaic; workday preset stays lean — two densities, named"
+        },
+        {
+          "n": "SVG frame component kit",
+          "d": "DataV's borders/decorations as data-driven components",
+          "f": "ck",
+          "a": "Port 3-4 DataV frame primitives into nerv-ui.css as the panel chrome kit"
+        }
+      ]
+    },
+    {
+      "id": "arwescosmic",
+      "name": "Arwes / cosmic-ui lineage",
+      "cat": "fui",
+      "motifs": [
+        {
+          "n": "Frame/bleep/reveal system",
+          "d": "Componentized sci-fi chrome with sound hooks",
+          "f": "cv",
+          "a": "Audit their reveal + bleep APIs for the Telegraph's sound design — patterns only, no dependency"
+        }
+      ]
+    }
+  ],
+  "cats": {
+    "games": "GAMES",
+    "film": "FILM / TV",
+    "anime": "ANIME",
+    "books": "BOOKS",
+    "cyb": "CYBERNETICS",
+    "music": "MUSIC / SCENE",
+    "fui": "FUI STUDIOS"
+  }
+}
