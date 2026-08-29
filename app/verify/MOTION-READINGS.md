@@ -1097,25 +1097,52 @@ refusal is about, and composition happens in the forecast band, not on the readi
 `organism`'s missing-edge copy (the edges are named, not summarised), and the fixture
 vocabulary test above.
 
-## Finding #11 — open: a `level` has two dialects, and the chrome speaks both at once
+## Finding #11 — closed: the bar was mis-anchored, and the title of this finding was wrong
 
-The SVG dialect puts the extent **in the transform**: the drawing is authored at full
-extent and `scaleX(level)` is what makes it a measurement. The HTML dialect, in most hosts,
-puts it in CSS width — `.cd-esper-meter i { width: calc(var(--esper-p) * 100%) }` — and the
-animation is only the reveal. Both are reasonable. Speaking them at once is not:
+The diagnosis filed here said the chrome's rule bar "speaks both dialects at once": `data-level
+="0.406"` with a fill whose CSS width is the whole track, rendered at `0.189` of that track, and
+notably `0.189 ≠ 0.406² = 0.165`, which is what double-encoding would have produced. The number
+was right and the reading of it was not. A fill at `width: 100%` is not an extent claim — it is the
+**track**, the thing the extent is measured against — so this host always had exactly one encoding:
+the transform carries the extent. What was broken was the anchor. `scaleX()` scales about the
+element's own centre unless told otherwise, so a bar holding the right reading was drawn from the
+middle of the box outward, and a claim that divided its rendered box by the track came back with
+something no arithmetic explains. The same defect the gate caught in `chipBudget` (finding #10) was
+already fixed for every marked element by the anchor rule in `src/motion.css` — `transform-box
+: fill-box`, origin at the left edge — which left this finding's headline pointing at a dialect
+problem that had never existed.
+
+Probed on the rendered page after the fix, both themes, 1280:
 
 ```
-.cd-rule-bar   data-level="0.406"   fill CSS width 597px (= the whole track)
-               rendered 0.189 of the track
+.cd-rule-bar   data-level="0.406"   inline `transform: scaleX(0.406)`
+               transform-origin 0px 13px (left edge) · track 599px · bar 242.4px
+               ratio 0.405 · left inset 1px (the frame)
 ```
 
-`0.189` is neither `0.406` nor `0.406² = 0.165`, so the chrome's rule bar is not simply
-double-encoded either; it is a third thing nobody has read yet. The gate asserts the left
-edge in both dialects and the right edge **only** in the SVG one, with these numbers in the
-comment, because a claim that goes red for a reason the file cannot fix teaches the next
-reader to mute the file. Rule to hold when it is closed: **one measurement, one encoding** —
-either the transform carries the extent or the width does, never both, and whichever carries
-it must be the one the animation ends on.
+The closing rule still holds, restated because the first phrasing is what misled: **one
+measurement, one encoding** — either the transform carries the extent or the CSS width does — and
+*which one* is now read off the page rather than inferred from the tag. The gate asserts the right
+edge wherever the resting transform carries a scale anchored at the element's own left edge, and a
+host that encodes extent in width still fails that test for the right edge and is measured on the
+left only. What the claim is proven to catch was established by sabotage, twice, and the two runs
+disagreed:
+
+- **`transform-origin: center` on the chrome bar → red**, as it must be:
+  `cd-rule-bar is a level of 0.406 that does not land where it was drawn: authored edge 34..631,
+  rendered 211..454 (drift 177px / 0px)`. The mis-anchor that produced finding #11's `0.189` is
+  caught on the left edge.
+- **`scaleX(0.9)` written into the markup under a mark that says 0.406 → green**, and the first
+  draft of this entry claimed that sabotage turned it red. It does not, and the reason is worth
+  keeping: the gate samples ~200ms after the specimen mounts, while the runtime's reveal still owns
+  the property, so the inline extent the server wrote is not what is on screen yet and the claim
+  measures the animation instead of the markup.
+
+**Still open, narrowed.** The gate has no settled measurement of a `level`: it asserts arrival
+during the reveal and byte-identity of the markup after settle, and neither one compares a settled
+rendered extent against `data-level`. Closing it means measuring the same prediction a second time
+after the animations finish, not inventing an encoding rule to excuse the first. Do not trust the
+green in the second bullet again.
 
 ---
 

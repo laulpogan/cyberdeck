@@ -446,14 +446,20 @@ for (const route of routes) {
             width = Math.abs(ctm.a * box.width);
             scaleByLevel = true;
           } else {
-            // HTML dialect: the extent is in the CSS width the host already set
-            // (`width: calc(<level> * 100%)`) and the animation only reveals it, so the
-            // fill must land at its own width, not at its width times the level again.
-            const origin = target.offsetParent || target.parentElement;
-            if (!origin) return;
-            authoredLeft = origin.getBoundingClientRect().left + target.offsetLeft;
-            width = target.offsetWidth;
-            scaleByLevel = false;
+            // HTML dialect, measured as an OUTCOME rather than classified by encoding. What
+            // used to live here tried to work out WHICH encoding the host used -- CSS width or
+            // the transform -- and skipped the right edge whenever it could not tell, which is
+            // how a bar declaring 0.406 rendered at 0.189 of its track through the whole life
+            // of finding #11 while the gate watched and said nothing. A `level` prediction needs
+            // no such judgement: 0.406 means the ink covers 40.6% of its track, however the host
+            // drew it, and the ink starts at that track's own left edge. Width-encoded hosts
+            // satisfy both, transform-encoded hosts satisfy both, and a centre-anchored bar --
+            // the real defect -- starts 177px late and is caught on the left edge.
+            const track = el.getBoundingClientRect();
+            if (!(track.width > 0)) return;
+            authoredLeft = track.left;
+            width = track.width;
+            scaleByLevel = true;
           }
           const r = target.getBoundingClientRect();
           out.push({
@@ -487,12 +493,12 @@ for (const route of routes) {
         // user units to fewer device pixels, and the same one-unit rounding is smaller.
         const slack = 1.5 + bar.span * 0.03;
         const leftDrift = Math.abs(bar.renderedLeft - bar.authoredLeft);
-        // The right edge is claimable only in the SVG dialect, where the transform *is*
-        // the extent. In the HTML dialect the host may have put the extent in CSS width,
-        // in the transform, or in both: the chrome's `cd-rule-bar` declares 0.406 and
-        // renders at 0.189 of its track, which is neither -- that arithmetic is finding
-        // #11, recorded and unresolved. A claim that goes red for a reason this file
-        // cannot fix only teaches the next reader to mute the file.
+        // The right edge is claimed wherever the resting transform carries the extent and
+        // is anchored at the element's own left edge -- in either dialect. `scaleByLevel` is
+        // measured off the computed transform and its origin, not inferred from the tag: the
+        // skip that used to live here was written when the chrome's `cd-rule-bar` declared
+        // 0.406 and rendered 0.189, and the anchor rule fixed the bar without this claim ever
+        // being asked to come back. A dodge that outlives its defect is a hole with a comment.
         const rightMiss = bar.scaleByLevel ? Math.abs(bar.renderedRight - bar.authoredRight) : 0;
         if (leftDrift > slack || rightMiss > slack) {
           bad.push(`${bar.name} is a level of ${bar.level} that does not land where it `
