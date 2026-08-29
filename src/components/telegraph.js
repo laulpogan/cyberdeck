@@ -171,6 +171,10 @@ export function bypass({ openCount = null, cite = 'items[].request_class' }) {
  * only span on it that has a length. An unreached run is drawn whole and
  * entered nowhere: an armed-looking first gate over a seam that does not
  * exist is the cruellest thing this component could do. */
+/** Which gate the abort-window bracket is drawn over. The same constant answers
+ * "is the window armed", so the geometry cannot disagree with the claim. */
+const WINDOW_GATE = 2;
+
 export function ceremony({ stages, windowSeconds,
                            cite = 'ceremony.stages[].reached' }) {
   if (!stages || !stages.length) {
@@ -193,12 +197,34 @@ export function ceremony({ stages, windowSeconds,
   });
   // The window is stated before anything is armed. A window an operator
   // learns the length of only after committing is not a window.
-  const from = PAD + 14 + step * 2;
-  g.push('<g class="cd-tg-window">'
+  //
+  // The bracket is a *dimension*, not a countdown: it says how long the span is, and
+  // nothing more. Saying `ABORT WINDOW 10s` over a gate nobody reached announced ten
+  // seconds an operator does not have, and a length with no state on it is the same
+  // error the collar already refuses (`river.js`: elapsed, because remaining is
+  // unknowable). So the bracket carries the state it can prove. If a producer ever
+  // supplies an elapsed stamp for an armed window, this is where `cycle(elapsed,
+  // windowSeconds, sourceState, ...)` belongs and the bracket will decay and refuse on
+  // overrun like every other countdown here -- no such stamp exists in any fixture,
+  // which is why it is not drawn pretending to.
+  const from = PAD + 14 + step * WINDOW_GATE;
+  const openGate = stages[WINDOW_GATE] || null;
+  const armed = Boolean(openGate && openGate.reached);
+  const unstated = windowSeconds === null || windowSeconds === undefined;
+  const windowMark = unstated
+    ? refusal('the ceremony defines no abort window length')
+    : armed
+      ? still('the window is armed, and no elapsed stamp is supplied to count it down')
+      : still(`the window is not armed: ${openGate ? openGate.label : `gate ${WINDOW_GATE + 1}`}`
+        + ' was not reached');
+  const windowWord = unstated
+    ? 'WINDOW LENGTH UNREPORTED'
+    : `ABORT WINDOW ${windowSeconds}s${armed ? ' · ARMED' : ' · NOT ARMED'}`;
+  g.push(`<g class="cd-tg-window"${attrs(windowMark)}>`
     + line(from, top + 34, from + step, top + 34, { width: 2 })
     + line(from, top + 30, from, top + 38, { width: 2 })
     + line(from + step, top + 30, from + step, top + 38, { width: 2 })
-    + text(from + step / 2, top + 48, `ABORT WINDOW ${windowSeconds}s`,
+    + text(from + step / 2, top + 48, windowWord,
         { size: 8, anchor: 'middle' }) + '</g>');
   stages.forEach((stage, i) => {
     g.push(text(PAD, 132 + i * 17,

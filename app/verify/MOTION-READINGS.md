@@ -536,20 +536,21 @@ problem again at its most repetitive.
 
 ### `oracle` — Fragment oracle
 
-**Measured:** 0 of 17 changed, 0 of 12, `still`, 571px held. `1 of 5 exhausted`, fragment boxes with
-`credential expiry  3s`, and hatched bands beneath for what is not held.
+**Measured:** 0 of 17 changed, 0 of 12, `still`, 571px held. `5 of 5 exhausted`, fragment boxes with
+`credential expiry · 3×`, and hatched bands beneath for what is not held.
 **Refused:** 0 of 13 — the fragments become dashed outlines and the bands hatch harder.
 
-**Does the motion measure something? Nothing moves, and one string on the card promises that
-something should.** `credential expiry 3s` is drawn as a live countdown in the same format the
-library uses for measured windows, and it has no `cycle` and no `traffic`: nothing on the page
-counts it down, and if the credential really expires in three seconds a static `3s` is a lie one
-frame after it is drawn. This is `ceremony`'s `ABOUT WINDOW 16s` defect for the second time, and it
-is the second-most-dangerous thing found in this pass after a moving-without-evidence counter: a
-number that implies a timer is a claim about the future. Either it gets `cycle(spent, period,
-sourceState)` and refuses on overrun, or it becomes an absolute timestamp, drawn as one.
+**Does the motion measure something? Nothing moves, and this reading originally accused the card of
+promising that something should. That accusation was wrong and is retracted.** Written from a
+filmstrip frame too small to resolve punctuation, the string was logged as `credential expiry 3s` and
+charged with being an uncounted countdown. What the card actually prints is `credential expiry · 3×`
+under the label `SAME BLOCKER`, cited to `sessions[].state_reason`: the same blocker recurred three
+times. That is a count of the past, not a claim about the future, and it is the honest shape of the
+field. No change was made to `oracle`.
 
-### `oscillation` — Oscillation detector
+The lesson is about this file, not the component: a reading taken off a thumbnail is a hypothesis.
+Both halves of the finding that follow were tested against the rendered string before anything was
+edited, and one of them did not survive.### `oscillation` — Oscillation detector
 
 **Measured:** 16 of 17 changed, **11 of 12 loop**, `still`, `trace`, `traffic`, 453px held. Ticks run
 along a rail under a dashed `THRESHOLD 3` rule, with three hatched `UNMEASURED` bands below for the
@@ -816,8 +817,10 @@ Ordered by how much they cost to fix and how much they were hiding.
    REACHED`, `magi` `0 of 3 …`, `keycard`). A refusal that reports a number is arithmetic on absence.
    `queueState` already prints `—` where its count would be: the correct pattern exists in the
    library and costs nothing.
-5. **Phantom countdowns** (`ceremony` `ABOUT WINDOW 16s`, `oracle` `credential expiry 3s`). A number
-   in a timer format with no `cycle` and nothing counting it down. Either measured or absolute.
+5. **A length with no state on it** (`ceremony` `ABORT WINDOW 10s`). ~~`ABOUT WINDOW 16s` and
+   `oracle`'s `credential expiry 3s`~~ — both strings were misread off small filmstrip frames; see
+   the correction at the end of this file. What survives is narrower: the bracket announced ten
+   seconds over a gate nobody reached. It says `· NOT ARMED` now, and refuses to tick.
 6. **Findings painted before the evidence arrives** (`admission`, `chipBudget`, `contextBurn`,
    `glassCell`, `gauge`, `scanOverlay`). The number is complete in the frame where nothing has
    arrived yet; the sum, the balance, the verdict should be the last thing drawn, because then the
@@ -894,6 +897,32 @@ loudest line on the refused panel, `TURN UNMEASURED`, was rendered in the health
 the letters said one thing and the colour said the opposite, which is a green checkmark on an
 unchecked row one size up. It carries the refusal ink now. The green sequence rail under the
 labels stays green on purpose — the order of the doors *is* measured, only their states aren't.
+
+## Finding #5 is closed — and the readings file was the defect half the time
+
+Read again against the running app rather than the filmstrip, half of finding #5 did not exist. The
+two strings I logged were mis-transcriptions off thumbnails:
+
+| logged from the sheet | what the card actually prints | |
+| --- | --- | --- |
+| `ceremony` `ABOUT WINDOW 16s` | `ABORT WINDOW 10s` | 10 is the fixture's own value |
+| `oracle` `credential expiry 3s` | `credential expiry · 3×` | a recurrence count under `SAME BLOCKER`, cited to `sessions[].state_reason` |
+
+`oracle` has no phantom countdown and was not touched: a count of how many times a blocker recurred
+is a fact about the past, drawn in the shape of a count. The retraction is recorded here rather than
+quietly edited, because the next reader who trusts this file will otherwise go looking for a timer
+that does not exist.
+
+What survived in `ceremony` is narrower and real: the bracket stated a **length** over a gate nobody
+reached, which announces ten seconds the operator does not have. A dimension is not a countdown — the
+bracket is a labelled span between two gates — but a length with no state on it is the same family of
+error the collar already refuses (`elapsed, because remaining is unknowable`). It now says
+`ABORT WINDOW 10s · NOT ARMED`, or `· ARMED` when the gate is reached, and either way carries
+`still` naming what is missing: an armed window with no elapsed stamp refuses to tick rather than
+drawing a static number in countdown type. No fixture supplies an elapsed stamp, so none is invented —
+the place where `cycle(elapsed, windowSeconds, sourceState)` belongs is written into the comment, and
+it will decay the day a producer exists. If the length itself is never stated, the bracket reads
+`WINDOW LENGTH UNREPORTED` in refusal ink and no number fills the gap.
 
 ### Two probe results that came out *for* the library
 

@@ -215,3 +215,29 @@ test('no telegraph component hides moving marks inside a stillness', () => {
   ];
   for (const html of cases) assert.equal(nesting(html), 0);
 });
+
+// --------------------------------------------------------------------------
+// Finding #5, once the frames were read correctly: there is no phantom countdown in
+// this library -- the panel says `ABORT WINDOW 10s` (a dimension) and the oracle says
+// `credential expiry · 3×` (a recurrence count, not seconds). What was real is smaller
+// and worth holding: a length printed over a gate nobody reached announced seconds the
+// operator does not have. The bracket now carries the state it can prove.
+test('the abort window says whether it is open, and never pretends to tick', () => {
+  const closed = t.ceremony({ stages: STAGES, windowSeconds: 20 });
+  assert.match(closed, /ABORT WINDOW 20s · NOT ARMED/, 'a length nobody armed says so');
+  assert.match(closed, /data-motion="still" data-still-reason="the window is not armed: /,
+    'and the refusal names the gate that is missing');
+  assert.doesNotMatch(closed, /data-motion="cycle"/, 'no elapsed stamp, so nothing counts');
+
+  const open = t.ceremony({
+    stages: STAGES.map((s) => ({ ...s, reached: true })), windowSeconds: 20,
+  });
+  assert.match(open, /ABORT WINDOW 20s · ARMED/, 'armed is a different sentence');
+  assert.match(open, /no elapsed stamp is supplied/, 'and it still refuses to tick blind');
+
+  const unstated = t.ceremony({ stages: STAGES, windowSeconds: null });
+  assert.match(unstated, /WINDOW LENGTH UNREPORTED/, 'nobody stated a length');
+  assert.match(unstated, /class="cd-tg-window"[^>]*data-refusal="1"/,
+    'unsaid is refusal ink, not a measured zero');
+  assert.doesNotMatch(unstated, /ABORT WINDOW \d+s/, 'and no invented number fills the gap');
+});
