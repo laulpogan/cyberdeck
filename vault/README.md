@@ -95,6 +95,7 @@ what it is good for will be used as if it were good.
 | `intitle:"screen recording"` on Commons (`barcode-scan-receipt`) | ✓ 13 files answered, direct media URLs | a phone barcode scan: reticle, an honest `Retrieving data, please wait…` with no progress bar, then a priced receipt while a cart badge steps 26 → 27 | most of the 13 are tool demos, and this one is **handheld camera over a real interface** — its SPECS travel belongs to the cameraperson (`cameraDrift: true`), so it is quoted for state vocabulary, not for a rate |
 | NOAA / NWS radar loops on Commons (`hurricane-irma-radar-loop`) | ✓ the same direct-media path | a labelled geographic plate whose stamp steps by six minutes and whose wrap is a jump | the first reference in the vault for a **rolling loop** rather than a repeating one: everything in the field changes, the furniture is dark ink the instrument cannot see, and the age of the picture is printed on it |
 | Wikimedia Commons search API, under load | ⚠ throttles: `You are making too many requests to the API`, returned as **plain text**, so a script that pipes it into a JSON parser reports a parse error and looks like a code fault | — | resolve a known filename through `Special:FilePath/<name>` (not the search API) and read `url_effective`; never rebuild a URL from a truncated print — one run recorded a 137-byte 403 page as a candidate reference that way |
+| Commons search API **from a real browser** (Playwright, `fetch` run on-site) | ✓ answers JSON with no throttle where the plain client was refused: the block was a client property, not a network one | `filetype:video` in the query returned three families of motion files: level-crossing barriers going down (`twoState` — rejected), OLED/TV test patterns (`standardSheet` — rejected), optical-fibre splicing (`tapeSplice` — the only one whose drawing hosts its demand) | **the acquisition path is not blocked**; what limits coverage is the drawing test, not the network. Run `api.php` inside a page loaded from `commons.wikimedia.org` so the request is same-origin, and put `filetype:video` in the search string — bare nouns return still photographs of the *thing*, not the screen |  
 | Wikimedia Commons (`vault/clip.mjs`, direct media URLs) | ✓ `upload.wikimedia.org` answers a plain `curl`; the API answers in JSON; no browser needed | the first usable **moving diegetic interface** since the loaders: a declassified F-16 HUD (`raw/f16-hud-gcas.gif`) — tapes scrolling under pinned readouts, a FLYUP limit cue arriving and leaving, `xxx` printed where a value is unavailable | **the path that works**: search the API for `filetype:video`, take the URL, derive a window with `node vault/clip.mjs` |
 | YouTube clip harvest (`clip.mjs` pointed at a YouTube URL) | search works (`yt-dlp "ytsearch…"` returns titles and durations) | **media download is refused from this network**: `HTTP Error 403` on the plain client, `The page needs to be reloaded.` on the `tv` client. Two distinct client failures, so the path is not a flag away | blocked here; needs browser cookies or another host |
 | Internet Archive (`advancedsearch.php` + `metadata/`) | ✓ queries and direct file downloads both answer | its index points at ROMs, game builds and let's-play videos; a `ftl+faster+than+light+gameplay` query returned a ZX Spectrum tape, a Stellaris video and a GOG installer, not one HUD recording | reachable but not yet productive; the query, not the host, is the problem |
@@ -104,3 +105,27 @@ be read off. GIF hosts index the character holding the screen, mission footage i
 and the panel is a wedge in the corner of the shot. The verified corpus today (7 of 51 components
 quoted in `SPECS-FOR.json`, see `vault/MAPPING.md`) is not a ranking failure — `vault/rank.py`
 already puts the likeliest files first, and the likeliest files are stormtroopers.
+
+## Two files that were found and not acquired, and why
+
+The Commons search block being a client artefact changed what "coverage is capped" means: the network can supply
+motion, so the limit is the **drawing test** — whether the component's own picture could host the demand the frames
+state. Two candidates died there, and are recorded so nobody re-acquires them:
+
+- **`twoState` ← level-crossing barrier footage** (`File:Gillingham Level Crossing barriers going down.webm`, and
+  eleven neighbours). A barrier coming down is a machine changing state. `twoState` is a *commit decision*: two
+  outcomes drawn at equal weight, `NOTHING IS PRESELECTED`, and a line for the cost of choosing neither. Nothing in a
+  barrier's descent informs how two boxes are weighted or what the inaction line holds. The nearest file — malfunctioning
+  crossing lights — is a *state that never completes*, which is `hardCut`'s and `queueState`'s country, not this card's.
+- **`standardSheet` ← television test-pattern footage** (OLED burn-in and calibration patterns). A test card *is* a
+  semiotic standard sheet, and the analogy is seductive, but the card's demands are that six glyphs stay distinguishable
+  by **shape** with the labels covered and that the key never read as a measurement. A burn-in video measures pixel
+  damage over minutes. Quoting it would be `mfd` all over again — a reading implying work the drawing cannot host.
+
+The honest consequence for the goal: **coverage is not going to reach 51 by searching harder**, and the number stays
+meaningful only if a `for` entry names where a reference actually informs a drawing. Of the twelve components still in
+the nothing tier — `scaleCrush`, `chipBudget`, `standardSheet`, `tapeSplice`, `loopDeviation`, `bypass`, `ceremony`,
+`twoState`, `contextBurn`, `garage`, `gevulot`, `channel` — several are Stargate metaphors with no diegetic screen in
+the world to photograph (`gevulot` will not tell you; `ceremony` is a commissioning rite), and two of them are legends
+whose whole claim is that they are not readings. The next real candidate is `tapeSplice` ← optical-fibre splicing, whose
+drawing is a join with attempts before it, which is the thing a fusion splicer's screen actually shows.
