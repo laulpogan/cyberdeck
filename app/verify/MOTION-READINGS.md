@@ -1742,3 +1742,33 @@ immediately. **A sabotage that produces no animation object tests the harness's 
 Also removed while in there: `furniture_still` existed **twice** in the `else if` chain, identical, the second copy
 unreachable. Anyone patching the copy at line 777 would have changed nothing at all and had every reason to believe
 otherwise. Gauntlet 24 rows — **22 pass, 2 held, 0 FAIL**; gate 4 passes on `#/component/coverage`; `npm test` 309.
+
+## `tracker`'s demand, closed in the dialect the drawing can actually speak
+
+The hurricane loop's third demand — *"a value entering the plate is already drawn at its measured value, not faded up to
+it"* — came from measuring a saturated cell sitting at 0.25 of its final extent at half duration: a new observation step
+*appears* at full reflectivity instead of growing into itself. Read literally against `tracker` that would demand
+snap-to-length bands, and `tracker`'s bands are `trace` reveals of *measured waits in arrival order* — the library's
+licensed reveal. Demanding the raster claim of a weather cell from a survey arc is `mfd` again: a reading implying work
+the drawing cannot host. So the demand was translated to the dialect the plate actually has, and it is narrower:
+**the printed figure is a measurement already taken, so nothing animates it.**
+
+`test/entered-values.test.mjs` holds that. `OLDEST WAIT` and its duration must be outside every marked group, and
+`tracker`'s mark kinds are a named whitelist — `trace` reveals a measured band in order, `traffic` is the recorder's own
+tick, `refusal`/`still` declare absences — so any new kind appearing on this plate has to be argued for in the test. An
+elapsed counter is forbidden by name (this plate's whole reading is one measured figure, not a running one) and so is a
+`decay` (*"a figure that decays is a figure being spent, and this one was taken already"*). Proven by planting a
+`count` over the duration: *"the duration itself sits inside an animated group — a measured wait restated as something
+happening."*
+
+Three of my own errors are in this file's history and each is the kind that fakes a green. The first render used
+`{ oldest, ticks }` — real props are `{ oldestWaitSeconds, sourceState }` — and produced `NO CONTACT / EVERY WAIT IS
+UNMEASURED / NO CADENCE`: a **plausible refusal face**, which I nearly asserted invariants about; a wrong call shape
+that renders a refusal looks exactly like a passing test if the assertions are negative enough. The second was the
+arithmetic again: 9456 s asserted as `2H 36M`, and the honest build printed `2H 37M` because the formatter rounds up —
+the same mistake I made on `collar`, now with an exact multiple (5400 s) and a comment saying why. And the earlier
+`decay` plants on `coverage` are written up above: one threw because the module never imported it, one created no
+`Animation` at all, and both looked like answers.
+
+`tracker` was already innocent. What changed is that its innocence is now a claim with a fence around it, and the fence
+quotes the reference that justifies it. `npm test` 312.
