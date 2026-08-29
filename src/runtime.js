@@ -390,8 +390,12 @@
     // same length, by the kind whose whole job is extent.
     var level = parseFloat(el.getAttribute('data-level'));
     if (!(level >= 0)) level = 1;
-    var fn = axis === 'y' ? 'scaleY' : 'scaleX';
-    play(bar, { transform: [fn + '(0)', fn + '(' + level + ')'] },
+    // A named axis with no emitter is dead code that quietly mis-draws
+    // the day someone trusts it -- the rotate branch hid a horizontal
+    // radar sweep exactly this way. There is no vertical level in the
+    // rack, so there is no scaleY here; a component that grows one must
+    // name the axis and prove the motion.
+    play(bar, { transform: ['scaleX(0)', 'scaleX(' + level + ')'] },
       { duration: T.enter / 1000, easing: 'ease-out' });
   }
 
