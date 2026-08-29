@@ -6,7 +6,7 @@
 // who is allowed to see the answer.
 
 import { frame, rect, line, dot, hexCell, text } from '../draw.js';
-import { trace, count, still, attrs } from '../marks.js';
+import { attrs, count, refusal, still, trace } from '../marks.js';
 import { card, esc, wrapped, W, H } from './card.js';
 
 const PAD = 12;
@@ -67,7 +67,11 @@ export function magi({ seats, collapsedState = null,
       + '</g>');
   });
   const spoke = seats.filter((s) => s.standing === 'spoke').length;
-  g.push(text(PAD, 170, 'AGREEMENT UNMEASURED', { size: 9, weight: '600' }));
+  // The seats' standings are drawn; what the bench agreed on is not, and until
+  // now both facts shared one ink with the unmeasured gaps. The agreement is a
+  // refusal — nothing recorded it — so it takes the refusal mark.
+  g.push(`<g class="cd-dc-agreement"${attrs(refusal('no agreement was recorded across the bench'))}>`
+    + text(PAD, 170, 'AGREEMENT UNMEASURED', { size: 9, weight: '600' }) + '</g>');
   g.push(text(PAD, 182,
     `${spoke} of ${seats.length} producers contributed to `
     + String(collapsedState || 'UNMEASURED').toUpperCase(),

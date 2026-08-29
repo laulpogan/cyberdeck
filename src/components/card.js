@@ -6,7 +6,7 @@
 // disagree with the drawing it holds.
 
 import { attrs } from '../marks.js';
-import { frame, hatched, line, text } from '../draw.js';
+import { frame, line, refusalHatched, text } from '../draw.js';
 
 export const esc = (v) => String(v)
   .replace(/&/g, '&amp;').replace(/</g, '&lt;')
@@ -41,8 +41,8 @@ export function refusalFrame({ word = 'UNMEASURED', ghost = [], cite = null,
   // own empty geometry does not need them: the outline of the thing that is missing is already
   // the hatch, and laying ink over it would hide the shape the refusal exists to keep.
   const bands = ghost.length ? [] : [
-    hatched(14, middle - band - 14, width - 28, band),
-    hatched(14, middle + 14, width - 28, band),
+    refusalHatched(14, middle - band - 14, width - 28, band),
+    refusalHatched(14, middle + 14, width - 28, band),
   ];
   const g = [
     ...ghost,

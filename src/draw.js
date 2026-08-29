@@ -27,6 +27,37 @@ export const SCHEMA = 'cyberdeck.draw/1';
 // is the same texture at the same angle -- an operator learns it once.
 export const HATCH_ID = 'cd-hatch-unmeasured';
 
+// A refusal is a different claim from an unmeasured region, and until these
+// were two textures it could not be told from one. `hatched` means *this
+// quantity exists and no instrument reported it* -- a gap inside a live
+// drawing. A refusal means *the library holds nothing to draw here*, which is
+// a fact about the data source, not the world. Same ink, same 45-degree
+// texture, same dashed border: so a sparse board and a blind board were one
+// picture, in seven components. The refusal is a crosshatch inside a SOLID
+// border -- a different shape, not just a different colour, because a
+// distinction that only survives in hue is gone in monochrome and gone to
+// about eight percent of men.
+// A refusal is a different claim from an unmeasured region, and until these were
+// two textures it could not be told from one. `hatched` means *this quantity
+// exists and no instrument reported it* — a gap inside a live drawing. A refusal
+// means *the library holds nothing to draw here*, which is a fact about the data
+// source, not the world. Same ink, same 45-degree texture, same dashed border: so
+// a sparse board and a blind board were one picture, in seven components.
+//
+// The refusal is a CROSSHATCH inside a solid border — a different shape, not
+// merely a different colour, because a distinction carried only in hue is gone in
+// monochrome and gone to about eight percent of men. It is built from two passes
+// of the one existing texture, the second mirrored about the region's centre,
+// which rotates its 45-degree lines to 135. Mirrored rather than rotated because
+// a rotation does not preserve a rectangular box, and a band that moved out of
+// its box would be a refusal that no longer describes the thing it refuses.
+//
+// It adds no `<pattern>` of its own on purpose: the defs block is contract-held by
+// test/draw-contract.json, byte for byte, against the implementation this library
+// was ported from. A texture that can be composed from the primitives without
+// touching the port is composed, not added.
+export const REFUSAL_CLASS = 'cd-refusal';
+
 const DEFS =
   '<defs>'
   + `<pattern id="${HATCH_ID}" width="6" height="6" patternUnits="userSpaceOnUse" `
@@ -169,6 +200,21 @@ export const hatched = (x, y, w, h, { extra = '' } = {}) =>
   `<rect x="${num(x)}" y="${num(y)}" width="${num(w)}" height="${num(h)}" `
   + `fill="url(#${HATCH_ID})" stroke="currentColor" stroke-width="1" `
   + `stroke-dasharray="3 3"${tail(extra)}/>`;
+
+/** A region the library cannot draw at all. Crosshatched and SOLID-edged:
+ * the dashed border belongs to a gap inside a live measurement, and a
+ * refusal has no live measurement to be a gap inside of. */
+/** A region the library cannot draw at all: crosshatched, and grouped under
+ * `.cd-refusal` so the stylesheet can give it refusal ink and a solid border.
+ * The dashed border belongs to a gap inside a live measurement, and a refusal
+ * has no live measurement to be a gap inside of. */
+export const refusalHatched = (x, y, w, h, { extra = '' } = {}) => {
+  const cx = x + w / 2;
+  return `<g class="${REFUSAL_CLASS}"${tail(extra)}>`
+    + hatched(x, y, w, h)
+    + `<g transform="translate(${num(cx * 2)} 0) scale(-1 1)">${hatched(x, y, w, h)}</g>`
+    + '</g>';
+};
 
 export const scanlines = (x, y, w, h) =>
   `<rect x="${num(x)}" y="${num(y)}" width="${num(w)}" height="${num(h)}" `

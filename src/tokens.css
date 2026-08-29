@@ -30,6 +30,12 @@
   --cd-signal-alert-fill: rgba(173, 33, 23, 0.13);
   --cd-signal-warn: #715600;
   --cd-signal-unknown: #960060;
+  /* A refusal, drawn. `--cd-signal-unknown` is the ink of a quantity that exists
+     and went unreported; these are for the case where nothing was held to report.
+     Warm graphite, deliberately not another hue: the primary distinction is the
+     crosshatch and the solid border in `draw.js`, and a difference carried only by
+     colour disappears in monochrome and to about eight percent of men. */
+  --cd-refusal-ink: #4A3B2E;
   --cd-steel-ink: #241A14;
   --cd-steel-muted: #665448;
   --cd-steel-faint: rgba(36, 26, 20, 0.07);
@@ -108,6 +114,7 @@
     --cd-signal-alert-fill: rgba(255, 48, 48, 0.15);
     --cd-signal-warn: #FFE820;
     --cd-signal-unknown: #F030C0;
+    --cd-refusal-ink: #C4B29E;
     --cd-steel-ink: #D8D8D0;
     --cd-steel-muted: #888880;
     --cd-steel-faint: rgba(200, 200, 192, 0.06);
@@ -186,6 +193,7 @@
   --cd-signal-alert-fill: rgba(255, 48, 48, 0.15);
   --cd-signal-warn: #FFE820;
   --cd-signal-unknown: #F030C0;
+  --cd-refusal-ink: #C4B29E;
   --cd-steel-ink: #D8D8D0;
   --cd-steel-muted: #888880;
   --cd-steel-faint: rgba(200, 200, 192, 0.06);

@@ -12,7 +12,7 @@
 
 import {
   frame, hexagon, hexCell, rect, line, dot, ring, arc, wedge, needle, text,
-  hatched, scanlines, staticField, wall, curve, axis,
+  hatched, refusalHatched, REFUSAL_CLASS, scanlines, staticField, wall, curve, axis,
 } from '../../src/draw.js';
 
 const W = 208;
@@ -93,6 +93,15 @@ export const PRIMITIVES = [
     call: 'hatched(x, y, w, h, { extra })',
     note: 'A region nobody measured. Hatch rather than leave blank: a blank region reads as a quiet one, and quiet is a measurement.',
     html: () => show(hatched(16, 14, 176, 32), 'a hatched region'),
+  },
+  {
+    name: 'refusalHatched',
+    call: 'refusalHatched(x, y, w, h, { extra })',
+    note: 'A region the library cannot draw at all: crosshatched, and grouped under '
+        + '`.cd-refusal` so the stylesheet can give it refusal ink and a solid border. '
+        + 'The dashed border belongs to a gap inside a live measurement, and a refusal '
+        + 'has no live measurement to be a gap inside of.',
+    html: () => show(refusalHatched(16, 14, 176, 32), 'a crosshatched refusal'),
   },
   {
     name: 'scanlines',

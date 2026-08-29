@@ -397,3 +397,33 @@ fall out of it and a reviewer should not have to rediscover them:
 - The source's `band` word chooses ink only while the pass time is measured. Otherwise the contact
   is drawn `data-band="unmeasured"` with a ring: a typed category must not keep a dot glowing after
   the clock it was supposed to describe has refused.
+
+## Two inks, not one
+
+`hatched()` means *this quantity exists and no instrument reported it* — a gap
+inside a live drawing. A refusal means *the library holds nothing to draw*, which
+is a fact about the source. They shared a texture, a dashed border and the magenta
+of `--cd-signal-unknown`, so a sparse board and a blind board were the same
+picture in seven components. The split is now in the machinery, not in someone's
+eye:
+
+- `refusalHatched()` (`src/draw.js`) draws a **crosshatch inside a solid border**,
+  built from two passes of the one existing texture, the second mirrored about the
+  region's centre — mirrored, not rotated, because a rotation does not preserve a
+  rectangular box. It adds no `<pattern>` of its own: the defs block is
+  contract-held byte-for-byte by `test/draw-contract.json`, and a texture that can
+  be composed without touching the port is composed, not added.
+- `refusal(reason)` (`src/marks.js`) is `still(reason)` plus `data-refusal="1"`.
+  **Not every stillness is a refusal** — a threshold, a sightline and a wall are
+  motionless and measured — and the first cut of the stylesheet keyed off
+  `[data-motion="still"]`, which would have drawn a measured fact in refusal ink.
+  That is the same error as the one being fixed, in the other direction.
+- CSS: `.cd-refusal` and `[data-refusal="1"]` take `--cd-refusal-ink` (warm
+  graphite, defined in all three theme states) and a `1 4` dot-dash against the
+  `3 3` gap-dash. Hue is the secondary signal; shape carries the claim.
+- `test/marks.test.mjs` holds the two apart in both directions: loopDeviation's
+  `NO REFERENCE TRACE` band carries the refusal, coverage's magenta unraided
+  region must not.
+
+Still on the list, now that the vocabulary exists: dispatch's rails, ice's walls,
+keycard's sleeves, triVision's field, needleField's field of hollow rings.

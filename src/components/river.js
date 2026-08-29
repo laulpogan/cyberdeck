@@ -12,7 +12,7 @@
 // what it always was: a `trace`, staggered in the order the lanes are
 // read. A lane with no events does not draw, and says so.
 
-import { trace, count, decay, still, attrs } from '../marks.js';
+import { attrs, count, decay, refusal, still, trace } from '../marks.js';
 
 // Event kinds map to shapes, never to colour alone. A reader who cannot
 // distinguish the two greens still reads the run.
@@ -347,7 +347,11 @@ export function loopDeviation({ observed = [], cite = 'expected_trace(work_id)' 
   }
   const y = top + lane + 34;
   g.push(text(PAD, y - 6, 'EXPECTED', { size: 7, opacity: '.8' }));
-  g.push(`<g class="cd-riv-noref"${attrs(still('no reference trace was ever written'))}>`
+  // A refusal, not a gap. The observed events are a measurement with a hole in
+  // it; this band is the comparison that could not be computed because nobody
+  // wrote the loop down — a fact about the archive, drawn in the refusal ink so
+  // it does not read as another unmeasured quantity inside live data.
+  g.push(`<g class="cd-riv-noref"${attrs(refusal('no reference trace was ever written'))}>`
     + hatched(PAD, y, SPAN, lane)
     + text(W / 2, y + lane - 9, 'NO REFERENCE TRACE', { size: 8.5, anchor: 'middle' })
     + '</g>');

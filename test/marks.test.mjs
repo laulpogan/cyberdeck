@@ -127,3 +127,35 @@ test('marks are attributes and nothing else', () => {
     }
   }
 });
+
+// The two inks, held apart. `still(reason)` covers a thing that is legitimately
+// motionless and a thing the library cannot draw, and the drawing has to tell them
+// apart — "not reached" and "no data" sharing a stroke made a sparse board and a
+// blind board one picture in seven components. `refusal()` is the extra bit the
+// stylesheet reads, so the distinction is asserted here rather than eyeballed in a
+// screenshot every time someone touches a hatch.
+test('a refusal is marked as one, and a plain stillness is not', async () => {
+  const { refusal, still } = await import('../src/marks.js');
+  assert.equal(still('a rule about who may look')['data-refusal'], undefined);
+  assert.deepEqual(refusal('no reference trace was ever written'), {
+    'data-motion': 'still',
+    'data-still-reason': 'no reference trace was ever written',
+    'data-refusal': '1',
+  });
+  const { loopDeviation } = await import('../src/components/river.js');
+  const html = loopDeviation({ observed: [{ t: 1, kind: 'attempt' }], expected: [],
+    cite: 'loop.period' });
+  assert.match(html, /class="cd-riv-noref"[^>]*data-refusal="1"/,
+    'the band nobody could compute is a refusal');
+  assert.match(html, /class="cd-riv-[^"]*"[^>]*data-motion/, 'the live lane still marks its own motion');
+  // The other half, on a component where the two coexist by design: coverage
+  // hatches the territory nobody flew (a measured gap — the survey says nothing
+  // was flown there) and must not claim a refusal over it.
+  const { coverage } = await import('../src/components/field.js');
+  const { brightFor } = await import('../app/fixtures/index.js');
+  const swept = coverage(brightFor('coverage'));
+  assert.ok((swept.match(/url\(#cd-hatch-unmeasured\)/g) || []).length >= 1,
+    'the unraided region is drawn as a hatched gap');
+  assert.equal(swept.match(/data-refusal/g), null,
+    'a gap inside measured data is not a refusal and must not take the refusal ink');
+});

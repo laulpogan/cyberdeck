@@ -834,6 +834,24 @@ Ordered by how much they cost to fix and how much they were hiding.
     `redaction`, `joiOverlay`, `twoState`…). `DECLARED STILL` reads 0 over a deliberate refusal, which
     is why the twelve are already in `FILMSTRIP.md`.
 
+## Finding #2 is closed at the vocabulary, not at the sites
+
+The two inks now differ in **shape** before colour: a refusal is a crosshatch
+inside a solid border in `--cd-refusal-ink`; a measured absence keeps the single
+45-degree hatch, the dashed border and the magenta of `--cd-signal-unknown`.
+`refusal(reason)` stamps `data-refusal="1"`, and `refusalHatched()` composes the
+crosshatch from two mirrored passes of the one existing texture — no new
+`<pattern>`, because `test/draw-contract.json` holds the port's defs byte for byte
+and a texture that can be composed without touching the port should be. `loopDeviation`'s
+`NO REFERENCE TRACE` and `magi`'s `AGREEMENT UNMEASURED` are the first in-card
+refusals to take it; a test holds coverage's magenta unraided region *out* of it,
+so the distinction cannot quietly collapse back into one stroke.
+
+What is **not** done: dispatch's rails, ice's walls, keycard's sleeves,
+triVision's field and needleField's field of hollow rings still draw their
+in-specimen absence in the gap ink. The vocabulary exists; those sites still have
+to say which of the two facts they mean.
+
 ### Two probe results that came out *for* the library
 
 The bright model was checked against the dark model for all 51 components. Two render byte-identical

@@ -195,6 +195,28 @@ export const intent = (kind = 'hover') => ({
 
 /** Render a mark as an HTML attribute string, for templates and servers
  * that build markup as text rather than as elements. */
+/** A stillness that is a statement about the data source.
+ *
+ * `still(reason)` covers two different facts, and the drawing has always had to
+ * tell them apart by itself: a thing that is legitimately motionless — a rule
+ * about who may look, a threshold, a wall — and a thing the library cannot draw
+ * because nothing was held to draw it. The first is a reading; the second is the
+ * absence of one. Same mark, same dashed stroke the unmeasured gap already uses,
+ * so a review script could not tell them and neither could an operator: the ink
+ * for "not reached" and the ink for "no data" were the same pixels in seven
+ * components.
+ *
+ * This stamps the same stillness, plus the one bit of information the stylesheet
+ * needs: `data-refusal="1"`, which buys a crosshatch, a solid border, and the
+ * refusal ink. A measured static quantity keeps the gap-dash and the unknown hue.
+ */
+export function refusal(reason, { cite = null } = {}) {
+  const mark = still(reason);
+  if (cite) mark['data-cite'] = cite;
+  mark['data-refusal'] = '1';
+  return mark;
+}
+
 export function attrs(mark) {
   const escape = (v) => String(v)
     .replace(/&/g, '&amp;').replace(/</g, '&lt;')

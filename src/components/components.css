@@ -653,3 +653,31 @@
   color: var(--cd-health-colour-unknown); }
 .cd-ag-cost[data-priced="1"] b { color: var(--cd-signal-data); }
 .cd-ag-cost span { display: block; font-size: .5rem; color: var(--cd-steel-muted); }
+
+/* A refusal is not an unmeasured quantity, and across the library it was drawn as
+   one. `hatched()` means *this quantity exists and no instrument reported it* — a
+   gap inside a live drawing. A refusal means *the library holds nothing to draw*,
+   which is a fact about the source, not the world. Same texture, same dashed
+   border, same magenta: so `city` with two unplaced towers and `city` with no data
+   at all were the same picture, and a reader could not tell a sparse board from a
+   blind one. The shape carries the difference — crosshatch inside a solid border —
+   and the ink follows in warm graphite rather than yet another hue. */
+.cd-refusal { color: var(--cd-refusal-ink); }
+.cd-refusal rect { stroke-dasharray: none; stroke-width: 1.2; }
+
+/* A refusal inside a specimen that is otherwise measured — a comparison no
+   reference made computable, an agreement three cores did not record. Marked
+   `refusal(...)` rather than plain `still(...)`, because `still` also covers the
+   things that are legitimately motionless: a threshold, a sightline, a wall. The
+   dot-dash is the refusal's own rhythm against the `3 3` gap-dash of a quantity
+   that exists and went unreported. Presentation attributes lose to any selector,
+   so this reaches shapes that stamped a dash pattern of their own in markup. */
+[data-refusal="1"] { color: var(--cd-refusal-ink); }
+[data-refusal="1"] [stroke-dasharray], [data-refusal="1"][stroke-dasharray] {
+  stroke-dasharray: 1 4;
+}
+
+/* HTML furniture that refuses — the MU/TH/UR console, the killmail receipt, the
+   loadout — carries the same two signals, because the rule is one rule whether the
+   drawing is a `<g>` or a `<div>`. */
+[data-refusal="1"] { border-style: solid; }

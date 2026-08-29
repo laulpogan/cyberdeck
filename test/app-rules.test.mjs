@@ -102,7 +102,12 @@ test('markText is what attrs prints, so the page quotes the bytes the browser se
 
 test('every drawing export is on the primitives page, and none is invented', async () => {
   const draw = await import('../src/draw.js');
-  const exported = Object.keys(draw).filter((name) => !['SCHEMA', 'HATCH_ID'].includes(name));
+  // The exemption is for names that are not shapes: a schema string and the two
+  // id/class constants the textures reference. It is a licence, so it states what
+  // qualifies — anything drawable has to be on the page, where someone can look at
+  // it, and a constant that cannot be drawn cannot be shown either.
+  const NOT_A_SHAPE = ['SCHEMA', 'HATCH_ID', 'REFUSAL_CLASS'];
+  const exported = Object.keys(draw).filter((name) => !NOT_A_SHAPE.includes(name));
   const missing = exported.filter((name) => !PRIMITIVE_NAMES.includes(name));
   const invented = PRIMITIVE_NAMES.filter((name) => !(name in draw));
   assert.deepEqual(missing, [], 'an export nobody shows is an export nobody checks');
