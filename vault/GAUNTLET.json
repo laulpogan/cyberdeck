@@ -168,6 +168,19 @@
       "assert": {
         "kind": "no_motion"
       }
+    },
+    {
+      "id": "envelope-limit-holds",
+      "component": "envelope",
+      "reference": "f16-hud-gcas.gif",
+      "referenceFigure": "80 frames over 13.33s, cells that never move: 0 of 12, travel of the bright head: 0.605 of the frame crossed",
+      "heldAs": "model",
+      "gap": "FLYUP arrives when the measured closure violates the limit, holds exactly as long as the violation lasts, and is gone by 10.7s — a limit cue that pulses would be an animation, not a state. The library's envelope extent must arrive and HOLD, and the limit it is measured against has to be named beside it, the way AL 500 sits under the live value (finding #12's homeless 0.62).",
+      "assert": {
+        "kind": "no_residual_motion",
+        "selector": "[data-motion='level']",
+        "afterMs": 1500
+      }
     }
   ]
 }

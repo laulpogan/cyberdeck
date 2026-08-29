@@ -21,6 +21,13 @@
   "sheet": "/tmp/eye-q/all/sheet-02.png",
   "shows": "Purple-tinted footage of a figure crawling through a tunnel with pink glitch blocks, watermarked Kliencer. A scene with a glitch filter, not an instrument."
  },
+ "raw/f16-hud-gcas.gif": {
+  "contentVerified": true,
+  "eyeballedBy": "agent-eye(qwen/dot-backbone)",
+  "framesViewed": "8 frames sampled across the file's own timeline",
+  "sheet": "see OUT dir",
+  "shows": "Declassified F-16 HUD, frame-filling, ninety-six frames of a descent. Airspeed tape down the left and altitude tape down the right scroll continuously under a boxed pointer that never moves; a heading tape scrolls along the bottom under a caret; SIM G-load, a mission clock and a countdown counter change as derived figures. A FLYUP limit cue ARRIVES around 2.7s of the window with GND PROX lit beside it, holds while the closure lasts, and is GONE by 10.7s — it arrives and leaves rather than sitting there. Where a value is unavailable the display prints xxx inside the field (under AL 500) instead"
+ },
  "raw/fake-os-loaders--blob.gifcities.org_gifcities_2S4N3JQ6GIQGIKRNQ6CX4AAHKS6DQHE6.gif": {
   "contentVerified": true,
   "eyeballedBy": "agent-eye(qwen/dot-backbone)",

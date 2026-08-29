@@ -127,7 +127,7 @@
         100,
         100
       ],
-      "loopSeconds": 6.0,
+      "loopSeconds": 6,
       "still": false
     },
     "magi--media.tenor.com_ApvAP_wB5rkAAAA1_i-puk-your-system.webp.webp": {
@@ -299,7 +299,7 @@
         100,
         100
       ],
-      "loopSeconds": 10.0,
+      "loopSeconds": 10,
       "still": false
     },
     "insertion-sync--media.tenor.com_VHHSBFU2EM8AAAA1_dexters-laboratory.webp.webp": {
@@ -508,7 +508,7 @@
         100,
         100
       ],
-      "loopSeconds": 4.0,
+      "loopSeconds": 4,
       "still": false
     },
     "rig--media.tenor.com_ITRBPx5QvF8AAAA1_67.webp.webp": {
@@ -1273,7 +1273,7 @@
         100,
         100
       ],
-      "loopSeconds": 4.0,
+      "loopSeconds": 4,
       "still": false
     },
     "lumon--media.tenor.com_y5JfzkXUNNEAAAA1_stare-down-severance.webp.webp": {
@@ -1660,7 +1660,7 @@
         100,
         100
       ],
-      "loopSeconds": 3.0,
+      "loopSeconds": 3,
       "still": false
     },
     "tron-grid--media.tenor.com_wea_Tz9mf08AAAA1_omori-neutral.webp.webp": {
@@ -1703,7 +1703,7 @@
         100,
         100
       ],
-      "loopSeconds": 6.0,
+      "loopSeconds": 6,
       "still": false
     },
     "tron-grid--media.tenor.com_1UAP9GJcLFIAAAA1_ocbc-ocbc-cycle.webp.webp": {
@@ -1746,7 +1746,7 @@
         100,
         100
       ],
-      "loopSeconds": 6.0,
+      "loopSeconds": 6,
       "still": false
     },
     "tron-grid--media.tenor.com_yLPMiKOnm08AAAA1_stopiee-bike-trick.webp.webp": {
@@ -1961,7 +1961,7 @@
         100,
         100
       ],
-      "loopSeconds": 2.0,
+      "loopSeconds": 2,
       "still": false
     },
     "generic-hud--media.tenor.com_dGu30CNlqkkAAAA1_sad-hug-gif.webp.webp": {
@@ -2178,7 +2178,7 @@
       "frameDelayCs": [
         100
       ],
-      "loopSeconds": 8.0,
+      "loopSeconds": 8,
       "sha1": "d74da1a45b1b9de8",
       "mediaUrl": "https://blob.gifcities.org/gifcities/25G2DJC3DOO6R72EAGURMGNK5YW7FRZC.gif",
       "sourcePage": "https://gifcities.org/search?q=motion+tracker",
@@ -2234,7 +2234,7 @@
       "frameDelayCs": [
         50
       ],
-      "loopSeconds": 14.0,
+      "loopSeconds": 14,
       "sha1": "d10019d0021ad0e5",
       "mediaUrl": "https://blob.gifcities.org/gifcities/2EABTUACDLIOLENESGNT52SRNSJEOKE5.gif",
       "sourcePage": "https://gifcities.org/search?q=motion+tracker",
@@ -2319,7 +2319,7 @@
         100,
         200
       ],
-      "loopSeconds": 13.0,
+      "loopSeconds": 13,
       "sha1": "d042b51ae90f5404",
       "mediaUrl": "https://blob.gifcities.org/gifcities/2BBLKGXJB5KAJZARVU6AEMEWNKFFCIX3.gif",
       "sourcePage": "https://gifcities.org/search?q=evangelion+magi",
@@ -2429,7 +2429,7 @@
         5,
         10
       ],
-      "loopSeconds": 8.0,
+      "loopSeconds": 8,
       "sha1": "d739a273ee80edb4",
       "mediaUrl": "https://blob.gifcities.org/gifcities/2442E47OQDW3JQT5LC2S3S2O6QNUVCEW.gif",
       "sourcePage": "https://gifcities.org/search?q=hologram+globe",
@@ -2485,7 +2485,7 @@
       "frameDelayCs": [
         25
       ],
-      "loopSeconds": 3.0,
+      "loopSeconds": 3,
       "sha1": "d0ada4dbe2265fc2",
       "mediaUrl": "https://blob.gifcities.org/gifcities/2CW2JW7CEZP4FXCUBBNI2EPWDDLXQQOI.gif",
       "sourcePage": "https://gifcities.org/search?q=hologram+globe",
@@ -3980,7 +3980,7 @@
       "frameDelayCs": [
         10
       ],
-      "loopSeconds": 2.0,
+      "loopSeconds": 2,
       "sha1": "d0b88e1279131835",
       "mediaUrl": "https://blob.gifcities.org/gifcities/2C4I4ETZCMMDL74OK5FQHSLCKJEQK45Z.gif",
       "sourcePage": "https://gifcities.org/search?q=insertion+sync",
@@ -4009,7 +4009,7 @@
         0,
         25
       ],
-      "loopSeconds": 1.0,
+      "loopSeconds": 1,
       "sha1": "d1a3b66b52c922a7",
       "mediaUrl": "https://blob.gifcities.org/gifcities/2GR3M22SZERKOBYQPVKLW2MWDHRTKL62.gif",
       "sourcePage": "https://gifcities.org/search?q=insertion+sync",
@@ -4422,7 +4422,7 @@
       "frameDelayCs": [
         20
       ],
-      "loopSeconds": 3.0,
+      "loopSeconds": 3,
       "sha1": "d45dd937682a061a",
       "mediaUrl": "https://blob.gifcities.org/gifcities/2RO5SN3IFIDBUAFOOVBDCFJ7J6V4DRXR.gif",
       "sourcePage": "https://gifcities.org/search?q=dead+space+hud",
@@ -4450,7 +4450,7 @@
       "frameDelayCs": [
         150
       ],
-      "loopSeconds": 12.0,
+      "loopSeconds": 12,
       "sha1": "da8682ff8ade4df9",
       "mediaUrl": "https://blob.gifcities.org/gifcities/3KDIF74K3ZG7TLDTLKWOGBQT4ED5RYH3.gif",
       "sourcePage": "https://gifcities.org/search?q=dead+space+hud",
@@ -5540,7 +5540,7 @@
       "frameDelayCs": [
         10
       ],
-      "loopSeconds": 5.0,
+      "loopSeconds": 5,
       "sha1": "d02d8934303fc9b4",
       "mediaUrl": "https://blob.gifcities.org/gifcities/2AWYSNBQH7E3JQPMI2B5UNXXOTV7UDLB.gif",
       "sourcePage": "https://gifcities.org/search?q=tron+grid",
@@ -6330,6 +6330,32 @@
       "statusNote": "the host's keyword or semantic search matched the words, not the prop",
       "frameDelaysMs": null,
       "still": false
+    },
+    "f16-hud-gcas.gif": {
+      "file": "raw/f16-hud-gcas.gif",
+      "seed": "direct-clips",
+      "kind": "gif",
+      "bytes": 4404817,
+      "frames": 96,
+      "frameDelayCs": [
+        17
+      ],
+      "loopSeconds": 16.0,
+      "sha1": "dc93963b4d0f849c",
+      "mediaUrl": "file:/tmp/gcas.webm",
+      "sourcePage": "https://commons.wikimedia.org/wiki/File:Auto-GCAS_Saves_Unconscious_F-16_Pilot%E2%80%94Declassified_USAF_Footage.webm",
+      "status": "unmarked",
+      "work": "Auto-GCAS Saves Unconscious F-16 Pilot \u2014 declassified USAF HUD footage (Wikimedia Commons)",
+      "segment": {
+        "startSeconds": 30,
+        "seconds": 16,
+        "sourceSeconds": 80.1,
+        "sourceDims": "720x480",
+        "fps": 6,
+        "derivedGifWidth": 340
+      },
+      "captionOnPage": "what the eye is expected to check: F-16 HUD: airspeed and altitude tapes scrolling under fixed pointers, heading tape along the bottom, a FLYUP limit cue arriving, and xxx where a value is not available",
+      "requestedFrames": 96
     }
   }
 }

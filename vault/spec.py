@@ -233,7 +233,13 @@ def main():
             lines.append("- **not measurable**: fewer than three decodable frames.")
             lines.append("")
             continue
-        lines.append(f"- measured: {m['frames']} frames over {m['seconds']}s, median delay "
+        # `MAX_FRAMES` is a cap on what gets measured, not a property of the file. Say which
+        # number the reader is looking at: the first F-16 HUD record claimed a file of 80 frames
+        # when the file holds 96, and a rate read off a truncated window is still a rate someone
+        # will quote.
+        capped = (f", first {m['frames']} of {record.get('frames')} frames measured"
+                  if record.get('frames') and record['frames'] > m['frames'] else "")
+        lines.append(f"- measured: {m['frames']} frames over {m['seconds']}s{capped}, median delay "
                      f"{m['medianDelayMs']}ms, loop {m['periodSeconds'] or 'no return to frame zero'}")
         lines.append(f"- first change by cell (4x3, index = frame): `{m['firstChangeByCell']}`")
         lines.append(f"- cells that never move: {m['stillCells']} of {CELLS[0] * CELLS[1]}")

@@ -646,3 +646,27 @@ index characters and site decoration; the diegetic interface is not what the har
 one file that passed is what makes `dossier`'s stillness *visible*: the panel in it arrives over a
 field where 11 of 12 cells keep changing, and `dossier` has no running field, so `gauntlet.json`
 now asserts that it does not breathe.
+
+## The moving references were on a host that answers a plain request
+
+`vault/clip.mjs` takes a **direct** media URL (or a file already on disk), derives a window of it
+as a GIF for `spec.py`, sheets the frames for the eye, and writes the manifest record with the
+derivation on it (`segment.start`, `segment.seconds`, `sourceSeconds`). It is 100 lines and it
+found in one run what eleven batches of GIF-host harvest mostly did not: a frame-filling moving
+interface — a declassified F-16 HUD (`raw/f16-hud-gcas.gif`, Wikimedia Commons, `curl` answers it,
+no browser, no challenge). YouTube refuses media downloads from this network (`403`, then the `tv`
+client's "page needs to be reloaded"); Commons answers. Query the Commons API with
+`filetype:video …` and `gsrnamespace=6`, take `imageinfo[].url`, and derive a window.
+
+What that one file is now quoted for: **`envelope`** (a FLYUP limit cue arrives when the measured
+closure violates the limit, holds exactly as long as it lasts, and leaves; the limit itself is
+printed beside the live value — `AL 500` — which is the answer to the extent that meant "0.62 of
+what"), **`tape`** (graduations scroll under a pinned boxed readout, so the movement is the
+reading and the position is the number), and `elapsed`. It also shows the library's own refusal
+from the outside: where a value is unavailable the HUD prints `xxx` **inside the field**, and a
+masked black block keeps its space with every neighbour still laid out.
+
+Two number-hygiene lessons, both from files written in the same hour: the frame count of a derived
+GIF must be **counted out of the file** (the tool first wrote `DUR × FPS` = 96 into a record for a
+file it believed held fewer), and a cap on what gets measured is not a property of the file —
+`spec.py` measures the first 80 frames, so its line now says `first 80 of 96 frames measured`.

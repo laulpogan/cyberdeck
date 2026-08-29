@@ -28,6 +28,7 @@ no extent, and saying so is the point.
 | `fake-os-loaders--blob.gifcities.org_gifc…` | `rules page` | Counter-example, not model: a word rotating 360 degrees and a dot orbiting it, 2.4s loop. Nothing measured, everything moving -- the exact idiom the chrome rule forbids, which makes it the picture to put next to the rule. |
 | `fake-os-loaders--blob.gifcities.org_gifc…` | `rules page` | Counter-example: the ellipsis that grows to three dots and cycles. Measured travel 0.043 of a frame -- the only quantity on screen is the dot count, and it says nothing about anything. |
 | `cyberpunk-hud--media.tenor.com_gdhPO38Xj…` | `dossier`, `rules page` | Full-frame game interface: nameplates and segmented health bars ride above a squad, a selection ring breathes on the chosen unit, and a party panel opens at the right with a grid of portrait cells. Two readings, one on each side of the library's rule. The panel arrives over a field that KEEPS RUNNING — health changes, contacts move — which is why an arriving record set is honest there; `dossier` answers "which exact thing am I about to command" from facts already true at read time, so it has no live field, and its stillness is the same rule seen from the other side. The breathing ring is an ambient pulse with no quantity behind it: the selection idiom this app may not put in its chrome, which makes the file a counter-example as well as a map of the idiom. |
+| `f16-hud-gcas.gif…` | `envelope`, `tape`, `elapsed` | A limit that acts, drawn by people who had to fly the thing. FLYUP arrives when the measured closure violates the limit, holds exactly as long as the violation lasts, and is gone the moment it is not; beside it the limit itself is printed (AL 500) with the live value above it, so the cue names the number it is protecting — `envelope`'s 0.62 has to answer to a limit like that or it means nothing. The tapes are the extent idiom `tape` is missing: the graduations scroll and the boxed current value is pinned, so the reading is the MOVEMENT of the scale and the position is the number. Where a value cannot be had the display prints xxx in the field rather than deleting it, and the masked block at lower left keeps its space with every neighbour still laid out — the same refusal the library writes, from the outside. The clock (17:26:17 → 17:26:29) and the countdown counter are the only unambiguous `elapsed` in the frame: both keep counting and neither animates. |
 
 The rows underneath are measured out of the files; the table above is the
 judgement step and is meant to be disagreed with.
@@ -41,6 +42,17 @@ judgement step and is meant to be disagreed with.
 - extent (area of one saturated ink): `N/A` — the ink does not grow; see travel
 - travel of the bright head: 0.756 of the frame crossed, 0.6 of the way along at half the duration — constant rate, not monotone (it comes back)
 - motion amplitude (max difference from frame zero): 27.68
+
+## `f16-hud-gcas.gif`
+
+- seed: `direct-clips`  ·  source: file:/tmp/gcas.webm
+- eye: Declassified F-16 HUD, frame-filling, ninety-six frames of a descent. Airspeed tape down the left and altitude tape down the right scroll continuously under a boxed pointer that never moves; a heading tape scrolls along the bottom under a caret; SIM G-load, a mission clock and a countdown counter change as derived figures. A FLYUP limit cue ARRIVES around 2.7s of the window with GND PROX lit beside it, holds while the closure lasts, and is GONE by 10.7s — it arrives and leaves rather than sitting there. Where a value is unavailable the display prints xxx inside the field (under AL 500) instead
+- measured: 80 frames over 13.33s, first 80 of 96 frames measured, median delay 170.0ms, loop no return to frame zero
+- first change by cell (4x3, index = frame): `[1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]`
+- cells that never move: 0 of 12
+- extent (area of one saturated ink): `N/A` — the ink does not grow; see travel
+- travel of the bright head: 0.605 of the frame crossed, 0.31 of the way along at half the duration — front-loaded, not monotone (it comes back)
+- motion amplitude (max difference from frame zero): 40.69
 
 ## `fake-os-loaders--blob.gifcities.org_gifcities_2S4N3JQ6GIQGIKRNQ6CX4AAHKS6DQHE6.gif`
 
@@ -79,7 +91,7 @@ judgement step and is meant to be disagreed with.
 
 - seed: `hologlobe`  ·  source: https://blob.gifcities.org/gifcities/2442E47OQDW3JQT5LC2S3S2O6QNUVCEW.gif
 - eye: QUOTE FOR globe, as a caution: the real Hologlobe globe, a small pixelated Earth on an 8.0s loop whose continents re-tint through a palette cycle (yellow-violet, green, teal, blue, magenta, orange) while the disc itself stays put. The motion is hue rotation, the weakest kind — a distinction carried only in hue vanishes in monochrome, which is the library rule this reference illustrates from the wrong side.
-- measured: 80 frames over 5.55s, median delay 50.0ms, loop no return to frame zero
+- measured: 80 frames over 5.55s, first 80 of 131 frames measured, median delay 50.0ms, loop no return to frame zero
 - first change by cell (4x3, index = frame): `[1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]`
 - cells that never move: 0 of 12
 - extent (area of one saturated ink): `N/A` — the ink does not grow; see travel

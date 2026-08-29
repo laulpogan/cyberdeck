@@ -77,5 +77,13 @@
       "rules page"
     ],
     "reading": "Full-frame game interface: nameplates and segmented health bars ride above a squad, a selection ring breathes on the chosen unit, and a party panel opens at the right with a grid of portrait cells. Two readings, one on each side of the library's rule. The panel arrives over a field that KEEPS RUNNING — health changes, contacts move — which is why an arriving record set is honest there; `dossier` answers \"which exact thing am I about to command\" from facts already true at read time, so it has no live field, and its stillness is the same rule seen from the other side. The breathing ring is an ambient pulse with no quantity behind it: the selection idiom this app may not put in its chrome, which makes the file a counter-example as well as a map of the idiom."
+  },
+  "f16-hud-gcas.gif": {
+    "for": [
+      "envelope",
+      "tape",
+      "elapsed"
+    ],
+    "reading": "A limit that acts, drawn by people who had to fly the thing. FLYUP arrives when the measured closure violates the limit, holds exactly as long as the violation lasts, and is gone the moment it is not; beside it the limit itself is printed (AL 500) with the live value above it, so the cue names the number it is protecting — `envelope`'s 0.62 has to answer to a limit like that or it means nothing. The tapes are the extent idiom `tape` is missing: the graduations scroll and the boxed current value is pinned, so the reading is the MOVEMENT of the scale and the position is the number. Where a value cannot be had the display prints xxx in the field rather than deleting it, and the masked block at lower left keeps its space with every neighbour still laid out — the same refusal the library writes, from the outside. The clock (17:26:17 → 17:26:29) and the countdown counter are the only unambiguous `elapsed` in the frame: both keep counting and neither animates."
   }
 }
