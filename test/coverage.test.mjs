@@ -16,10 +16,29 @@ const here = (f) => fileURLToPath(new URL(f, import.meta.url));
 
 test('the coverage tiers partition the registry — nothing counted twice, nothing dropped', () => {
   const { tiers, total } = coverage();
-  assert.equal(tiers.spec.length + tiers.filesOnly.length + tiers.none.length, total,
+  assert.equal(tiers.spec.length + tiers.verifiedOnly.length + tiers.candidates.length + tiers.none.length, total,
     'a component is in two tiers or in none');
   assert.ok(tiers.spec.length >= 22,
     `spec-held fell to ${tiers.spec.length}; coverage is a claim and it went down — add the measurement back or say so here`);
+});
+
+// The tier that used to be called "files only" counted *seed-mates* — everything a search returned
+// for a subject — and two of the biggest seeds were opened and found to hold a cutscene, a suit
+// turntable, a spaceship, an Undertale animation and eleven stills of a device with no time in
+// them. Naming is the fix: a candidate is a search hit, and the report must never call one held.
+test('a search candidate is never reported as a reference held', () => {
+  const { tiers } = coverage();
+  const report = readFileSync(here('../vault/COVERAGE.md'), 'utf8');
+  for (const row of tiers.candidates) {
+    assert.ok(!tiers.spec.some((r) => r.key === row.key) && !tiers.verifiedOnly.some((r) => r.key === row.key),
+      `${row.key} sits in the candidate tier and a reference tier at once`);
+  }
+  assert.match(report, /search candidates only/i, 'the report stopped naming the tier honestly');
+  assert.equal(/^\| files only \|/m.test(report), false,
+    'the report calls a seed-mate count "files only" again — that tier made 36 unverified hits read as coverage');
+  for (const row of tiers.verifiedOnly) {
+    assert.ok(row.files.length, `${row.key} is in the verified tier naming no file`);
+  }
 });
 
 test('every spec-held component is quoted by a file the eye verified and the spec measured', () => {

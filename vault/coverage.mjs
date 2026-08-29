@@ -24,6 +24,7 @@ import { COMPONENT_KEYS } from '../app/src/registry/index.js';
 const HERE = fileURLToPath(new URL('.', import.meta.url));
 const SPECS_FOR = JSON.parse(readFileSync(join(HERE, 'SPECS-FOR.json'), 'utf8'));
 const MAPPING = readFileSync(join(HERE, 'MAPPING.md'), 'utf8');
+const MANIFEST = JSON.parse(readFileSync(join(HERE, 'manifest.json'), 'utf8'));
 
 /** Files held per component, read out of the table `map.py` generates. */
 function filesHeld () {
@@ -33,6 +34,29 @@ function filesHeld () {
     if (m) held.set(m[1], { seed: m[2].trim(), files: Number(m[3]) });
   }
   return held;
+}
+
+/** Components named by a **content-verified** manifest record. This is the only tier below
+ * `spec` that means anything: everything else on disk is a search hit. Two of the biggest seeds
+ * were opened after this distinction was introduced — `rig` (25 candidates, meant to inform
+ * `gauge`, `ice` and `individuation`) and `spinner-console` (11 candidates, meant to inform
+ * `collar` and `joiOverlay`) — and between them they yielded nothing usable: a cutscene, a 3D
+ * suit turntable on a blue background, a flying spaceship, an Undertale fan animation, and a set
+ * of film-UI stills from a show whose spinner has no time in it. A count of seed-mates counted as
+ * "files held" was therefore a number that made the vault look deeper than it is. */
+function verifiedNamed () {
+  const named = new Map();
+  const registry = new Set(COMPONENT_KEYS);
+  for (const rec of Object.values(MANIFEST.files)) {
+    if (!rec.contentVerified) continue;
+    const file = String(rec.file || '').split('/').pop();
+    for (const name of rec.for || []) {
+      if (!registry.has(name)) continue;
+      if (!named.has(name)) named.set(name, []);
+      named.get(name).push(file);
+    }
+  }
+  return named;
 }
 
 /** Components quoted in SPECS-FOR, restricted to names the registry can render. */
@@ -53,25 +77,28 @@ function specQuoted () {
 export function coverage () {
   const files = filesHeld();
   const quoted = specQuoted();
-  const tiers = { spec: [], filesOnly: [], none: [] };
+  const verified = verifiedNamed();
+  const tiers = { spec: [], verifiedOnly: [], candidates: [], none: [] };
   for (const key of COMPONENT_KEYS) {
     if (quoted.has(key)) tiers.spec.push({ key, files: quoted.get(key) });
-    else if ((files.get(key) || {}).files > 0) tiers.filesOnly.push({ key, files: (files.get(key)).files, seed: (files.get(key)).seed });
+    else if (verified.has(key)) tiers.verifiedOnly.push({ key, files: verified.get(key) });
+    else if ((files.get(key) || {}).files > 0) tiers.candidates.push({ key, files: (files.get(key)).files, seed: (files.get(key)).seed });
     else tiers.none.push(key);
   }
-  return { tiers, total: COMPONENT_KEYS.length, files, quoted };
+  return { tiers, total: COMPONENT_KEYS.length, files, quoted, verified };
 }
 
 const { tiers, total } = coverage();
 
 if (process.argv.slice(2).includes('--check')) {
-  const sum = tiers.spec.length + tiers.filesOnly.length + tiers.none.length;
+  const sum = tiers.spec.length + tiers.verifiedOnly.length + tiers.candidates.length + tiers.none.length;
   if (sum !== total) {
     console.error(`coverage tiers sum to ${sum}, the registry renders ${total} — a component is counted twice or not at all`);
     process.exit(1);
   }
   if (!tiers.spec.length) { console.error('no component is quoted in SPECS-FOR; coverage is zero'); process.exit(1); }
-  console.log(`coverage tiers add up: ${tiers.spec.length} spec-held + ${tiers.filesOnly.length} files only + ${tiers.none.length} with nothing = ${total}`);
+  console.log(`coverage tiers add up: ${tiers.spec.length} spec-held + ${tiers.verifiedOnly.length} verified-unquoted `
+    + `+ ${tiers.candidates.length} search candidates only + ${tiers.none.length} with nothing = ${total}`);
   process.exit(0);
 }
 
@@ -83,19 +110,35 @@ const lines = [
   '| tier | meaning | count |',
   '| --- | --- | --- |',
   `| spec-held | a verified file's measurement is quoted against it in \`SPECS-FOR.json\` — buildable against a reference | ${tiers.spec.length} |`,
-  `| files only | ranked, eye-marked files resemble it, but no measurement has been read off them | ${tiers.filesOnly.length} |`,
+  `| verified, unquoted | a content-verified file names it in the manifest, but no measurement has been read off it | ${tiers.verifiedOnly.length} |`,
+  `| search candidates only | files sit in \`raw/\` under the seed chosen for it, and **not one has been verified** — these are search hits, not references | ${tiers.candidates.length} |`,
   `| nothing | neither | ${tiers.none.length} |`,
   '',
-  'These are not interchangeable. A component with eleven files and no spec row has nobody to copy;',
-  'the number quoted as coverage in prose is the spec-held tier, and nothing else.',
+  'These are not interchangeable, and the middle tier used to lie. It read "files only" off',
+  '`MAPPING.md`, which counts *seed-mates* — everything a search returned for the subject chosen',
+  'for that component. Opening two of the biggest seeds to check: `rig` (25 candidates, meant for',
+  '`gauge`, `ice`, `individuation`) — its four biggest tenor candidates were a cutscene, a 3D suit',
+  'turntable on a blue background, a flying spaceship and an Undertale fan animation (the seed does',
+  'hold one verified file, a gifcities capture already quoted for `radar`; the drift is in the bulk',
+  'nobody opened). `spinner-console` (11 candidates, meant for `collar` and `joiOverlay`) is film-UI',
+  'stills of a device with no time in it, and step 3 asks for durations, easing and loop period.',
+  'Between 36 unverified candidates: zero additional references.',
+  'So only the first two tiers mean anything, the number quoted as coverage in prose is the',
+  'spec-held tier, and a candidate count is a statement about a search query, not about the vault.',
   '',
   `## Spec-held (${tiers.spec.length})`,
   '',
   ...tiers.spec.map((r) => `- \`${r.key}\` ← ${r.files.map((f) => `\`${f}\``).join(', ')}`),
   '',
-  `## Files only — a picture held, no measurement read (${tiers.filesOnly.length})`,
+  `## Verified, quoted nowhere (${tiers.verifiedOnly.length})`,
   '',
-  ...tiers.filesOnly.map((r) => `- \`${r.key}\` — ${r.files} file(s), seed \`${r.seed}\``),
+  ...(tiers.verifiedOnly.length
+      ? tiers.verifiedOnly.map((r) => `- \`${r.key}\` ← ${r.files.map((f) => `\`${f}\``).join(', ')}`)
+      : ['_(none — every verified file has had its reading written down)_']),
+  '',
+  `## Search candidates only — opened and, where checked, refused (${tiers.candidates.length})`,
+  '',
+  ...tiers.candidates.map((r) => `- \`${r.key}\` — ${r.files} candidate(s) under seed \`${r.seed}\`, 0 verified`),
   '',
   `## Nothing at all (${tiers.none.length})`,
   '',
@@ -103,4 +146,5 @@ const lines = [
   '',
 ];
 writeFileSync(join(HERE, 'COVERAGE.md'), lines.join('\n'));
-console.log(`${tiers.spec.length} of ${total} spec-held · ${tiers.filesOnly.length} files only · ${tiers.none.length} with nothing — COVERAGE.md`);
+console.log(`${tiers.spec.length} of ${total} spec-held · ${tiers.verifiedOnly.length} verified unquoted `
+  + `· ${tiers.candidates.length} candidates only · ${tiers.none.length} with nothing — COVERAGE.md`);

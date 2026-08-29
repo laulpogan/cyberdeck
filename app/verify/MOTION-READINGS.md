@@ -1631,3 +1631,36 @@ Three things this sweep taught about instruments, in the order they hurt:
 3. **A snapshot restores a state, not an intent.** Undoing a sabotage with `cp /tmp/index.guard3.js` reverted a fix I
    had made *after* the snapshot was taken, and the file passed `node --check` looking entirely innocent. The diff is
    what tells you what the copy took back.
+
+## 273 files on disk, 18 measured: the coverage tier that counted search hits as a vault
+
+Task-3's contract is per component — the files a component is held against, and a motion spec read off frames — and it
+stands at 22 of 51. The number that made that look close to finishable was the middle tier: *17 components with "files
+only"*, which read as *we have pictures for those, we just haven't written the spec*. So I opened the biggest seeds
+underneath it, and the tier was lying.
+
+`rig` — 25 candidates, chosen to inform `gauge`, `ice` and `individuation` (Dead Space's RIG spine: stasis, kinesis).
+Its four largest animated candidates: a combat cutscene; a **3D model turntable of the suit on a blue background**, which
+is a character viewer and not an interface; a spaceship flying; and an **Undertale fan animation**. `spinner-console` —
+11 candidates, chosen to inform `collar` and `joiOverlay` — is real film-UI stills from scifiinterfaces, of the
+*Severance* spinner: a digit window cycling 000000–000006 under six coloured bands. It is a genuine interface, and it is
+a **still**, while step 3 asks for entry order, real durations, easing and loop period; the device has no time in it at
+all. Between 36 unverified candidates, zero additional references. One correction to my own first draft of this
+paragraph: the `rig` seed does hold one verified file — a gifcities capture already quoted for `radar` — so the drift is
+in the bulk nobody opened, not in the seed's every member. That is the difference between "the seed is worthless" and
+what is actually true, and it is the difference the vault exists to keep.
+
+So `vault/coverage.mjs` was changed to say what it knows. Four tiers now: **spec-held 22 · verified-unquoted 0 ·
+search candidates only 17 · nothing 12**, and the middle tier's definition is `contentVerified` on a manifest record,
+not a row in `MAPPING.md`. `COVERAGE.md` names the last tier *search hits, not references* and carries the story of the
+two seeds, and `test/coverage.test.mjs` refuses the old wording outright — rename the label back to `files only` and the
+suite goes red (*"the report calls a seed-mate count 'files only' again — that tier made 36 unverified hits read as
+coverage"*), proven both ways in one sitting.
+
+The honest shape of the remaining work is now legible, and it is not analysis. Eighteen files have been through the eye
+and the frame counter; 255 have not. Coverage grows only by verifying a candidate into a reference, and the two seeds
+opened today say the yield of verification-by-bulk is low, because a search subject returns the *thing* far more often
+than a *screen showing the thing* — the splicer whose display never faces the camera, the radar dish on the hill, the
+suit on the turntable. What is left is not "write the specs we can see"; it is that the material for most of these
+components has not been found, and `gevulot` will not tell you and `ceremony` is a rite. `npm test` 303; coverage
+`22 + 0 + 17 + 12 = 51`.

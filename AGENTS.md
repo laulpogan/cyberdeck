@@ -881,3 +881,11 @@ a delta proves the change.
 count line was unconditional and counted rendered configs, not verified claims, and `grep passes` is what a reviewer
 or a shard's parent reads first. Print the count only when it is the whole truth (`✗ RED — 4 of 8 configs with
 problems …` otherwise). Same rule for any tool that reports both.
+
+## Name a tier by what it proves, not by what it was convenient to count
+
+`vault/coverage.mjs` reported "17 components with files only", counting rows in `MAPPING.md` — which counts *seed-mates*,
+everything a search returned for a subject. Opening two of those seeds (25 and 11 candidates) yielded a cutscene, a 3D
+suit turntable, a spaceship, an Undertale fan animation, and eleven film-UI stills of a device with no time in them.
+Four tiers now, with `contentVerified` as the gate, and a test that goes red if the honest label is ever softened back.
+A count that reads deeper than the vault is a count that will be quoted.
