@@ -240,3 +240,28 @@ conclave, MU/TH/UR terminal, Dominator display, GIT-S net-dive HUD).
 Motion fixed by the sweep: radar trail+pings, mfd cascade, lanes live
 pulse, the shared cascade rule, the light-theme trail multiplier. All
 other movers passed as drawn under the vision audit.
+
+### radar & gauge -- cycle 3 -- what the eye on the live page caught
+Paul watched the running showcase and called two real defects the film
+camera had scored "moving" without asking WHAT moves:
+
+- radar swept horizontally because NOTHING emitted data-cycle-axis:
+  rotate -- the rotate branch was dead code and the sweep took the bar
+  branch, a literal scaleX wipe. marks.cycle() now emits the axis and
+  the dial origin (viewBox centre 170,100 vs dial centre 100,100 -- the
+  origin fix matters the moment the branch lives). The blip pings died
+  too, but for a subtler reason: Motion mini keeps ONE animation per
+  element per property and stop()s the previous -- the arrival stagger
+  claims the contact group's opacity at mount, so first-lap pings were
+  born stopped. The ping now rides the dot's own circle. fill:forwards
+  holds the decay until the next pass refreshes it, instead of the dot
+  flashing back to full just before the line arrives.
+- gauge's level kind scaleX'd the whole arc path sideways (origin at the
+  viewBox corner) into a crescent smeared off its track. The arc already
+  carries its ratio as a dash (pathLength=1); levelled() learned the
+  dash-drawn shape: it animates stroke-dashoffset from empty to where
+  the render put it, never a transform of the measured shape.
+
+Lessons for the ledger: a liveness number says something moves, not that
+it moves as drawn -- eyeball the live page too. And a branch nobody
+emits is dead code no test catches: test the MARKS, not just the runtime.

@@ -167,8 +167,23 @@
           var at = parseFloat(pings[p].getAttribute('data-sweep-angle'));
           if (!(at >= 0)) continue;
           var frac = (((at - startDeg) % 360) + 360) % 360 / 360;
-          play(pings[p], { opacity: [1, 0.35] },
-            { duration: lapSec * 0.55, delay: lapSec * frac,
+          // fill:forwards holds the decay until the next pass refreshes
+          // the blip; without it the dot flashed back to full brightness
+          // just before the line arrived -- the inverse of what a blip
+          // means. Prior lap effects are cancelled first so a page open
+          // all shift does not bank thousands of finished effects.
+          // The ping rides the dot's own circle, not the contact group:
+          // the mini keeps one animation per element per property, and
+          // the arrival stagger claims the group's opacity at mount --
+          // pinging the group meant every first-lap flash was stopped the
+          // instant it was born. The circle is the blip anyway.
+          var blip = pings[p].querySelector('circle') || pings[p];
+          if (blip.getAnimations) {
+            var old = blip.getAnimations();
+            for (var q = 0; q < old.length; q++) { try { old[q].cancel(); } catch (e) {} }
+          }
+          play(blip, { opacity: [1, 0.35] },
+            { duration: lapSec * 0.55, delay: lapSec * frac, fill: 'forwards',
               easing: 'cubic-bezier(.12,.72,.3,1)' });
         }
       }
@@ -333,6 +348,19 @@
   // so the end of the animation and the static render are the same frame.
   function levelled(el) {
     var bar = el.querySelector('i') || el;
+    // A dash-drawn path already carries its ratio in its own geometry:
+    // the gauge arc is drawn to its full extent and dashed back to the
+    // fraction, with pathLength making the arithmetic exact. Scaling
+    // that path sideways smeared a crescent across the dial. A level
+    // animates the dashoffset from empty to where the render already
+    // put it -- never a transform of the measured shape.
+    if (bar.getTotalLength && bar.style.strokeDasharray
+        && bar.hasAttribute('pathLength')) {
+      var drawn = bar.style.strokeDashoffset || '0';
+      play(bar, { strokeDashoffset: [bar.getAttribute('pathLength') || '1', drawn] },
+        { duration: T.enter / 1000, easing: 'ease-out' });
+      return;
+    }
     var axis = el.getAttribute('data-level-axis') || 'x';
     if (axis === 'slide') {
       // Some measurements are a position rather than an extent: the burn

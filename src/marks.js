@@ -170,19 +170,24 @@ export function traffic(periodSeconds, sourceState, { cite }) {
  * An overrun refuses. A poll due forty seconds ago that has not landed is
  * the finding, and a bar that quietly wrapped and started again would
  * erase it. */
-export function cycle(spentSeconds, period, sourceState, { cite }) {
+export function cycle(spentSeconds, period, sourceState, { cite, origin = null }) {
   if (!PULSING_STATES.includes(sourceState)) return still(`source is ${sourceState}, not live`);
   if (spentSeconds == null || period == null || Number(period) <= 0) {
     return still('poll interval was not measured');
   }
   const spent = Number(spentSeconds) / Number(period);
   if (spent < 0 || spent > 1) return still('poll is overdue');
-  return {
+  const mark = {
     'data-motion': 'cycle',
     'data-spent': num(spent),
     'data-period': num(period),
     'data-cite': cite,
   };
+  if (origin) {
+    mark['data-cycle-axis'] = 'rotate';
+    mark['data-cycle-origin'] = origin;
+  }
+  return mark;
 }
 
 /** Operator-caused motion. The operator is the producer, so this one

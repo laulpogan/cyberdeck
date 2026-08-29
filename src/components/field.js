@@ -196,7 +196,8 @@ export function radar({ contacts, pollElapsed = null, pollPeriod = null,
   const cx = 100, cy = 100;
   const g = [];
   [28, 52, 76].forEach((r) => g.push(ring(cx, cy, r, { width: 1, extra: 'opacity=".45"' })));
-  const sweep = cycle(pollElapsed, pollPeriod, sourceState, { cite });
+  const sweep = cycle(pollElapsed, pollPeriod, sourceState,
+    { cite, origin: `${cx} ${cy}` });
   const sweeping = sweep['data-motion'] === 'cycle';
   // The leading edge sits exactly at 0 rad so a contact lights when the
   // rotation reaches its bearing -- the ping angle is the bearing, no
