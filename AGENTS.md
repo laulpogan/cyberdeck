@@ -528,3 +528,15 @@ Three ways this went wrong while being implemented, all of them worth rememberin
 - **A read of one measurement is not a conclusion.** `gauge`'s number and its arc are one
   measurement, so delaying the number would be a transition invented to look like reasoning. The
   rule is about derived figures; do not extend it to single-source labels.
+
+## A mark moves what its kind can move.
+
+`trace` animates geometry — `path, line, polyline, polygon, rect, circle, ellipse` — and **no text**.
+So a `trace` on a leader line says *the line travelled*, and says nothing about the value printed at
+its end. `scanOverlay` claimed an order for years while every answer sat in the 0ms frame: the mark
+was honest about its own element and silent about the one that mattered. Give text its own reveal at
+the same position (`count(i, n)` uses the same `data-index`/`data-total` and therefore the same
+delay), and verify with `getComputedTiming().delay` on both elements rather than by reading the
+markup. Labels — the questions a form asks — may print at frame 0; answers may not. And an unread
+field prints `NOT READ` at frame 0 with no mark: a reveal on an absence is a transition invented to
+look like a process.

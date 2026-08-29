@@ -898,6 +898,26 @@ the letters said one thing and the colour said the opposite, which is a green ch
 unchecked row one size up. It carries the refusal ink now. The green sequence rail under the
 labels stays green on purpose — the order of the doors *is* measured, only their states aren't.
 
+## Finding #7 is closed: the scan reveals in the order it claims
+
+`scanOverlay` stamped its leaders with `order`/`total` and then printed every answer in the 0ms
+frame — `s-incident · hermes · dellpromax` and `RETRY · NO_GRANT` sitting there before the scan had
+moved, the hexagon doing calisthenics next to a form that had already answered. The cause was not
+sloppiness but a kind boundary: **`trace` animates geometry — paths, lines, rects — and no text at
+all.** A mark on a leader says the leader travelled; it says nothing about the words at its end.
+
+Each value now carries the same reveal position in the kind that animates an element (`count(i, n)`),
+so line and answer land in the same instant. Read out of the running app:
+
+    answer delays  [0, 60, 120]ms     leader delays [0, 60, 120]ms
+    answer opacity at currentTime=0:  0, 0, 0   -- blank ink until the order passes
+
+The label of each field stays printed at frame 0: `IDENTITY`, `AUTHORITY`, `BLOCKED BY` are the form,
+not claims about the world. And a row nobody read is printed at once with no mark at all —
+`NOT READ` at 0ms is a true sentence, and giving it a reveal would be a transition invented to make an
+absence look like a process. The dark model ends up with zero reveal marks on the specimen, which the
+honesty gate checks rather than this prose.
+
 ## Finding #6 is closed: the entrance is now the argument
 
 Six specimens painted the conclusion in frame 0 while its evidence was still fading in — a balance,

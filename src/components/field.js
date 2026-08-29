@@ -46,9 +46,20 @@ export function scanOverlay({ subject, cite = 'sessions[].id' }) {
       + `${attrs(trace(known, { cite: path, order: i, total: rows.length }))}>`
       + line(78, 100, 108, y, { width: 1, dashed: true })
       + line(108, y, 150, y, { width: 1, dashed: true }) + '</g>');
+    // The form's question is on the page from the start; the *answer* is not.
+    //
+    // `trace` animates geometry -- paths, lines, rects -- and no text at all, so a
+    // leader drawn to a printed value announced an order and then ignored it: every
+    // field was filled in the 0ms frame, and the scan was a hexagon doing calisthenics
+    // next to a form that had already answered. The answer now carries the reveal
+    // position the leader claims, in the kind that animates an element: same index,
+    // same total, so line and value land in the same instant. Unread rows stay put and
+    // unmarked -- `NOT READ` at 0ms is a true sentence, not a reveal.
     g.push(text(154, y - 4, label, { size: 7, opacity: '.7' }));
-    g.push(text(154, y + 8, known ? value : 'NOT READ',
-      { size: 9, opacity: known ? null : '.55' }));
+    g.push(known
+      ? `<g class="cd-fd-answer"${attrs(count(i, rows.length))}>`
+        + text(154, y + 8, value, { size: 9 }) + '</g>'
+      : text(154, y + 8, 'NOT READ', { size: 9, opacity: '.55' }));
   });
   return card('scan', 'Kiroshi scan overlay',
     frame(W, H, g.join(''), { label: `Annotations on ${subject.name}` }),

@@ -114,3 +114,36 @@ test('the manifest line enters after the parts -- and refuses when none complete
   assert.doesNotMatch(incomplete, /data-motion="count"/,
     'the invariant the older test guards: no counting on a broken chain');
 });
+
+// --------------------------------------------------------------------------
+// Finding #7: an order claimed and then ignored. `scanOverlay` stamped its leaders
+// with `order`/`total` and printed every answer in the 0ms frame, so the scan was a
+// hexagon doing calisthenics next to a form that had already answered. `trace` animates
+// geometry and no text, so the value carries the same position in the kind that animates
+// an element -- same index, same total, one instant.
+
+test('the answers arrive when the leader that claims them reaches them', () => {
+  const html = f.scanOverlay(brightFor('scanOverlay'));
+  const leaders = slots(html, 'cd-fd-leader');
+  const answers = slots(html, 'cd-fd-answer');
+  assert.equal(answers.length, leaders.length, 'one reveal per claimed reveal');
+  assert.ok(answers.length >= 3, 'non-vacuous: the bright subject is read');
+  leaders.forEach((leader, i) => {
+    assert.equal(answers[i].index, leader.index, `row ${i}: same index`);
+    assert.equal(answers[i].total, leader.total, `row ${i}: same total`);
+  });
+  const ratios = answers.map((a) => a.index / a.total);
+  assert.deepEqual([...ratios].sort((x, y) => x - y), ratios, 'the reveals are in order');
+  assert.ok(ratios[ratios.length - 1] > 0, 'and the last one is not on the first frame');
+});
+
+test('a field nobody read is printed at once, and does not animate', () => {
+  // `NOT READ` at 0ms is a true sentence. Giving it a reveal would be a transition
+  // invented to make an absence look like a process.
+  const html = f.scanOverlay({ subject: { name: 's-1', state: 'needs_human', settled: true } });
+  assert.equal((html.match(/class="cd-fd-answer"/g) || []).length, 0, 'no reveals at all');
+  assert.equal((html.match(/NOT READ/g) || []).length, 3, 'three fields, three true sentences');
+  assert.match(html, /class="cd-fd-leader" data-known="0" data-motion="still"/);
+  const dark = f.scanOverlay(darkFor('scanOverlay'));
+  assert.doesNotMatch(dark, /class="cd-fd-answer" data-motion/, 'and the switch leaves none');
+});
