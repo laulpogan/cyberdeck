@@ -261,6 +261,17 @@
       "observed": "not asserted; the row is recorded so the reference stays attached to the gap it came from",
       "notHeld": "Catching an eased wrap needs the position trace sampled at frame resolution across two full periods and aligned to the wrap. The recorder that does this exists since hardCut was tested, and it taught the harder half of the lesson: a change window about 300ms long is missed entirely by anything sampling at human cadence. Wiring that recorder to a wrap rather than to a click is real work with its own sabotage, and a row written before the sabotage exists would certify the very crossfade it claims to watch for.",
       "watch": "the needle or coverage mass easing back toward zero instead of stepping, or an opacity fade at the wrap"
+    },
+    {
+      "id": "in-flight-wait-draws-no-progress-bar",
+      "reference": "barcode-scan-receipt.gif",
+      "component": "dispatch",
+      "gap": "a wait whose remaining time was never measured is drawn as a progress bar, a percentage, or a remaining-time figure",
+      "referenceFigure": "24 frames over 4.0s, median delay 170.0ms, loop no return to frame zero",
+      "assertKind": "an element or number count over the in-flight state: a bar geometry or a % figure must be absent where no duration was supplied",
+      "observed": "not asserted; recorded with its reference so the gap keeps the picture it came from",
+      "notHeld": "Two hard things, both named rather than papered over. This reference is handheld, so its measured travel belongs to the cameraperson and it can hold a component to a state vocabulary but not to a rate. And the assert needs a specimen whose wait is actually in flight, which the dispatch fixture currently resolves as settled — an assert written now would run against a state nobody renders and could never go red for the reason it exists.",
+      "watch": "`dispatch` or `loopDeviation` growing a bar, a percentage, or an ETA without a supplied duration"
     }
   ]
 }

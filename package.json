@@ -39,7 +39,8 @@
     "verify:stillness": "node app/verify/declared-stillness.mjs",
     "verify:furniture": "node app/verify/furniture.mjs",
     "verify:gauntlet": "node app/verify/gauntlet.mjs",
-    "verify:gauntlet-sheet": "python3 app/verify/gauntlet-sheet.py"
+    "verify:gauntlet-sheet": "python3 app/verify/gauntlet-sheet.py",
+    "verify:coverage": "node vault/coverage.mjs && node vault/coverage.mjs --check"
   },
   "keywords": [
     "cyberpunk",

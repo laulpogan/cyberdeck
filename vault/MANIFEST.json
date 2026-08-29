@@ -6487,6 +6487,34 @@
         "derivedGifWidth": 320
       },
       "captionOnPage": "what the eye is expected to check: a storm complex advancing across a labelled geographic map with a colour legend and time stamps"
+    },
+    "barcode-scan-receipt.gif": {
+      "file": "raw/barcode-scan-receipt.gif",
+      "seed": "direct-clips",
+      "kind": "gif",
+      "bytes": 1247482,
+      "frames": 24,
+      "requestedFrames": 24,
+      "frameDelayCs": [
+        17
+      ],
+      "loopSeconds": 4,
+      "sha1": "e4b348076508de65",
+      "mediaUrl": "https://upload.wikimedia.org/wikipedia/commons/f/fd/K-Scan_screen_recording.webm",
+      "sourcePage": "https://commons.wikimedia.org/wiki/File:K-Scan_screen_recording.webm",
+      "status": "unmarked",
+      "work": "K-Scan screen recording (Wikimedia Commons upload)",
+      "segment": {
+        "startSeconds": 0,
+        "seconds": 4,
+        "sourceSeconds": 4.3,
+        "sourceDims": "880x1080",
+        "fps": 6,
+        "derivedGifWidth": 320
+      },
+      "captionOnPage": "what the eye is expected to check: a handheld scan app: a camera viewfinder with a reticle and the instruction to point at a barcode, a card that says the code was found and data is being retrieved, then an item-added card naming the product and its price, while a cart badge goes from 26 to 27",
+      "cameraDrift": true,
+      "cameraDriftNote": "Handheld phone footage: the viewfinder is a moving camera on a shop shelf, so travel and amplitude in SPECS.md are largely the operator's hand. The UI's own facts — which states exist, what each one says, whether a wait carries a bar — are read with the eye off the frames, which is what this file is quoted for."
     }
   }
 }

@@ -769,3 +769,29 @@ Guessed shapes cost more time than the acquisition did. Written down so they are
 And the quietest one: piping a verify tool's stderr into `/dev/null` let `gauntlet-sheet.py` fail three
 commits running while I reported "sheets regenerated" from the directory it had left behind. Run the tool
 where its noise can be seen; a broken tool that prints nothing looks exactly like a passing one.
+
+## Coverage has three numbers, and only one of them means what people think it means
+
+`node vault/coverage.mjs` (also `npm run verify:coverage`) writes `vault/COVERAGE.md` and splits the
+registry into three tiers: **18 spec-held** — a verified file's measurement is quoted against the component
+in `SPECS-FOR.json`; **17 files-only** — marked files resemble it and nobody has read a measurement off
+them; **16 with nothing**. They sum to 51 and `test/coverage.test.mjs` holds that partition, holds each
+spec-held component to a file the eye verified *and* a row `spec.py` measured, and refuses a `COVERAGE.md`
+whose counts have drifted from the live derivation.
+
+Prose had been quoting "25 without a usable reference" (from `map.py`, files joined by resemblance) and
+"34 lack references" interchangeably. The widest reading overstates coverage by more than three times:
+eleven files on a component is not a reference you can build against, it is eleven pictures nobody measured.
+
+The steering consequence, learned the hour the report was written: **the cheapest coverage is not
+acquisition.** Seventeen components already hold marked files. Re-reading the 18 verified files and asking
+what *else* is visible in each frame — a health bar beside a survey grid, a ratio beside a countdown — raises
+the spec-held tier with no network at all. Acquisition stays the only route for the 16 in the nothing tier.
+
+## Undo a sabotage with a copy, not with `git checkout`, while the file carries uncommitted work
+
+`git checkout vault/EYEBALL.json` to undo a doctored `contentVerified: false` also threw away the mark
+that turn had just made — the mark was uncommitted, so "restore" meant "erase the finding too", and the
+coverage test then failed for a *true* reason (a component counted as spec-held on a file nobody verified).
+The instrument was right and my repair was wrong. Snapshot to `/tmp` before sabotaging a file the turn has
+written to, and restore from there.

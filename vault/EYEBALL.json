@@ -6,6 +6,13 @@
   "sheet": "see OUT dir",
   "shows": "Five frames of a rotating radar ANTENNA on a hill outside Crawley — a camera pointed at the structure against a blue sky and trees. No display, no readout, no interface anywhere in the frame. The title said radar and the file showed the thing that emits it."
  },
+ "raw/barcode-scan-receipt.gif": {
+  "contentVerified": true,
+  "eyeballedBy": "agent-eye(qwen/dot-backbone)",
+  "framesViewed": "8 frames sampled across the file's own timeline",
+  "sheet": "see OUT dir",
+  "shows": "A handheld barcode scan in a shop: camera viewfinder with a reticle and the point-at-the-barcode instruction; a card reading Product code found, Retrieving data, please wait with no progress bar at all; then an item-added card naming the product and its price while the cart badge steps from 26 to 27"
+ },
  "raw/cyberpunk-hud--media.tenor.com_gdhPO38XjlUAAAAM_urith-set.gif.gif": {
   "contentVerified": true,
   "eyeballedBy": "agent-eye(qwen/dot-backbone)",
