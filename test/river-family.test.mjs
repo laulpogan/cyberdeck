@@ -27,8 +27,29 @@ test('the dive draws its floor as a level, not as a missing level', () => {
   const html = r.esperDive({ levels: LEVELS });
   assert.match(html, /NO FURTHER RESOLUTION/);
   assert.match(html, /data-floor="1"/);
-  // Two levels were read, two were not. Only the read ones travel.
-  assert.equal((html.match(/data-motion="trace"/g) || []).length, 4);
+  // Two levels were read, two were not — and nothing travels any more. `trace` draws a path
+  // along its own length because something went along it, and a per-level decoy window is not
+  // a route: the verified survey grid in vault/SPECS.md says the furniture holds still and only
+  // the contact moves, and app/verify/furniture.mjs is the audit that caught it. A level that
+  // was read reveals in payload order; a level that was not says so and stays put. Asserted per
+  // level by position rather than by a component-wide total, because the drawing also reveals
+  // its readout rows, and a count of marks says nothing about which level kept its promise.
+  assert.equal((html.match(/data-motion="trace"/g) || []).length, 0,
+    'the decoy window and its sightlines no longer claim a journey');
+  const boxes = html.split('<g').filter((chunk) => /class="cd-riv-level/.test(chunk));
+  assert.equal(boxes.length, LEVELS.filter((l) => !l.floor).length,
+    'one decoy window per level, and the floor is drawn as the floor');
+  LEVELS.filter((l) => !l.floor).forEach((level, i) => {
+    const read = level.value !== null && level.value !== undefined;
+    if (read) {
+      assert.match(boxes[i], /data-motion="count"[^>]*data-index="\d+"[^>]*data-total="\d+"/,
+        `read level ${level.label} reveals in payload order`);
+    } else {
+      assert.match(boxes[i],
+        /data-motion="still"[^>]*data-still-reason="this level was not known to the diver"/,
+        `unread level ${level.label} declares its stillness`);
+    }
+  });
   assert.match(html, /UNMEASURED/);
 });
 

@@ -165,8 +165,19 @@ export function esperDive({ levels }) {
     if (level.floor) {
       g.push(`<g class="cd-riv-floor">${hatched(x, top, bw, bh)}</g>`);
     } else {
-      g.push(`<g class="cd-riv-frame" data-known="${known ? 1 : 0}"`
-        + `${attrs(trace(known, { cite: level.cite, order: i, total: levels.length }))}>`
+      // The frame is furniture and the sightlines are geometry, not a route. `trace` draws a
+      // path along its own length because something travelled it, and nothing travelled a
+      // decoy window — the verified survey grid in `vault/SPECS.md` says the same thing from
+      // the other direction: grid and labels dead, only the contact moves. What is a
+      // measurement here is *which levels the diver knew*, and that arrives in payload order
+      // or it is declared motionless. `glassCell`'s sightline was fixed the same way in
+      // finding #1; this one had simply never been looked at. The group was also renamed
+      // `cd-riv-level`, because the audit that caught this could only ask what the element is
+      // *called*, and a per-level decoy box calling itself `frame` will keep inviting the
+      // wrong mark: the name is the only documentation an audit reads.
+      const levelMark = known ? count(i, levels.length)
+        : still('this level was not known to the diver');
+      g.push(`<g class="cd-riv-level" data-known="${known ? 1 : 0}"${attrs(levelMark)}>`
         + rect(x, top, bw, bh, { dashed: !known }) + '</g>');
       // The region the next step enlarges, marked inside this one. The
       // leaders are what make the chain a dive rather than a row.
@@ -174,7 +185,7 @@ export function esperDive({ levels }) {
         g.push(`<g class="cd-riv-crop">`
           + rect(x + bw * .34, top + bh * .3, bw * .3, bh * .3, { width: 1.2 }) + '</g>');
         g.push(`<g class="cd-riv-leader"`
-          + `${attrs(trace(known, { cite: level.cite, order: i, total: levels.length }))}>`
+          + `${attrs(levelMark)}>`
           + line(x + bw * .64, top + bh * .3, x + bw + gap, top, { dashed: true })
           + line(x + bw * .64, top + bh * .6, x + bw + gap, top + bh, { dashed: true })
           + '</g>');
@@ -188,7 +199,10 @@ export function esperDive({ levels }) {
   levels.forEach((level, i) => {
     const y = 96 + i * 25;
     const known = level.value !== null && level.value !== undefined && level.value !== '';
-    g.push(`<g class="cd-riv-level" data-floor="${level.floor ? 1 : 0}" `
+    // The row under the windows, not another window. It carried `cd-riv-level` too, which is
+    // how an audit that reads class names came to count seven decoy windows in a four-level
+    // dive: one class for two roles makes every count a guess, in the CSS and in the tests.
+    g.push(`<g class="cd-riv-readrow" data-floor="${level.floor ? 1 : 0}" `
       + `data-known="${known ? 1 : 0}"${attrs(count(i, levels.length))}>`
       + text(PAD, y, level.label, { size: 7, opacity: '.7' })
       + text(PAD, y + 11, known ? String(level.value)

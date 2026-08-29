@@ -188,11 +188,12 @@
    weight here, and the measured stroke is the exception. */
 .cd-riv-floor, .cd-riv-dark, .cd-riv-noref, .cd-riv-missing, .cd-riv-nocount,
 .cd-riv-nodial, .cd-riv-gap { color: var(--cd-health-colour-unknown); }
-.cd-riv-frame[data-known="0"] { color: var(--cd-steel-muted); }
+.cd-riv-level[data-known="0"] { color: var(--cd-steel-muted); }
 .cd-riv-crop { color: var(--cd-signal-amber); opacity: .8; }
 .cd-riv-leader { color: var(--cd-steel-muted); opacity: .65; }
-.cd-riv-level[data-known="0"] { color: var(--cd-steel-muted); }
-.cd-riv-level[data-floor="1"] { color: var(--cd-health-colour-unknown); }
+/* The `data-known="0"` rule above is the same rule; it appeared twice. The floor rule now
+   names the readout row, which is where `data-floor` actually is. */
+.cd-riv-readrow[data-floor="1"] { color: var(--cd-health-colour-unknown); }
 .cd-riv-stock, .cd-riv-sample, .cd-riv-elapsed { color: var(--cd-signal-data); }
 /* The seam is the finding, so it is the one thing on the tape that is
    allowed to shout. */
