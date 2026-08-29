@@ -349,15 +349,20 @@ Things the fixtures turned up, all of them in the library rather than the app:
   `data-refusal`; unpriced still refuses. A refusal that is not true is not a
   conservative error — the honesty ledger reads the DOM, so it is a second reading of
   one fact, and the two disagree in the markup.
-- **Twelve components refuse by drawing rather than declaring.** `tapeSplice`,
-  `twoState`, `muthur`, `city`, `garage`, `grid`, `gevulot`, `dominator`, `ladder`,
-  `dossier`, `channel` and `redaction` write their absence as ink — `UNMEASURED`,
-  `DARK`, `NO PROOF HISTORY`, `UNATTRIBUTED` — with no `data-motion="still"`
-  anywhere, so `DECLARED STILL` reads 0 over a deliberate refusal and a review
-  script cannot tell "we drew nothing on purpose" from "we forgot". Each names its
-  word in the registry as `refusalText`, and the fixture test asserts the word is
-  really on screen. The `standardSheet` in the same role *does* stamp, which is
-  what makes the other twelve read as a gap rather than a choice.
+- **Twelve components refused by drawing rather than declaring — closed on this
+  branch.** `tapeSplice`, `twoState`, `muthur`, `city`, `garage`, `grid`, `gevulot`,
+  `dominator`, `ladder`, `dossier`, `channel` and `redaction` wrote absence as ink —
+  `UNMEASURED`, `DARK`, `NO PROOF HISTORY`, `UNATTRIBUTED` — with nothing in the DOM
+  saying why, so `DECLARED STILL` read 0 over a deliberate refusal and a review script
+  could not tell "we drew nothing on purpose" from "we forgot". Each now stamps its
+  reason as well as drawing it, and `app/verify/declared-stillness.mjs` holds it
+  server-side over every bright model: it harvests the library's own absence vocabulary
+  (`ABSENCE_WORDS`) and currently reads **0 of 22** undeclared. Proven by taking
+  `city`'s `refusal('no placement was recorded on this host')` off the group that draws
+  `DARK` — **1 of 22** — then restoring. Keep the rule, not just the number: a word
+  painted inside a picture is true to the eye and invisible to every script, and the
+  ledger is a script. This bullet was nearly "re-fixed" from a previous turn's summary,
+  which still described the open gap; the file is the fact, the recollection is not.
 - **Finding #10 is closed: an absence speaks in one vocabulary.**
   `app/verify/declared-stillness.mjs` renders every bright model, matches the absence words
   the library actually prints, and asks whether the same specimen declares it in the

@@ -1772,3 +1772,21 @@ the same mistake I made on `collar`, now with an exact multiple (5400 s) and a c
 
 `tracker` was already innocent. What changed is that its innocence is now a claim with a fence around it, and the fence
 quotes the reference that justifies it. `npm test` 312.
+
+## The ledger is green, and the notes said it was red: re-run the instrument before repeating the number
+
+The largest item on the standing debt list was the twelve components that "refuse by drawing rather than declaring" —
+ink that reads `UNMEASURED` or `DARK` with nothing in the DOM saying why, so a review script couldn't separate a
+decision from an oversight. It is closed: `app/verify/declared-stillness.mjs`, which harvests the library's own absence
+vocabulary and renders every bright model server-side, reads **0 of 22 undeclared**, and `verify:stillness` is already a
+package script. Before writing that up as news I made the instrument prove it: taking `city`'s
+`refusal('no placement was recorded on this host')` off the group that draws `DARK` moves it to **1 of 22**; restoring
+returns it to **0**. Green that cannot be made red is not a result, and this ledger had not been re-sabotaged since the
+last component was fixed.
+
+The stale claim was not in `AGENTS.md` — that file had already marked the `killmail` mis-stamp *"fixed on this branch"*,
+with the two test halves named. The stale claim was in **my own carried-forward summary**, which still described both
+gaps as open, and it was specific enough to send me off "fixing" two closed findings. That is worth writing where the
+next reader will see it, because every long-running session on this branch inherits the same hazard: a summary is a
+photograph of the work at compaction time, and the work moved. **Re-run the instrument, or read the bullet in the file —
+the file carries the corrections, the recollection carries the drift.**
