@@ -4,7 +4,9 @@ Three doctrines that came out of the wide pass and have not been contradicted
 since. They are recorded here because they constrain components that do not exist
 yet, and a constraint nobody wrote down is a constraint nobody will honour.
 
-Source page: [`pages/the-idea-bank.html`](pages/the-idea-bank.html).
+Source page: [`pages/the-idea-bank.html`](pages/the-idea-bank.html). Restated as
+Part 0 of [`source-archive.md`](source-archive.md), where it overrides every
+property-specific note in that file.
 
 ## Motion
 

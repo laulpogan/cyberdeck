@@ -9,6 +9,8 @@ a library ends up with eight components and no vocabulary.
 - Rendered page, with the full 73 x 15 co-occurrence matrix and cell explorer:
   [`pages/the-idea-bank.html`](pages/the-idea-bank.html)
 - The same motifs drawn as vignettes: [`specimens.md`](specimens.md)
+- The same sources with a verified video clip and a motion spec each:
+  [`source-archive.md`](source-archive.md)
 
 Motif fields: **what it is** in the source work, and **what it becomes** here.
 

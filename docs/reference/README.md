@@ -17,6 +17,7 @@ be diffed, and disappears when the link does. This directory is the fix.
 | [`doctrine.md`](doctrine.md) | Motion, sound, and the spatial cut. Constraints on components that do not exist yet |
 | [`substitution-matrix.md`](substitution-matrix.md) | The six patterns that serve the most roles, and the verdict vocabulary that separates *could build* from *could build honestly* |
 | [`comb-instrument.md`](comb-instrument.md) | Prior art on the population-comb pattern, and 26 other populations it could carry |
+| [`source-archive.md`](source-archive.md) | The build-agent handoff: every source property with a verified video clip, an evidence tag, and a motion spec — plus the licence-verified tool index and the acceptance checklist |
 
 ## The map
 
@@ -45,5 +46,10 @@ instead, because they are usage rather than research.
 If you are new to this: [`../GOAL.md`](../GOAL.md) for the rule the library
 enforces, then [`cybernetics-canon.md`](cybernetics-canon.md) for why the rule is
 not arbitrary, then [`specimens.md`](specimens.md) for the vocabulary it is built
-from. [`branches.md`](branches.md) last, when you want to know what is not on this
+from.
+
+If you are about to build a component, go straight to
+[`source-archive.md`](source-archive.md) and watch the clip it names for that
+property first. It is the only file here that says what the source actually looks
+like in motion, and its Part 10 is the checklist to finish against. [`branches.md`](branches.md) last, when you want to know what is not on this
 branch — and [`merge-plan.md`](merge-plan.md) when you want to change that.

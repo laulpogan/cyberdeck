@@ -3,7 +3,8 @@
 Six textbook diagrams. They are the load-bearing pictures behind the library, not
 decoration on top of it. Each one is redrawn on
 [`pages/the-idea-bank.html`](pages/the-idea-bank.html); this file records what each
-one obliges a component to do.
+one obliges a component to do. Part 6 of [`source-archive.md`](source-archive.md)
+carries the same six with their primary sources.
 
 The through-line: every one of them is about a signal that either exists or does
 not. That is the same claim the library makes about motion, arrived at from the
