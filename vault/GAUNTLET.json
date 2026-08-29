@@ -313,6 +313,23 @@
       },
       "observed": "asserted from the fixture, whose FLEET scope carries no count because hosts that are dark cannot be enumerated",
       "watch": "the word `undefined` reappearing in the readout, or an unread scope dropping out of the row instead of holding its cell"
+    },
+    {
+      "id": "solari-rows-occupy-fixed-slots",
+      "reference": "solari-departure-flap.gif",
+      "component": "stockFlow",
+      "gap": "a list whose rows move with their content — a row that grows, re-sorts, or fills to its value — makes the operator compare geometry instead of reading figures, and turns a standing quantity into an extent.",
+      "referenceFigure": "Only the cells whose value changed move",
+      "assertKind": "slots_do_not_move",
+      "assert": {
+        "kind": "slots_do_not_move",
+        "route": "#/component/stockFlow",
+        "selector": "[data-specimen-view=\"stockFlow\"]",
+        "rows": ".cd-og-level, .cd-og-rate",
+        "tolerancePx": 1.5
+      },
+      "observed": "22 observations across 67s of the board: identical left edge and width on every row, no re-sorting, no row grew with its number, two rows changed at all. stockFlow draws each level and rate in its own row with the value as text and refuses extents on rates; asserted at 1280 and 390.",
+      "watch": "a row whose width or left edge tracks its value; a level/extent mark in a stock list; rows re-sorting"
     }
   ]
 }

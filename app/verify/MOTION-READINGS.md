@@ -1506,3 +1506,46 @@ a figure's shape, or derive it; a pinned value that rounds differently is a red 
 Gate green on `#/component/collar` and `#/families/river` (9 passes, byte-identity holding). Gauntlet 22 rows:
 **20 pass, 2 held** — the two survivors are `globe-hue-caution`, an appearance lesson by design, and
 `tape-sweeps-a-drawn-strip`, which no mark vocabulary can say. `npm test` 297.
+
+## Re-reading the board for what it says about *rows*: one component gains a reference, one loses one
+
+Coverage was 21 of 51 and the cheapest material was already on disk, so the question asked of each verified file was
+"what else is in these frames?" For `solari-departure-flap.gif` — 22 observations at two-second spacing across 67
+seconds — the answer was about the **rows**, not the flaps: every row keeps the same left edge and width the whole
+clip; the row order never re-sorts; no row grew when its value did (16:25 and 18:20 sit in the same slot); only two
+rows changed at all in 67 seconds, and each of those changes was marked **by ink as well as words** — `FINAL CALL`
+arrives red, `GATE closed` arrives dimmed and lower-case. That is a demand on any list, and `stockFlow` is the
+library's list of standing quantities, whose own note reads *"Tell them apart with the labels covered."* Quoted, and
+now asserted by `slots_do_not_move`: left-edge spread, width spread, and no measured-extent mark anywhere in the
+specimen. Green: *5 rows, left spread 0px, width spread 0px, extents 0*.
+
+**The same read cost a coverage point, which is the point.** `dispatch`'s only spec-held source was this record — and
+`dispatch` draws a fitted-parts chain: three workers, three manifest parts, a dashed chain at the first unfitted one.
+The board does not inform that drawing any more than it informed `collar`'s row yesterday. `for` lists are "where the
+reference actually informs", so `dispatch` came out of the record: **21 spec-held, but 20 honest ones before and 21
+now** — the count held because a name-resemblance left as a real reading arrived. This is the third time this week a
+`for` entry was chosen by name instead of drawing (`scanOverlay`, `twoState`, `dispatch`), and both rows now carry
+their mis-attribution in their own text rather than being quietly corrected.
+
+Sabotage A went green first, and the reason matters more than the eventual red: I wrote the sabotage as
+
+```
+<div …>
+      style="width: ${140 + i * 40}px"><span …>
+```
+
+— after the tag's `>`. The `style` became **text content** printed on the card, and the widths never varied, so the
+row correctly reported *5 rows, width spread 0px* over a build my edit had not actually changed. A sabotage that did
+not apply certifies nothing, and the tell was sitting in the row's own measurement (`value=width` pairs all equal, and
+a stray `style="…"` string now on the plate). Re-planted inside the opening tag: **red** — *"rows do not share a field
+(left spread 0px, width spread 691.63px) — on the board the row's geometry is fixed and only its characters change."*
+Sabotage B, an extent stamped into the rate row: **red** — *"2 measured-extent mark(s) in a stock-and-flow list: the
+board draws a value in a slot and never draws how much it is."*
+
+The ink-per-state half of this reading — `FINAL CALL` in red, `GATE closed` dimmed — is recorded and **not yet
+asserted**. It demands a component with states to distinguish; `stockFlow` has none, and the queue components carry
+their own colour discipline. Filed rather than forced: a reading that implies work the drawing cannot host is the
+`mfd` mistake, and that mistake is already in the ledger once.
+
+Gauntlet 23 rows: **21 pass, 2 held, 0 FAIL**. Gate green on `#/component/stockFlow` and `#/families/organism` (9
+passes). Coverage tiers add up: 21 spec-held + 17 files-only + 13 nothing. `npm test` 297.

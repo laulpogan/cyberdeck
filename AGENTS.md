@@ -856,3 +856,11 @@ without, assert what arrives and what leaves — not as a report with a vocabula
 - **When the instrument cannot distinguish two causes, say both.** An `ease-in-out` reversal is nearly motionless
   at the seam, so the stall arm fires first; the message names the observation and both readings rather than
   guessing a mechanism.
+
+## Check that your sabotage reached the build before believing a green
+
+A gauntlet row went green over a sabotage that had become **text content** — the injected `style="width: …"` landed
+after the tag's `>`, so nothing about geometry changed and the instrument honestly reported the unchanged build.
+The tell was in its own output: the row's `value=width` pairs were all equal. After every sabotage plant, confirm
+the change is observable in the measurement (a value moved, a mark appeared, a string printed); a red proves the
+instrument, a green proves nothing until you know the defect was in the room.

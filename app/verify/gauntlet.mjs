@@ -569,6 +569,51 @@ for (const gap of GAPS) {
                     : `only ${spin.frames} frames were sampled, too few to tell a seam from a dropped frame`;
           }
         }
+      } else if (a.kind === 'slots_do_not_move') {
+        // The reference is a 67-second split-flap board: ~22 observations, two rows changed at all,
+        // and every row held its field — same left edge, same width, the order never re-sorted, and
+        // no row grew because its number got bigger. A list that scales a row to its value makes
+        // the *quantity* the thing you compare, when the board's whole argument is that rows are
+        // addressed by what they are, not by how much they are. `stockFlow` exists to keep a stock
+        // and a flow apart, and the one way to draw that wrong is to let a level fill something.
+        const rows = await page.evaluate(({ selector, rows: rowSel, tolerancePx = 1.5 }) => {
+          const view = document.querySelector(selector);
+          if (!view) return { missing: true };
+          const list = [...view.querySelectorAll(rowSel)];
+          if (list.length < 2) return { tooFew: list.length };
+          const boxes = list.map((el) => {
+            const r = el.getBoundingClientRect();
+            return { w: r.width, h: r.height, left: r.left, right: r.right,
+                     value: (el.querySelector('strong')?.textContent || '').trim() };
+          });
+          const spread = (pick) => Math.max(...boxes.map(pick)) - Math.min(...boxes.map(pick));
+          return {
+            n: boxes.length,
+            widthSpread: spread((b) => b.w), leftSpread: spread((b) => b.left),
+            rightSpread: spread((b) => b.right), heightSpread: spread((b) => b.h),
+            extents: view.querySelectorAll('[data-motion="level"]').length,
+            pairs: boxes.map((b) => `${b.value}=${Math.round(b.w * 10) / 10}`),
+          };
+        }, a);
+        if (rows.missing || rows.tooFew !== undefined) {
+          row.measured = rows.missing ? `no specimen matched ${a.selector}`
+                                       : `only ${rows.tooFew} row(s) matched — a spread needs two`;
+          row.verdict = 'FAIL';
+        } else {
+          row.measured = `${rows.n} rows, left edge spread ${Math.round(rows.leftSpread * 100) / 100}px, `
+            + `width spread ${Math.round(rows.widthSpread * 100) / 100}px, right edge spread `
+            + `${Math.round(rows.rightSpread * 100) / 100}px (tolerance ${a.tolerancePx ?? 1.5}px); `
+            + `measured-extent marks: ${rows.extents}; value=width: ${rows.pairs.join(' ')}`;
+          const tol = a.tolerancePx ?? 1.5;
+          row.verdict = (rows.leftSpread <= tol && rows.widthSpread <= tol && rows.extents === 0)
+            ? 'pass' : 'FAIL';
+          if (row.verdict === 'FAIL') {
+            row.detail = rows.extents > 0
+              ? `${rows.extents} measured-extent mark(s) in a stock-and-flow list: the board draws a value in a slot and never draws how much it is — a level is the wrong vocabulary for a standing quantity, and for a rate it is a lie`
+              : `rows do not share a field (left spread ${Math.round(rows.leftSpread * 100) / 100}px, width spread ${Math.round(rows.widthSpread * 100) / 100}px) — on the board the row's geometry is fixed and only its characters change, so a row that grows with its number is asking the operator to compare shapes instead of reading values`;
+          }
+        }
+
       } else if (a.kind === 'no_bar_where_no_terminus') {
         // The reference is a phone barcode scan whose lookup says `Retrieving data, please wait…`
         // and draws NOTHING measurable — no bar, no percentage, no remaining-time figure. A wait
