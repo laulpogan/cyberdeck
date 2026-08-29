@@ -1701,3 +1701,44 @@ apart is CSS colour, which is the distinction the rule says must not live in hue
 gives *"the lane that owes a person stopped saying it, leaving hue to carry the whole difference"*. Restored from `/tmp`
 copies, and `git status` confirmed clean apart from the new file. `npm test` 309; gate 24 passes over
 `syncRatio`/`keycard`/`dispatch`/`needleField`/`twoState`/`river`.
+
+## `coverage` gets its row, and the instrument had to be fixed twice to earn it
+
+The hurricane loop states three demands — `radar` (asserted), `coverage`, and `tracker`. Writing the `coverage` row
+turned up two problems before it produced a result.
+
+**The reading doesn't land where it says.** It asks that "the plate and its legend are untouched by the animation", but
+`coverage` draws no graticule and no colour key: it has contours (`trace`, measured), posts (`count`), and the dashed,
+hatched `UNMEASURED / terrain unrendered` ground. So the demand's real home is *that block must not move while the
+survey arrives* — and demanding an untouched legend from a component with no legend would have been the `mfd` mistake in
+a new costume. The row says so in its own `observed` field.
+
+**The instrument could not see motion.** The first run failed with *"6 contact element(s), 0 with an animation of their
+own … nothing moved either"*, while `probe-anims.mjs` showed six `strokeDashoffset` animations running at +120 ms and
+none by +600 ms: the entrance is real and lasts about half a second. Two bugs, one line each. It read the animation
+count from the **last frame of the window** — settled ground by definition — so liveness is now counted per contact
+across every frame. And it asked `getAnimations({ subtree: false })` on the `<g>` the selector matched, while the
+runtime's animation sits on the child `<polyline>`: the file's own comment warns that *"a default that reads 'still'
+from a moving thing is the worst kind of instrument"*, and the per-element count had been doing exactly that while the
+page-wide count had been fixed. Same fix applied to `dead_cells`, where under-counting liveness *inflates* the dead-cell
+total and so makes its own row easier to pass — `chipBudget` still reports 7 of 12 quiet, so that claim survived a
+sharper instrument rather than being re-tuned to it.
+
+**Stillness is not only position.** With liveness fixed, the row passed on the honest build — and stayed green over a
+sabotage that put a mark on the hatched ground. A pulsing absence never leaves its box, so a drift check sails right
+past it, and an absence that breathes reads as a quantity. `furniture_still` now fails if any furniture element carries
+**an animation or an opacity change at any point in the window**, not merely a translation: *"1 furniture element(s)
+carried an animation of their own (cd-fd-dark|UNMEASUREDterrain) — furniture that animates is furniture asking to be
+read as a measurement."* All three furniture rows stay green on the honest build, so no legitimate label arrival got
+caught by the new arm; radar's furniture really is untouched.
+
+Two invalid plants on the way, recorded because they are the failure mode, not an aside: the first sabotage used
+`decay`, which `field.js` never imported, so the component threw and the harness reported a `waitForSelector` timeout —
+right result, wrong reason, and the loudness is the only thing that made it survivable. The second imported `decay` but
+called it in a way that creates no `Animation` at all, so the row passed over a "moving" absence and looked like a
+verified green. The third plant — `count(1, 2)`, the known-good one from the `no_blend_on_change` work — went red
+immediately. **A sabotage that produces no animation object tests the harness's patience, not its eyes.**
+
+Also removed while in there: `furniture_still` existed **twice** in the `else if` chain, identical, the second copy
+unreachable. Anyone patching the copy at line 777 would have changed nothing at all and had every reason to believe
+otherwise. Gauntlet 24 rows — **22 pass, 2 held, 0 FAIL**; gate 4 passes on `#/component/coverage`; `npm test` 309.

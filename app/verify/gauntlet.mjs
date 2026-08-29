@@ -78,6 +78,11 @@ function recorder(cfg) {
     return m ? [Number(m[1]), Number(m[2])] : null;
   };
   const own = (el) => (el.getAnimations ? el.getAnimations({ subtree: false }).length : 0);
+  // The animation the runtime makes usually sits on the child, not the group: a contour's
+  // `strokeDashoffset` lives on the <polyline>, a cell's fill on its rect. Asking only the
+  // element whether it is animating is how a moving thing reports "still" — the file's own
+  // comment says so about the page-wide count, and the per-element count had been doing it.
+  const ownKids = (el) => (el.getAnimations ? el.getAnimations({ subtree: true }).length : 0);
 
   const tick = () => {
     const doc = document;
@@ -159,9 +164,11 @@ function recorder(cfg) {
           p: cfg.wantTranslate ? translateOf(el) : null,
           o: getComputedStyle(el).opacity,
           n: own(el),
+          nk: ownKids(el),
           k: (el.getAttribute('class') || el.tagName) + '|' + (el.textContent || '').slice(0, 18),
         })),
-        all: everything.map((el) => ({ r: rectOf(el), n: own(el), o: getComputedStyle(el).opacity })),
+        all: everything.map((el) => ({ r: rectOf(el), n: own(el), nk: ownKids(el),
+          o: getComputedStyle(el).opacity })),
       });
     }
     requestAnimationFrame(tick);
@@ -263,7 +270,7 @@ function deadCells(frames, tolerancePx) {
       const a = base.all[e], b = f.all[e];
       const moved = Math.abs(a.r[0] - b.r[0]) > tolerancePx || Math.abs(a.r[1] - b.r[1]) > tolerancePx
         || Math.abs(a.r[2] - b.r[2]) > tolerancePx || Math.abs(a.r[3] - b.r[3]) > tolerancePx
-        || Math.abs(a.o - b.o) > 0.01 || b.n > 0;
+        || Math.abs(a.o - b.o) > 0.01 || (b.nk ?? b.n) > 0;
       if (!moved) continue;
       const cell = cellOf(a.r[0] + a.r[2] / 2, a.r[1] + a.r[3] / 2);
       if (cell !== null) live.add(cell);
@@ -703,18 +710,56 @@ for (const gap of GAPS) {
           const f0 = spans[0];
           const furn = group(spans, f0.nSel, f0.nSel + f0.nFurn);
           const cont = group(spans, f0.nSel + f0.nFurn, f0.nSel + f0.nFurn + f0.nCont);
-          const animating = spans[spans.length - 1].el
-            .slice(f0.nSel + f0.nFurn).reduce((n, e) => n + (e.n > 0 ? 1 : 0), 0);
+          // An entrance is ~300-500ms; the last frame of a 2200ms window is settled ground, and
+          // counting animation there certified a specimen whose contacts had already finished —
+          // then reported "nothing moved" as the failure, which was the instrument's own blind
+          // spot dressed up as the component's. Liveness is per contact over the whole window.
+          const liveAt = [];
+          for (const f of spans) {
+            const cont = f.el.slice(f0.nSel + f0.nFurn);
+            for (let i = 0; i < cont.length; i++) {
+              if ((cont[i].nk ?? cont[i].n) > 0) liveAt[i] = true;
+            }
+          }
+          const animating = liveAt.filter(Boolean).length;
+          // The other half of "untouched". A hatched absence that *pulses* never leaves its box,
+          // so the drift check passes right over it — an absence that breathes is an absence
+          // asking to be read as a quantity. Furniture carries no measurement, so it carries no
+          // animation at any point in the window, and no opacity change either.
+          const furnLive = [];
+          const furnOpacity = [];
+          for (const f of spans) {
+            const furnEls = f.el.slice(f0.nSel, f0.nSel + f0.nFurn);
+            for (let i = 0; i < furnEls.length; i++) {
+              if ((furnEls[i].nk ?? furnEls[i].n) > 0) furnLive[i] = furnEls[i].k;
+              const o = Number(furnEls[i].o);
+              if (Number.isFinite(o)) (furnOpacity[i] ??= []).push(o);
+            }
+          }
+          const furnAnimated = furnLive.filter(Boolean);
+          const furnFade = furnOpacity.reduce((worst, list) => Math.max(worst,
+            list.length ? Math.max(...list) - Math.min(...list) : 0), 0);
           const widths = spans.length > 2 ? spans.map((f) => Math.max(0, ...f.el.slice(f0.nSel, f0.nSel + f0.nFurn).map((e, i) => Math.abs(e.r[2] - spans[0].el[f0.nSel + i]?.r[2] ?? 0)))) : [0];
           row.measured = `furniture moved at most ${furn.worst.toFixed(2)}px${furn.name ? ` (${furn.name})` : ''}, widest text change ${Math.max(...widths).toFixed(1)}px; `
-            + `${f0.nCont} contact element(s), ${animating} with an animation of their own, `
-            + `contacts moved up to ${cont.worst.toFixed(2)}px`;
+            + `${f0.nCont} contact element(s), ${animating} animated at some point in the window `
+            + '(counted across every frame, with descendants), contacts moved up to '
+            + cont.worst.toFixed(2) + 'px; furniture animated: '
+            + furnAnimated.length + ', furniture opacity spread: ' + furnFade.toFixed(3) + '';
           row.verdict = f0.nFurn === 0 || f0.nCont === 0 ? 'FAIL'
-            : furn.worst > a.tolerancePx ? 'FAIL'
-              : (animating === 0 && cont.worst <= 0.5) ? 'FAIL' : 'pass';
+            : furnAnimated.length > 0 ? 'FAIL'
+              : furnFade > 0.02 ? 'FAIL'
+                : furn.worst > a.tolerancePx ? 'FAIL'
+                  : (animating === 0 && cont.worst <= 0.5) ? 'FAIL' : 'pass';
           if (row.verdict === 'FAIL' && (f0.nFurn === 0 || f0.nCont === 0)) {
             row.detail = `only ${f0.nFurn} furniture and ${f0.nCont} contact element(s) matched — `
               + 'a split with both halves missing is not a split';
+          } else if (row.verdict === 'FAIL' && furnAnimated.length > 0) {
+            row.detail = `${furnAnimated.length} furniture element(s) carried an animation of their `
+              + `own (${furnAnimated.slice(0, 3).join(' | ')}) — the reference holds the plate untouched, `
+              + `and furniture that animates is furniture asking to be read as a measurement`;
+          } else if (row.verdict === 'FAIL' && furnFade > 0.02) {
+            row.detail = `furniture opacity moved across the window (${furnFade.toFixed(2)}) — a hatched `
+              + 'absence that breathes reads as a quantity, and nobody measured this one at all';
           } else if (row.verdict === 'FAIL' && furn.worst > a.tolerancePx) {
             row.detail = `${furn.name} is furniture that drifted ${furn.worst.toFixed(2)}px; the `
               + `reference holds its ${a.furniture.join(', ')} fixed`;
@@ -773,58 +818,6 @@ for (const gap of GAPS) {
         if (row.verdict === 'FAIL' && still.count > 0) {
           row.detail = 'it is still moving after it should have arrived — '
             + `the reference ${a.kind === 'no_residual_motion' ? gap.referenceFigure : ''}`;
-        }
-      } else if (a.kind === 'furniture_still') {
-        // The recorder tracks the selector's elements, then the furniture, then the contacts, in
-        // that order, every frame — so a slice of `f.el` addresses one of those groups across the
-        // whole entrance. Comparing by index requires the tree to have stayed the same size, and
-        // frames where it has not are dropped rather than compared against the wrong element.
-        const spans = frames.filter((f) => f.el.length === (f.nSel + f.nFurn + f.nCont));
-        const group = (frames2, from, to) => {
-          let worst = 0, name = '';
-          for (let i = from; i < to; i++) {
-            const base = frames2[0].el[i];
-            for (const f of frames2) {
-              const e = f.el[i];
-              if (!e) continue;
-              // The centre, and only position. A centred label that restates itself (`fresh`
-              // becoming `12s`) moves its left edge by half the width change while sitting exactly
-              // where it was put; measuring the top-left would call a relayout a slide. Width
-              // change is reported beside the number, never failed on its own.
-              const centre = (r) => [r[0] + r[2] / 2, r[1] + r[3] / 2];
-              const bc = centre(base.r);
-              const ec = centre(e.r);
-              const d = Math.max(Math.abs(bc[0] - ec[0]), Math.abs(bc[1] - ec[1]));
-              if (d > worst) { worst = d; name = e.k; }
-            }
-          }
-          return { worst, name };
-        };
-        if (spans.length < 3) {
-          row.verdict = 'FAIL';
-          row.detail = `only ${spans.length} comparable frame(s) — the specimen's tree kept changing size`;
-        } else {
-          const f0 = spans[0];
-          const furn = group(spans, f0.nSel, f0.nSel + f0.nFurn);
-          const cont = group(spans, f0.nSel + f0.nFurn, f0.nSel + f0.nFurn + f0.nCont);
-          const animating = spans[spans.length - 1].el
-            .slice(f0.nSel + f0.nFurn).reduce((n, e) => n + (e.n > 0 ? 1 : 0), 0);
-          const widths = spans.length > 2 ? spans.map((f) => Math.max(0, ...f.el.slice(f0.nSel, f0.nSel + f0.nFurn).map((e, i) => Math.abs(e.r[2] - spans[0].el[f0.nSel + i]?.r[2] ?? 0)))) : [0];
-          row.measured = `furniture moved at most ${furn.worst.toFixed(2)}px${furn.name ? ` (${furn.name})` : ''}, widest text change ${Math.max(...widths).toFixed(1)}px; `
-            + `${f0.nCont} contact element(s), ${animating} with an animation of their own, `
-            + `contacts moved up to ${cont.worst.toFixed(2)}px`;
-          row.verdict = f0.nFurn === 0 || f0.nCont === 0 ? 'FAIL'
-            : furn.worst > a.tolerancePx ? 'FAIL'
-              : (animating === 0 && cont.worst <= 0.5) ? 'FAIL' : 'pass';
-          if (row.verdict === 'FAIL' && (f0.nFurn === 0 || f0.nCont === 0)) {
-            row.detail = `only ${f0.nFurn} furniture and ${f0.nCont} contact element(s) matched — `
-              + 'a split with both halves missing is not a split';
-          } else if (row.verdict === 'FAIL' && furn.worst > a.tolerancePx) {
-            row.detail = `${furn.name} is furniture that drifted ${furn.worst.toFixed(2)}px; the `
-              + `reference holds its ${a.furniture.join(', ')} fixed`;
-          } else if (row.verdict === 'FAIL') {
-            row.detail = 'nothing moved either — a survey grid with no contact on it is not a survey';
-          }
         }
       } else if (a.kind === 'dead_cells') {
         const dc = deadCells(frames, 1);

@@ -330,6 +330,27 @@
       },
       "observed": "22 observations across 67s of the board: identical left edge and width on every row, no re-sorting, no row grew with its number, two rows changed at all. stockFlow draws each level and rate in its own row with the value as text and refuses extents on rates; asserted at 1280 and 390.",
       "watch": "a row whose width or left edge tracks its value; a level/extent mark in a stock list; rows re-sorting"
+    },
+    {
+      "id": "coverage-dark-ground-holds",
+      "reference": "hurricane-irma-radar-loop.gif",
+      "component": "coverage",
+      "gap": "the unmeasured ground shifting under the survey that never covered it. On the reference the plate's furniture is untouched by the animation while the return moves; a gap that shifts reads as a quantity, and a gap drawn from an absence must sit exactly where the survey says it sits.",
+      "referenceFigure": "the plate and its legend are untouched by the animation",
+      "assertKind": "furniture_still",
+      "assert": {
+        "kind": "furniture_still",
+        "furniture": [
+          ".cd-fd-dark"
+        ],
+        "contacts": [
+          ".cd-fd-contour",
+          ".cd-fd-post"
+        ],
+        "tolerancePx": 0.75
+      },
+      "observed": "asserted against the hatched ground rather than a legend: `coverage` draws no graticule and no colour key, so the reading's demand lands on the one element that exists to hold an absence — the dashed, hatched `UNMEASURED / terrain unrendered` block, which is `still`-stamped and must not translate while the contours arrive. Correcting the reading matters here: demanding an untouched legend from a component with no legend would be the `mfd` mistake in a new costume.",
+      "watch": "the dark ground translating or scaling while contours sweep; a mark appearing on the hatch; contours drawing over the hatched area instead of stopping at it"
     }
   ]
 }

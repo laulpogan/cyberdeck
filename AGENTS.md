@@ -892,3 +892,13 @@ everything a search returned for a subject. Opening two of those seeds (25 and 1
 suit turntable, a spaceship, an Undertale fan animation, and eleven film-UI stills of a device with no time in them.
 Four tiers now, with `contentVerified` as the gate, and a test that goes red if the honest label is ever softened back.
 A count that reads deeper than the vault is a count that will be quoted.
+
+## Liveness is counted across every frame, and on the subtree
+
+Two one-line bugs made `furniture_still` unable to see motion: it read the animation count from the **last frame of the
+window** (a ~500 ms entrance is over by then, so a moving specimen reported "0 with an animation of their own" and the
+row blamed the component), and it asked `getAnimations({ subtree: false })` on the `<g>` the selector matched while the
+runtime's animation lives on the child `<polyline>`. Count liveness per element across every frame, with `subtree: true`.
+Fixing that exposed the mirror defect: stillness measured as position only passed a hatched *absence* that had been
+given a mark — a pulsing gap never leaves its box and still reads as a quantity. Furniture that carries any animation or
+opacity change anywhere in the window is not furniture.
