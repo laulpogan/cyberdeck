@@ -1863,3 +1863,37 @@ regenerating is the habit now, same family as checking that your sabotage reache
 Gauntlet unchanged at **24 rows, 22 pass, 2 held, 0 FAIL**; `npm test` **316**; the corrected `chipBudget` sheet is
 5792px wide and shows the install marker crossing all the way across, which is the claim the row has been making about
 constant rate since it was written.
+
+## Every reference that names a component now owes a named artifact, and it turned out the work was already done
+
+A closure that lives in prose is the drift hazard this whole branch keeps hitting: the session ends, the next one inherits
+a summary, and nobody can tell "we asserted that" from "we meant to". So `vault/DEMANDS.json` now lists all **28 targets**
+named in any `SPECS-FOR.json` for-list, each with a one-sentence claim (what the picture demands of the drawing) and the
+artifacts that close it — `test/demand-coverage.test.mjs` refuses a target with no closure, an orphan closure, a closure
+naming a row that is held rather than asserted, a test title that is not in the file it cites, a claim short enough to be
+a label, and an asserted row that no closure owns.
+
+Making the closures precise caught two false friends. A call-site grep matched `coverage.test.mjs` to the `coverage`
+component — that file asserts the **vault's coverage tiers**, not the component; the real closure is
+`field.test.mjs: "unmeasured terrain is a hatched void with the word on it"`. And `trace`'s nearest matches were the
+app-side tests about marks surviving the evidence switch, when the claim is about a trace ending — `agents.test.mjs: "the
+trace is deterministic, so two captures compare"`. Both would have been green and both would have been lies about which
+test proves what.
+
+The finding worth keeping: **nothing had to be declared unassertable.** The five targets I expected to write off —
+`city`, `mfd`, `muthur`, `oscillation`, `strands` — have no gauntlet row and no test title naming them, but each is
+asserted by a block whose title describes the behaviour instead of the component: *"an empty host is a dark plot, never a
+missing row"*, *"a dark pane renders its own face and never the other pane"*, *"a refusal is an answer and gets the same
+rule as one"*, *"the detector raises a candidate and never a diagnosis"*, *"an undelivered route stays drawn, dashed, and
+still"*. A grep for the component's name finds nothing and a grep for the claim finds the assertion; the ledger stores the
+second kind, which is why it was cheap to write and needs no new code — **`git status` shows two new files and no library
+edit.** The work was already there; what was missing was the bookkeeping that lets the next agent check it.
+
+The fifth check closes the loop the `dispatch` de-quoting opened: an asserted row whose component *is* quoted must be
+named by that component's closure, and one whose component nobody quotes must have filed itself as `origin`. So a row can
+no longer be born from a picture and then be orphaned when the attribution is corrected — it has to say which it is.
+Proven five ways: drop a target, cite a title that doesn't exist, lean on the held `tape` row, delete a row from its own
+closure, shorten a claim to `the globe moves`. Each produced its own named red.
+
+`npm test` **321 · 0 fail** (five new checks); the ledger holds 28 targets and 65 artifact references; gauntlet unchanged
+at 24 rows, 22 pass, 2 held.
