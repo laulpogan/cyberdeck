@@ -686,3 +686,15 @@ file did not print, N/A included.
 
 And a noun search returns the thing, not the screen: Commons `radar` gave a camera pointed at a
 rotating antenna on a hill. Search for the **display** (`oscilloscope`, `HUD`, `monitor screen`).
+
+## A playhead needs a shared axis, and `river` does not have one
+
+The audio-editor reference made the missing idiom look cheap: draw a hairline at `now` and let it
+cross the field. It is not portable, and the reason is in the geometry, not the will. `river` maps
+each lane through `px(t) = gutter + ((t - t0) / span) * (right - gutter)` where `t0` and `span` come
+from **that lane's own** first and last event. Every lane is normalised to its own life, so "now"
+has one x per lane and none of them agree — a now-line clamped to each lane's right edge would
+print "now is where this lane stopped", the falsest sentence a time chart can make. `tape` is not an
+escape hatch either: it is the *decision* tape, a queue of waits, with no axis at all. The mark kind
+still does not exist; the row stays `notHeld` with this reason in it. Building the idiom means a
+component whose x is absolute time — which is a new drawing, not a new dialect.

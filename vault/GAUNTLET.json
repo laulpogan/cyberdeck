@@ -218,7 +218,7 @@
       "referenceFigure": "measured: 48 frames over 8.0s, motion amplitude (max difference from frame zero): 5.4",
       "heldAs": "model",
       "gap": "The audio editor's whole idiom is a marker crossing a strip that is ALREADY ink: the waveform, the ruler, the track labels and the selection block hold still and one hairline travels. `tape` has no such marker — it stamps `count`, `elapsed`, `still` and one refusal, and nothing translates along its axis. The five mark kinds that exist cannot express it: `trace` reveals a shape, `count` reveals by index, `cycle` addresses a clock, `level` is an extent from an anchor. Building it means a kind that moves a marker along an axis, which is a library change, not a showcase change.",
-      "notHeld": "no mark kind translates a marker along an axis; the reference names a capability the library does not have, and inventing an assert for it would be a green light on a component that does not move"
+      "notHeld": "Two facts, read out of the source rather than the name. `tape` is the DECISION tape -- a queue of waits with an `elapsed` clock on each row and no axis to cross, so there is no position for a marker to have. And the component that DOES draw time, `river`, scales every lane to its own first-and-last event (px(t) normalises by that lane's span), so there is no shared present anywhere in the drawing to put a line on; a now-line clamped to each lane's right edge would say 'now is where this lane stopped', which is the falsest sentence a time chart can make. The idiom needs a shared absolute axis, which the library does not draw."
     }
   ]
 }

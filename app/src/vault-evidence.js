@@ -44,6 +44,23 @@ export const PERMITTED_IDIOMS = [
     source: 'https://blob.gifcities.org/gifcities/36SZVJ74JXC6QPNLGBGDNMW26HNU7TFW.gif',
   },
   {
+    // The fourth row is the one the instrument could not see, and it is kept because the
+    // blindness is the lesson: an audio editor's playhead is a dark hairline on a light
+    // window, so the bright-ink tracker prints `no bright marker crosses the frame` while the
+    // eye watched it cross the whole strip. Quote what the instrument printed; do not quote it
+    // as if it had measured something.
+    idiom: 'A marker crossing a strip that is already ink',
+    measured: '48 frames over 8.0s · motion amplitude (max difference from frame zero): 5.4 · '
+      + 'no bright marker crosses the frame',
+    verdict: 'The waveform, the ruler and the labels are drawn before anything moves, and the '
+      + 'only motion is a hairline crossing them at a clock\'s constant rate. A series that '
+      + 'grows itself into being is animating the data instead of reading it.',
+    kind: 'decay',
+    file: 'scope-envelope-violin.gif',
+    source: 'https://upload.wikimedia.org/wikipedia/commons/7/7c/'
+      + 'Envelope_comparison_between_violin_pizz_and_piano.webm',
+  },
+  {
     idiom: 'A route drawn by the thing that arrived along it',
     measured: '0.77 of the frame crossed · 1.0 — the far end — by half the duration · '
       + 'the route it drew stays on screen',
