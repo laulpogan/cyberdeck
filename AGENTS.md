@@ -594,3 +594,32 @@ needed `TERMINATE` in the seam list before the ceremony shape ever appeared on a
   producer with four boundaries was described as having three. Interpolated copy is derived
   data: pluralise from the same number, and take the total from the argument, never from a
   constant in the component.
+
+## The gauntlet, and what it found lying
+
+`node app/verify/gauntlet.mjs` (npm: `verify:gauntlet`, then `verify:gauntlet-sheet` for the
+pictures) walks `vault/GAUNTLET.json`: each row is one component, the verified vault file it was
+built against, the figure `vault/spec.py` read off that file, and a measurement of the app's own
+specimen. It writes `OUT/GAUNTLET.md`, `OUT/summary.json`, and one sheet per gap with the
+reference's frames on the row above the specimen's. Rows with no `assert` are printed `held`, never
+`pass`. `test/gauntlet.test.mjs` holds the rows to the vault's own records — a quoted figure has to
+be a string `SPECS.md` actually contains.
+
+Two defects it produced on its first run, both invisible in any screenshot:
+
+- **A measured period that depended on the refresh rate.** `globe.js` advanced the mesh by
+  `2π / (period × 60)` **per animation frame**, which is a 60 Hz assumption wearing a measurement.
+  Timed against its own `data-period`, a 4 s globe turned in **1.1 s** on a headless compositor
+  with no vsync lock. The angle is now derived from elapsed time; the same instrument reads
+  **4.00 s, no spread between turns**. Any loop you write must take its rate from `performance.now()`.
+- **An easing word that did not ease.** The tilt asked the engine for `ease-out` and measured
+  **0.48** of its travel at half the animation's own duration — a straight line. `vendor/motion.min.js`
+  honours a named curve weakly; the reference is at 0.93. The travel now lives in a middle keyframe
+  (`(0 - deg * 0.07)`), and measures **0.92**. A named curve is a request; a keyframe is a measurement.
+
+Two instrument lessons paid for in the same run, both recorded in the file's comments: "half the
+duration" must mean the **animation's** half (`effect.getComputedTiming().progress`), not half of the
+sampling window; and the endpoints of a travel must be read from the whole capture, because the
+engine fills its keyframes backwards and the frames before and after an animation carry its start
+and rest. Fitting a sinusoid over less than ~1.5 turns is degenerate — the turn is now **timed at
+phase crossings**, which also reports the constancy the reference is quoted for.

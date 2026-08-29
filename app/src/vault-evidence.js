@@ -57,11 +57,28 @@ export const PERMITTED_IDIOMS = [
     measured: '0.93 of the way over by half the duration, then it holds',
     verdict: 'Front-loaded, because a load arrives and then sits there.',
     kind: 'level',
-    library: '`axis: "tilt"` — the third dialect of an extent. The runtime swings the arm in '
-      + 'from level on the same ease-out the reference measured, starting from the counter-'
-      + 'rotation so the angle the server drew stays the angle the page rests at.',
+    library: '`axis: "tilt"` — the third dialect of an extent. The travel sits in a middle '
+      + 'keyframe rather than in an easing word: asking the engine for `ease-out` measured 0.48 '
+      + 'of the way over at half the animation, and putting 0.93 of the travel in the first half '
+      + 'of the swing measures 0.91-0.92 run to run, against the 0.93 those frames were quoted '
+      + 'with. It starts from '
+      + 'the counter-rotation, so the angle the server drew stays the angle the page rests at.',
     file: 'motion-tracker--blob.gifcities.org_gifcities_25G2DJC3DOO6R72EAGURMGNK5YW7FRZC.gif',
     source: 'https://blob.gifcities.org/gifcities/25G2DJC3DOO6R72EAGURMGNK5YW7FRZC.gif',
+  },
+  {
+    idiom: 'A mesh turning at the interval it declares',
+    measured: '0.367 of the frame crossed · 0.43 of the way along at half the duration · '
+      + '21 frames over 4.2s',
+    verdict: 'The rate is the reading. A globe that turns faster on a faster screen is not '
+      + 'measuring anything; it is being refreshed.',
+    kind: 'traffic',
+    library: 'The turn is derived from elapsed time against `data-period`, not from an increment '
+      + 'per animation frame. Counting frames was a 60 Hz assumption wearing a measurement: the '
+      + 'same mark declared 4s and turned in 1.1s on a compositor with no refresh lock. It '
+      + 'measures 4.00s per turn now, with no spread between turns.',
+    file: 'hologlobe--blob.gifcities.org_gifcities_2BDK66BWLK42ADEG52TMSEUEDO6IZDTX.gif',
+    source: 'https://blob.gifcities.org/gifcities/2BDK66BWLK42ADEG52TMSEUEDO6IZDTX.gif',
   },
 ];
 

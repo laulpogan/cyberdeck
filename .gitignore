@@ -7,3 +7,8 @@ vault/raw/
 /node_modules
 /vault/.lock
 !vault/acquire.log
+
+# Gauntlet evidence: pictures and per-run machine output stay out of git; the report and the
+# sheet index are generated, and they are what a reader looks at first.
+app/verify/GAUNTLET/*.png
+app/verify/GAUNTLET/summary.json

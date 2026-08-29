@@ -76,6 +76,19 @@ test('the runtime owns the tilt axis, and reads the angle out of the mark', () =
     'a pivot given in drawing coordinates needs view-box; fill-box spins the arm about itself');
   // It must animate DOWN to the authored angle, not up from it, or the settled page is not the
   // static export. `'- deg'` as the FROM value and '0deg' as the TO value is the whole trick.
-  assert.match(src, /rotate: \[\(0 - deg\)[\s\S]{0,40}'0deg'\]/,
+  assert.match(src, /rotate: \[\(0 - deg\)[\s\S]{0,120}'0deg'\]/,
     'a tilt must start from the counter-rotation and end at zero, which is the drawing');
+});
+
+test('the front-load is the measured figure, not an easing word', () => {
+  // The first draft asked the engine for `ease-out` and the screen returned a straight line:
+  // the gauntlet measured 0.48 of the travel done at half the animation's duration, against a
+  // reference at 0.93. A named curve is a request; a middle keyframe is a measurement. This
+  // asserts the 0.07 — the 7% of the travel left for the settle — so the number cannot quietly
+  // drift into a taste, and the reason the number is 7 rather than 50.
+  const src = readFileSync(fileURLToPath(new URL('../src/runtime.js', import.meta.url)), 'utf8');
+  const m = /rotate: \[\(0 - deg\) \+ 'deg', \(0 - deg \* ([\d.]+)\)[\s\S]{0,60}'0deg'\]/.exec(src);
+  assert.ok(m, 'the tilt no longer puts its travel in a middle keyframe');
+  const rest = Number(m[1]);
+  assert.ok(rest > 0 && rest < 0.25, `the settle carries ${(rest * 100).toFixed(0)}% of the travel`);
 });

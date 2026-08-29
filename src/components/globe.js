@@ -97,8 +97,15 @@ export function paintGlobe(figure) {
 
   const turning = figure.getAttribute('data-motion') === 'traffic';
   const period = Number(figure.getAttribute('data-period')) || 0;
-  // One full turn per measured interval. The rate IS the reading.
-  const rate = turning && period > 0 ? (Math.PI * 2) / (period * 60) : 0;
+  // One full turn per measured interval, and the interval is SECONDS. This used to advance a
+  // fixed increment per animation frame — `2π / (period * 60)` — which quietly assumed a 60 Hz
+  // display, so a 4 s turn took 1.1 s on a headless compositor whose frame callback is not
+  // locked to a refresh. `data-period` is a claim about the producer's clock; a turn whose
+  // length depends on the monitor is not a measurement, and the hologlobe reference is quoted
+  // precisely because its rate is the reading (4.2 s, constant). The angle is now derived from
+  // elapsed time, so the period is the period whatever the frame rate does.
+  const periodMs = turning && period > 0 ? period * 1000 : 0;
+  const t0 = performance.now();
   const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
   // The library's off switch has to reach in here too. A canvas loop is
   // outside the runtime's reach -- it owns Animation objects, and this
@@ -147,13 +154,16 @@ export function paintGlobe(figure) {
       pin.style.opacity = z < 0 ? '0.18' : '1';
     });
 
-    if (rate && !reduced && !stopped()) { rot += rate; requestAnimationFrame(draw); }
+    if (periodMs && !reduced && !stopped()) {
+      rot = (((performance.now() - t0) % periodMs) / periodMs) * Math.PI * 2;
+      requestAnimationFrame(draw);
+    }
   };
   draw();
 
   // And it has to come back when motion does, without a second control.
   const observer = new MutationObserver(() => {
-    if (rate && !reduced && !stopped()) draw();
+    if (periodMs && !reduced && !stopped()) draw();
   });
   observer.observe(document.documentElement,
     { attributes: true, attributeFilter: ['data-motion-off'] });

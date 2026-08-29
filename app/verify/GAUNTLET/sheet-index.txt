@@ -1,0 +1,11 @@
+ pass  admission-front-loaded           0.91 of the travel done at half the animation's duration (travel 19.48, animation 300ms)
+ pass  admission-holds                  0 animation(s) on 1 element(s) 1500ms after the entrance
+ pass  chipBudget-constant-rate         0.65 of the travel done at half the animation's duration (travel 145.29, animation 300ms)
+ pass  chipBudget-furniture-still       7 of 12 cells never moved (5 carried something)
+ pass  radar-furniture-still            furniture moved at most 0.50px (text|inner ring: fresh), widest text change 1.0px; 6 contact element(s), 3 with an animation of their own, contacts moved up to 236.28px
+ pass  globe-constant-rate              turns of 4.00s, 4.00s against a declared 4s period (median 4000ms, drift 0.0%, widest spread 0ms)
+ pass  glassCell-trace-holds            0 animation(s) on 3 element(s) 1500ms after the entrance
+ pass  esperDive-no-furniture-trace     0 mark(s) on furniture across every bright model
+ held  globe-hue-caution                held
+ pass  rules-forbidden-idioms           all 2 figure(s) on screen
+ pass  rules-chrome-still               0 animation(s) outside the specimens, sampled 90 times

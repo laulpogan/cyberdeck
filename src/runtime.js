@@ -391,7 +391,14 @@
       el.style.transformOrigin = pivot
         ? pivot.split(/\s+/).map(function (n) { return n + 'px'; }).join(' ')
         : 'center';
-      play(el, { rotate: [(0 - deg) + 'deg', '0deg'] },
+      // The middle keyframe is the measured reference, not a tuning knob. That verified balance
+      // is 0.93 of the way over by half its duration and then holds, so 93% of the travel goes
+      // in the first half of the swing and 7% is the settle. The `easing` option is asked for as
+      // well and kept honest by the gauntlet: `app/verify/gauntlet.mjs` measures how far along
+      // the travel is at half the animation's own duration and fails this beam at 0.7, which is
+      // where it sat when the easing was only asked for — it read 0.48, i.e. a linear swing,
+      // because the engine applies the named curve weakly and a named curve is a request.
+      play(el, { rotate: [(0 - deg) + 'deg', (0 - deg * 0.07) + 'deg', '0deg'] },
         { duration: T.enter / 1000, easing: 'ease-out', delay: delay });
       return;
     }
