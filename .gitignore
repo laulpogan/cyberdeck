@@ -5,3 +5,5 @@ node_modules/
 app/dist/
 vault/raw/
 /node_modules
+/vault/.lock
+!vault/acquire.log

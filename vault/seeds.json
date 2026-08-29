@@ -1,0 +1,146 @@
+{
+  "comment": "What each reference seed claims. The words are the relevance gate: a candidate survives when its URL, the caption the page gives the image, or the page title names one. acquire.mjs reads this; mark.py reads it. Reviewed data, not code.",
+  "seeds": {
+    "motion-tracker": {
+      "work": "Aliens; Aliens: Colonial Marines",
+      "subject": "M513-3 motion tracker sweep and contact blip",
+      "moves": "a radial sweep turns at a fixed period; the blip appears when the sweep passes it, and fades on a measured decay, not on a timer someone liked",
+      "words": [
+        "motion-tracker",
+        "motion_tracker",
+        "motiontracker",
+        "aliens",
+        "colonial-marines",
+        "weylut",
+        "tracker"
+      ]
+    },
+    "magi": {
+      "work": "Neon Genesis Evangelion",
+      "subject": "MAGI system conference: three cores deliberating",
+      "moves": "three triangular nodes light in turn while they vote; the verdict arrives after the vote, never on load",
+      "words": [
+        "magi",
+        "evangelion",
+        "eva-",
+        "matsuko",
+        "fuyutsuki",
+        "balthasar",
+        "melchior",
+        "casper"
+      ]
+    },
+    "insertion-sync": {
+      "work": "Neon Genesis Evangelion",
+      "subject": "insertion sync / entry plug depth countdown",
+      "moves": "a percentage climbs under measurement while warning hatching flashes; a hold is a hold, not a pause animation",
+      "words": [
+        "insert",
+        "sync",
+        "entry-plug",
+        "plug",
+        "evangelion",
+        "eva"
+      ]
+    },
+    "rig": {
+      "work": "Dead Space",
+      "subject": "RIG spine: suit integrity, stasis, kinesis",
+      "moves": "segments drain downward as integrity is spent; stasis slows the world it is drawn over, so the reference shows the world and the bar slowing together",
+      "words": [
+        "dead-space",
+        "dead_space",
+        "deadspace",
+        "rig",
+        "suit-integrity",
+        "stasis",
+        "kinesis",
+        "node"
+      ]
+    },
+    "spinner-console": {
+      "work": "Blade Runner; Blade Runner 2049",
+      "subject": "spinner console, analyzer and baseline readouts",
+      "moves": "a baseline breathes with the subject; analysis lines resolve under a scanning pass rather than appearing complete",
+      "words": [
+        "blade-runner",
+        "blade_runner",
+        "bladerunner",
+        "spinner",
+        "wallace",
+        "lsd-analyst",
+        "baseline"
+      ]
+    },
+    "lumon": {
+      "work": "Severance",
+      "subject": "Lumon macrodata refinement terminal and OS",
+      "moves": "nothing moves until the operator moves; numbers settle as a choice is taken, and the idle state is genuinely idle",
+      "words": [
+        "severance",
+        "lumon",
+        "refinement",
+        "macrodata",
+        "perpetuity",
+        "obelisk"
+      ]
+    },
+    "tron-disc": {
+      "work": "Tron; Tron: Legacy",
+      "subject": "identity disc, grid overlay, light-cycle readouts",
+      "moves": "arc segments trace themselves as a thing travels; a stalled thing stays drawn instead of easing back to a resting place",
+      "words": [
+        "tron",
+        "identity-disc",
+        "light-cycle",
+        "grid",
+        "recognizer"
+      ]
+    },
+    "hologlobe": {
+      "work": "Star Wars; GoldenEye; Contact",
+      "subject": "holographic table: rotating globe with plotted routes",
+      "moves": "rotation is continuous and belongs to the model, not the frame; plotted arcs are drawn once and hold, they do not pulse",
+      "words": [
+        "hologram",
+        "holo-table",
+        "holotable",
+        "rallcum",
+        "goldeneye",
+        "satellite",
+        "globe",
+        "star-wars"
+      ]
+    },
+    "ship-hud": {
+      "work": "Star Citizen; Elite Dangerous; F.E.A.R.",
+      "subject": "cockpit HUD: compass tape, reticle states, target lock",
+      "moves": "the tape rolls with the ship and stops dead when it does; lock is a discrete state change, not a breathing glow",
+      "words": [
+        "star-citizen",
+        "elite-dangerous",
+        "cockpit",
+        "hud",
+        "reticle",
+        "compass",
+        "lock",
+        "targeting"
+      ]
+    },
+    "fake-os-loaders": {
+      "work": "progress bar 95; System Shock; Severance",
+      "subject": "fictional operating systems and the loaders, progress bars and boot screens they invent",
+      "moves": "each fake OS has its own progress idiom, and the animation is the whole content of the screen",
+      "words": [
+        "progressbar",
+        "progress-bar",
+        "progress",
+        "loader",
+        "loading",
+        "boot",
+        "fake-os",
+        "system-shock"
+      ]
+    }
+  }
+}
