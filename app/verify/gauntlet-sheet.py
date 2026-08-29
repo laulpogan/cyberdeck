@@ -81,15 +81,27 @@ def row(canvas, draw, y, frames, label, sub):
 def main():
     summary = json.load(open(os.path.join(OUT, "summary.json")))
     os.makedirs(OUT, exist_ok=True)
+    # Two silent degradations used to live here: a row with no captured frames was printed to
+    # stdout and dropped, and a reference that could not be found simply produced no reference
+    # band — so a sheet could read as a completed side-by-side while showing only one side. Both
+    # now go into the index, because the artifact has to state its own holes: the run's stdout is
+    # something nobody re-reads, and `tail -1` hides a skip completely.
+    no_frames = []
+    no_ref = []
     for gap in summary["rows"]:
         app_files = [c["file"] for c in gap.get("clips") or []]
         app_files = [f for f in app_files if os.path.exists(f)]
         if not app_files:
+            no_frames.append(gap["id"])
             print(f"skip {gap['id']}: no specimen frames captured")
             continue
         app = [Image.open(f).convert("RGB") for f in app_files]
         ref_path = os.path.join(RAW, gap["reference"])
-        refs = ref_strip(ref_path) if os.path.exists(ref_path) else None
+        if os.path.exists(ref_path):
+            refs = ref_strip(ref_path)
+        else:
+            refs = None
+            no_ref.append((gap["id"], gap["reference"]))
 
         width = max(1180, sum(tile(a, H).width + 4 for a in app) + 2 * PAD)
         height = 2 * (LABEL_H + H + PAD) + 74
@@ -114,7 +126,22 @@ def main():
     with open(index, "w") as f:
         for gap in summary["rows"]:
             f.write(f"{gap['verdict']:>5}  {gap['id']:<32} {gap.get('measured') or gap.get('detail') or 'held'}\n")
+        # The summary carries a verdict, not the `assert` block: a held row is one that was never
+        # asserted, so "asserted" means "not held". Reading a key that is not there is how this line
+        # first printed "0 asserted row(s); -1 sheet(s) written" — an arithmetic sign that was the only
+        # honest thing on the page.
+        asserted = [g for g in summary["rows"] if g["verdict"] != "held"]
+        f.write(f"\n# {len(asserted)} asserted row(s); {len(asserted) - len(no_frames)} sheet(s) written.\n")
+        for gap_id in no_frames:
+            f.write(f"# no filmstrip for {gap_id}: its assert kind samples markup across every "
+                    "bright model, not motion — the component's frames live in the task-1 filmstrips.\n")
+        for gap_id, ref in no_ref:
+            f.write(f"# {gap_id} was sheeted WITHOUT its reference ({ref} not found on disk): the "
+                    "bottom row is an app-only strip and is not a comparison.\n")
     print(index)
+    if no_frames or no_ref:
+        print(f"# {len(no_frames)} row(s) without a filmstrip, {len(no_ref)} sheet(s) missing a reference "
+              "— named in the index")
 
 
 if __name__ == "__main__":

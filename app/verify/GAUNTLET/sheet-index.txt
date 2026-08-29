@@ -22,3 +22,6 @@
  pass  atfield-unread-scope-keeps-its-row all 2 figure(s) on screen
  pass  solari-rows-occupy-fixed-slots   5 rows, left edge spread 0px, width spread 0px, right edge spread 0px (tolerance 1.5px); measured-extent marks: 0; value=width: 12=831.6 7=831.6 3=831.6 41=831.6 $3.40=831.6
  pass  coverage-dark-ground-holds       furniture moved at most 0.00px, widest text change 0.0px; 6 contact element(s), 6 animated at some point in the window (counted across every frame, with descendants), contacts moved up to 0.50px; furniture animated: 0, furniture opacity spread: 0.000
+
+# 22 asserted row(s); 21 sheet(s) written.
+# no filmstrip for esperDive-no-furniture-trace: its assert kind samples markup across every bright model, not motion — the component's frames live in the task-1 filmstrips.
