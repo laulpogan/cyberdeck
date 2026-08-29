@@ -220,3 +220,12 @@ void, 1.85 against paper. The rendered ladder is unchanged in dark
 (byte-identity intact, opacity attributes untouched as the no-CSS
 fallback); in light the trail finally reads as a sweep instead of a
 stain. 176/176.
+
+### light-theme QA and the crush recheck
+The cream theme's apparent weakness (muthur's pale terminal) was the
+montage again -- the raw frame shows crisp amber questions, green
+answers, full hierarchy. Third documented case: 406px sheets cannot
+carry glyph verdicts. city, lanes, killmail, magi all read designed on
+cream. crush, re-filmed under the shared cascade rule, now admits its
+216 cells in a visible wave with the impacts lighting as their cells
+arrive -- the wall counts itself off inside about 600ms. PASS.
