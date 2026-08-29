@@ -1897,3 +1897,23 @@ closure, shorten a claim to `the globe moves`. Each produced its own named red.
 
 `npm test` **321 · 0 fail** (five new checks); the ledger holds 28 targets and 65 artifact references; gauntlet unchanged
 at 24 rows, 22 pass, 2 held.
+
+## Pushing a red, and the two mechanisms that let me do it
+
+The commit before this one carried `fail 1`. Two independent mechanisms conspired. The first is a shell
+fact: `npm test 2>&1 | grep -E "^ℹ (pass|fail)" && git commit && git push` gates on **grep's** status, which
+is 0 as long as a summary line was printed — including `ℹ fail 1`. I read the printed counts, then chained
+the commit anyway, which is what a summary line is for and why it must never be the gate.
+
+The second was worse, because it was my own new test. `test/coverage.test.mjs` doctored `vault/SPECS-FOR.json`
+in place to prove `--check` can go red. `node --test` runs test *files* in parallel processes, so
+`test/gauntlet.test.mjs` read the doctored vault and failed on `referenceRelation` — a true statement about a
+vault that no longer existed, and nobody's defect but mine. Each file was green in isolation; the pair was
+never tested until they ran in the same suite, which is what a suite is for. The fix is not a lock or an
+ordering trick: the checker now takes `CYBERDECK_SPECS_FOR` and `CYBERDECK_COVERAGE_REPORT`, and the test
+doctored copy in a temp directory — and it asserts the **undoctored** copy passes first, so the harness is
+proven before the sabotage is.
+
+Both rules are in `AGENTS.md`. The suite has been run twice from a clean tree with the exit status checked
+directly: **323 pass, 0 fail, exit 0, twice**. The red commit is not rebased away — the fix is the next
+commit, so the branch carries the failure and the correction in that order, which is the honest history.

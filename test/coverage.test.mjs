@@ -6,7 +6,9 @@
 // whichever was nearest to hand. This test makes the widest one agree with the registry.
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { readFileSync, writeFileSync } from 'node:fs';
+import { mkdtempSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
+import { tmpdir } from 'node:os';
+import { join } from 'node:path';
 import { execFileSync } from 'node:child_process';
 import { fileURLToPath } from 'node:url';
 
@@ -81,44 +83,55 @@ test('a component with no reference owes a reason, not a bare name', () => {
 });
 
 test('--check can go red on provenance that moves no count', () => {
-  // The checker used to verify one thing: that the tiers sum to the registry. That is true while the
-  // report's provenance rots — a component held by two files loses one quotation, every count holds, and
-  // the line a reviewer reads still credits a record that no longer names it. So the data is doctored in
-  // exactly that count-neutral way: a component is removed from ONE of the two files that hold it.
-  const file = here('../vault/SPECS-FOR.json');
-  const original = readFileSync(file, 'utf8');
-  const record = JSON.parse(original);
+  // The checker used to verify one property: that the tiers sum to the registry. That stays true while the
+  // report's provenance rots — a component held by two verified files loses one quotation, every count
+  // holds, and the line a reviewer reads still credits a record that stopped naming it. So the doctoring
+  // is exactly that count-neutral edit: remove a component from ONE of the two files that hold it.
+  //
+  // It happens in a temp directory on purpose. The first version of this test rewrote
+  // `vault/SPECS-FOR.json` in place, and because `node --test` runs test files as parallel processes,
+  // `test/gauntlet.test.mjs` read the doctored vault mid-run and reported a red that was not its own.
+  // A test may not mutate data the rest of the suite reads; the env-var override below is what makes
+  // the doctoring safe rather than merely quick.
   const { tiers } = coverage();
   const multi = tiers.spec.find((r) => r.files.length > 1);
-  if (!multi) {
-    // No multi-holder component means the drift class cannot exist today; say so rather than
-    // silently passing a test that did nothing.
-    assert.ok(true, 'no component is held by two verified files, so count-neutral drift has no host yet');
-    return;
-  }
-  const holder = record[multi.files[0]];
-  assert.ok(holder, `${multi.files[0]} is credited in the tiers but is not a SPECS-FOR record`);
-  holder.for = holder.for.filter((k) => k !== multi.key);
+  assert.ok(multi, 'this drift class needs a component held by two verified files; none exists, so the '
+    + 'checker has nothing to catch yet — widen this test rather than trusting it');
+
+  const specsPath = here('../vault/SPECS-FOR.json');
+  const reportPath = here('../vault/COVERAGE.md');
+  const dir = mkdtempSync(join(tmpdir(), 'coverage-drift-'));
+  const fakeSpecs = join(dir, 'SPECS-FOR.json');
+  const fakeReport = join(dir, 'COVERAGE.md');
+  const record = JSON.parse(readFileSync(specsPath, 'utf8'));
+  assert.ok(record[multi.files[0]], `${multi.files[0]} is credited in the tiers but is not a SPECS-FOR record`);
+  const env = (specs) => ({ ...process.env, CYBERDECK_SPECS_FOR: specs, CYBERDECK_COVERAGE_REPORT: fakeReport });
+  const run = (specs) => execFileSync('node', [here('../vault/coverage.mjs'), '--check'],
+    { encoding: 'utf8', stdio: 'pipe', env: env(specs) });
+
   try {
-    writeFileSync(file, JSON.stringify(record, null, 2) + '\n');
+    writeFileSync(fakeReport, readFileSync(reportPath, 'utf8'));
+    writeFileSync(fakeSpecs, JSON.stringify(record, null, 2) + '\n');
+    assert.match(run(fakeSpecs), /coverage tiers add up/,
+      'the undoctored copy must pass, or the harness proves nothing');
+
+    record[multi.files[0]].for = record[multi.files[0]].for.filter((k) => k !== multi.key);
+    writeFileSync(fakeSpecs, JSON.stringify(record, null, 2) + '\n');
     let failed = false;
     let said = '';
     try {
-      execFileSync('node', [here('../vault/coverage.mjs'), '--check'],
-        { encoding: 'utf8', stdio: 'pipe' });
+      run(fakeSpecs);
     } catch (err) {
       failed = true;
       said = `${err.stdout || ''}${err.stderr || ''}`;
     }
-    assert.ok(failed, `--check accepted a vault that stopped naming ${multi.key} in ${multi.files[0]} while `
-      + `COVERAGE.md still credits that file with it. Counts held, provenance did not, and nothing noticed.`);
+    assert.ok(failed, `--check accepted a vault that stopped naming ${multi.key} in ${multi.files[0]} while the `
+      + `report still credits that file. Counts held; provenance did not; nothing noticed.`);
     assert.match(said, new RegExp(multi.key),
       `the checker went red without naming the component whose provenance moved: ${said.slice(0, 240)}`);
   } finally {
-    writeFileSync(file, original);
+    rmSync(dir, { recursive: true, force: true });
   }
-  const again = execFileSync('node', [here('../vault/coverage.mjs'), '--check'], { encoding: 'utf8' });
-  assert.match(again, /coverage tiers add up/, 'the restored tree must go green again, or the doctoring leaked');
 });
 
 test('the checker runs as a command, not only as an import', () => {

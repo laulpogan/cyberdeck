@@ -164,6 +164,19 @@ in the file rather than hidden in a helper:
   all if the specimen is still being written to.
 
 ## The traps, paid for
+## The gate, and how it was bypassed twice in one session
+
+- **`npm test | grep ...` is not a gate.** A pipeline reports the exit status of its *last* command, so
+  `npm test 2>&1 | grep -E "^ℹ (pass|fail)" && git commit && git push` commits and pushes whatever the
+  suite said, including `fail 1`. It happened: a red in `test/gauntlet.test.mjs` was pushed in `931b537`
+  while the operator was reading a summary line that had itself come from the failing run. Gate on the
+  real status — `npm test > /tmp/t.log 2>&1; echo "exit=$?"` — and read the counts after, not instead.
+- **A test may not mutate data the suite shares.** `node --test` runs test *files* in parallel processes,
+  so the coverage test that doctored `vault/SPECS-FOR.json` in place raced `test/gauntlet.test.mjs`, which
+  read the doctored vault and reported a defect of its own. Each test being green alone proved nothing
+  about the pair. Doctor a copy in a temp directory and point the tool at it (`CYBERDECK_SPECS_FOR`,
+  `CYBERDECK_COVERAGE_REPORT`), which is why `vault/coverage.mjs` takes those two env overrides at all.
+
 
 - **`<repo>/react/` shadows the npm `react` package.** With the Vite root at the
   repository root, a bare `import { useEffect } from 'react'` resolved to the

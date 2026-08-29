@@ -43,7 +43,13 @@ export const NO_REFERENCE_REASON = {
 };
 
 const HERE = fileURLToPath(new URL('.', import.meta.url));
-const SPECS_FOR = JSON.parse(readFileSync(join(HERE, 'SPECS-FOR.json'), 'utf8'));
+// Both inputs can be redirected by env var, for one reason: a test that doctors the vault's own
+// SPECS-FOR.json is not isolated — `node --test` runs test FILES in parallel processes, so a mutation
+// here is a race against every other file that reads the vault, and it already cost a false red.
+// Overriding the paths lets a test doctor a copy in a temp directory and leave the tree untouched.
+const SPECS_FOR_PATH = process.env.CYBERDECK_SPECS_FOR || join(HERE, 'SPECS-FOR.json');
+const COVERAGE_REPORT_PATH = process.env.CYBERDECK_COVERAGE_REPORT || join(HERE, 'COVERAGE.md');
+const SPECS_FOR = JSON.parse(readFileSync(SPECS_FOR_PATH, 'utf8'));
 const MAPPING = readFileSync(join(HERE, 'MAPPING.md'), 'utf8');
 const MANIFEST = JSON.parse(readFileSync(join(HERE, 'manifest.json'), 'utf8'));
 
@@ -121,9 +127,9 @@ if (process.argv.slice(2).includes('--check')) {
   // The tier sum is the weakest claim available: it stays true while the provenance lines rot, because a
   // component quoted by two files can lose one of those quotations and every count holds. The report
   // states which files hold each spec-held component, so compare the structure a human actually reads.
-  const reportPath = join(HERE, 'COVERAGE.md');
+  const reportPath = COVERAGE_REPORT_PATH;
   if (!existsSync(reportPath)) {
-    console.error('COVERAGE.md is missing — run `node vault/coverage.mjs` to write it, then --check again');
+    console.error(`${reportPath} is missing — run \`node vault/coverage.mjs\` to write it, then --check again`);
     process.exit(1);
   }
   const written = readFileSync(reportPath, 'utf8');
