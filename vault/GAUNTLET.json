@@ -272,6 +272,17 @@
       "observed": "not asserted; recorded with its reference so the gap keeps the picture it came from",
       "notHeld": "Two hard things, both named rather than papered over. This reference is handheld, so its measured travel belongs to the cameraperson and it can hold a component to a state vocabulary but not to a rate. And the assert needs a specimen whose wait is actually in flight, which the dispatch fixture currently resolves as settled — an assert written now would run against a state nobody renders and could never go red for the reason it exists.",
       "watch": "`dispatch` or `loopDeviation` growing a bar, a percentage, or an ETA without a supplied duration"
+    },
+    {
+      "id": "river-lanes-share-one-now",
+      "reference": "scope-envelope-violin.gif",
+      "component": "river",
+      "gap": "lanes are stacked with each lane mapping time by its own normalised position, so a single 'now' has no single x and a playhead or a cross-lane event cannot be drawn",
+      "referenceFigure": "48 frames over 8.0s, median delay 170.0ms, loop no return to frame zero",
+      "assertKind": "a geometry read across lanes: for one timestamp, the x of a per-lane marker must be identical in every lane",
+      "observed": "not asserted; the gap is the finding and the drawing does not exist yet",
+      "notHeld": "An assert cannot fail on a geometry the component never draws. river maps time with px(t) normalised per lane from each lane's own t0 and span, so 'now' resolves to a different x per lane and there is nothing for a cross-lane x assertion to measure; the reference shows one ruler across the whole plate and one playhead over it, which means the fix is a new drawing on an absolute axis rather than a dialect change, and the marker-crossing idiom was already registered as not held for exactly this reason.",
+      "watch": "any cross-lane marker, playhead, or 'now' cue added to river — it must land at the same x in every lane, which requires an absolute-time axis the component does not have"
     }
   ]
 }

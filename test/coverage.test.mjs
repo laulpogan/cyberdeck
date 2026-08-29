@@ -18,7 +18,7 @@ test('the coverage tiers partition the registry — nothing counted twice, nothi
   const { tiers, total } = coverage();
   assert.equal(tiers.spec.length + tiers.filesOnly.length + tiers.none.length, total,
     'a component is in two tiers or in none');
-  assert.ok(tiers.spec.length >= 18,
+  assert.ok(tiers.spec.length >= 21,
     `spec-held fell to ${tiers.spec.length}; coverage is a claim and it went down — add the measurement back or say so here`);
 });
 
