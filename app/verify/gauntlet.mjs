@@ -569,6 +569,62 @@ for (const gap of GAPS) {
                     : `only ${spin.frames} frames were sampled, too few to tell a seam from a dropped frame`;
           }
         }
+      } else if (a.kind === 'no_bar_where_no_terminus') {
+        // The reference is a phone barcode scan whose lookup says `Retrieving data, please wait…`
+        // and draws NOTHING measurable — no bar, no percentage, no remaining-time figure. A wait
+        // with no terminus drawn as an extent is a claim about how much longer, made from no
+        // measurement. The instrument looks for the three ways that claim gets made: a measured
+        // extent mark, a hatched refusal where the wait should be stated, and — in the label's own
+        // region, not anywhere on the plate — a figure that reads as remaining time.
+        const wait = await page.evaluate((sel) => {
+          const view = document.querySelector(sel);
+          if (!view) return { missing: true };
+          const label = [...view.querySelectorAll('text, span, div')]
+            .find((el) => el.children.length === 0 && /^\s*REMAINING\s*$/.test(el.textContent || ''));
+          const lab = label ? label.getBoundingClientRect() : null;
+          const figures = [];
+          const FIGURE = /(\d+\s*%|\bETA\b|\d+\s*(?:h|m|s|min|hours?|minutes?|seconds?)\b)/i;
+          for (const el of view.querySelectorAll('text, span, div')) {
+            if (el.children.length || !lab) continue;
+            const r = el.getBoundingClientRect();
+            const text = (el.textContent || '').trim();
+            if (!text || !FIGURE.test(text)) continue;
+            // "The label's own region": to the right of where REMAINING sits, on its row or the
+            // one under it. A duration elsewhere on the plate — the elapsed counter, which is
+            // measured — belongs to a different quantity and is not this violation.
+            if (r.left >= lab.left - 4 && r.top < lab.bottom + 34 && r.bottom > lab.top - 6) {
+              figures.push(`${text} @ ${Math.round(r.left)},${Math.round(r.top)}`);
+            }
+          }
+          return {
+            hasLabel: !!label,
+            hatch: view.querySelectorAll('[fill^="url(#cd-hatch"]').length
+              + view.querySelectorAll('rect[fill^="url(#cd-hatch"]').length,
+            extents: view.querySelectorAll('[data-motion="level"]').length,
+            figures,
+          };
+        }, a.selector);
+        if (wait.missing) {
+          row.measured = `no specimen matched ${a.selector}`;
+          row.verdict = 'FAIL';
+        } else {
+          row.measured = `REMAINING label found: ${wait.hasLabel}; hatched refusal areas: ${wait.hatch}; `
+            + `measured-extent marks in the specimen: ${wait.extents}; remaining-time figures in the label's `
+            + `region: ${wait.figures.length ? wait.figures.join(' | ') : 'none'}`;
+          row.verdict = wait.hasLabel ? 'pass' : 'FAIL';
+          if (wait.hasLabel && wait.hatch < 1) row.verdict = 'FAIL';
+          if (wait.extents > 0) row.verdict = 'FAIL';
+          if (wait.figures.length) row.verdict = 'FAIL';
+          if (row.verdict === 'FAIL') {
+            row.detail = wait.extents > 0
+              ? `the wait carries ${wait.extents} measured-extent mark(s): an extent says how much is left, and nothing supplied a terminus — the reference states an unknown wait in words and draws no bar`
+              : wait.figures.length
+                ? `a remaining-time figure was drawn beside REMAINING (${wait.figures.join(' | ')}) where no deadline exists — the app in the reference says "retrieving data, please wait" and refuses to number the wait, which is the difference between an indeterminate wait and a lie about a determinate one`
+                : wait.hatch < 1
+                  ? 'the wait area is empty rather than hatched: a blank area reads as a quantity of zero, and nobody measured zero'
+                  : 'the plate no longer names the missing terminus where a reader looks for it';
+          }
+        }
       } else if (a.kind === 'furniture_still') {
         // The recorder tracks the selector's elements, then the furniture, then the contacts, in
         // that order, every frame — so a slice of `f.el` addresses one of those groups across the

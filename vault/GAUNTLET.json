@@ -269,13 +269,17 @@
     {
       "id": "in-flight-wait-draws-no-progress-bar",
       "reference": "barcode-scan-receipt.gif",
-      "component": "dispatch",
-      "gap": "a wait whose remaining time was never measured is drawn as a progress bar, a percentage, or a remaining-time figure",
+      "component": "collar",
+      "gap": "a wait with no deadline drawn as a measured extent, a percentage, or a remaining-time figure — the claim \"this much is left\" made from no measurement. The reference states an unknown wait in words and draws nothing measurable.",
       "referenceFigure": "24 frames over 4.0s, median delay 170.0ms, loop no return to frame zero",
-      "assertKind": "an element or number count over the in-flight state: a bar geometry or a % figure must be absent where no duration was supplied",
-      "observed": "not asserted; recorded with its reference so the gap keeps the picture it came from",
-      "notHeld": "Two hard things, both named rather than papered over. This reference is handheld, so its measured travel belongs to the cameraperson and it can hold a component to a state vocabulary but not to a rate. And the assert needs a specimen whose wait is actually in flight, which the dispatch fixture currently resolves as settled — an assert written now would run against a state nobody renders and could never go red for the reason it exists.",
-      "watch": "`dispatch` or `loopDeviation` growing a bar, a percentage, or an ETA without a supplied duration"
+      "assertKind": "no_bar_where_no_terminus",
+      "assert": {
+        "kind": "no_bar_where_no_terminus",
+        "route": "#/component/collar",
+        "selector": "[data-specimen-view=\"collar\"]"
+      },
+      "observed": "asserted against `collar`, which has no deadline parameter at all and so draws a hatched area reading NO DEADLINE SET under REMAINING. The row was first filed against `dispatch`, which draws a fitted-parts chain and has no wait in it — named by resemblance instead of by drawing, the error class `scanOverlay` and `twoState` taught in the same week. Recorded here rather than quietly retargeted.",
+      "watch": "a level/extent mark or a percentage or ETA appearing in the REMAINING region; a blank area replacing the hatched one"
     },
     {
       "id": "river-lanes-share-one-now",

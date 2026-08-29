@@ -1469,3 +1469,40 @@ runtime writing `transform-box`/`transform-origin` inline (that branch's own `re
 dial and it survives a real page). `test/field.test.mjs` pins both mark states. Gauntlet 22 rows — **19 pass, 3
 held, 0 FAIL** — with two rows flipped from held to asserted today (`river-lanes-share-one-now`, this one).
 `npm test` 294.
+
+## The wait with no terminus: the row was aimed at the wrong component, and the right one was already innocent
+
+`in-flight-wait-draws-no-progress-bar` was filed against `dispatch`, with a hold saying the assert needed a
+specimen whose wait was actually in flight. Reading `dispatch` now, the truth is blunter: **`dispatch` draws a
+fitted-parts chain — three workers, three parts, a dashed chain at the first missing one — and has no wait in it at
+all.** The component was chosen because "dispatch" sounds like sending-and-waiting. That is the same error as
+`scanOverlay` (a map annotator, not a scanner) and `twoState` (a commit widget, not a cell), three times in one
+week, so the rule stays written: **read the drawing, never the name.** The row records the mis-attribution in its
+own `observed` field instead of being quietly retargeted.
+
+The component that actually draws a wait is `collar` — and it was already doing the right thing. It cites
+`evidence.operator.deadline_at`, **takes no deadline parameter**, and draws under `REMAINING` a hatched area reading
+`NO DEADLINE SET`, with the plate's own note: *"Counting down to an invented instant is manufactured urgency."* That
+is the barcode reference exactly — the scanning app says `Retrieving data, please wait…` and draws no bar, no
+percentage, no remaining-time figure, because it knows it does not know. So this commit adds no drawing; it adds the
+assertion that keeps it true.
+
+`no_bar_where_no_terminus` looks for the three ways the claim "this much is left" gets made: a measured-extent mark
+(`data-motion="level"`) anywhere in the specimen, a missing hatched area, and — **scoped to the REMAINING label's own
+region**, not anywhere on the plate — a figure that reads as remaining time. The scoping is the whole instrument:
+`collar` legitimately prints `2h 37m` elapsed, which is measured, and a plate-wide ban on duration patterns would
+fail the honest component for the one number it is allowed. Green: *REMAINING label found: true; hatched refusal
+areas: 2; measured-extent marks: 0; remaining-time figures in the label's region: none*. Sabotages, both red:
+replacing the refusal with `ETA 4M LEFT` gives *"a remaining-time figure was drawn beside REMAINING (ETA 4M LEFT @
+603,521) where no deadline exists"*; stamping `data-motion="level"` over the wait area gives *"the wait carries 1
+measured-extent mark(s): an extent says how much is left, and nothing supplied a terminus"*.
+
+`test/collar-wait.test.mjs` pins the same three claims without a browser, and my two attempts at it are worth more
+than the tests: an `assert.match` regex for the hatch fill that refused to match a string the markup plainly
+contains, replaced by the plain `includes` it was really testing; and a pinned elapsed figure of `2h 36m` that the
+honest build "failed" — 9456 s is 2 h 37 m, so the test disagreed with the formatter, not with the drawing. **Assert
+a figure's shape, or derive it; a pinned value that rounds differently is a red that means nothing.**
+
+Gate green on `#/component/collar` and `#/families/river` (9 passes, byte-identity holding). Gauntlet 22 rows:
+**20 pass, 2 held** — the two survivors are `globe-hue-caution`, an appearance lesson by design, and
+`tape-sweeps-a-drawn-strip`, which no mark vocabulary can say. `npm test` 297.
