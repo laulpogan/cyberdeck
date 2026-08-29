@@ -70,6 +70,11 @@ GIFs, 11 of which hold a single frame. Longest real loop is 147 frames over
 14.7 s. Frame and delay measurements were cross-checked against ImageMagick on 15
 sampled files with zero disagreements.
 
+The binaries are gitignored — 284 files, 106 MB, local only — but the 24 tracked
+files under `vault/` include `MANIFEST.json` and its per-file provenance, so the
+corpus is re-acquirable. That is the difference between this branch and
+`motion/vault-gauntlet`, which commits nothing under `vault/` at all.
+
 Coverage against the 51 rendered components, by tier that means something:
 22 spec-held, 0 verified-but-unquoted, 17 search-candidates-only, 12 nothing. The
 middle tier used to lie by counting seed-mates — everything a search returned —
@@ -88,8 +93,13 @@ wrong, including two mechanisms that let a red result get pushed as green.
 `scripts/motion-film.mjs` renders every component's motion to filmstrips.
 `docs/MOTION-GAUNTLET.md` is the judged ledger: 52 of 52 components judged across
 both themes and both motion preferences, against a vault of 67 stills and 16
-strips. `vault/film/` holds the committed frames — 60-odd PNGs named for the
-component and, where the refusal had to prove it could move, its arrival variant.
+strips.
+
+The frames themselves are not in git. This branch's `.gitignore` excludes `vault/`
+outright, so **zero files are tracked under it** — the 73 PNGs in `vault/film/`
+and the reference imagery in `vault/ref/` and `vault/motion/` exist only in the
+local worktree, with no committed manifest to re-acquire them from. The ledger
+cites frames a reader cannot open.
 
 The ledger is worth reading for the cases where the instrument was wrong before
 the component was: the radar phased its blips against a partial lap, the gauge arc

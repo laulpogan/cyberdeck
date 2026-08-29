@@ -23,6 +23,7 @@ be diffed, and disappears when the link does. This directory is the fix.
 | File | What it holds |
 | --- | --- |
 | [`branches.md`](branches.md) | Four unmerged branches, what each one built, and the measured state of the reference vault |
+| [`merge-plan.md`](merge-plan.md) | The order to merge them in, the two collisions that make order matter, and the cross-test evidence behind each call |
 | [`artifacts.md`](artifacts.md) | Every published page, which are preserved here, and where the rest are |
 
 ## The pages
@@ -45,4 +46,4 @@ If you are new to this: [`../GOAL.md`](../GOAL.md) for the rule the library
 enforces, then [`cybernetics-canon.md`](cybernetics-canon.md) for why the rule is
 not arbitrary, then [`specimens.md`](specimens.md) for the vocabulary it is built
 from. [`branches.md`](branches.md) last, when you want to know what is not on this
-branch.
+branch — and [`merge-plan.md`](merge-plan.md) when you want to change that.
