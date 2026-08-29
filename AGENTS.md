@@ -285,6 +285,20 @@ refusal in its own body text (the collar's `UNMEASURED` dial) leaves the card
 unmarked, which is why `MOVING WITHOUT EVIDENCE` needs a subtree guard rather
 than a card-level one.
 
+**A refusal draws itself now, and a card body may be empty because of it.** `card()` compares its
+own body against the mark it holds: empty body + `still` mark → `refusalFrame()` puts the
+library's unmeasured hatch around a word naming what is missing, so the card holds the space of
+the drawing it refused. Thirteen components had been answering "no measurement" with an empty
+body and losing 200-430px, invisible to the gate because its only height floor ran on the
+evidence-present page. Two levers, both read off the mark: `refusalWord` (name the word --
+`UNMEASURED` everywhere is a legend, not a reading) and `ghost` (the absent geometry in the
+component's own helpers; when it is supplied the hatch is dropped, because the outline of the
+missing thing is itself the hatch). The reason sentence stays in the card's `<i class="cd-why">`
+line and is never painted into the picture, and the cite line prints only when a cite exists -- a
+placeholder there stands exactly where provenance is read. One component, `muthur`, did not take
+the frame at all: its body is a CRT console, so its refusal is one unasked prompt in that
+console, because HTML furniture holds its height at 390px where a scaled SVG frame does not.
+
 `wrapped(x, y, value, chars, options, leading)` exists because SVG text does not
 wrap and breaking by character count cuts words in half, which looks deliberate.
 

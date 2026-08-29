@@ -274,9 +274,22 @@ export function hardCut({ changed = null, inFlight = null, attempt = null,
  * to look more capable than it is. */
 export function muthur({ answers }) {
   if (!answers || !answers.length) {
-    return card('muthur', 'MU/TH/UR query mode', '',
-      { refusalWord: 'NO QUESTIONS DEFINED',
-    mark: still('no question list is defined for this subject') });
+    // The terminal, unasked. MU/TH/UR's refusals are answers with the same prompt,
+    // so the refusal is drawn as one prompt in the console rather than as a generic
+    // frame: the CRT furniture is the shape this specimen is about, and an SVG hole
+    // in its place lost a fifth of the card's height on a narrow screen.
+    return card('muthur', 'MU/TH/UR query mode',
+      `<div class="cd-th-crt">
+        <p class="cd-th-crt-head">INTERROGATIVE</p>
+        <ol class="cd-th-queries"><li data-answered="0">
+          <b><i>&gt;</i>NO QUESTION LIST</b>
+          <span>${esc(UNABLE)}</span>
+          <cite>no question list is defined for this subject</cite></li></ol>
+        <p class="cd-th-crt-foot">AWAITING OPERATOR. NO FURTHER ENHANCEMENT.<i
+          class="cd-th-cursor" aria-hidden="true"></i></p>
+      </div>
+      <p class="cd-th-edge"><b>NOTHING ASKED OF THIS CONSOLE</b></p>`,
+      { mark: still('no question list is defined for this subject') });
   }
   const answered = answers.filter((a) => a.answer != null).length;
   const rows = answers.map((row, i) => {
