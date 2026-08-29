@@ -20,6 +20,7 @@ import { mkdirSync, writeFileSync } from 'node:fs';
 
 import { REGISTRY, allComponents } from '../src/registry/index.js';
 import { UNCONDITIONAL_MARKS } from '../src/undeclared.js';
+import { FIXTURES } from '../fixtures/index.js';
 import { DRAWING_SELECTOR, DRAWING_PROBE, drawingVerdict, layoutVerdict } from './drawing.mjs';
 
 const BASE = process.env.BASE || 'http://127.0.0.1:5199/';
@@ -646,7 +647,16 @@ for (const route of routes) {
         // evidence away. Four shards against one dev server produced exactly these false reds:
         // thirteen components "still marked", one "loses its drawing". Score those checks only
         // over a render that proves it changed, and say plainly when it did not.
-        const switchTook = changed;
+        // Two pages of the fifty-one are legends — `standardSheet`'s glyph key and `channel`'s four
+        // trust classes — and their fixtures declare `fields: []` on purpose: there is no measurement
+        // on a key that could be taken away, so the page is *supposed* to read identical on both sides
+        // of the toggle, and its refusal (UNATTRIBUTED, NO MEASUREMENT HERE) is printed either way.
+        // Demanding a change from them would be demanding that a legend pretend to be a reading. The
+        // declaration is read from the fixtures rather than duplicated here, because a licence that
+        // lives in the checker is a licence nobody reviews.
+        const changesOnToggle = readout.specimens.some((spec) => COMPONENT_KEYS.has(spec.label)
+          && !DRAWN_ONLY.has(spec.label) && (FIXTURES[spec.label]?.fields || []).length > 0);
+        const switchTook = changed || !changesOnToggle;
         const marksLeft = off.liveMarks.reduce((n, s) => n + s.marks.length, 0);
         // Only pages that show registry components owe a refusal at all — the primitives page is a
         // shape gallery with no measurement anywhere to remove, and demanding a refusal from it
@@ -849,7 +859,20 @@ if (!process.env.SKIP_REDUCED) {
 await browser.close();
 const failures = results.filter((r) => r.bad.length);
 writeFileSync(`${OUT}/results.json`, JSON.stringify(results, null, 2));
-console.log(`\n${results.length} passes over ${routes.length} routes × ${widths.length} widths × ${schemes.length} schemes`);
+/**
+ * One line, one verdict. The pass count used to print unconditionally, so a run that failed read
+ * as `8 passes over 2 routes …` immediately followed by `✗ 4 with problems` — and `grep passes` is
+ * exactly what a reviewer, or a shard's parent, reaches for first. A number that appears in a red
+ * run is a false green wearing a statistic's clothes, so the count now appears only when it is the
+ * whole truth.
+ */
+if (failures.length) {
+  console.log(`\n✗ RED — ${failures.length} of ${results.length} configs with problems over `
+    + `${routes.length} routes × ${widths.length} widths × ${schemes.length} schemes`);
+} else {
+  console.log(`\n${results.length} passes over ${routes.length} routes × ${widths.length} widths `
+    + `× ${schemes.length} schemes`);
+}
 if (failures.length) {
   console.log(`✗ ${failures.length} with problems — ${failures.map((f) => f.name).join(', ')}`);
   console.log(`  evidence in ${OUT}/results.json`);
