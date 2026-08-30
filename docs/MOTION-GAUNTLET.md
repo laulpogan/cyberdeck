@@ -363,3 +363,13 @@ second stride the population barely changes shape -- liveness this
 honest is nearly invisible frame to frame, which is the whole point no
 synthetic page ever dares to copy. The radar and globe families have a
 non-fiction ancestor in the vault now.
+
+## Reference: the radar loop (vault pull)
+
+A NEXRAD loop of a real outbreak, both windows kept. Its motion is all
+step, no tween: the reflectivity field jumps honestly from sweep to
+sweep, the storm-attribute table changes only when a measurement
+arrives, the colour legend never moves because the scale is not data.
+Where our board and level family could learn one thing from it -- a
+field that refuses to interpolate between measurements reads as more
+alive than one that smoothes, because the jump IS the clock.

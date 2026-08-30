@@ -71,6 +71,9 @@ const SCENES = [
   { file: '/tmp/fr24.mp4', tag: 'air-traffic-live', origin: 'https://www.youtube.com/watch?v=eZfjUEkS5eg',
     note: 'Flightradar-type live map: tracks laid by flying, positions on the clock',
     windows: [[10, 55], [70, 55], [130, 40]] },
+  { file: '/tmp/nexrad.mp4', tag: 'weather-loop', origin: 'https://www.youtube.com/watch?v=j6CbFY8oesE',
+    note: 'NEXRAD loop of the 2011 Super Outbreak -- reflectivity over real time',
+    windows: [[5, 30], [35, 25]] },
 ];
 
 const CELL_H = 200;
