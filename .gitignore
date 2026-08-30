@@ -12,5 +12,4 @@ vault/raw/
 # sheet index are generated, and they are what a reader looks at first.
 app/verify/GAUNTLET/*.png
 app/verify/GAUNTLET/summary.json
-vault/WINDOWS.json
 vault/reels.log
