@@ -44,15 +44,28 @@ from PIL import Image  # noqa: E402  (after args, so a bad invocation fails befo
 # Titles worth looking at, by feel. Not a taxonomy and not defensible -- it is a taste list, and
 # the whole point of this pass is that taste comes before tagging. Matched loosely against the
 # game names learned from the corpus, so a substring is enough.
-VIBE = """cyberpunk deus ex system shock prey observation tacoma signalis alien duskers hacknet
-uplink stellaris endless space elite eve starfield no man subnautica satisfactory factorio
-barotrauma deep rock helldivers xcom frostpunk papers obra dinn orwell watch dogs death stranding
-metal gear control doom fallout mass effect dead space destiny warframe titanfall apex halo
-starcraft homeworld into the breach ftl rimworld dwarf kerbal outer wilds returnal ghostrunner
-ruiner katana zero hardspace nier stray va 11 quadrilateral exapunks shenzhen opus beholder
-not for broadcast mothergunship anno terra invicta highfleet nebulous oxygen not included void
-sable citizen sleeper deathloop guilty gear""".split("\n")
-VIBE = [v for line in VIBE for v in [line.strip()] if v]
+# Titles worth looking at, by feel. Not a taxonomy and not defensible -- it is a taste list, and
+# the whole point of this pass is that taste comes before tagging. Matched as substrings against
+# the game names learned from the corpus, so `deus ex` catches `deus ex mankind divided`.
+#
+# Written as an explicit tuple of phrases, which matters more than it looks. The first version
+# built this by splitting a triple-quoted block on newlines, so every entry was a seventy-
+# character line that matched nothing, and the run reported success while adding zero games.
+# Splitting on whitespace instead would have been worse in a quieter way: `deus ex` and `into the
+# breach` would have become `ex`, `into`, `the`, `breach`, and `the` matches almost everything.
+VIBE = (
+    "cyberpunk", "deus ex", "system shock", "prey", "observation", "tacoma", "signalis",
+    "alien", "duskers", "hacknet", "uplink", "stellaris", "endless space", "elite", "eve online",
+    "starfield", "no mans sky", "subnautica", "satisfactory", "factorio", "barotrauma",
+    "deep rock", "helldivers", "xcom", "frostpunk", "papers", "obra dinn", "orwell",
+    "watch dogs", "death stranding", "metal gear", "control", "doom", "fallout", "mass effect",
+    "dead space", "destiny", "warframe", "titanfall", "apex legends", "halo", "starcraft",
+    "homeworld", "into the breach", "ftl", "rimworld", "dwarf fortress", "kerbal", "outer wilds",
+    "returnal", "ghostrunner", "ruiner", "katana zero", "hardspace", "nier", "stray", "va 11",
+    "quadrilateral", "exapunks", "shenzhen", "beholder", "not for broadcast", "mothergunship",
+    "anno", "terra invicta", "highfleet", "nebulous", "oxygen not included", "void bastards",
+    "sable", "citizen sleeper", "deathloop", "guilty gear",
+)
 
 
 def game_names(rows, floor=6):
