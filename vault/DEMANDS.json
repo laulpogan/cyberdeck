@@ -1,220 +1,221 @@
 {
-  "_about": [
-    "Which artifact closes the demand each for-list pair makes. A reference naming a component is a claim that the",
-    "component owes that picture something; every name in a vault/SPECS-FOR.json for-list therefore has to resolve to",
-    "a gauntlet row that asserts, or to a test block that renders the component and holds the claim. `row:<id>` and",
-    "`test:<file>|<test title>` are checked by test/demand-coverage.test.mjs: a closedBy that does not exist, or names",
-    "a test whose title is not in that file, is a red. This file exists because closures that live only in prose",
-    "cannot be re-checked by the next agent, and the prose is where drift hides."
-  ],
-  "demands": {
-    "admission": {
-      "claim": "The balance enters after the crates it is computed from, and is never drawn level when one side was never counted.",
-      "closedBy": [
-        "row:admission-front-loaded",
-        "row:admission-holds",
-        "test:test/organism.test.mjs|the beam is not drawn level when a side was never counted",
-        "test:test/reveal-order.test.mjs|the admission balance enters after the crates it is computed from"
-      ]
-    },
-    "arrive": {
-      "claim": "An element enters once, at an instant somebody recorded — nothing on a plate may enter on a house tempo.",
-      "closedBy": [
-        "test:test/reveal-order.test.mjs|the answers arrive when the leader that claims them reaches them",
-        "test:test/agents.test.mjs|a withheld worker does not get to arrive"
-      ]
-    },
-    "atField": {
-      "claim": "Each wider scope is drawn further out and fainter, and a scope with no count prints a word, never the word `undefined`.",
-      "closedBy": [
-        "row:atfield-unread-scope-keeps-its-row",
-        "test:test/organism.test.mjs|a wider scope is drawn further out and fainter",
-        "test:test/organism.test.mjs|reach is not a permission unless something can actually write"
-      ]
-    },
-    "city": {
-      "claim": "A host with no placement is drawn DARK in its own place, never omitted from the city it belongs to.",
-      "closedBy": [
-        "test:test/organism.test.mjs|an empty host is a dark plot, never a missing row",
-        "test:test/organism.test.mjs|one window per worker, never a texture"
-      ]
-    },
-    "coverage": {
-      "claim": "Terrain nobody sampled is a hatched gap that holds still while the survey moves; an unmoving gap reads as a quantity.",
-      "closedBy": [
-        "row:coverage-dark-ground-holds",
-        "test:test/field.test.mjs|unmeasured terrain is a hatched void with the word on it"
-      ]
-    },
-    "decay": {
-      "claim": "A stale value settles from flash to rest across the real staleness window: the fade IS the age, and an unmeasured age fades nothing.",
-      "closedBy": [
-        "test:test/reveal-order.test.mjs|a field nobody read is printed at once, and does not animate"
-      ]
-    },
-    "dossier": {
-      "claim": "Every part the producer went silent on is named and keeps its place on the sheet, because the gap is the finding.",
-      "closedBy": [
-        "row:dossier-does-not-breathe",
-        "test:test/agents.test.mjs|the dossier names each part its producer went silent on",
-        "test:test/agents.test.mjs|one helper draws every disc"
-      ]
-    },
-    "elapsed": {
-      "claim": "A count-up is a measurement being retaken, not a decoration: it keeps its mark, and a stale feed stops it.",
-      "closedBy": [
-        "test:test/collar-wait.test.mjs|the elapsed count stays a measurement and keeps its mark"
-      ]
-    },
-    "envelope": {
-      "claim": "With a boundary unsupplied the gauge draws no position and no comfortable middle, and names each missing boundary separately.",
-      "closedBy": [
-        "row:envelope-limit-holds",
-        "row:envelope-limit-named",
-        "test:test/cue-liveness.test.mjs|envelope: the ceiling cue appears only past the ceiling, and the number is named either way",
-        "test:test/organism.test.mjs|the envelope draws no position and no comfortable middle"
-      ]
-    },
-    "esperDive": {
-      "claim": "The dive descends only as far as the producer retains and draws the floor as a frame; furniture carries no mark.",
-      "closedBy": [
-        "row:esperDive-no-furniture-trace",
-        "test:test/esper-empty.test.mjs|the dive animates the rows that hold something and refuses the rest",
-        "test:test/esper-empty.test.mjs|a dive with nothing known is motionless"
-      ]
-    },
-    "globe": {
-      "claim": "The mesh turns only on a live feed with a measured interval, on elapsed time rather than on frames the display happens to hand it.",
-      "closedBy": [
-        "row:globe-constant-rate",
-        "test:test/components.test.mjs|the globe turns only on a live feed with a measured interval",
-        "test:test/components.test.mjs|an endpoint carrying nobody gets no arc drawn to it"
-      ]
-    },
-    "grid": {
-      "claim": "An empty cell is named, never blank, and the widest specimen keeps its own scroll container rather than the page's.",
-      "closedBy": [
-        "test:test/organism.test.mjs|an empty grid cell is named, never blank",
-        "test:test/organism.test.mjs|the grid keeps its own scroll container"
-      ]
-    },
-    "hardCut": {
-      "claim": "States replace one another with no in-between drawn, and the scar travels only when the change set it strikes through was measured.",
-      "closedBy": [
-        "row:hardcut-has-no-in-between-state",
-        "test:test/cue-liveness.test.mjs|hardCut: the in-flight bar arrives with the value and leaves without it",
-        "test:test/thread.test.mjs|the cut is drawn as one hard rule with nothing under it"
-      ]
-    },
-    "killmail": {
-      "claim": "A charge record arrives already priced: an amount and a denial of holding one never appear in the same tag.",
-      "closedBy": [
-        "test:test/agents.test.mjs|unpriced is a truthful value, not a placeholder",
-        "test:test/agents.test.mjs|the receipt records the fit and the damage as objects"
-      ]
-    },
-    "level": {
-      "claim": "A measured quantity draws out to its measured extent, and a rate never wears a level's glyph.",
-      "closedBy": [
-        "test:test/marks.test.mjs|an unmeasured quantity never animates to a default",
-        "test:test/tilt.test.mjs|a tilt carries its axis, its angle, and its pivot"
-      ]
-    },
-    "mfd": {
-      "claim": "A readout whose producer is silent renders its own dark face and never falls back to the pane that has data.",
-      "closedBy": [
-        "test:test/thread.test.mjs|a dark pane renders its own face and never the other pane\\",
-        "test:test/thread.test.mjs|the deck refuses to be a deck with one pane"
-      ]
-    },
-    "muthur": {
-      "claim": "A refusal is an answer: same prompt, same weight, no demotion to a grey footnote.",
-      "closedBy": [
-        "test:test/thread.test.mjs|a refusal is an answer and gets the same rule as one",
-        "test:test/thread.test.mjs|the query list refuses to exist without questions"
-      ]
-    },
-    "oscillation": {
-      "claim": "A rhythm needs a period; with none measured the detector stands still and raises a candidate, never a diagnosis.",
-      "closedBy": [
-        "test:test/river-family.test.mjs|the detector raises a candidate and never a diagnosis",
-        "test:test/river-family.test.mjs|the detector does not oscillate over an unmeasured period"
-      ]
-    },
-    "queueState": {
-      "claim": "Only a board measured empty may claim an all-clear; a board holding work says what waits, and an uncounted one prints no numeral.",
-      "closedBy": [
-        "test:test/state-legibility.test.mjs|queueState: three ways to be empty, and only one of them is an all-clear",
-        "test:test/telegraph.test.mjs|a measured empty board is allowed to say all clear"
-      ]
-    },
-    "radar": {
-      "claim": "The sweep runs only on a polled live feed, wraps as it turns instead of jumping, and holds its furniture while it does.",
-      "closedBy": [
-        "row:radar-furniture-still",
-        "row:radar-loop-wraps-without-a-tween",
-        "test:test/field.test.mjs|the radar sweeps only on a polled live feed",
-        "test:test/field.test.mjs|a contact with no measured age is off-scope, not at the centre"
-      ]
-    },
-    "river": {
-      "claim": "Lanes travel because the run happened and share one now-line; a lane that owes a human says it in words, not only in amber.",
-      "closedBy": [
-        "row:river-lanes-share-one-now",
-        "test:test/components.test.mjs|every lane that ran is traced, and the empty one is drawn anyway",
-        "test:test/components.test.mjs|a lane waiting on a person says so rather than animating"
-      ]
-    },
-    "rules page": {
-      "claim": "The catalogue of marks forbids the idioms the library refuses: no decorative loop, no motion over an unmeasured quantity.",
-      "closedBy": [
-        "row:rules-forbidden-idioms",
-        "row:rules-chrome-still",
-        "test:test/app-rules.test.mjs|every drawing carries the mark its row names"
-      ]
-    },
-    "stockFlow": {
-      "claim": "Slots hold their geometry across a change and only the characters flip; a value is never drawn as an extent.",
-      "closedBy": [
-        "row:solari-rows-occupy-fixed-slots",
-        "test:test/organism.test.mjs|a level and a rate never share a glyph",
-        "test:test/organism.test.mjs|the level mark reveals in order, never in extent"
-      ]
-    },
-    "strands": {
-      "claim": "A route thickens once per landing on it, and an undelivered route stays drawn, dashed, and still.",
-      "closedBy": [
-        "test:test/organism.test.mjs|a route thickens once per landing on it",
-        "test:test/organism.test.mjs|an undelivered route stays drawn, dashed, and still"
-      ]
-    },
-    "stripChart": {
-      "claim": "One sample draws as one mark at its own instant; a flat line from a single sample is the commonest chart lie there is.",
-      "closedBy": [
-        "row:stripchart-series-is-drawn-ink",
-        "test:test/river-family.test.mjs|the strip draws every lane, including the three nobody records",
-        "test:test/river-family.test.mjs|the strip refuses when nothing was retained at all"
-      ]
-    },
-    "tape": {
-      "claim": "The tape plays back in the order it will hurt, and a splice whose tape length was never told is refused.",
-      "closedBy": [
-        "test:test/telegraph.test.mjs|the tape ranks by the order it will hurt",
-        "test:test/telegraph.test.mjs|an unmeasured wait on a strip does not tick"
-      ]
-    },
-    "trace": {
-      "claim": "A trace travels once and ends; it is deterministic, so two captures of the same run compare.",
-      "closedBy": [
-        "test:test/agents.test.mjs|the trace is deterministic, so two captures compare"
-      ]
-    },
-    "tracker": {
-      "claim": "The beat is the measured cadence and nothing else, and the printed wait is a reading — nothing animates it.",
-      "closedBy": [
-        "test:test/telegraph.test.mjs|an unmeasured wait gets no cadence at all",
-        "test:test/telegraph.test.mjs|the tracker beats at the measured cadence and nothing else"
-      ]
-    }
+ "_about": [
+  "Which artifact closes the demand each for-list pair makes. A reference naming a component is a claim that the",
+  "component owes that picture something; every name in a vault/SPECS-FOR.json for-list therefore has to resolve to",
+  "a gauntlet row that asserts, or to a test block that renders the component and holds the claim. `row:<id>` and",
+  "`test:<file>|<test title>` are checked by test/demand-coverage.test.mjs: a closedBy that does not exist, or names",
+  "a test whose title is not in that file, is a red. This file exists because closures that live only in prose",
+  "cannot be re-checked by the next agent, and the prose is where drift hides."
+ ],
+ "demands": {
+  "admission": {
+   "claim": "The balance enters after the crates it is computed from, and is never drawn level when one side was never counted.",
+   "closedBy": [
+    "row:admission-front-loaded",
+    "row:admission-holds",
+    "test:test/organism.test.mjs|the beam is not drawn level when a side was never counted",
+    "test:test/reveal-order.test.mjs|the admission balance enters after the crates it is computed from"
+   ]
+  },
+  "arrive": {
+   "claim": "An element enters once, at an instant somebody recorded — nothing on a plate may enter on a house tempo.",
+   "closedBy": [
+    "test:test/reveal-order.test.mjs|the answers arrive when the leader that claims them reaches them",
+    "test:test/agents.test.mjs|a withheld worker does not get to arrive"
+   ]
+  },
+  "atField": {
+   "claim": "Each wider scope is drawn further out and fainter, and a scope with no count prints a word, never the word `undefined`.",
+   "closedBy": [
+    "row:atfield-unread-scope-keeps-its-row",
+    "test:test/organism.test.mjs|a wider scope is drawn further out and fainter",
+    "test:test/organism.test.mjs|reach is not a permission unless something can actually write"
+   ]
+  },
+  "city": {
+   "claim": "A host with no placement is drawn DARK in its own place, never omitted from the city it belongs to.",
+   "closedBy": [
+    "test:test/organism.test.mjs|an empty host is a dark plot, never a missing row",
+    "test:test/organism.test.mjs|one window per worker, never a texture"
+   ]
+  },
+  "coverage": {
+   "claim": "Terrain nobody sampled is a hatched gap that holds still while the survey moves; an unmoving gap reads as a quantity.",
+   "closedBy": [
+    "row:coverage-dark-ground-holds",
+    "test:test/field.test.mjs|unmeasured terrain is a hatched void with the word on it"
+   ]
+  },
+  "decay": {
+   "claim": "A stale value settles from flash to rest across the real staleness window: the fade IS the age, and an unmeasured age fades nothing.",
+   "closedBy": [
+    "test:test/reveal-order.test.mjs|a field nobody read is printed at once, and does not animate"
+   ]
+  },
+  "dossier": {
+   "claim": "Every part the producer went silent on is named and keeps its place on the sheet, because the gap is the finding.",
+   "closedBy": [
+    "row:dossier-does-not-breathe",
+    "test:test/agents.test.mjs|the dossier names each part its producer went silent on",
+    "test:test/agents.test.mjs|one helper draws every disc"
+   ]
+  },
+  "elapsed": {
+   "claim": "A count-up is a measurement being retaken, not a decoration: it keeps its mark, and a stale feed stops it.",
+   "closedBy": [
+    "test:test/collar-wait.test.mjs|the elapsed count stays a measurement and keeps its mark"
+   ]
+  },
+  "envelope": {
+   "claim": "With a boundary unsupplied the gauge draws no position and no comfortable middle, and names each missing boundary separately.",
+   "closedBy": [
+    "row:envelope-limit-holds",
+    "row:envelope-limit-named",
+    "test:test/cue-liveness.test.mjs|envelope: the ceiling cue appears only past the ceiling, and the number is named either way",
+    "test:test/organism.test.mjs|the envelope draws no position and no comfortable middle"
+   ]
+  },
+  "esperDive": {
+   "claim": "The dive descends only as far as the producer retains and draws the floor as a frame; furniture carries no mark.",
+   "closedBy": [
+    "row:esperDive-no-furniture-trace",
+    "test:test/esper-empty.test.mjs|the dive animates the rows that hold something and refuses the rest",
+    "test:test/esper-empty.test.mjs|a dive with nothing known is motionless"
+   ]
+  },
+  "globe": {
+   "claim": "The mesh turns only on a live feed with a measured interval, on elapsed time rather than on frames the display happens to hand it.",
+   "closedBy": [
+    "row:globe-constant-rate",
+    "test:test/components.test.mjs|the globe turns only on a live feed with a measured interval",
+    "test:test/components.test.mjs|an endpoint carrying nobody gets no arc drawn to it"
+   ]
+  },
+  "grid": {
+   "claim": "An empty cell is named, never blank, and the widest specimen keeps its own scroll container rather than the page's.",
+   "closedBy": [
+    "test:test/organism.test.mjs|an empty grid cell is named, never blank",
+    "test:test/organism.test.mjs|the grid keeps its own scroll container"
+   ]
+  },
+  "hardCut": {
+   "claim": "States replace one another with no in-between drawn, and the scar travels only when the change set it strikes through was measured.",
+   "closedBy": [
+    "row:hardcut-has-no-in-between-state",
+    "test:test/cue-liveness.test.mjs|hardCut: the in-flight bar arrives with the value and leaves without it",
+    "test:test/thread.test.mjs|the cut is drawn as one hard rule with nothing under it"
+   ]
+  },
+  "killmail": {
+   "claim": "A charge record arrives already priced: an amount and a denial of holding one never appear in the same tag.",
+   "closedBy": [
+    "test:test/agents.test.mjs|unpriced is a truthful value, not a placeholder",
+    "test:test/agents.test.mjs|the receipt records the fit and the damage as objects"
+   ]
+  },
+  "level": {
+   "claim": "A measured quantity draws out to its measured extent, and a rate never wears a level's glyph.",
+   "closedBy": [
+    "test:test/marks.test.mjs|an unmeasured quantity never animates to a default",
+    "test:test/tilt.test.mjs|a tilt carries its axis, its angle, and its pivot"
+   ]
+  },
+  "mfd": {
+   "claim": "A readout whose producer is silent renders its own dark face and never falls back to the pane that has data.",
+   "closedBy": [
+    "test:test/thread.test.mjs|a dark pane renders its own face and never the other pane\\",
+    "test:test/thread.test.mjs|the deck refuses to be a deck with one pane"
+   ]
+  },
+  "muthur": {
+   "claim": "A refusal is an answer: same prompt, same weight, no demotion to a grey footnote.",
+   "closedBy": [
+    "test:test/thread.test.mjs|a refusal is an answer and gets the same rule as one",
+    "test:test/thread.test.mjs|the query list refuses to exist without questions"
+   ]
+  },
+  "oscillation": {
+   "claim": "A rhythm needs a period; with none measured the detector stands still and raises a candidate, never a diagnosis.",
+   "closedBy": [
+    "test:test/river-family.test.mjs|the detector raises a candidate and never a diagnosis",
+    "test:test/river-family.test.mjs|the detector does not oscillate over an unmeasured period"
+   ]
+  },
+  "queueState": {
+   "claim": "Only a board measured empty may claim an all-clear; a board holding work says what waits, and an uncounted one prints no numeral.",
+   "closedBy": [
+    "test:test/state-legibility.test.mjs|queueState: three ways to be empty, and only one of them is an all-clear",
+    "test:test/telegraph.test.mjs|a measured empty board is allowed to say all clear"
+   ]
+  },
+  "radar": {
+   "claim": "The sweep runs only on a polled live feed, wraps as it turns instead of jumping, and holds its furniture while it does.",
+   "closedBy": [
+    "row:radar-furniture-still",
+    "row:radar-loop-wraps-without-a-tween",
+    "test:test/field.test.mjs|the radar sweeps only on a polled live feed",
+    "test:test/field.test.mjs|a contact with no measured age is off-scope, not at the centre"
+   ]
+  },
+  "river": {
+   "claim": "Lanes travel because the run happened and share one now-line; a lane that owes a human says it in words, not only in amber.",
+   "closedBy": [
+    "row:river-lanes-share-one-now",
+    "test:test/components.test.mjs|every lane that ran is traced, and the empty one is drawn anyway",
+    "test:test/components.test.mjs|a lane waiting on a person says so rather than animating"
+   ]
+  },
+  "rules page": {
+   "claim": "The catalogue of marks forbids the idioms the library refuses: no decorative loop, no motion over an unmeasured quantity.",
+   "closedBy": [
+    "row:rules-forbidden-idioms",
+    "row:rules-chrome-still",
+    "test:test/app-rules.test.mjs|every drawing carries the mark its row names"
+   ]
+  },
+  "stockFlow": {
+   "claim": "Slots hold their geometry across a change and only the characters flip; a value is never drawn as an extent.",
+   "closedBy": [
+    "row:solari-rows-occupy-fixed-slots",
+    "test:test/organism.test.mjs|a level and a rate never share a glyph",
+    "test:test/organism.test.mjs|the level mark reveals in order, never in extent"
+   ]
+  },
+  "strands": {
+   "claim": "A route thickens once per landing on it, and an undelivered route stays drawn, dashed, and still.",
+   "closedBy": [
+    "test:test/organism.test.mjs|a route thickens once per landing on it",
+    "test:test/organism.test.mjs|an undelivered route stays drawn, dashed, and still"
+   ],
+   "noReference": "no verified picture stands behind this demand. It arrived from `tron-disc--blob.gifcities.org_gifcities_2AWYSNBQH7E3JQPMI2B5UNXXOTV7UDLB.gif`, which an eye had marked verified for a trail that stays drawn; re-measuring all fifty frames found the lit area flat at 26-73 px, so the gif is refused and quoted for nothing (see the correction recorded in vault/EYEBALL.json for that file). The two assertions underneath stay because they are assertions, not because a picture was found for them: a route thickening once per landing is a count, and an undelivered route staying drawn, dashed and still is a state. They are self-derived, they are checked in test/organism.test.mjs, and no reference may be claimed for them until one exists."
+  },
+  "stripChart": {
+   "claim": "One sample draws as one mark at its own instant; a flat line from a single sample is the commonest chart lie there is.",
+   "closedBy": [
+    "row:stripchart-series-is-drawn-ink",
+    "test:test/river-family.test.mjs|the strip draws every lane, including the three nobody records",
+    "test:test/river-family.test.mjs|the strip refuses when nothing was retained at all"
+   ]
+  },
+  "tape": {
+   "claim": "The tape plays back in the order it will hurt, and a splice whose tape length was never told is refused.",
+   "closedBy": [
+    "test:test/telegraph.test.mjs|the tape ranks by the order it will hurt",
+    "test:test/telegraph.test.mjs|an unmeasured wait on a strip does not tick"
+   ]
+  },
+  "trace": {
+   "claim": "A trace travels once and ends; it is deterministic, so two captures of the same run compare.",
+   "closedBy": [
+    "test:test/agents.test.mjs|the trace is deterministic, so two captures compare"
+   ]
+  },
+  "tracker": {
+   "claim": "The beat is the measured cadence and nothing else, and the printed wait is a reading — nothing animates it.",
+   "closedBy": [
+    "test:test/telegraph.test.mjs|an unmeasured wait gets no cadence at all",
+    "test:test/telegraph.test.mjs|the tracker beats at the measured cadence and nothing else"
+   ]
   }
+ }
 }

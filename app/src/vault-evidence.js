@@ -111,8 +111,14 @@ const ROWS = FORBIDDEN_IDIOMS.length + PERMITTED_IDIOMS.length;
 // Both figures are held to their source by `test/app-vault-evidence.test.mjs`: VERIFIED_COUNT
 // against vault/EYEBALL.json, MOVING_COUNT against the list vault/RANK.json ranks. The first
 // draft of this line said 131 from memory, and the test named 114 — which is what the ranking
-// actually contains.
-export const VERIFIED_COUNT = 18;
+// actually contains. It went from 18 to 17 because one of the eighteen was withdrawn: the circuit
+// gif quoted for a trail that stays drawn measured a flat ink budget on all fifty of its frames, so
+// no trail was ever in it and the eye's earlier yes did not survive being checked. It is 19 after the
+// last nineteen rows of the queue were judged: a game interface in its webp container and a period
+// fake of a Mac loader window that types LOADING... and then delivers a page of text. Both figures
+// count files, not works — the game interface is the second container of an asset already counted, so
+// nineteen files survived an eye and fewer than nineteen distinct screens did.
+export const VERIFIED_COUNT = 19;
 export const MOVING_COUNT = 114;
 export const VAULT_NOTE = `${MOVING_COUNT} moving reference files were ranked for how much of `
   + `the frame they move and how dark their ground is; ${VERIFIED_COUNT} of them survived an `

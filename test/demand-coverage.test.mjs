@@ -35,9 +35,21 @@ test('every component a reference names is in the demand ledger', () => {
 });
 
 test('the ledger does not invent targets nobody quoted', () => {
-  const orphans = Object.keys(LEDGER).filter((c) => !NAMED.has(c)).sort();
-  assert.deepEqual(orphans, [], `${orphans.join(', ')} are in the ledger but in no for-list: either the `
-    + `quotation was withdrawn (then the closure goes with it) or a for-list entry was lost`);
+  // An orphan used to have exactly two explanations, and the second one is a lie we told ourselves once
+  // already: `strands` lost its quotation when remeasuring its gif found no trail at all, and the two
+  // assertions in test/organism.test.mjs that close it did not therefore stop being true. Deleting a
+  // checked requirement because the picture that inspired it was refused would make the library less
+  // honest, not more. So a third state exists and has to be declared in words: self-derived, no picture,
+  // and no for-list entry on the side.
+  const orphans = Object.entries(LEDGER).filter(([c, e]) => !NAMED.has(c));
+  const unargued = orphans.filter(([, e]) => !e.noReference || e.noReference.trim().length < 60)
+    .map(([c]) => c).sort();
+  assert.deepEqual(unargued, [], `${unargued.join(', ') || 'none'} are in the ledger but in no for-list `
+    + `without a stated reason: either the quotation was withdrawn and the closure goes with it, or a `
+    + `for-list entry was lost, or the demand is self-derived and has to say so in noReference`);
+  const alsoQuoted = Object.entries(LEDGER).filter(([c, e]) => e.noReference && NAMED.has(c)).map(([c]) => c);
+  assert.deepEqual(alsoQuoted, [], `${alsoQuoted.join(', ')} declare noReference and are still quoted in `
+    + `a for-list: a demand either has a picture behind it or says it has none, and cannot have both`);
 });
 
 test('a closure names an artifact that exists and asserts', () => {

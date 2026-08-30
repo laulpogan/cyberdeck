@@ -20,7 +20,13 @@ test('the coverage tiers partition the registry — nothing counted twice, nothi
   const { tiers, total } = coverage();
   assert.equal(tiers.spec.length + tiers.verifiedOnly.length + tiers.candidates.length + tiers.none.length, total,
     'a component is in two tiers or in none');
-  assert.ok(tiers.spec.length >= 22,
+  // The floor came down from 22 to 21, and it came down because a claim was withdrawn rather than
+  // because a measurement was lost: `strands` was spec-held on a Geocities circuit gif quoted for a trail
+  // that stays drawn, and counting the lit area on all fifty of that gif's frames found it flat at 26-73 px
+  // — no accumulation at any brightness floor, so the trail was never there. A component whose only
+  // reference turns out not to show the thing it was quoted for is not spec-held, and lowering the number
+  // is the honest edit. The floor stays a floor: if it drops again, name what went and why.
+  assert.ok(tiers.spec.length >= 21,
     `spec-held fell to ${tiers.spec.length}; coverage is a claim and it went down — add the measurement back or say so here`);
 });
 

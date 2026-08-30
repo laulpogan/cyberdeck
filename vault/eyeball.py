@@ -133,7 +133,7 @@ def main():
                 sys.exit("MARK refused: " + repr(path.strip()) + " is not a file in "
                          "MANIFEST.json. A mark on a path that does not exist is invisible to "
                          "every checklist, which is worse than no mark at all.")
-            marks[path.strip()] = {
+            record = {
                 "contentVerified": verdict.strip().lower().startswith("y"),
                 "shows": (shows or verdict).strip()[:600] or "no description recorded",
                 "eyeballedBy": EYE,
@@ -145,6 +145,31 @@ def main():
                     f"{COPIES} frames sampled across the file's own timeline"),
                 "sheet": os.environ.get("SHEET", "see OUT dir"),
             }
+            # A re-pass must not quietly overwrite a verdict. A second eye walked this queue
+            # once already and its `no` landed on a file an earlier eye had marked `verified`,
+            # turning the ledger count from 18 to 17 with nothing printed about it — the later
+            # mark always won because it was the later mark. Flipping a verdict is allowed,
+            # arguing for it is required, and the argument is kept beside the new verdict.
+            prior = marks.get(path.strip()) or {}
+            if prior and bool(prior.get("contentVerified")) != record["contentVerified"]:
+                reason = os.environ.get("CORRECTION", "").strip()
+                if not reason:
+                    sys.exit(
+                        "MARK refused: %s already reads contentVerified=%s, marked by %s. "
+                        "Flipping a verdict needs CORRECTION=<what the frames show that the "
+                        "first reading got wrong>, so the ledger keeps both readings and the "
+                        "reason the second one won. If the first reading was right, do not "
+                        "mark this row again.\n  first reading said: %s"
+                        % (path.strip(), bool(prior.get("contentVerified")),
+                           prior.get("eyeballedBy", "unknown eye"),
+                           (prior.get("shows") or "")[:200]))
+                record["correction"] = reason[:600]
+                record["superseded"] = {
+                    "contentVerified": bool(prior.get("contentVerified")),
+                    "eyeballedBy": prior.get("eyeballedBy", "unknown eye"),
+                    "shows": (prior.get("shows") or "")[:300],
+                }
+            marks[path.strip()] = record
         json.dump(marks, open(marks_path, "w"), indent=1, ensure_ascii=False, sort_keys=True)
         print(f"{len(marks)} marks on disk.")
         return
