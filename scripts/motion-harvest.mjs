@@ -59,6 +59,12 @@ const SCENES = [
   { file: '/tmp/tron-lightcycle.mp4', tag: 'tron-lightcycle', origin: 'https://www.youtube.com/watch?v=VVzm8yyHCHE',
     note: 'TRON: Legacy light cycle battle -- trail-laid-as-you-go on the grid',
     windows: [[20, 50], [80, 50], [140, 50], [200, 50]] },
+  { file: '/tmp/mr-computer.mp4', tag: 'precrime-desk', origin: 'https://www.youtube.com/watch?v=33Raqx9sFbo',
+    note: 'Minority Report: precrime file review on the data gloves',
+    windows: [[10, 50], [60, 45]] },
+  { file: '/tmp/mr-ui.mp4', tag: 'precrime-desk', origin: 'https://www.youtube.com/watch?v=NwVBzx0LMNQ',
+    note: 'Minority Report: interface compilation (pull/scroll/compare gestures)',
+    windows: [[10, 60], [80, 60], [145, 45]] },
 ];
 
 const CELL_H = 200;
@@ -132,6 +138,10 @@ for (const sc of SCENES) {
   const dir = path.join(MOTION, sc.tag);
   fs.mkdirSync(dir, { recursive: true });
   for (const [start, len] of sc.windows) {
+    // Include the source file stem: two clips under one tag otherwise
+    // write the same strip name and the second silently overwrites the
+    // first while both manifest rows survive.
+    const stem = path.basename(sc.file, '.mp4');
     const step = (len - 1) / (FRAMES - 1);
     const files = [];
     for (let i = 0; i < FRAMES; i++) {
@@ -140,7 +150,7 @@ for (const sc of SCENES) {
       run(['-y', '-ss', t, '-i', sc.file, '-vf', `scale=-2:${CELL_H}`, '-frames:v', '1', out]);
       files.push(out);
     }
-    const strip = path.join(dir, `${sc.tag}-${start}s.png`);
+    const strip = path.join(dir, `${stem === sc.tag ? stem : sc.tag + '-' + stem}-${start}s.png`);
     execFileSync('montage', [...files, '-tile', `${FRAMES}x1`, '-geometry', '+2+2',
       '-background', '#000', '-fill', '#ffb000', '-label', '%t',
       '-font', '/System/Library/Fonts/Supplemental/Andale Mono.ttf', '-pointsize', '12', strip]);

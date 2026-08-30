@@ -315,3 +315,21 @@ pings and the clocks are linear (position), while the trafficking pulse
 and every enter draw may ease (texture). Nothing in the rack moved --
 the reference confirms the law rather than correcting it, which is also
 worth a strip.
+
+## Reference: the precrime desk (vault pull)
+
+Minority Report pulled as two clips and steeped five windows; two
+deleted as cinema. The three kept windows record how the film's
+dossier motions earn their keep: a scrubbed timeline is a dense
+horizontal strip where every cell carries equal weight and only the
+head position gets the callout; the selected record is pulled toward
+the operator as the SAME card grown larger, never new content
+manufactured mid-transition; the unselected records drift past blurred
+while the selected one is the only thing at full legibility. All three
+back the dossier and strip family as gauntleted -- the motion carries
+the record, it does not invent it. Nothing in the rack moved.
+
+Harvest bug the pull exposed and fixed: strips were named tag+time,
+so two clips sharing a tag overwrote each other's window while both
+manifest rows survived; names now carry the source stem, and manifest
+rows whose strip no longer exists are swept.
