@@ -100,6 +100,21 @@ footage is on both platforms and in the Internet Archive.
 - Two failures at the same thing means stop and check the tool version before trying again.
   A stale extractor looks exactly like a hard refusal, and that has already cost a session.
 
+## This file is subordinate to the operator's latest ask
+
+Written goals outlive the intent that produced them. This one was drafted when the job was a
+comparison catalog, and it kept steering the work after the operator had twice said they wanted a
+broad visual survey instead — "i don't care about measurement, or evidence, or any of that shit,
+right now we are just collecting cool uis", and later "i didn't just want it by function, i just
+wanted a general survey of cool looking stuff". Both times the taxonomy came back anyway, because
+this file said to fill it and this file was the thing being read.
+
+So: re-read the operator's most recent framing before executing anything below. If the two
+disagree, the operator wins and this file is stale — say so and change it, rather than working
+the queue because the queue exists. `vault/survey.py` is the tool for the breadth pass; the
+function spine and `cover.py` are for the comparison pass. Do not run one while asked for the
+other.
+
 ## Per-session shape
 
 Pick one source from the depth queue. Empty it, or work it until the session is long enough.

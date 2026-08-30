@@ -238,10 +238,87 @@ def from_disk():
     return entries
 
 
+def groups_report():
+    """Per group: how many rows, how many fetched, how many actually opened.
+
+    The last column is the point, and it is here because prose failed. A skill rule saying "do
+    not rank groups you have not opened" was written twice and forward-tested three times; asked
+    which channels to prioritise, the model ranked them from their names every time, once while
+    quoting the rule back. So the refusal is mechanical now. A group with nothing opened prints
+    UNSEEN and no ordering is offered, because the real error this prevents was ranking a channel
+    called `terminal-ruins` fourth-best in a survey of computer interfaces on the strength of the
+    word "terminal". It holds Met Museum objects and a Neolithic arrowhead.
+
+    `opened` is written by `sheets.py` when it renders an item onto a contact sheet.
+    """
+    everything = json.load(open(os.path.join(HERE, "EXAMPLES.json")))
+    # Games are grouped by the title learned from the slug, the same way the fetcher named the
+    # files. Counting them by their raw `set` instead would print 0 rows against 96 fetched, and
+    # a denominator of zero is worse than no denominator: it reads as a group that came from
+    # nowhere rather than one indexed under another name.
+    games = [r for r in everything if r["from"] == "interfaceingame"]
+    known = game_names(games) if games else set()
+    index = collections.Counter()
+    for row in everything:
+        index[title_of(row, known) if row["from"] == "interfaceingame"
+              else row.get("set", "?")] += 1
+    fetched = collections.Counter(g for g, _p, _t in from_disk())
+    ledger = {}
+    opened_path = os.path.join(HERE, "OPENED.json")
+    if os.path.exists(opened_path):
+        ledger = json.load(open(opened_path))
+    opened = collections.Counter(name.split("--", 1)[0] for name in ledger)
+
+    # Only groups that are actually in the survey. The index also carries every game title the
+    # corpus knows -- some 1,200 of them -- and listing those as unseen would bury the fourteen
+    # that matter under a thousand that were never fetched and were never going to be.
+    print(f"{'group':44} {'rows':>6} {'fetched':>8} {'opened':>7}  status")
+    unseen = []
+    for group in sorted(fetched, key=lambda g: -fetched[g]):
+        seen = opened[group]
+        if not seen:
+            unseen.append(group)
+        status = "UNSEEN — not rankable" if not seen else "sampled"
+        print(f"{group[:44]:44} {index[group]:6} {fetched[group]:8} {seen:7}  {status}")
+
+    print(f"\n{len(fetched)} groups in the survey, {len(fetched) - len(unseen)} sampled.")
+    if unseen:
+        print(f"{len(unseen)} have had nothing opened, so no ordering is printed for them. A "
+              f"count is the\nfiler's claim about a group, not an observation of it. Run "
+              f"`sheets.py SET=<group>` and\nlook, then ask again. Unseen: "
+              + ", ".join(unseen[:6]) + ("…" if len(unseen) > 6 else ""))
+
+
 def main():
+    if args.get("GROUPS"):
+        groups_report()
+        return
     if args.get("PAGE"):
         build_page(from_disk())
         return
+    # One fetcher at a time. Two copies of this script once ran concurrently against a small
+    # third-party site for ten minutes, doing identical work, because a chained invocation and a
+    # manual rerun both survived. The politeness is the point; the duplicated bandwidth was ours
+    # to waste and the load was not.
+    lock = os.path.join(HERE, ".survey.lock")
+    if os.path.exists(lock):
+        held = open(lock).read().strip()
+        try:
+            os.kill(int(held), 0)
+        except (ValueError, ProcessLookupError):
+            os.remove(lock)  # stale: the holder died without cleaning up
+        else:
+            sys.exit(f"survey.py: pid {held} is already fetching. Wait for it, or remove "
+                     f"{lock} if you know it is dead. Refusing to double the load on the host.")
+    open(lock, "w").write(str(os.getpid()))
+    try:
+        run()
+    finally:
+        if os.path.exists(lock):
+            os.remove(lock)
+
+
+def run():
     everything = json.load(open(os.path.join(HERE, "EXAMPLES.json")))
     rows = [r for r in everything
             if r["from"] == "are.na" and r["kind"] in ("Image", "Attachment")]

@@ -13,3 +13,4 @@ vault/raw/
 app/verify/GAUNTLET/*.png
 app/verify/GAUNTLET/summary.json
 vault/reels.log
+vault/.survey.lock
