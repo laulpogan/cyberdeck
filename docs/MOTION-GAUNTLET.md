@@ -354,3 +354,12 @@ measures anything. It is the counter-example the vault should hold
 loudly -- gorgeous UI that is pure ambient decoration is exactly what
 the honesty bar exists to refuse. A reference earns its strip by
 modelling measurement, not by looking expensive.
+
+## Reference: the live sky (vault pull)
+
+A real flight-tracking map, both kept windows: every mark carries its
+own bearing, positions advance on the reporting clock, and at a seven
+second stride the population barely changes shape -- liveness this
+honest is nearly invisible frame to frame, which is the whole point no
+synthetic page ever dares to copy. The radar and globe families have a
+non-fiction ancestor in the vault now.

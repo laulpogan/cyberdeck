@@ -68,6 +68,9 @@ const SCENES = [
   { file: '/tmp/face-track.mp4', tag: 'surveillance-demo', origin: 'https://www.youtube.com/watch?v=2rZ42PPcYpk',
     note: 'Face recognition + people tracking system demo (real product UI)',
     windows: [[5, 55], [60, 50]] },
+  { file: '/tmp/fr24.mp4', tag: 'air-traffic-live', origin: 'https://www.youtube.com/watch?v=eZfjUEkS5eg',
+    note: 'Flightradar-type live map: tracks laid by flying, positions on the clock',
+    windows: [[10, 55], [70, 55], [130, 40]] },
 ];
 
 const CELL_H = 200;
@@ -140,7 +143,15 @@ for (const sc of SCENES) {
   if (!fs.existsSync(sc.file)) { console.log(`missing ${sc.file}`); continue; }
   const dir = path.join(MOTION, sc.tag);
   fs.mkdirSync(dir, { recursive: true });
-  for (const [start, len] of sc.windows) {
+  for (const [startReq, lenReq] of sc.windows) {
+    // Windows are requested, not guaranteed: clamp them to the probed
+    // duration, or ffmpeg quietly yields no frame past the end and
+    // montage dies on a missing tile.
+    const dur = Number(execFileSync('ffprobe', ['-v', 'error', '-show_entries', 'format=duration',
+      '-of', 'default=nw=1:nk=1', sc.file], { encoding: 'utf8' }).trim());
+    const start = Math.min(startReq, Math.max(0, dur - 2));
+    const len = Math.min(lenReq, dur - start);
+    if (len < FRAMES * 0.5) { console.log(`skip ${sc.tag} ${startReq}s: only ${(dur - start).toFixed(1)}s left`); continue; }
     // Include the source file stem: two clips under one tag otherwise
     // write the same strip name and the second silently overwrites the
     // first while both manifest rows survive.
