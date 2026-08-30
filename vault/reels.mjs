@@ -15,9 +15,12 @@
  * themselves and passes the session; this file never sees a password. Without COOKIES or
  * COOKIES_FROM it refuses rather than starting a run that would fail 135 times.
  *
- * It also stops after two consecutive failures. A run that keeps going against a wall turns
- * one clear diagnosis into a hundred identical log lines, and the second failure is where the
- * useful information already was.
+ * It stops when failures look like a wall rather than like weather. A dead session fails
+ * everything; a list of reels posted between 2010 and 2015 fails individually, because some
+ * were made private, deleted, or region-locked years ago. Two consecutive misses were the
+ * first guess at that line and it was wrong -- the second reel in the queue is simply gone,
+ * and stopping there would have abandoned a hundred and thirty-three live ones. So the rule
+ * is now a run of failures with nothing succeeding in between.
  */
 import { execFileSync } from 'node:child_process';
 import { existsSync, readFileSync, appendFileSync } from 'node:fs';
@@ -54,6 +57,7 @@ if (args.DRY) {
   process.exit(0);
 }
 
+const WALL = Number(args.WALL ?? 6);
 const log = join(HERE, 'reels.log');
 let misses = 0;
 let got = 0;
@@ -71,10 +75,11 @@ for (const q of run) {
   } catch {
     appendFileSync(log, `FAIL ${q.id} ${q.key} ${q.work.title}\n`);
     misses += 1;
-    if (misses >= 2) {
-      console.error(`\nreels.mjs: two in a row failed. Stopping rather than walking the rest of`
-        + ` the list into the same wall. Check the session is live and that yt-dlp is current --`
-        + ` a stale extractor looks exactly like a hard refusal. ${got} fetched before this.`);
+    console.log(`skip     ${q.id} unavailable (${misses} in a row)`);
+    if (misses >= WALL) {
+      console.error(`\nreels.mjs: ${WALL} in a row failed with nothing succeeding between them.`
+        + ` That is a wall, not a run of dead links. Check the session is live and that yt-dlp is`
+        + ` current -- a stale extractor looks exactly like a hard refusal. ${got} fetched first.`);
       process.exit(1);
     }
   }
