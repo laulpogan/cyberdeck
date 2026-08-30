@@ -205,7 +205,11 @@ def main():
             checked += 1
         loop = f"{record['loopSeconds']:.1f}s" if record.get("loopSeconds") else "—"
         verified = {True: "**yes**", False: "no"}.get(mark.get("contentVerified"), "☐")
-        lines.append(f"| {record['seed']} | `{os.path.basename(rel)[:40]}` | {record['frames']} "
+        # The full relative path, not a truncated basename. A row that reads
+        # `magi--media.tenor.com_DsOG5u4CNHkAAAA1_fud` opens nothing: there is no such file, no
+        # status and no way back to the sheet. A ledger whose rows cannot be reopened is a list
+        # of rumours, so the path is the row.
+        lines.append(f"| {record['seed']} | `{rel}` | {record['frames']} "
                      f"| {loop} | {record['status']} | {verified} "
                      f"| {(mark.get('shows') or '_awaiting eyes_')[:70]} |")
     open(os.path.join(HERE, "EYEBALL.md"), "w").write("\n".join(lines) + "\n")
