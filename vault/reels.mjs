@@ -62,10 +62,19 @@ if (args.DRY) {
   process.exit(0);
 }
 
-// A missing video says nothing about whether we are allowed in; a demand for credentials says
-// everything. Only the second kind is a reason to abandon the rest of the list.
-const GONE = /404|not found|no longer exist|removed|deleted|private|unavailable|password/i;
-const WALL = /sign ?in|log ?in|403|401|forbidden|cookies|account|credential/i;
+// A missing or restricted video says nothing about whether we are allowed in; a demand for
+// credentials says everything. Only the second kind is a reason to abandon the rest.
+//
+// Two corrections are baked in here. First, classify on yt-dlp's own ERROR line and nothing
+// else: the previous version tested the whole of stderr, which includes youtube.mjs's own
+// message about how a 403 page ends up in a vault -- so the word 403 in our own prose marked
+// every failure as a wall. A detector that reads its own output is not a detector.
+//
+// Second, a bare 403 on one video is a restricted video, not a dead session. Vimeo returns it
+// for things set to followers-only or blocked by region, and it arrives in the middle of a run
+// of successes. The signal for an actual wall is a demand for credentials, in words.
+const ERRLINE = /^ERROR:.*$/mi;
+const WALL = /sign ?in|log ?in|logged[- ]in|cookies|credential|account|password required/i;
 const log = join(HERE, 'reels.log');
 let misses = 0;
 let got = 0;
@@ -83,10 +92,11 @@ for (const q of run) {
     got += 1;
   } catch (err) {
     const why = String(err.stderr || '');
-    const gone = GONE.test(why) && !WALL.test(why);
+    const line = (why.match(ERRLINE) || [''])[0];
+    const gone = !WALL.test(line);
     appendFileSync(log, `${gone ? 'GONE' : 'FAIL'} ${q.id} ${q.key} ${q.work.title}\n`);
     if (gone) {
-      console.log(`gone     ${q.id} ${q.work.title} -- pruned from the host, not a refusal`);
+      console.log(`gone     ${q.id} ${q.work.title} -- ${line.slice(0, 90) || 'unavailable'}`);
       misses = 0;
       continue;
     }

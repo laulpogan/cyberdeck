@@ -293,6 +293,30 @@ Multiple functions per row are normal — most real screens do more than one job
 | map · sensor | Jupiter Ascending — isometric weather-map-inspired flow lines visualising invisible forces, projected live onto glass set panels rather than added in post | film-tv | https://www.hudsandguis.com/home/2015/2/16/jupiter-ascending-ui-reel-by-territory-studio | drawing what cannot be seen — cloaking and wormholes — as meteorology |
 | sensor · map | Invasion (2020) — military command-centre satellite and radar screens plus abstract alien-AI data visualisation, point-cloud prologue | film-tv | https://www.hudsandguis.com/home/2020/invasion | a non-Anglophone blockbuster's command centre, which is a register this catalog had nothing in. Studio dobro.ccs |
 
+## Bulk index — `EXAMPLES.json`
+
+19,637 examples, harvested by `harvest.mjs` from the two sources that publish structured data
+rather than pages. It is an index of titles and links; no pictures are stored, and nothing
+here has been looked at.
+
+The two halves are not equal and should not be quoted as one number.
+
+**Are.na, 2,649 rows across 17 verified channels.** The strong half. Block titles are often
+production filenames that name a screen *and its state* — an Avengers monitor broken out into
+battle mode, menu system, blank screen, four-up layout — which is exactly the granularity a
+comparison catalog needs and the thing no other source hands over.
+
+**Interface In Game, 16,988 rows.** A pool rather than a catalog. Their sitemaps carry no
+image titles, so the label comes from the URL slug, and the slug is the game plus an index
+number: `apex legends 28`, `anno 1800 24 2`. That identifies which game a screenshot belongs
+to, across roughly 6,600 game groupings, and nothing about what the screen shows. Useful for
+going and looking; not useful for comparing without a pass that opens them.
+
+The first version of this harvest was worse and is worth recording. It looked for image titles
+that these sitemaps do not contain, and returned seventeen thousand rows with no game and no
+name on any of them. An unlabelled URL is not an example, it is a URL, and a large number of
+them is not progress.
+
 ## Function coverage
 
 The comparison spine from `MISSION.md`. A function is covered when it holds instances from
