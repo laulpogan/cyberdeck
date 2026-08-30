@@ -19,6 +19,7 @@ looking at, matched against the game names the corpus already taught us in `func
     python3 vault/survey.py GAMES=1            # add the games, ~2k more
     python3 vault/survey.py SETS=terminal-ruins,software-cyberdeck
     python3 vault/survey.py LIMIT=300          # a taste first
+    python3 vault/survey.py PAGE=1             # rebuild the page from what is on disk
 
 Everything lands under `vault/raw/`, which is gitignored. This is a private reference copy for
 design study; nothing here is redistributed and no third-party image is ever committed.
@@ -41,9 +42,6 @@ args = dict(a.split("=", 1) for a in sys.argv[1:] if "=" in a)
 from PIL import Image  # noqa: E402  (after args, so a bad invocation fails before the import cost)
 
 
-# Titles worth looking at, by feel. Not a taxonomy and not defensible -- it is a taste list, and
-# the whole point of this pass is that taste comes before tagging. Matched loosely against the
-# game names learned from the corpus, so a substring is enough.
 # Titles worth looking at, by feel. Not a taxonomy and not defensible -- it is a taste list, and
 # the whole point of this pass is that taste comes before tagging. Matched as substrings against
 # the game names learned from the corpus, so `deus ex` catches `deus ex mankind divided`.
@@ -198,7 +196,52 @@ q.addEventListener('input',run);run();
 """
 
 
+def build_page(entries):
+    """entries: (group, full-size path, thumbnail path).
+
+    Kept separate from fetching, because a long fetch should not be the only thing that can
+    produce a gallery. The games half of this survey takes over an hour, and a run that dies at
+    ninety per cent should cost you the last ten per cent, not the page."""
+    by_group = {}
+    for group, path, tp in entries:
+        by_group.setdefault(group, []).append((path, tp))
+
+    blocks = []
+    for name in sorted(by_group, key=lambda g: -len(by_group[g])):
+        cards = []
+        for path, tp in by_group[name]:
+            label = os.path.basename(path).split("--", 1)[-1]
+            key = html.escape(f"{name} {label}".lower(), quote=True)
+            cards.append(
+                f'<figure data-k="{key}">'
+                f'<a class=shot href="{html.escape(os.path.relpath(path, RAW))}">'
+                f'<img loading=lazy src="{html.escape(os.path.relpath(tp, RAW))}"></a>'
+                f'<figcaption>{html.escape(name)}</figcaption></figure>')
+        blocks.append(f'<section id="{html.escape(name)}" data-name="{html.escape(name)}">'
+                      f'<h2>{html.escape(name)} · {len(by_group[name])}</h2>'
+                      f'<div class=grid>{"".join(cards)}</div></section>')
+
+    dest = os.path.join(RAW, "gallery.html")
+    open(dest, "w").write(PAGE.replace("__CARDS__", "".join(blocks)))
+    print(f"gallery: {dest}  ({len(entries)} images, {len(by_group)} groups)")
+
+
+def from_disk():
+    """Everything that has a thumbnail, grouped by the prefix the fetcher wrote into its name."""
+    entries = []
+    for name in sorted(os.listdir(THUMBS)):
+        if not name.endswith(".webp"):
+            continue
+        full = os.path.join(RAW, name[:-len(".webp")])
+        if os.path.exists(full):
+            entries.append((name.split("--", 1)[0], full, os.path.join(THUMBS, name)))
+    return entries
+
+
 def main():
+    if args.get("PAGE"):
+        build_page(from_disk())
+        return
     everything = json.load(open(os.path.join(HERE, "EXAMPLES.json")))
     rows = [r for r in everything
             if r["from"] == "are.na" and r["kind"] in ("Image", "Attachment")]
@@ -227,28 +270,12 @@ def main():
 
     by_set = {}
     with concurrent.futures.ThreadPoolExecutor(max_workers=8) as pool:
-        paths = list(pool.map(lambda g: thumb(g[1]), got))
-    for (row, path), tp in zip(got, paths):
-        if tp and not path.endswith(".mp4"):
-            by_set.setdefault(row["set"], []).append((row, path, tp))
+        list(pool.map(lambda g: thumb(g[1]), got))
 
-    out = []
-    for name in sorted(by_set, key=lambda s: -len(by_set[s])):
-        items = by_set[name]
-        cards = []
-        for row, path, tp in items:
-            key = html.escape(f"{name} {row.get('title', '')}".lower(), quote=True)
-            cards.append(
-                f'<figure data-k="{key}"><a class=shot href="{html.escape(os.path.relpath(path, RAW))}">'
-                f'<img loading=lazy src="{html.escape(os.path.relpath(tp, RAW))}"></a>'
-                f'<figcaption>{html.escape(row.get("title", "") or "—")[:90]}</figcaption></figure>')
-        out.append(f'<section id="{html.escape(name)}" data-name="{html.escape(name)}">'
-                   f'<h2>{html.escape(name)} · {len(items)}</h2>'
-                   f'<div class=grid>{"".join(cards)}</div></section>')
-
-    dest = os.path.join(RAW, "gallery.html")
-    open(dest, "w").write(PAGE.replace("__CARDS__", "".join(out)))
-    print("gallery:", dest)
+    # The page is built from disk rather than from `got`, so it carries everything ever fetched
+    # rather than only this run's share. That is what makes the two halves -- are.na and the
+    # games -- add up to one gallery instead of overwriting each other.
+    build_page(from_disk())
 
 
 main()
