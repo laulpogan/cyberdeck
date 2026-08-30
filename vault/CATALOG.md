@@ -269,6 +269,12 @@ by what the surface does, so a function can be read down rather than hunted acro
 Multiple functions per row are normal — most real screens do more than one job.
 | function | what | vein | source | why |
 | --- | --- | --- | --- | --- |
+| consensus · identity · warning | Robocop (2014) montage, Perception — threat assessment printed onto a person's face in three states: NO THREAT DETECTED, NON THREAT, and THREAT, each a coloured plate over the subject while their hands are raised | film-tv | https://vimeo.com/86511029 | the best decision surface found anywhere so far. A machine reaching a verdict about a human and rendering it ON them, with a distinct plate per state rather than a single alarm. Also carries SCANNING ENVIRONMENT wireframe passes, a CCTV UPLOAD counter over a grid of camera thumbnails, an ASSESSING CRIMINAL ACTIVITY board and OFFLINE plates. Viewed: 43-frame sheet across 86s |
+| scan · sensor | Robocop (2014) — the SCANNING ENVIRONMENT pass: a red wireframe sweeping a corridor and resolving its geometry, with a walking figure picked out in red against it | film-tv | https://vimeo.com/86511029 | scanning shown as the room being drawn rather than a line crossing a subject. Viewed on the same sheet |
+| map · sensor · timeline | Zero Dark Thirty, Territory Studio — the compound rendered as plan, wireframe, shadow study and HUD overlay, plus a situation-room wall of monitors and red seven-segment countdown clocks | film-tv | https://vimeo.com/68522528 | a numbered breakdown reel: the layers are labelled 10 LOW POLY SIMULATION, 11 CHARACTER ANIMATION, 12 CHARACTERS, 14 SHADOWS, 17 COMPOSITE, 19 HUD OVERLAY, so you can see the readout assembled in stages. Rare to get the construction rather than the result. Viewed: 29-frame sheet across 58s |
+| identity · tracking | Person of Interest main title, Imaginary Forces — individuals boxed out of a moving crowd and tagged, with a status plate reading NYPD: ACTIVE held beside the face | tv-show | https://vimeo.com/52100298 | the cleanest identity readout in the set: a person, a box, a status. Opens on a city map with target rings and closes on a red network graph of the whole city, so it runs the full scope from population to individual. Viewed: 28-frame sheet across 28s |
+| scan · map | Person of Interest title — the surveillance city: overhead plates with target circles and address labels, then the same city as a red line network | tv-show | https://vimeo.com/52100298 | two representations of one place, one photographic and one topological, cut against each other. Viewed on the same sheet |
+| terminal · diagnostic | Symbolics Open Genera 2.0, Kalman Reti's 2013 demo — full-screen Dynamic Windows: dense tiled text panes, banner headers, a persistent status line, a live inspector, mouse-sensitive output | obsolete computing | https://www.youtube.com/watch?v=o4-YnLpLgtk | a real system rather than a depiction of one, held uncut for 822 seconds. The window picker scores it at 0.0013 energy, fifty times below the reels, which is the honest reading: it is a static text desktop that occasionally changes. Viewed: 39-frame sheet |
 | scan · analysis | Ghost in the Shell 2: Innocence — Batou's environment scans, orange-on-black cyborg readouts, holographic diagrams | anime | https://www.hudsandguis.com/2011/10/17/ui-design-ghost-in-the-shell-2 | a starker, earlier take on the same franchise's scanning language. Orange on black rather than the cyan everyone copies |
 | map · comms | Ghost in the Shell (2017) — holo-conference room with scanline-textured life-size holograms; a Hologlobe tabletop where users insert cards and gesture on the surface | film-tv | https://www.hudsandguis.com/home/2017/4/17/ghostintheshell-fui | physical cards inserted into a table as the input to a holographic display. MPC, Territory, Ash Thorp |
 | identity | Blade Runner 2049 — three-tier fidelity: Wallace Corp elegant and minimal, LAPD gritty, K's Spinner deliberately degraded | film-tv | https://www.hudsandguis.com/home/2018/blade-runner-2049 | UI quality itself signalling class and status. The most transferable idea in the whole archive |
@@ -328,24 +334,24 @@ work list, and a depth pass fills it.
 
 | function | media held | status |
 | --- | --- | --- |
-| terminal | — | open |
+| terminal | obsolete computing | 1 of 3 |
 | scope | — | open |
-| scan | — | open |
-| analysis | — | open |
-| warning | — | open |
-| map | — | open |
-| tracking | — | open |
+| scan | film-tv, anime, games | COVERED |
+| analysis | anime, film-tv | 2 of 3 |
+| warning | film-tv | 1 of 3 |
+| map | film-tv, tv-show, games | COVERED |
+| tracking | tv-show | 1 of 3 |
 | manifest | — | open |
-| access | — | open |
-| diagnostic | — | open |
-| queue | — | open |
-| comms | — | open |
-| boot | — | open |
+| access | games | 1 of 3 |
+| diagnostic | film-tv, games, obsolete computing | COVERED |
+| queue | film-tv | 1 of 3 |
+| comms | film-tv, anime | 2 of 3 |
+| boot | film-tv, games | 2 of 3 |
 | progress | — | open |
-| targeting | — | open |
-| vitals | — | open |
-| timeline | — | open |
+| targeting | film-tv, games | 2 of 3 |
+| vitals | film-tv | 1 of 3 |
+| timeline | film-tv | 1 of 3 |
 | network | — | open |
-| consensus | — | open |
-| identity | — | open |
-| sensor | — | open |
+| consensus | film-tv | 1 of 3 |
+| identity | film-tv, tv-show | 2 of 3 |
+| sensor | film-tv | 1 of 3 |
