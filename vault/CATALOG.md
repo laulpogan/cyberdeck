@@ -250,3 +250,36 @@ around one. Several are excellent sources — a person may read them, we do not 
 | airandspace.si.edu | 403 |
 | pushing-pixels.org | permitted, but sets `Crawl-delay: 10`. Honour it |
 | vimeo.com | yt-dlp reports the web client now works only when logged in. Credentials or browser cookies would route around an access gate, so the 135 reel IDs in `KIT-FUI.json` are enumerable but not fetchable here. The reels need a person with a browser session |
+
+## Function coverage
+
+The comparison spine from `MISSION.md`. A function is covered when it holds instances from
+at least three different media — film/TV, anime, games, real hardware, obsolete computing,
+print. Three, because two is a coincidence and three is a convention.
+
+Nothing is tagged yet: the survey phase collected sources, not instances. This table is the
+work list, and a depth pass fills it.
+
+| function | media held | status |
+| --- | --- | --- |
+| terminal | — | open |
+| scope | — | open |
+| scan | — | open |
+| analysis | — | open |
+| warning | — | open |
+| map | — | open |
+| tracking | — | open |
+| manifest | — | open |
+| access | — | open |
+| diagnostic | — | open |
+| queue | — | open |
+| comms | — | open |
+| boot | — | open |
+| progress | — | open |
+| targeting | — | open |
+| vitals | — | open |
+| timeline | — | open |
+| network | — | open |
+| consensus | — | open |
+| identity | — | open |
+| sensor | — | open |
