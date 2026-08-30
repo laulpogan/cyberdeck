@@ -15,6 +15,9 @@
  * `vault/README.md`: a moving diegetic interface is not on GIF hosts. It is in the films, and the
  * films are on YouTube.
  *
+ * Hosts that want a session get one from the operator, never from this tool: pass
+ * COOKIES=<file> (an export scoped to that host, preferred) or COOKIES_FROM=<browser>.
+ *
  * Two modes, and the first one is not optional.
  *
  *   node vault/youtube.mjs URL=https://www.youtube.com/watch?v=ID SLUG=magi
@@ -58,6 +61,18 @@ const SLUG = need('SLUG', 'The slug names the record and the derived GIF; a file
   + ' nobody can trace back is the thing this vault was built to stop being.');
 const MAX_HEIGHT = args.MAX_HEIGHT ?? '720';
 
+// Some hosts serve metadata to anyone and media only to a signed-in client -- Vimeo is the
+// live example. That is a locked door, not a refusal: the operator opens it with their own
+// account and hands the session over. So the credentials are an input, never something this
+// tool acquires, and it holds no password at any point.
+//   COOKIES=/path/to/cookies.txt   an export scoped to the one host (preferred)
+//   COOKIES_FROM=chrome            yt-dlp reads the browser's whole cookie store
+// The file form is the default advice because the browser form decrypts every cookie the
+// browser holds, for every site, to fetch one video.
+const auth = args.COOKIES ? ['--cookies', args.COOKIES]
+  : args.COOKIES_FROM ? ['--cookies-from-browser', args.COOKIES_FROM]
+  : [];
+
 // 1. Identity first. This also proves the page is reachable before anything is written to disk,
 //    and costs one metadata request rather than a download that fails at 90%.
 let id;
@@ -65,11 +80,15 @@ let title;
 let durationText;
 try {
   [id, title, durationText] = execFileSync('yt-dlp',
-    ['-q', '--no-warnings', '--print', '%(id)s\n%(title)s\n%(duration)s', URL_],
+    ['-q', '--no-warnings', ...auth, '--print', '%(id)s\n%(title)s\n%(duration)s', URL_],
     { encoding: 'utf8' }).trim().split('\n');
 } catch {
   console.error(`youtube.mjs: yt-dlp could not read ${URL_}. A page that will not identify`
     + ' itself is not a reference, and guessing past that is how a 403 page ends up in a vault.');
+  if (!auth.length) {
+    console.error('         If the error mentions signing in, this host wants a session. Pass'
+      + ' COOKIES=<file> or COOKIES_FROM=<browser> once the operator has logged in themselves.');
+  }
   process.exit(2);
 }
 
@@ -80,7 +99,7 @@ const cached = join(SRC, `${id}.mp4`);
 //    film and then cutting three windows out of it costs one download.
 if (!existsSync(cached)) {
   console.log(`fetch    ${id}  ${title}  (${durationText}s)`);
-  execFileSync('yt-dlp', ['-q', '--no-warnings', '--no-playlist',
+  execFileSync('yt-dlp', ['-q', '--no-warnings', '--no-playlist', ...auth,
     '-f', `bestvideo[height<=${MAX_HEIGHT}]+bestaudio/best[height<=${MAX_HEIGHT}]/best`,
     '--merge-output-format', 'mp4', '-o', cached, URL_], { stdio: 'inherit' });
 } else {
