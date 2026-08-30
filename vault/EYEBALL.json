@@ -1,4 +1,39 @@
 {
+ "raw/akira-capsule--media.tenor.com_N_KvrPF8bLIAAAA1_dancing-anime-characters.webp.webp": {
+  "contentVerified": false,
+  "eyeballedBy": "agent-eye(qwen/dot-backbone)",
+  "framesViewed": "8 frames sampled across the file's own timeline",
+  "sheet": "/tmp/eye-ledger/all/sheet-01.png",
+  "shows": "no=Same dancing-chibi clip in webp form — the same four figures bouncing on a teal/pink stage. No interface."
+ },
+ "raw/akira-capsule--media.tenor.com_N_KvrPF8bLIAAAAM_dancing-anime-characters.gif.gif": {
+  "contentVerified": false,
+  "eyeballedBy": "agent-eye(qwen/dot-backbone)",
+  "framesViewed": "8 frames sampled across the file's own timeline",
+  "sheet": "/tmp/eye-ledger/all/sheet-01.png",
+  "shows": "no=Chibi anime characters dancing on a green ground loop, TikTok watermark \"@shinmelinda\" over frame 2. A dancing-character meme; no vehicle, no capsule, no interface of any kind."
+ },
+ "raw/akira-capsule--media.tenor.com_dg_oP4OGPWcAAAAm_diwali-dhamaka-kalia.webp.webp": {
+  "contentVerified": false,
+  "eyeballedBy": "agent-eye(qwen/dot-backbone)",
+  "framesViewed": "8 frames sampled across the file's own timeline",
+  "sheet": "/tmp/eye-ledger/all/sheet-01.png",
+  "shows": "no=A Diwali/Dhaka logo sting: a wordmark over a checkered floor with a light sweep. Promotional title animation, not a screen UI."
+ },
+ "raw/akira-capsule--media.tenor.com_x2XXdMLovF0AAAA1_cym-cropped-yakuza-memes.webp.webp": {
+  "contentVerified": false,
+  "eyeballedBy": "agent-eye(qwen/dot-backbone)",
+  "framesViewed": "8 frames sampled across the file's own timeline",
+  "sheet": "/tmp/eye-ledger/all/sheet-01.png",
+  "shows": "no=Same Yakuza meme in webp form — the table scene with a chibi figure and a small crowd cut-in. No interface."
+ },
+ "raw/akira-capsule--media.tenor.com_x2XXdMLovF0AAAAM_cym-cropped-yakuza-memes.gif.gif": {
+  "contentVerified": false,
+  "eyeballedBy": "agent-eye(qwen/dot-backbone)",
+  "framesViewed": "8 frames sampled across the file's own timeline",
+  "sheet": "/tmp/eye-ledger/all/sheet-01.png",
+  "shows": "no=Kyomu-cropped Yakuza meme: a text card reading GIRIGUSHI over a still, then a man standing at a low table, then a chibi redraw of the same table scene. A dialogue meme; no HUD."
+ },
  "raw/atc-radar-pease.gif": {
   "contentVerified": false,
   "eyeballedBy": "agent-eye(qwen/dot-backbone)",
@@ -81,8 +116,36 @@
   "contentVerified": false,
   "eyeballedBy": "agent-eye(qwen/dot-backbone)",
   "framesViewed": "8 frames sampled across the file's own timeline",
-  "sheet": "/tmp/eye-q/all/sheet-03.png",
-  "shows": "A pixel drawing that alternates between a face in a grille and a boot — the boots-and-a-face joke, 20 frames. No instrument in it."
+  "sheet": "/tmp/eye-ledger/all/sheet-06.png",
+  "shows": "no=Black-and-white pixel illustration of a van front on black, with a diagonal hazard-striped band wiping across it every few frames. A graphic glitch-wipe on a vehicle drawing — the wipe motion is real but the subject is a van illustration, not a HUD."
+ },
+ "raw/generic-hud--media.tenor.com_dGu30CNlqkkAAAA1_sad-hug-gif.webp.webp": {
+  "contentVerified": false,
+  "eyeballedBy": "agent-eye(qwen/dot-backbone)",
+  "framesViewed": "8 frames sampled across the file's own timeline",
+  "sheet": "/tmp/eye-ledger/all/sheet-06.png",
+  "shows": "no=Live-action Korean-drama scene: a woman and a man in dark suits in front of a wood-panel wall, leaning together until their faces touch. Camera-only footage, zero interface."
+ },
+ "raw/generic-hud--media.tenor.com_dGu30CNlqkkAAAAM_sad-hug-gif.gif.gif": {
+  "contentVerified": false,
+  "eyeballedBy": "agent-eye(qwen/dot-backbone)",
+  "framesViewed": "8 frames sampled across the file's own timeline",
+  "sheet": "/tmp/eye-ledger/all/sheet-06.png",
+  "shows": "no=Same K-drama kiss scene in gif form (32 frames, 3.2s loop) — the same two figures and the same wood wall. No interface."
+ },
+ "raw/generic-hud--media.tenor.com_pCADhAyoF64AAAA1_trash-garbage.webp.webp": {
+  "contentVerified": false,
+  "eyeballedBy": "agent-eye(qwen/dot-backbone)",
+  "framesViewed": "8 frames sampled across the file's own timeline",
+  "sheet": "/tmp/eye-ledger/all/sheet-06.png",
+  "shows": "no=Handheld phone footage at a kerbside rubbish tip — figures standing on wheelie bins, the word HUD burned into the bottom of the frame as a caption. The keyword found the word in a caption, not an interface. No drawn HUD anywhere."
+ },
+ "raw/generic-hud--media.tenor.com_pCADhAyoF64AAAAM_trash-garbage.gif.gif": {
+  "contentVerified": false,
+  "eyeballedBy": "agent-eye(qwen/dot-backbone)",
+  "framesViewed": "8 frames sampled across the file's own timeline",
+  "sheet": "/tmp/eye-ledger/all/sheet-06.png",
+  "shows": "no=Same kerbside rubbish-tip clip in gif form, 21 frames looping at 2.1s, same HUD caption burned bottom-centre. A meme about the word, not a screen."
  },
  "raw/gits-optic--edia.tenor.com_MC6C3rHwL_YAAAA1_ghost-in-the-shell-kokaku-kidotai.webp.webp": {
   "contentVerified": false,
@@ -99,6 +162,41 @@
   "sheet": "/tmp/eyeball/all/sheet-08.png",
   "sheetNote": "The /tmp path names the strip set the eyes were on at the time of the mark; sheets are regenerated artifacts and are not in git. Re-run `python3 vault/eyeball.py SEED=<seed>` to reproduce the strip for this file.",
   "shows": "Same clip, gif copy: character animation over a static data-column skyline."
+ },
+ "raw/gits-optic--media.tenor.com_VF1njMisAREAAAA1_major-motoko.webp.webp": {
+  "contentVerified": false,
+  "eyeballedBy": "agent-eye(qwen/dot-backbone)",
+  "framesViewed": "8 frames sampled across the file's own timeline",
+  "sheet": "/tmp/eye-ledger/all/sheet-07.png",
+  "shows": "no=Anime close-up: blue-haired girl lying down, eyes closing, cutting to a red-haired girl propped on an elbow against a pale out-of-focus panel wall. Character acting, no optic overlay, no interface motion."
+ },
+ "raw/gits-optic--media.tenor.com_VF1njMisAREAAAAM_major-motoko.gif.gif": {
+  "contentVerified": false,
+  "eyeballedBy": "agent-eye(qwen/dot-backbone)",
+  "framesViewed": "8 frames sampled across the file's own timeline",
+  "sheet": "/tmp/eye-ledger/all/sheet-07.png",
+  "shows": "no=Same anime close-up pair in gif form — the blue-haired girl, then the red-haired girl in front of a blurred wall of pale readout panels. The background reads as a control room but nothing in it moves or resolves; there is nothing to imitate."
+ },
+ "raw/gits-optic--media.tenor.com_YmizP6ZPRKwAAAA1_ghost-cod.webp.webp": {
+  "contentVerified": false,
+  "eyeballedBy": "agent-eye(qwen/dot-backbone)",
+  "framesViewed": "8 frames sampled across the file's own timeline",
+  "sheet": "/tmp/eye-ledger/all/sheet-07.png",
+  "shows": "no=Halo Reach multiplayer in snow — two Spartans, one hoisting the other — with Russian meme captions top and bottom. Gameplay footage with burned-in text; the only screen furniture is whatever the game engine draws."
+ },
+ "raw/gits-optic--media.tenor.com_YmizP6ZPRKwAAAAM_ghost-cod.gif.gif": {
+  "contentVerified": false,
+  "eyeballedBy": "agent-eye(qwen/dot-backbone)",
+  "framesViewed": "8 frames sampled across the file's own timeline",
+  "sheet": "/tmp/eye-ledger/all/sheet-07.png",
+  "shows": "no=Same Halo snow meme in gif form, 49 frames looping at 4.9s, same Russian captions. No interface."
+ },
+ "raw/gits-optic--media.tenor.com_wn2h7OIneRwAAAA1_ghost-in-the-shell-anime-girl.webp.webp": {
+  "contentVerified": false,
+  "eyeballedBy": "agent-eye(qwen/dot-backbone)",
+  "framesViewed": "8 frames sampled across the file's own timeline",
+  "sheet": "/tmp/eye-ledger/all/sheet-07.png",
+  "shows": "no=Two anime girls in a cafe reading papers with sparkle effects around one head. A comedy beat, not a Ghost in the Shell optic shot; zero interface."
  },
  "raw/gits-optic--media.tenor.com_wn2h7OIneRwAAAAM_ghost-in-the-shell-anime-girl.gif.gif": {
   "contentVerified": false,
@@ -156,12 +254,40 @@
   "sheet": "/tmp/eye-q/all/sheet-01.png",
   "shows": "A yellow ANSYNC wordmark with a star, jittering and briefly dropping to a single block. An animated logo, not an instrument; the motion is jitter applied to type."
  },
+ "raw/insertion-sync--blob.gifcities.org_gifcities_2C4I4ETZCMMDL74OK5FQHSLCKJEQK45Z.gif": {
+  "contentVerified": false,
+  "eyeballedBy": "agent-eye(qwen/dot-backbone)",
+  "framesViewed": "8 frames sampled across the file's own timeline",
+  "sheet": "/tmp/eye-ledger/all/sheet-10.png",
+  "shows": "no=A Geocities-era white banner with the line Mario Congressista con Honor in small black type, the letter spacing and weight jittering on a 2.0s loop. A flashing text banner — it does have a real period and a real loop, but the subject is a political wordmark and nothing measures anything."
+ },
+ "raw/insertion-sync--blob.gifcities.org_gifcities_2GR3M22SZERKOBYQPVKLW2MWDHRTKL62.gif": {
+  "contentVerified": false,
+  "eyeballedBy": "agent-eye(qwen/dot-backbone)",
+  "framesViewed": "8 frames sampled across the file's own timeline",
+  "sheet": "/tmp/eye-ledger/all/sheet-11.png",
+  "shows": "no=A Geocities-era oval badge reading NSYNC, cycling hue frame to frame: blue, magenta, gold, green, cyan, with a white gleam sweeping the ellipse. A colour-cycle loop with a real 1.0s period — the cycle mechanic is transferable, the subject is a boyband wordmark and nothing measures anything."
+ },
  "raw/insertion-sync--blob.gifcities.org_gifcities_2V66PE7Q3CTXL77X7FUG3VRUCXWWWMZS.gif": {
   "contentVerified": false,
   "eyeballedBy": "agent-eye(qwen/dot-backbone)",
   "framesViewed": "8 frames sampled across the file's own timeline",
   "sheet": "/tmp/eye-q/all/sheet-02.png",
   "shows": "End-credit titles crawling on black in cyan and green (Star Trek the Next Generation, a producer credit). Type moving over black; no interface."
+ },
+ "raw/insertion-sync--media.tenor.com_5y8cpd3mdaMAAAA1_champion-black-belter.webp.webp": {
+  "contentVerified": false,
+  "eyeballedBy": "agent-eye(qwen/dot-backbone)",
+  "framesViewed": "8 frames sampled across the file's own timeline",
+  "sheet": "/tmp/eye-ledger/all/sheet-10.png",
+  "shows": "no=Stage footage from a Serbian talent show — a singer in a pink sports bra with arms raised while two handlers fit a championship belt around her waist, concentric-circle backdrop graphics behind. Camera-only; the round graphics are set dressing on a wall, not a screen."
+ },
+ "raw/insertion-sync--media.tenor.com_5y8cpd3mdaMAAAAM_champion-black-belter.gif.gif": {
+  "contentVerified": false,
+  "eyeballedBy": "agent-eye(qwen/dot-backbone)",
+  "framesViewed": "8 frames sampled across the file's own timeline",
+  "sheet": "/tmp/eye-ledger/all/sheet-10.png",
+  "shows": "no=Same belt-ceremony stage footage in gif form, 37 frames looping at 3.7s. No interface motion."
  },
  "raw/insertion-sync--media.tenor.com_H2iWMCqaaBsAAAA1_sync-done.webp.webp": {
   "contentVerified": false,
@@ -171,6 +297,13 @@
   "sheet": "/tmp/eyeball/all/sheet-09.png",
   "sheetNote": "The /tmp path names the strip set the eyes were on at the time of the mark; sheets are regenerated artifacts and are not in git. Re-run `python3 vault/eyeball.py SEED=<seed>` to reproduce the strip for this file.",
   "shows": "A snowy road, a truck, a body thrown, with the words sync and then done. stamped over the frame. Not an interface; the only transferable idea is that the state word is the last thing to arrive and the only thing that sta"
+ },
+ "raw/insertion-sync--media.tenor.com_H2iWMCqaaBsAAAAM_sync-done.gif.gif": {
+  "contentVerified": false,
+  "eyeballedBy": "agent-eye(qwen/dot-backbone)",
+  "framesViewed": "8 frames sampled across the file's own timeline",
+  "sheet": "/tmp/eye-ledger/all/sheet-10.png",
+  "shows": "no=Snowy roadside dashcam meme — a truck at the kerb, the lowercase word sync burned over the first quarter, a whip-pan blur, a distant runner, then the word done. on a dark frame. The mark classifier called this reference off the caption; the eyes say it is a two-word meme card. One device is transferable: a held word, a hard blur transition, a completion word — timing with no form. Zero interface furniture, no gauge, no numerals."
  },
  "raw/insertion-sync--media.tenor.com_OqdnW132Vu0AAAA1_jack-stauber-pull-the-plug.webp.webp": {
   "contentVerified": false,
@@ -190,12 +323,166 @@
   "sheetNote": "The /tmp path names the strip set the eyes were on at the time of the mark; sheets are regenerated artifacts and are not in git. Re-run `python3 vault/eyeball.py SEED=<seed>` to reproduce the strip for this file.",
   "shows": "Same white-room clip as the 140-frame file, gif copy: character footage, no interface."
  },
+ "raw/insertion-sync--media.tenor.com_VHHSBFU2EM8AAAA1_dexters-laboratory.webp.webp": {
+  "contentVerified": false,
+  "eyeballedBy": "agent-eye(qwen/dot-backbone)",
+  "framesViewed": "8 frames sampled across the file's own timeline",
+  "sheet": "/tmp/eye-ledger/all/sheet-11.png",
+  "shows": "no=Same Dexters Laboratory cartoon in another capture — the goggled boy at a console, a starburst impact, then the extruded orange title card over a blue gantry. Duplicate of the row above it; an opening credit, not a sync readout."
+ },
+ "raw/insertion-sync--media.tenor.com_VHHSBFU2EM8AAAAM_dexters-laboratory.gif.gif": {
+  "contentVerified": false,
+  "eyeballedBy": "agent-eye(qwen/dot-backbone)",
+  "framesViewed": "8 frames sampled across the file's own timeline",
+  "sheet": "/tmp/eye-ledger/all/sheet-10.png",
+  "shows": "no=Cartoon frames — a goggled boy with orange hair beside a blue machine, cutting to the title card reading DEXTERS LABORATORY in extruded orange letters across a blue hexagonal gantry. The title-card wipe is a genuine reveal device, but it is an opening credit, not a sync readout."
+ },
+ "raw/lumon--ces.com_wp-content_uploads_2017_02_jm-31-navigation-animated.gif_ssl_1.gif": {
+  "contentVerified": false,
+  "eyeballedBy": "agent-eye(qwen/dot-backbone)",
+  "framesViewed": "8 frames sampled across the file's own timeline",
+  "sheet": "/tmp/eye-ledger/all/sheet-13.png",
+  "shows": "no=A first-person radial-blur plunge down a tunnel of converging light streaks that resolves, over its last two frames, into a dark rack of equipment with red diodes and diagonal hazard stripes, with a pair of hands at the bottom of frame. The camera-move is the whole clip: a zoom-through with a hard focus pull. Worth stealing for a dive transition; it is not a Lumon interface and never shows a readout."
+ },
+ "raw/lumon--media.tenor.com_NM3M3totYHEAAAA1_severance-running-white-hallway.webp.webp": {
+  "contentVerified": false,
+  "eyeballedBy": "agent-eye(qwen/dot-backbone)",
+  "framesViewed": "8 frames sampled across the file's own timeline",
+  "sheet": "/tmp/eye-ledger/all/sheet-12.png",
+  "shows": "no=Adam Driver in a dark suit running down a bright white corridor with a black handrail, then turning. This is not Severance at all — wrong actor, wrong show — and it is a person moving through architecture, not an image of an interface moving. The classifier took the tag severance-running literally."
+ },
+ "raw/lumon--media.tenor.com_NM3M3totYHEAAAAM_severance-running-white-hallway.gif.gif": {
+  "contentVerified": false,
+  "eyeballedBy": "agent-eye(qwen/dot-backbone)",
+  "framesViewed": "8 frames sampled across the file's own timeline",
+  "sheet": "/tmp/eye-ledger/all/sheet-13.png",
+  "shows": "no=Adam Driver running down the white corridor again, 29 frames, the gif twin of the row two up. Same defect: wrong show, and a person moving through architecture rather than an interface moving."
+ },
+ "raw/lumon--media.tenor.com_Uf4j5d7ceokAAAA1_ms-casey-severance.webp.webp": {
+  "contentVerified": false,
+  "eyeballedBy": "agent-eye(qwen/dot-backbone)",
+  "framesViewed": "8 frames sampled across the file's own timeline",
+  "sheet": "/tmp/eye-ledger/all/sheet-12.png",
+  "shows": "no=Ms Casey in a black dress with a white collar, speaking to camera in the break room, with a burned-in subtitle reading Upon request, I can also perform a hug. The only text is a caption the encoder added; the interface she is describing is off screen. Face moves, nothing measures."
+ },
+ "raw/lumon--media.tenor.com_Uf4j5d7ceokAAAAM_ms-casey-severance.gif.gif": {
+  "contentVerified": false,
+  "eyeballedBy": "agent-eye(qwen/dot-backbone)",
+  "framesViewed": "8 frames sampled across the file's own timeline",
+  "sheet": "/tmp/eye-ledger/all/sheet-13.png",
+  "shows": "no=Ms Casey again at 36 frames with the burned-in subtitle Upon request, I can also perform a hug, measured loop 3.6s. Duplicate of the sheet above. The subtitle is the only text, and a loop the encoder reports is a duplicated hold, not a period in a drawing."
+ },
+ "raw/lumon--media.tenor.com_a5XhPdFDGYEAAAA1_helly-r-macrodata-refinement.webp.webp": {
+  "contentVerified": false,
+  "eyeballedBy": "agent-eye(qwen/dot-backbone)",
+  "framesViewed": "8 frames sampled across the file's own timeline",
+  "sheet": "/tmp/eye-ledger/all/sheet-11.png",
+  "shows": "no=Severance footage: Helly in a blue turtleneck standing in the Macrodata Refinement office, the diagonal white-and-grey wedge wall behind her, across 80 frames. She blinks and shifts her eyes almost imperceptibly; the wall does not move. The classifier called this reference off the Severance tag. There is no screen, no terminal, no number in frame — the only Lumon thing here is the paint on the wall."
+ },
+ "raw/lumon--media.tenor.com_a5XhPdFDGYEAAAAM_helly-r-macrodata-refinement.gif.gif": {
+  "contentVerified": false,
+  "eyeballedBy": "agent-eye(qwen/dot-backbone)",
+  "framesViewed": "8 frames sampled across the file's own timeline",
+  "sheet": "/tmp/eye-ledger/all/sheet-12.png",
+  "shows": "no=Ms Casey stare-down, 40 frames, measured loop 4.0s. A woman holding another person in frame while she blinks once. The famous Severance dread in this clip is carried by a face and a zoom, and there is no screen in it."
+ },
+ "raw/lumon--media.tenor.com_y5JfzkXUNNEAAAA1_stare-down-severance.webp.webp": {
+  "contentVerified": false,
+  "eyeballedBy": "agent-eye(qwen/dot-backbone)",
+  "framesViewed": "8 frames sampled across the file's own timeline",
+  "sheet": "/tmp/eye-ledger/all/sheet-12.png",
+  "shows": "no=A young MDR employee in a white shirt at her terminal in the Severance office, blue-white grade, across 68 frames. Her eyes move and her head turns a degree; the terminal itself is never in frame, only the chair-backs behind her. No pixels of the Macrodata Refinement screen are visible, which is the one thing this seed wants."
+ },
+ "raw/lumon--media.tenor.com_y5JfzkXUNNEAAAAM_stare-down-severance.gif.gif": {
+  "contentVerified": false,
+  "eyeballedBy": "agent-eye(qwen/dot-backbone)",
+  "framesViewed": "8 frames sampled across the file's own timeline",
+  "sheet": "/tmp/eye-ledger/all/sheet-12.png",
+  "shows": "no=Same MDR desk shot as the row above at 41 frames, measured loop 4.1s. The loop is the encoder holding the same two-second reaction, not a period in a drawing. Duplicate of that row, not a second reference."
+ },
+ "raw/magi--FBCQAAAAM_digitalisasi-sistem-penjualan-tiket-asdp-terus-berlanjut.gif": {
+  "contentVerified": false,
+  "eyeballedBy": "agent-eye(qwen/dot-backbone)",
+  "framesViewed": "8 frames sampled across the file's own timeline",
+  "sheet": "/tmp/eye-ledger/all/sheet-14.png",
+  "shows": "no=An Indonesian news title card reading DIGITALISASI SISTEM PENJUALAN TIKET ASDP TERUS BERLANJUT in heavy white capitals on a dark plate, wiping over live footage of a white car in its first frame and then holding dead still for 32 more. The wipe is a broadcast transition; the words are a headline about a ticketing system, not a picture of one."
+ },
+ "raw/magi--blob.gifcities.org_gifcities_27GU5PX4IGJ5RNWFQJTH5H3ZLCIORWPF.gif": {
+  "contentVerified": false,
+  "eyeballedBy": "agent-eye(qwen/dot-backbone)",
+  "framesViewed": "8 frames sampled across the file's own timeline",
+  "sheet": "/tmp/eye-ledger/all/sheet-15.png",
+  "shows": "no=A Geocities-era animated avatar barely twenty pixels wide: Rei Ayanami in white, face turning a few degrees across 21 frames, measured loop 3.1s. At this size there is no geometry to read, let alone a three-column system. It is a spacer gif from a personal homepage."
+ },
+ "raw/magi--edia.tenor.com_Z5M4QCFFIo8AAAA1_cat6cable-system-cable-management.webp.webp": {
+  "contentVerified": false,
+  "eyeballedBy": "agent-eye(qwen/dot-backbone)",
+  "framesViewed": "8 frames sampled across the file's own timeline",
+  "sheet": "/tmp/eye-ledger/all/sheet-14.png",
+  "shows": "no=A cable manufacturers diagram: a blue sheathed cable with its twisted pairs splayed out, and the labels CAT5E, CAT5, CAT4A appearing one under another beside the corresponding pairs, over a footer reading Cat 6 cable System and a URL. The label cascade is a real reveal order, and it is the only honest motion here. The subject is Ethernet cable, and the MAGI classifier matched on the word System."
+ },
+ "raw/magi--media.tenor.com_86Ef0-fGKbkAAAAm_aw3-allwhitelaser.webp": {
+  "contentVerified": false,
+  "eyeballedBy": "agent-eye(qwen/dot-backbone)",
+  "framesViewed": "8 frames sampled across the file's own timeline",
+  "sheet": "/tmp/eye-ledger/all/sheet-15.png",
+  "shows": "no=A datamosh wipe resolves into a pixel heart banded in rainbow, carrying a white MM3 wordmark and a small plate reading 00.04.26.09, on a white page. For two frames it is a heart dissolving into blocks, then it holds. A fan logo with a dissolve on the front — the block-dissolve is a real reveal device, but the thing revealed is a wordmark and there is no judgement display in it."
+ },
+ "raw/magi--media.tenor.com_ApvAP_wB5rkAAAA1_i-puk-your-system.webp.webp": {
+  "contentVerified": false,
+  "eyeballedBy": "agent-eye(qwen/dot-backbone)",
+  "framesViewed": "8 frames sampled across the file's own timeline",
+  "sheet": "/tmp/eye-ledger/all/sheet-14.png",
+  "shows": "no=A corridor with a neon sign reading ALEF and silhouetted figures in the distance, then a hard cut to men in blue shirts on wasteland, then a man in black at camera. A music video with an edit at the midpoint. No interface in any frame, and the classifier itself has already called this drift."
+ },
+ "raw/magi--media.tenor.com_ApvAP_wB5rkAAAAM_i-puk-your-system.gif.gif": {
+  "contentVerified": false,
+  "eyeballedBy": "agent-eye(qwen/dot-backbone)",
+  "framesViewed": "8 frames sampled across the file's own timeline",
+  "sheet": "/tmp/eye-ledger/all/sheet-15.png",
+  "shows": "no=The ALEF music video again in its gif form, 29 frames, measured loop 2.9s — neon sign, silhouettes in a corridor, cut to men on wasteland, cut to black with the sign alone in the last frame. Duplicate of a row already refused on this sheet."
+ },
+ "raw/magi--media.tenor.com_DsOG5u4CNHkAAAA1_fudo-fudopop.webp.webp": {
+  "contentVerified": false,
+  "eyeballedBy": "agent-eye(qwen/dot-backbone)",
+  "framesViewed": "8 frames sampled across the file's own timeline",
+  "sheet": "/tmp/eye-ledger/all/sheet-15.png",
+  "shows": "no=Asuka on the gantry again, 28 frames, the gif twin of the row above. Duplicate. Character animation with a fudopon watermark; no MAGI screen anywhere in it."
+ },
+ "raw/magi--media.tenor.com_DsOG5u4CNHkAAAAM_fudo-fudopop.gif.gif": {
+  "contentVerified": false,
+  "eyeballedBy": "agent-eye(qwen/dot-backbone)",
+  "framesViewed": "8 frames sampled across the file's own timeline",
+  "sheet": "/tmp/eye-ledger/all/sheet-14.png",
+  "shows": "no=Evangelion: Asuka in a red plugsuit striding along a gantry above purple cabling, then stopping and turning with her mouth open, with a fudopon watermark burned across her chest. Character animation, not a console. The MAGI screens are in this show and none of them are in this clip."
+ },
  "raw/magi--media.tenor.com_KSXNrJisSu0AAAAM_glitching-error.gif": {
   "contentVerified": false,
   "eyeballedBy": "agent-eye(qwen/dot-backbone)",
   "framesViewed": "8 frames sampled across the file's own timeline",
   "sheet": "/tmp/eye-q/all/sheet-01.png",
   "shows": "Eight sampled frames of near-black: a small block of green text at top left, scattered dots, and then the whole thing tears into angular shards. Nothing is legible enough to quote a duration or an entry order from, so th"
+ },
+ "raw/magi--media.tenor.com_Z5M4QCFFIo8AAAAM_cat6cable-system-cable-management.gif.gif": {
+  "contentVerified": false,
+  "eyeballedBy": "agent-eye(qwen/dot-backbone)",
+  "framesViewed": "8 frames sampled across the file's own timeline",
+  "sheet": "/tmp/eye-ledger/all/sheet-14.png",
+  "shows": "no=The same Cat 6 cable diagram in its gif form, 60 frames, measured loop 6.0s. Duplicate of the row above. Nothing about a triple-committee judgement system appears in it."
+ },
+ "raw/magi--media.tenor.com_etSO5vLqKjYAAAAM_quadmester-system.gif": {
+  "contentVerified": false,
+  "eyeballedBy": "agent-eye(qwen/dot-backbone)",
+  "framesViewed": "8 frames sampled across the file's own timeline",
+  "sheet": "/tmp/eye-ledger/all/sheet-13.png",
+  "shows": "no=A title card reading Quadmester System in white serif over a dim live-action face, 147 frames, measured loop 14.7s. The words hold perfectly still for the entire span while the shot behind them breathes. That is a meme card with a caption, not a system display, and the stillness of the text is the opposite of what this seed needs."
+ },
+ "raw/magi--media.tenor.com_ol-TQF31vxQAAAA1_mari-makinami-illustrious-mari.webp": {
+  "contentVerified": false,
+  "eyeballedBy": "agent-eye(qwen/dot-backbone)",
+  "framesViewed": "8 frames sampled across the file's own timeline",
+  "sheet": "/tmp/eye-ledger/all/sheet-13.png",
+  "shows": "no=Evangelion footage the MAGI tag dragged in: a grey Evangelion unit standing in a lake of red with white particulate, a hard cut to a red-armed figure against sky, then a close-up of Misato in red-framed glasses. All narrative animation. The MAGI themselves — three stacked judgement columns — appear in none of these frames."
  },
  "raw/magi-probe.gif": {
   "contentVerified": false,
