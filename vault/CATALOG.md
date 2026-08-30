@@ -452,6 +452,25 @@ production filenames that name a screen *and its state* — an Avengers monitor 
 battle mode, menu system, blank screen, four-up layout — which is exactly the granularity a
 comparison catalog needs and the thing no other source hands over.
 
+**Are.na, 2,625 rows across 17 channels — and half of them were pointing at the wrong place.**
+`harvest.mjs` recorded each block's `source.url`, which is where the person who saved it found
+it. For a block uploaded straight to are.na that is the CDN and the fetch works. For a block
+saved off somebody else's page it is that page's host, and those hosts mostly refuse a hotlink.
+The damage was invisible because it looked like taste: `sci-fi-ui` returned 500 images of 549 and
+`sci-fi-control-panels` returned four of ninety-seven, so the second channel read as thin when it
+was actually fine and the field was broken. Are.na keeps its own copy at `image.original.url`.
+`vault/mend.py` re-reads every channel and prefers that, keeping the original as `origin` so a
+block saved from the Met and one from a designer's portfolio stay distinguishable. 1,408 rows
+repaired; the survey went from 2,079 images to 2,437, and the channels that had looked empty came
+back — control panels 4 to 91, dos-hud 64 to 104, software-cyberdeck 18 to 32.
+
+**A channel's name is not its contents.** `terminal-ruins`, 266 blocks, was recommended in this
+pass as one of the best places to look on the strength of the word "terminal". It is an
+archaeology channel: 180 Met Museum objects, a Neolithic flint arrowhead, no interfaces. Nobody
+had opened it. It stays in the survey because it is a good channel, but it is not this subject,
+and the general lesson is the one this vault keeps relearning in new costumes — a label is a
+claim, and this time the label was a single word in a slug.
+
 **Interface In Game, 16,988 rows.** Read wrongly at first, and the correction is the useful
 part. The earlier note here said the slug was "the game plus an index number" and carried
 "nothing about what the screen shows". That was true of the rows I happened to look at and false
