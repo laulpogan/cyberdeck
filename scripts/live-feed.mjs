@@ -50,7 +50,10 @@ export function startFeed({ port = 0, host = '127.0.0.1' } = {}) {
       res.end(JSON.stringify(radarPatch(Date.now())));
       return;
     }
-    const file = path.join(ROOT, path.normalize(decodeURIComponent(url.pathname)));
+    let file = path.join(ROOT, path.normalize(decodeURIComponent(url.pathname)));
+    // A directory is a request for its index, the way every other static
+    // server answers it: :8299/app/ was a 404 while /app/index.html was fine.
+    if (fs.existsSync(file) && fs.statSync(file).isDirectory()) file = path.join(file, 'index.html');
     if (!file.startsWith(ROOT) || !fs.existsSync(file) || fs.statSync(file).isDirectory()) {
       res.writeHead(404); res.end('nope'); return;
     }
