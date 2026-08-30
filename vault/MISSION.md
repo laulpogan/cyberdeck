@@ -106,12 +106,29 @@ Pick one source from the depth queue. Empty it, or work it until the session is 
 Tag every row with its function. Commit the notes with a message saying which source you
 worked, which functions it filled, and what it did not have.
 
-Then run the coverage line at the bottom of `CATALOG.md` and update it: which functions now
-hold three media, and which are still short.
+Then run `python3 vault/cover.py`, which counts the coverage table off the instance rows rather
+than off anyone's memory of them. Do not hand-edit that table. It was hand-counted once and read
+a shell command quoted inside a row as the name of a medium, which made a function look covered
+when it was not.
 
 ## What done looks like
 
-Every function on the spine holds instances from at least three different media, and the
-catalog can be read down a function rather than across a source. At that point the question
-"how has anyone ever built this kind of readout" has an answer that is not one person's
-memory of a film they liked.
+Every function on the spine holds instances from at least three different media, and the catalog
+can be read down a function rather than across a source. At that point the question "how has
+anyone ever built this kind of readout" has an answer that is not one person's memory of a film
+they liked.
+
+**That bar was cleared on 30 August 2026: 21 of 21, across 153 instance rows.** It is worth being
+precise about what it did and did not prove. It proved the spine is fillable and that no function
+on it is an invention with no examples. It did not prove the catalog is deep — several functions
+clear three media on a single row apiece, and thirty-nine rows are `reported` rather than
+`looked`, which means an agent read a description and nobody has seen the frame.
+
+So the next bar is depth, not breadth, and it has three parts:
+
+1. **No function rests on one row per medium.** Three instances per medium, not three media.
+2. **Every `reported` row either gets looked at or gets struck.** A lead that survives a year
+   without an eye on it is not a lead, it is a rumour with a citation.
+3. **The comparison actually gets written.** Coverage is the precondition for the thing this was
+   built for — reading down `queue` and saying what a flight strip, a research panel and a
+   Senate hearing have in common, and where each one is lying.
