@@ -344,3 +344,13 @@ tag is coloured by class, never decorative. Two Ex Machina windows were
 judged and deleted: its "database" is a physical archive room, not a
 screen, and the search UI has no standalone upload to pull. A refused
 pull costs a manifest sweep, not a filler strip.
+
+## Refused: the Devs projection (vault pull)
+
+Both projection scenes steeped, five windows, all deleted. The film's
+famed visualisation is atmosphere engineering: the honeycomb wall
+flares for mood, the forest rings glow for ceremony, nothing on screen
+measures anything. It is the counter-example the vault should hold
+loudly -- gorgeous UI that is pure ambient decoration is exactly what
+the honesty bar exists to refuse. A reference earns its strip by
+modelling measurement, not by looking expensive.
