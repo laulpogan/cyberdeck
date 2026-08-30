@@ -302,3 +302,16 @@ live animations races the first decay under suite load, and a finished
 ping leaves getAnimations() entirely. Replaced with a creation-time
 recorder on Element.prototype.animate. Lesson: a check that reads a
 moving target must subscribe to creation, not to the current frame.
+
+## Reference: the light-cycle wall (vault pull)
+
+Pulled the TRON: Legacy light-cycle battle and steeped four windows; two
+were deleted as cinema, two kept. The kept strips record the line law in
+its purest screen form: a wall exists only where the cycle has actually
+travelled, the head edge burns brighter than the laid line, and advance
+is linear because position is data, not choreography. It also settles
+the eased-loop question in our own runtime by contrast: the sweep, the
+pings and the clocks are linear (position), while the trafficking pulse
+and every enter draw may ease (texture). Nothing in the rack moved --
+the reference confirms the law rather than correcting it, which is also
+worth a strip.
