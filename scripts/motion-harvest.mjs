@@ -56,6 +56,9 @@ const SCENES = [
     note: 'Ghost in the Shell: opening optical-cam POV HUD', windows: [[2, 40]] },
   { file: '/tmp/dominator.mp4', tag: 'dominator-scene', origin: 'https://www.youtube.com/watch?v=rhmh3tyEEfs',
     note: 'Psycho-Pass: Dominator mode-call screens', windows: [[10, 80], [80, 49]] },
+  { file: '/tmp/tron-lightcycle.mp4', tag: 'tron-lightcycle', origin: 'https://www.youtube.com/watch?v=VVzm8yyHCHE',
+    note: 'TRON: Legacy light cycle battle -- trail-laid-as-you-go on the grid',
+    windows: [[20, 50], [80, 50], [140, 50], [200, 50]] },
 ];
 
 const CELL_H = 200;
@@ -124,6 +127,7 @@ for (const clip of CLIPS) {
   }
 }
 for (const sc of SCENES) {
+  if (only && !sc.tag.includes(only)) continue;
   if (!fs.existsSync(sc.file)) { console.log(`missing ${sc.file}`); continue; }
   const dir = path.join(MOTION, sc.tag);
   fs.mkdirSync(dir, { recursive: true });
