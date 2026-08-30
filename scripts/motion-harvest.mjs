@@ -65,6 +65,9 @@ const SCENES = [
   { file: '/tmp/mr-ui.mp4', tag: 'precrime-desk', origin: 'https://www.youtube.com/watch?v=NwVBzx0LMNQ',
     note: 'Minority Report: interface compilation (pull/scroll/compare gestures)',
     windows: [[10, 60], [80, 60], [145, 45]] },
+  { file: '/tmp/face-track.mp4', tag: 'surveillance-demo', origin: 'https://www.youtube.com/watch?v=2rZ42PPcYpk',
+    note: 'Face recognition + people tracking system demo (real product UI)',
+    windows: [[5, 55], [60, 50]] },
 ];
 
 const CELL_H = 200;

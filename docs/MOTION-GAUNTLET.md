@@ -333,3 +333,14 @@ Harvest bug the pull exposed and fixed: strips were named tag+time,
 so two clips sharing a tag overwrote each other's window while both
 manifest rows survived; names now carry the source stem, and manifest
 rows whose strip no longer exists are swept.
+
+## Reference: real tracking UI (vault pull)
+
+First non-fiction reference in the vault: a shipping face-recognition +
+people-tracking demo. Its overlay does exactly what our doctrine says
+-- the identity badge rides the box it measured, the cross-camera link
+graph shows the evidence for an identity claim, and the classification
+tag is coloured by class, never decorative. Two Ex Machina windows were
+judged and deleted: its "database" is a physical archive room, not a
+screen, and the search UI has no standalone upload to pull. A refused
+pull costs a manifest sweep, not a filler strip.
