@@ -15,12 +15,17 @@
  * themselves and passes the session; this file never sees a password. Without COOKIES or
  * COOKIES_FROM it refuses rather than starting a run that would fail 135 times.
  *
- * It stops when failures look like a wall rather than like weather. A dead session fails
- * everything; a list of reels posted between 2010 and 2015 fails individually, because some
- * were made private, deleted, or region-locked years ago. Two consecutive misses were the
- * first guess at that line and it was wrong -- the second reel in the queue is simply gone,
- * and stopping there would have abandoned a hundred and thirty-three live ones. So the rule
- * is now a run of failures with nothing succeeding in between.
+ * It stops when failures look like a wall rather than like weather, and it took two wrong
+ * guesses to find that line. Two consecutive misses was the first, and the second reel in the
+ * queue is simply gone. A longer run of consecutive misses was the second, and it died on
+ * Guardians of the Galaxy: Kit FUI lists eight identifiers for that one work, seven of them
+ * pruned from the uploader's account years ago, one still live in the middle of the cluster.
+ * Dead links arrive in clumps, because one entry lists many videos from one uploader and an
+ * account is emptied all at once.
+ *
+ * So counting was the wrong instrument. The error text already says which kind of failure it
+ * is: a 404 is gone forever and tells you nothing about the session, while a demand to sign in
+ * is the wall itself and is worth stopping on immediately. Classify, do not tally.
  */
 import { execFileSync } from 'node:child_process';
 import { existsSync, readFileSync, appendFileSync } from 'node:fs';
@@ -57,7 +62,10 @@ if (args.DRY) {
   process.exit(0);
 }
 
-const WALL = Number(args.WALL ?? 6);
+// A missing video says nothing about whether we are allowed in; a demand for credentials says
+// everything. Only the second kind is a reason to abandon the rest of the list.
+const GONE = /404|not found|no longer exist|removed|deleted|private|unavailable|password/i;
+const WALL = /sign ?in|log ?in|403|401|forbidden|cookies|account|credential/i;
 const log = join(HERE, 'reels.log');
 let misses = 0;
 let got = 0;
@@ -68,18 +76,26 @@ for (const q of run) {
   if (args.COOKIES_FROM) pass.push(`COOKIES_FROM=${args.COOKIES_FROM}`);
   if (args.SAMPLES) pass.push(`SAMPLES=${args.SAMPLES}`);
   try {
-    execFileSync('node', [join(HERE, 'youtube.mjs'), ...pass], { stdio: 'inherit' });
+    execFileSync('node', [join(HERE, 'youtube.mjs'), ...pass],
+      { stdio: ['ignore', 'inherit', 'pipe'] });
     appendFileSync(log, `ok ${q.id} ${q.key} ${q.work.title}\n`);
     misses = 0;
     got += 1;
-  } catch {
-    appendFileSync(log, `FAIL ${q.id} ${q.key} ${q.work.title}\n`);
+  } catch (err) {
+    const why = String(err.stderr || '');
+    const gone = GONE.test(why) && !WALL.test(why);
+    appendFileSync(log, `${gone ? 'GONE' : 'FAIL'} ${q.id} ${q.key} ${q.work.title}\n`);
+    if (gone) {
+      console.log(`gone     ${q.id} ${q.work.title} -- pruned from the host, not a refusal`);
+      misses = 0;
+      continue;
+    }
+    process.stderr.write(why);
     misses += 1;
-    console.log(`skip     ${q.id} unavailable (${misses} in a row)`);
-    if (misses >= WALL) {
-      console.error(`\nreels.mjs: ${WALL} in a row failed with nothing succeeding between them.`
-        + ` That is a wall, not a run of dead links. Check the session is live and that yt-dlp is`
-        + ` current -- a stale extractor looks exactly like a hard refusal. ${got} fetched first.`);
+    if (misses >= 2) {
+      console.error(`\nreels.mjs: two failures that are not missing videos. That reads as the`
+        + ` session rather than the list. Check the cookies are live and that yt-dlp is current --`
+        + ` a stale extractor looks exactly like a hard refusal. ${got} fetched first.`);
       process.exit(1);
     }
   }
