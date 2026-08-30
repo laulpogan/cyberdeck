@@ -74,6 +74,12 @@ const SCENES = [
   { file: '/tmp/nexrad.mp4', tag: 'weather-loop', origin: 'https://www.youtube.com/watch?v=j6CbFY8oesE',
     note: 'NEXRAD loop of the 2011 Super Outbreak -- reflectivity over real time',
     windows: [[5, 30], [35, 25]] },
+  { file: '/tmp/apache-hud.mp4', tag: 'gunship-hud', origin: 'https://www.youtube.com/watch?v=0C1wiiaf79E',
+    note: 'AH-64 unedited in-cockpit feed: real TADS overlay over live optics',
+    windows: [[20, 60], [150, 60]] },
+  { file: '/tmp/f16-hud.mp4', tag: 'fighter-hud', origin: 'https://www.youtube.com/watch?v=oOa9eWgFllE',
+    note: 'F-16 dogfight HUD cam: ladder tape and lock marks under real g',
+    windows: [[10, 45], [60, 40]] },
 ];
 
 const CELL_H = 200;

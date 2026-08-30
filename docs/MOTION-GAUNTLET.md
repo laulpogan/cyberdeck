@@ -373,3 +373,15 @@ arrives, the colour legend never moves because the scale is not data.
 Where our board and level family could learn one thing from it -- a
 field that refuses to interpolate between measurements reads as more
 alive than one that smoothes, because the jump IS the clock.
+
+## Reference: two real HUDs (vault pull)
+
+An AH-64 gun-camera feed and an F-16 combat cam, four windows kept. The
+symbology never decorates: the heading tape scrolls because airspeed
+and heading are continuous at the readout's own sampling; the target
+bracket snaps to the target, never to a timeline; and the ammo and
+timecode fields change only when the aircraft does. Read together with
+the radar loop above, the pair settles the smoothness question -- a
+display steps when its source steps and scrolls when its source is
+continuous, and matching the tween to the sensor is exactly what
+"motion is a measurement" was always claiming.
