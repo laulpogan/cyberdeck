@@ -48,6 +48,41 @@
   "sheet": "see OUT dir",
   "shows": "A handheld barcode scan in a shop: camera viewfinder with a reticle and the point-at-the-barcode instruction; a card reading Product code found, Retrieving data, please wait with no progress bar at all; then an item-added card naming the product and its price while the cart badge steps from 26 to 27"
  },
+ "raw/cyberpunk-hud--media.tenor.com_43RQA3tT7vMAAAAm_dj-lui-v-lui-v.webp.webp": {
+  "contentVerified": false,
+  "eyeballedBy": "agent-eye(qwen/dot-backbone)",
+  "framesViewed": "8 frames sampled across the file's own timeline",
+  "sheet": "/tmp/eye-ledger/all/sheet-03.png",
+  "shows": "no=A grey emblem rendered in 3D on a white card, spinning about its vertical axis on a black field, 18 frames. The card flips edge-on to nothing twice a turn. A logo turntable."
+ },
+ "raw/cyberpunk-hud--media.tenor.com_ETarQ68CQeIAAAAm_zygo-zygo-tecnologia.webp.webp": {
+  "contentVerified": false,
+  "eyeballedBy": "agent-eye(qwen/dot-backbone)",
+  "framesViewed": "8 frames sampled across the file's own timeline",
+  "sheet": "/tmp/eye-ledger/all/sheet-03.png",
+  "shows": "no=Two frames: a blocky Z wordmark in orange, teal and purple on white, then black. A logo that appears once and is gone."
+ },
+ "raw/cyberpunk-hud--media.tenor.com_cI-VsnLASjUAAAA1_erik-swgoh.webp.webp": {
+  "contentVerified": false,
+  "eyeballedBy": "agent-eye(qwen/dot-backbone)",
+  "framesViewed": "8 frames sampled across the file's own timeline",
+  "sheet": "/tmp/eye-ledger/all/sheet-02.png",
+  "shows": "no=A man in a car pressing his hand over his face, black and white with a torn white border and heavy vignette, 101 frames of the facepalm landing. A reaction meme with a filter on it. No pixels of an interface."
+ },
+ "raw/cyberpunk-hud--media.tenor.com_cI-VsnLASjUAAAAM_erik-swgoh.gif.gif": {
+  "contentVerified": false,
+  "eyeballedBy": "agent-eye(qwen/dot-backbone)",
+  "framesViewed": "8 frames sampled across the file's own timeline",
+  "sheet": "/tmp/eye-ledger/all/sheet-02.png",
+  "shows": "no=The same facepalm in its gif form, 101 frames, measured loop 10.1s. Duplicate."
+ },
+ "raw/cyberpunk-hud--media.tenor.com_gdhPO38XjlUAAAA1_urith-set.webp.webp": {
+  "contentVerified": true,
+  "eyeballedBy": "agent-eye(qwen/dot-backbone)",
+  "framesViewed": "8 frames sampled across the file's own timeline",
+  "sheet": "/tmp/eye-ledger/all/sheet-02.png",
+  "shows": "yes=A full-frame game interface on rust-coloured ground: a squad of figures with nameplate bars above them, a green selection ring under the chosen unit, and at the right edge a parchment party panel opening as a grid of portrait cells. The nameplates and the ring are the furniture that holds while one unit is chosen, and the panel arriving is an event with a duration. This is the webp container of the gif already quoted for dossier and the rules page — same Tenor asset, same title — so it is a second capture of one reference, not a second reference, and the vault should not count it twice whe"
+ },
  "raw/cyberpunk-hud--media.tenor.com_gdhPO38XjlUAAAAM_urith-set.gif.gif": {
   "contentVerified": true,
   "eyeballedBy": "agent-eye(qwen/dot-backbone)",
@@ -77,6 +112,13 @@
   "sheet": "see OUT dir",
   "shows": "Declassified F-16 HUD, frame-filling, ninety-six frames of a descent. Airspeed tape down the left and altitude tape down the right scroll continuously under a boxed pointer that never moves; a heading tape scrolls along the bottom under a caret; SIM G-load, a mission clock and a countdown counter change as derived figures. A FLYUP limit cue ARRIVES around 2.7s of the window with GND PROX lit beside it, holds while the closure lasts, and is GONE by 10.7s — it arrives and leaves rather than sitting there. Where a value is unavailable the display prints xxx inside the field (under AL 500) instead"
  },
+ "raw/fake-os-loaders--blob.gifcities.org_gifcities_252EX5GXJE6BCNT4RSSDONF7UBPCE2BI.gif": {
+  "contentVerified": true,
+  "eyeballedBy": "agent-eye(qwen/dot-backbone)",
+  "framesViewed": "8 frames sampled across the file's own timeline",
+  "sheet": "/tmp/eye-ledger/all/sheet-05.png",
+  "shows": "yes=A period fake operating system loader, and a good one: a classic grey window with a bevelled title bar and a black content well, which types LOADING, then LOADING.., then LOADING... and then the well fills with a page of small monospace text welcoming the visitor to the new and improved craigslistpersonals.com and asking for feedback on the message board. 11 frames. The ellipsis advancing is a count of nothing, the window promises a load it never measures, and when the text lands the loader is simply replaced rather than completed. That is the idiom the chrome rule forbids, drawn by someon"
+ },
  "raw/fake-os-loaders--blob.gifcities.org_gifcities_2S4N3JQ6GIQGIKRNQ6CX4AAHKS6DQHE6.gif": {
   "contentVerified": true,
   "eyeballedBy": "agent-eye(qwen/dot-backbone)",
@@ -97,6 +139,48 @@
   "framesViewed": "8 frames sampled across the file's own timeline",
   "sheet": "/tmp/eye-q/all/sheet-01.png",
   "shows": "QUOTE FOR level and for trace on a named track: a green bar filling a track from the left edge to the right, terminal glyphs parked at both ends and never moving. The only thing that travels is the extent. Ink moves exactly as far as the measurement goes, at a rate that reads constant, and everything that is furniture holds still."
+ },
+ "raw/fake-os-loaders--media.tenor.com_Fhp4XyZzAWYAAAA1_pc2-happy.webp.webp": {
+  "contentVerified": false,
+  "eyeballedBy": "agent-eye(qwen/dot-backbone)",
+  "framesViewed": "8 frames sampled across the file's own timeline",
+  "sheet": "/tmp/eye-ledger/all/sheet-04.png",
+  "shows": "no=A meme: Roman soldiers cheering in a arena, captioned life and the boys when PC 2 comms out, with a fake poll pasted across the top — Xbox Series X, PlayStation 5, PC and other, and a percentage that changes between frames. The changing percentage is the whole joke and it is the exact idiom the rules page carries its counter-examples for: a number moving with no measurement behind it. It is not an operating-system loader, so it stays out of this seed, and if anyone wants it as a third counter-example it should be quoted for the claim it actually supports."
+ },
+ "raw/fake-os-loaders--media.tenor.com_Fhp4XyZzAWYAAAAM_pc2-happy.gif.gif": {
+  "contentVerified": false,
+  "eyeballedBy": "agent-eye(qwen/dot-backbone)",
+  "framesViewed": "8 frames sampled across the file's own timeline",
+  "sheet": "/tmp/eye-ledger/all/sheet-05.png",
+  "shows": "no=The console poll meme again, 26 frames, measured loop 2.6s. Duplicate."
+ },
+ "raw/fake-os-loaders--media.tenor.com__EYj7MgpRGIAAAA1_fake-smile.webp.webp": {
+  "contentVerified": false,
+  "eyeballedBy": "agent-eye(qwen/dot-backbone)",
+  "framesViewed": "8 frames sampled across the file's own timeline",
+  "sheet": "/tmp/eye-ledger/all/sheet-05.png",
+  "shows": "no=The same fake-smile anime gif, 13 frames. Duplicate."
+ },
+ "raw/fake-os-loaders--media.tenor.com__EYj7MgpRGIAAAAM_fake-smile.gif.gif": {
+  "contentVerified": false,
+  "eyeballedBy": "agent-eye(qwen/dot-backbone)",
+  "framesViewed": "8 frames sampled across the file's own timeline",
+  "sheet": "/tmp/eye-ledger/all/sheet-05.png",
+  "shows": "no=An anime boy with dark green hair and flowers strung in it, under a plate reading A FAKE SMILE?, grinning and then shutting his eyes and grinning wider, 20 frames, measured loop 2.0s. The label is the point of the gif and the label is a caption, not a readout."
+ },
+ "raw/fake-os-loaders--media.tenor.com_f1aQJ-FnON8AAAA1_the-chosen-the-chosen-tv-series.webp.webp": {
+  "contentVerified": false,
+  "eyeballedBy": "agent-eye(qwen/dot-backbone)",
+  "framesViewed": "8 frames sampled across the file's own timeline",
+  "sheet": "/tmp/eye-ledger/all/sheet-03.png",
+  "shows": "no=The Chosen, a bearded actor in soft light with burned-in subtitles running And you dont want / false hope again / I understand. A drama clip with captions. The classifier put it under fake-os-loaders because the file mentions nothing else, and the sheet already calls it drift."
+ },
+ "raw/fake-os-loaders--media.tenor.com_f1aQJ-FnON8AAAAM_the-chosen-the-chosen-tv-series.gif.gif": {
+  "contentVerified": false,
+  "eyeballedBy": "agent-eye(qwen/dot-backbone)",
+  "framesViewed": "8 frames sampled across the file's own timeline",
+  "sheet": "/tmp/eye-ledger/all/sheet-04.png",
+  "shows": "no=The Chosen again in its shorter form, 36 frames, measured loop 3.6s, same subtitles. Duplicate."
  },
  "raw/fake-os-loaders--media.tenor.com_qSiv7MdS0FsAAAA1_onregion-nintendo.webp.webp": {
   "contentVerified": false,
@@ -407,6 +491,13 @@
   "sheet": "/tmp/eye-ledger/all/sheet-14.png",
   "shows": "no=An Indonesian news title card reading DIGITALISASI SISTEM PENJUALAN TIKET ASDP TERUS BERLANJUT in heavy white capitals on a dark plate, wiping over live footage of a white car in its first frame and then holding dead still for 32 more. The wipe is a broadcast transition; the words are a headline about a ticketing system, not a picture of one."
  },
+ "raw/magi--blob.gifcities.org_gifcities_26YQQTNGQ54IDCE2MOICCWNYRHSMVGNA.gif": {
+  "contentVerified": false,
+  "eyeballedBy": "agent-eye(qwen/dot-backbone)",
+  "framesViewed": "8 frames sampled across the file's own timeline",
+  "sheet": "/tmp/eye-ledger/all/sheet-17.png",
+  "shows": "no=A Geocities gif that swaps a different Evangelion portrait into the same frame each step — Rei, Asuka shouting, Shinji laughing, Rei small against a globe, Shinji with a hand over his face. 5 frames, measured loop 1.2s. A character jukebox. The MAGI never appear in Evangelion fan gifs of this kind because they are boring to draw, and that is why this seed is empty."
+ },
  "raw/magi--blob.gifcities.org_gifcities_27GU5PX4IGJ5RNWFQJTH5H3ZLCIORWPF.gif": {
   "contentVerified": false,
   "eyeballedBy": "agent-eye(qwen/dot-backbone)",
@@ -414,12 +505,33 @@
   "sheet": "/tmp/eye-ledger/all/sheet-15.png",
   "shows": "no=A Geocities-era animated avatar barely twenty pixels wide: Rei Ayanami in white, face turning a few degrees across 21 frames, measured loop 3.1s. At this size there is no geometry to read, let alone a three-column system. It is a spacer gif from a personal homepage."
  },
+ "raw/magi--blob.gifcities.org_gifcities_2BBLKGXJB5KAJZARVU6AEMEWNKFFCIX3.gif": {
+  "contentVerified": false,
+  "eyeballedBy": "agent-eye(qwen/dot-backbone)",
+  "framesViewed": "8 frames sampled across the file's own timeline",
+  "sheet": "/tmp/eye-ledger/all/sheet-16.png",
+  "shows": "no=A Geocities banner: NEON GENESIS EVANGELION in white on black, and as the words shrink away, a horizontal strip of character busts crawls in from the right edge and packs the frame. Measured loop 13.0s. The crawl is a real ticker with a real period and the reveal order — title yields to content — is stealable. The subject is a fansite wordmark, not the MAGI."
+ },
+ "raw/magi--blob.gifcities.org_gifcities_2FM6VXCLFGFDW7K25O6LQ66KP77TIXST.gif": {
+  "contentVerified": false,
+  "eyeballedBy": "agent-eye(qwen/dot-backbone)",
+  "framesViewed": "8 frames sampled across the file's own timeline",
+  "sheet": "/tmp/eye-ledger/all/sheet-16.png",
+  "shows": "no=A Geocities gif of a grey window frame — chrome, bevel, the lot — that swaps a different anime picture into its content area each frame: a purple mecha, a group of characters, a moonlit tower, a face in crosshair, a girl in red. 6 frames, measured loop 4.5s. A fixed frame holding a rotating payload at a stated period is exactly the mechanic a cycle mark wants, and the sheet label has already called it a look-alike. It is still not a MAGI; it is a webring button."
+ },
  "raw/magi--edia.tenor.com_Z5M4QCFFIo8AAAA1_cat6cable-system-cable-management.webp.webp": {
   "contentVerified": false,
   "eyeballedBy": "agent-eye(qwen/dot-backbone)",
   "framesViewed": "8 frames sampled across the file's own timeline",
   "sheet": "/tmp/eye-ledger/all/sheet-14.png",
   "shows": "no=A cable manufacturers diagram: a blue sheathed cable with its twisted pairs splayed out, and the labels CAT5E, CAT5, CAT4A appearing one under another beside the corresponding pairs, over a footer reading Cat 6 cable System and a URL. The label cascade is a real reveal order, and it is the only honest motion here. The subject is Ethernet cable, and the MAGI classifier matched on the word System."
+ },
+ "raw/magi--m_zgU_x9IXmvkAAAAM_workforce-management-system-rfid-asset-tracking.gif": {
+  "contentVerified": false,
+  "eyeballedBy": "agent-eye(qwen/dot-backbone)",
+  "framesViewed": "8 frames sampled across the file's own timeline",
+  "sheet": "/tmp/eye-ledger/all/sheet-17.png",
+  "shows": "no=A four-slide corporate promo gif — an analyst at a wall of monitors showing white line charts on dark, a warehouse worker kneeling by parcels, an isometric warehouse diagram with an orange flow path, a bank of turnstiles. Measured loop 4.8s, which is the slideshow period, not motion inside a drawing. The first slide is the only frame with screens in it and the charts are unreadable at this scale; if we ever want a reference for an operator at displays, re-look at this file at full resolution rather than through this sheet."
  },
  "raw/magi--media.tenor.com_86Ef0-fGKbkAAAAm_aw3-allwhitelaser.webp": {
   "contentVerified": false,
@@ -456,6 +568,13 @@
   "sheet": "/tmp/eye-ledger/all/sheet-14.png",
   "shows": "no=Evangelion: Asuka in a red plugsuit striding along a gantry above purple cabling, then stopping and turning with her mouth open, with a fudopon watermark burned across her chest. Character animation, not a console. The MAGI screens are in this show and none of them are in this clip."
  },
+ "raw/magi--media.tenor.com_EQype_oQI-MAAAA1_pusheen-cat.webp": {
+  "contentVerified": false,
+  "eyeballedBy": "agent-eye(qwen/dot-backbone)",
+  "framesViewed": "8 frames sampled across the file's own timeline",
+  "sheet": "/tmp/eye-ledger/all/sheet-17.png",
+  "shows": "no=Pastel sticker art: round cats in profile, a shooting star, a ringed planet, sparkle marks, on cream. 4 frames of a twinkle. The classifier has already tagged it drift and it is right. Nothing here is an interface and nothing measures."
+ },
  "raw/magi--media.tenor.com_KSXNrJisSu0AAAAM_glitching-error.gif": {
   "contentVerified": false,
   "eyeballedBy": "agent-eye(qwen/dot-backbone)",
@@ -469,6 +588,27 @@
   "framesViewed": "8 frames sampled across the file's own timeline",
   "sheet": "/tmp/eye-ledger/all/sheet-14.png",
   "shows": "no=The same Cat 6 cable diagram in its gif form, 60 frames, measured loop 6.0s. Duplicate of the row above. Nothing about a triple-committee judgement system appears in it."
+ },
+ "raw/magi--media.tenor.com__H_NA61lRr0AAAA1_caps-evangelion.webp.webp": {
+  "contentVerified": false,
+  "eyeballedBy": "agent-eye(qwen/dot-backbone)",
+  "framesViewed": "8 frames sampled across the file's own timeline",
+  "sheet": "/tmp/eye-ledger/all/sheet-16.png",
+  "shows": "no=A bald wrestler in a blue tank top held back by four security staff in blue caps, with a red plate under the frame reading Hostenmeden Evangelion referansi yapmaya calisitim icin ethiren ben. A Turkish meme card. The plate flickers a pixel between frames, which is the encoder, not the drawing. The sheet label calls this a reference; the only Evangelion in it is the word in the caption."
+ },
+ "raw/magi--media.tenor.com__H_NA61lRr0AAAAM_caps-evangelion.gif.gif": {
+  "contentVerified": false,
+  "eyeballedBy": "agent-eye(qwen/dot-backbone)",
+  "framesViewed": "8 frames sampled across the file's own timeline",
+  "sheet": "/tmp/eye-ledger/all/sheet-16.png",
+  "shows": "no=The same wrestling meme in its gif form, 17 frames, measured loop 1.7s. Duplicate of the row above. Nothing in either frame is a display of any kind."
+ },
+ "raw/magi--media.tenor.com__aNGbtj7bQ8AAAAM_nite-sweet-dreams.gif": {
+  "contentVerified": false,
+  "eyeballedBy": "agent-eye(qwen/dot-backbone)",
+  "framesViewed": "8 frames sampled across the file's own timeline",
+  "sheet": "/tmp/eye-ledger/all/sheet-16.png",
+  "shows": "no=NITE NITE SWEET DREAMS in white capitals under a black hand reaching up out of a rotating spiral galaxy. 12 frames, measured loop 1.2s, and the galaxy turns a few degrees per frame while the words hold. A greeting gif. The rotation is the only motion, and it measures nothing."
  },
  "raw/magi--media.tenor.com_etSO5vLqKjYAAAAM_quadmester-system.gif": {
   "contentVerified": false,
@@ -554,28 +694,16 @@
  "raw/motion-tracker--media.tenor.com_qcahlSOkDFcAAAAm_cybersecurity-art-mule-yong.webp.webp": {
   "contentVerified": false,
   "eyeballedBy": "agent-eye(qwen/dot-backbone)",
-  "frames": [
-   1,
-   2,
-   3
-  ],
-  "framesViewed": "8-frame strip sampled across the file timeline",
-  "note": "Recorded 2026-08-29: the field defaulted to \"person\" in the tool, and no person looked. Corrected rather than left, because this file exists to carry provenance.",
-  "sheetNote": "The /tmp path names the strip set the eyes were on at the time of the mark; sheets are regenerated artifacts and are not in git. Re-run `python3 vault/eyeball.py SEED=<seed>` to reproduce the strip for this file.",
-  "shows": "see strip — not a motion tracker"
+  "framesViewed": "8 frames sampled across the file's own timeline",
+  "sheet": "/tmp/eye-ledger/all/sheet-17.png",
+  "shows": "no=A black frame in which magenta tiles scattered across a horizontal band converge and resolve into the single word AUTHENTICATION, hold, then scatter again, across 88 frames. Tiles assembling into a legible string is a real reveal order and it is worth stealing as a device. What it assembles is a wordmark about authentication, not a tracker sweeping an arc, so it stays refused here and the mechanic gets noted instead."
  },
  "raw/motion-tracker--media.tenor.com_vHCkBrnEpkkAAAA1_movie-film-cinema-theater.webp.webp": {
   "contentVerified": false,
   "eyeballedBy": "agent-eye(qwen/dot-backbone)",
-  "frames": [
-   1,
-   2,
-   3
-  ],
-  "framesViewed": "8-frame strip sampled across the file timeline",
-  "note": "Recorded 2026-08-29: the field defaulted to \"person\" in the tool, and no person looked. Corrected rather than left, because this file exists to carry provenance.",
-  "sheetNote": "The /tmp path names the strip set the eyes were on at the time of the mark; sheets are regenerated artifacts and are not in git. Re-run `python3 vault/eyeball.py SEED=<seed>` to reproduce the strip for this file.",
-  "shows": "see strip — not a motion tracker"
+  "framesViewed": "8 frames sampled across the file's own timeline",
+  "sheet": "/tmp/eye-ledger/all/sheet-17.png",
+  "shows": "no=A sticker-pack capture with the sticker-search apps own chrome across the top, a blue card reading MOVIE FILE tumbling above a cartoon boy in a green shirt shrug-dancing on black. 100 frames of the dance. The only interface in frame is the search bar the capture tool happened to include, and it belongs to Tenor, not to a motion tracker."
  },
  "raw/motion-tracker--media.tenor.com_vHCkBrnEpkkAAAAM_movie-film-cinema-theater.gif.gif": {
   "contentVerified": false,
@@ -592,6 +720,13 @@
   "framesViewed": "8 frames sampled across the file's own timeline",
   "sheet": "/tmp/eye-next/all/sheet-01.png",
   "shows": "Two Stormtroopers in a Star Wars fan film shooting each other at close range; red and yellow impact sparks fly from the hits. No screen, no interface, no measured quantity — a character shot tagged `rig` because a search said motion tracker."
+ },
+ "raw/rig--blob.gifcities.org_gifcities_2PCPYQIN4QOUBAPCUSRF2J63IYJ6O7JM.gif": {
+  "contentVerified": false,
+  "eyeballedBy": "agent-eye(qwen/dot-backbone)",
+  "framesViewed": "8 frames sampled across the file's own timeline",
+  "sheet": "/tmp/eye-ledger/all/sheet-21.png",
+  "shows": "no=A Geocities hit-badge: a big circle carrying a red horizontal waveform that changes shape every frame, a small circle below it carrying a magenta one, a numeric plate in the corner, ringed by chrome gears. 9 frames, measured loop 0.9s. It is a live visualiser with a value that really changes frame to frame, which is more than most of this seed can say, but the value is audio amplitude in a decorative dial — the RIG is a body-worn integrity gauge, and nothing here is that."
  },
  "raw/rig--blob.gifcities.org_gifcities_2RO5SN3IFIDBUAFOOVBDCFJ7J6V4DRXR.gif": {
   "contentVerified": true,
@@ -623,6 +758,34 @@
   "sheetNote": "The /tmp path names the strip set the eyes were on at the time of the mark; sheets are regenerated artifacts and are not in git. Re-run `python3 vault/eyeball.py SEED=<seed>` to reproduce the strip for this file.",
   "shows": "The same spaceship clip as the webp copy, 5.6s loop: a ship flying, no interface."
  },
+ "raw/rig--media.tenor.com_B4QIuSlRB70AAAA1_dead-space-isaac-clarke.webp.webp": {
+  "contentVerified": false,
+  "eyeballedBy": "agent-eye(qwen/dot-backbone)",
+  "framesViewed": "8 frames sampled across the file's own timeline",
+  "sheet": "/tmp/eye-ledger/all/sheet-20.png",
+  "shows": "no=Isaac Clarke in the engineering suit rotating on a blue gradient, 24 frames. A model turntable. Nothing is drawn over it and no value changes on it."
+ },
+ "raw/rig--media.tenor.com_B4QIuSlRB70AAAAM_dead-space-isaac-clarke.gif.gif": {
+  "contentVerified": false,
+  "eyeballedBy": "agent-eye(qwen/dot-backbone)",
+  "framesViewed": "8 frames sampled across the file's own timeline",
+  "sheet": "/tmp/eye-ledger/all/sheet-20.png",
+  "shows": "no=The same suit turntable in its gif form, 12 frames, measured loop 1.2s. Duplicate."
+ },
+ "raw/rig--media.tenor.com_CnhZ8L8cSfMAAAA1_psychopathtale-rapper-route.webp.webp": {
+  "contentVerified": false,
+  "eyeballedBy": "agent-eye(qwen/dot-backbone)",
+  "framesViewed": "8 frames sampled across the file's own timeline",
+  "sheet": "/tmp/eye-ledger/all/sheet-21.png",
+  "shows": "no=Undertale fan animation: two chibi figures in a snowy wood holding glowsticks, 9 frames of a bob. no."
+ },
+ "raw/rig--media.tenor.com_CnhZ8L8cSfMAAAAM_psychopathtale-rapper-route.gif.gif": {
+  "contentVerified": false,
+  "eyeballedBy": "agent-eye(qwen/dot-backbone)",
+  "framesViewed": "8 frames sampled across the file's own timeline",
+  "sheet": "/tmp/eye-ledger/all/sheet-21.png",
+  "shows": "no=The same Undertale pair in its gif form, 8 frames, measured loop 0.8s. Duplicate."
+ },
  "raw/rig--media.tenor.com_ITRBPx5QvF8AAAA1_67.webp.webp": {
   "contentVerified": false,
   "eyeballedBy": "agent-eye(qwen/dot-backbone)",
@@ -630,6 +793,13 @@
   "sheet": "/tmp/eyeball/all/sheet-19.png",
   "sheetNote": "The /tmp path names the strip set the eyes were on at the time of the mark; sheets are regenerated artifacts and are not in git. Re-run `python3 vault/eyeball.py SEED=<seed>` to reproduce the strip for this file.",
   "shows": "Cinematic game footage — armoured figures in a dark industrial set, blue emissive trim. A scene, not a diegetic interface: no spine bar, no mode readout, no objective marker."
+ },
+ "raw/rig--media.tenor.com_ITRBPx5QvF8AAAAM_67.gif.gif": {
+  "contentVerified": false,
+  "eyeballedBy": "agent-eye(qwen/dot-backbone)",
+  "framesViewed": "8 frames sampled across the file's own timeline",
+  "sheet": "/tmp/eye-ledger/all/sheet-20.png",
+  "shows": "no=Cinematic Dead Space footage: armoured figures swinging at something in blue steel and sparks, 44 frames, measured loop 4.4s. The RIG — the spine display worn on the suit that carries health and integrity — is turned away from camera in every frame, which is how this seed keeps losing: the object is on the characters back and films point at their faces."
  },
  "raw/scope-envelope-violin.gif": {
   "contentVerified": true,
@@ -649,15 +819,15 @@
   "contentVerified": false,
   "eyeballedBy": "agent-eye(qwen/dot-backbone)",
   "framesViewed": "8 frames sampled across the file's own timeline",
-  "sheet": "/tmp/eye-q/all/sheet-02.png",
-  "shows": "The same amber-lit face as the 53-frame file, 104 frames of head turn. Seed named the vehicle and its HUD; the host returned the actress."
+  "sheet": "/tmp/eye-ledger/all/sheet-22.png",
+  "shows": "no=A womans face lit amber against a black void, 104 frames, breathing and blinking, with the light pulsing a shade warmer and cooler. Nothing rotates and nothing is drawn. The classifier matched spinner on nothing visible and the sheet already calls it drift."
  },
  "raw/spinner--media.tenor.com_5VlkKDNwp5sAAAAM_blade-runner-2049-mariette.gif.gif": {
   "contentVerified": false,
   "eyeballedBy": "agent-eye(qwen/dot-backbone)",
   "framesViewed": "8 frames sampled across the file's own timeline",
-  "sheet": "/tmp/eye-q/all/sheet-01.png",
-  "shows": "A face lit amber against black, turning its head. The seed is named for the vehicle and its HUD; the harvest returned the character. No overlay, no reticle, no panel — the 5.3s loop is a head turn."
+  "sheet": "/tmp/eye-ledger/all/sheet-22.png",
+  "shows": "no=The same amber face as the top row in its shorter form, 53 frames, measured loop 5.3s. Duplicate."
  },
  "raw/spinner--media.tenor.com_6NmYhocrNjMAAAA1_blade-runner-tyrell-corporation.webp.webp": {
   "contentVerified": false,
@@ -670,15 +840,15 @@
   "contentVerified": false,
   "eyeballedBy": "agent-eye(qwen/dot-backbone)",
   "framesViewed": "8 frames sampled across the file's own timeline",
-  "sheet": "/tmp/eye-next/all/sheet-01.png",
-  "shows": "A dark corridor with a lamp at the end, a Blade Runner set. A few frames add a faint reflection on the floor. No interface anywhere in the frame."
+  "sheet": "/tmp/eye-ledger/all/sheet-22.png",
+  "shows": "no=A dark hall of columns with a bright lamp at the far end reflected in a wet floor, 54 frames, measured loop 5.4s. A camera drift in a game environment. No readout, no frame edge, nothing with a scale on it."
  },
  "raw/spinner--media.tenor.com_XlewEhGOuQgAAAA1_peni-parker-penny-parker.webp.webp": {
   "contentVerified": false,
   "eyeballedBy": "agent-eye(qwen/dot-backbone)",
   "framesViewed": "8 frames sampled across the file's own timeline",
-  "sheet": "/tmp/eye-next/all/sheet-01.png",
-  "shows": "A cartoon girl at a fairground stand with a subtitle reading \"I M DISPATCHING A ROLLER COASTER\". The word dispatching is the only reason this is near the seed; the picture is a character, not a panel."
+  "sheet": "/tmp/eye-ledger/all/sheet-22.png",
+  "shows": "no=Two animated figures seated in a red-flooded control booth with illuminated round dials and a blue panel glowing behind them, under a burned-in caption reading I AM DISPATCHING A ROLLER COASTER. The panels behind are the nearest thing to instrumentation in this whole sheet and they are set dressing in a meme — no value on them changes across the frames."
  },
  "raw/spinner--media.tenor.com_XlewEhGOuQgAAAAM_peni-parker-penny-parker.gif.gif": {
   "contentVerified": false,
@@ -687,12 +857,33 @@
   "sheet": "/tmp/eye-q/all/sheet-03.png",
   "shows": "Red-tinted animation of a girl at an arcade counter with the subtitle I'M DISPATCHING A ROLLER COASTER. A scene with burned-in subtitles; the only frame in the vault that says dispatching is somebody else's caption."
  },
+ "raw/spinner--media.tenor.com_xVmzWI7ZoVwAAAA1_joi-blade-runner.webp.webp": {
+  "contentVerified": false,
+  "eyeballedBy": "agent-eye(qwen/dot-backbone)",
+  "framesViewed": "8 frames sampled across the file's own timeline",
+  "sheet": "/tmp/eye-ledger/all/sheet-22.png",
+  "shows": "no=A blonde figure in a magenta neon haze with pink light-trails streaking off her, 30 frames of a music video. The streaks are an editor-added trail on a camera move, not a mechanism with a period."
+ },
  "raw/spinner--media.tenor.com_xVmzWI7ZoVwAAAAM_joi-blade-runner.gif.gif": {
   "contentVerified": false,
   "eyeballedBy": "agent-eye(qwen/dot-backbone)",
   "framesViewed": "8 frames sampled across the file's own timeline",
   "sheet": "/tmp/eye-next/all/sheet-01.png",
   "shows": "A pink hologram of a woman (Joi, Blade Runner 2049) walking in magenta light. A character render with volumetric fog; the overlay interface this seed was hunting for is not in the frame."
+ },
+ "raw/spinner-console--blob.gifcities.org_gifcities_22KXMYNKZDP2YB3T6HJ6HUINWV76WGZ6.gif": {
+  "contentVerified": false,
+  "eyeballedBy": "agent-eye(qwen/dot-backbone)",
+  "framesViewed": "8 frames sampled across the file's own timeline",
+  "sheet": "/tmp/eye-ledger/all/sheet-24.png",
+  "shows": "no=A Geocities button in a fixed orange rounded frame whose payload changes on a timer: black, then LEYENDAS URBANAS in white serif over a fireball, then the wordmark wipes left off the frame to reveal a womans face at the right edge. 6 frames, measured loop 2.5s. A fixed console frame holding a swappable payload at a stated period is the honest reading of what this gif does, and the wipe is a real transition. It is a webring badge. There is no console in it in the sense this seed wants."
+ },
+ "raw/spinner-console--blob.gifcities.org_gifcities_2C3TAKAQIQI3NSE6EFZ6TPABBXLJPPLY.gif": {
+  "contentVerified": false,
+  "eyeballedBy": "agent-eye(qwen/dot-backbone)",
+  "framesViewed": "8 frames sampled across the file's own timeline",
+  "sheet": "/tmp/eye-ledger/all/sheet-23.png",
+  "shows": "no=A webring badge on a rubble field: an orange ring around a circular aperture that swaps a different photograph of a face into the aperture as the ring holds, with an Enter plaque beside it. 28 frames, measured loop 5.6s. A fixed circular frame with a payload rotating through it at a stated period, which is the same mechanic the tron rows kept offering under other names. What it presents is a photo carousel behind an Enter button, not a console with a state on it."
  },
  "raw/spinner-console--blob.gifcities.org_gifcities_2CVXBIKAGKLDNI3KJ5X6XTH4BSVLQGXJ.gif": {
   "contentVerified": false,
@@ -708,6 +899,34 @@
   "sheet": "/tmp/eye-q/all/sheet-02.png",
   "shows": "QUOTE FOR trace and arrive, not for the seed: a starship under warp with a bright marker travelling a line that extends behind it, 5.2s loop. It is a visual-effects shot of a vehicle, not the console the seed asks for — but the motion is the exact idiom of a trace: the route is drawn as the head of it travels, and nothing else in the frame moves."
  },
+ "raw/star-citizen--media.tenor.com_4yMcUi0V7QwAAAA1_theastropub-paul-shelley.webp.webp": {
+  "contentVerified": false,
+  "eyeballedBy": "agent-eye(qwen/dot-backbone)",
+  "framesViewed": "8 frames sampled across the file's own timeline",
+  "sheet": "/tmp/eye-ledger/all/sheet-24.png",
+  "shows": "no=The same presenter in a wider crop, now gesturing with both hands up at his head and then laughing, 49 frames. Still a man in front of a painted cockpit. No readout in frame changes state."
+ },
+ "raw/star-citizen--media.tenor.com_4yMcUi0V7QwAAAAM_theastropub-paul-shelley.gif.gif": {
+  "contentVerified": false,
+  "eyeballedBy": "agent-eye(qwen/dot-backbone)",
+  "framesViewed": "8 frames sampled across the file's own timeline",
+  "sheet": "/tmp/eye-ledger/all/sheet-24.png",
+  "shows": "no=The same presenter again in its shortest form, 34 frames, measured loop 3.4s. Fourth capture of one talking-head video. One of these would have been enough to rule out, and all four cost the same eyes to rule out."
+ },
+ "raw/star-citizen--media.tenor.com_PGI7w5PjQ-AAAAA1_uhh-uh.webp.webp": {
+  "contentVerified": false,
+  "eyeballedBy": "agent-eye(qwen/dot-backbone)",
+  "framesViewed": "8 frames sampled across the file's own timeline",
+  "sheet": "/tmp/eye-ledger/all/sheet-24.png",
+  "shows": "no=A grey-haired man in a dark waistcoat and blue tie talking to camera in front of a virtual set — a cockpit valance and a horizontal band of scenery behind him — across 84 frames. His head and hands move; the set does not. The Star Citizen tag came from the backdrop, and the backdrop is a matte painting, not a display."
+ },
+ "raw/star-citizen--media.tenor.com_PGI7w5PjQ-AAAAAM_uhh-uh.gif.gif": {
+  "contentVerified": false,
+  "eyeballedBy": "agent-eye(qwen/dot-backbone)",
+  "framesViewed": "8 frames sampled across the file's own timeline",
+  "sheet": "/tmp/eye-ledger/all/sheet-24.png",
+  "shows": "no=The same presenter in the same virtual set, 54 frames, measured loop 5.4s. Duplicate of the row above. The band behind him holds the same pixels in every frame, so the loop the encoder reports is his gesture cycle, not a drawing."
+ },
  "raw/sweep-hearing-range.gif": {
   "contentVerified": true,
   "eyeballedBy": "agent-eye(qwen/dot-backbone)",
@@ -719,21 +938,90 @@
   "contentVerified": false,
   "eyeballedBy": "agent-eye(qwen/dot-backbone)",
   "framesViewed": "8 frames sampled across the file's own timeline",
-  "sheet": "/tmp/eye-next/all/sheet-01.png",
-  "shows": "A cyan wireframe of stacked towers assembling next to the text \"SX6 / flash Site\" on black: a GeoCities intro animation for a site. Ink on a dark ground, and it moves for the same reason a logo moves."
+  "sheet": "/tmp/eye-ledger/all/sheet-25.png",
+  "shows": "no=A black badge reading 5X5 Flash Site in blue, with cyan wireframe glyphs assembling and re-drawing beside the words across 40 frames, measured loop 3.2s. Cyan wireframe on black is the Tron palette and the strokes arrive by drawing rather than fading, so the device is right twice in a row now; the subject is a personal homepage badge."
  },
  "raw/tron-disc--blob.gifcities.org_gifcities_2AWYSNBQH7E3JQPMI2B5UNXXOTV7UDLB.gif": {
-  "contentVerified": true,
+  "contentVerified": false,
+  "correction": "The first reading said the trail it leaves stays drawn and quoted this file as the reference for trace and strands. It does not. Counted the non-lattice lit area on every frame at luminance floors 60, 90, 120 and 150: the four floors give identical counts, so there is no dim trail to miss, and the count runs 26 to 73 px, flat, where a segment laying history along a path over 50 frames would grow by roughly a factor of ten. Frame 0 and frame 49 hold zero lit pixels, so the loop starts and ends on a bare grid. What is actually here is one or two compact bright heads, about 50 px total, walking r",
   "eyeballedBy": "agent-eye(qwen/dot-backbone)",
-  "framesViewed": "8 frames sampled across the file's own timeline",
-  "sheet": "/tmp/eye-q/all/sheet-03.png",
-  "shows": "QUOTE FOR trace and strands: a magenta circuit grid on black where a bright segment travels a path and the trail it leaves stays drawn, 5.0s loop. The grid is furniture, one ink carries the travel, and the history of the path is the picture — which is what a trace is for."
+  "framesViewed": "all 50 frames, plus a per-frame pixel census of lit area at four brightness thresholds",
+  "sheet": "/tmp/eye-ledger/all/sheet-25.png",
+  "shows": "no=A full-bleed field of magenta printed-circuit traces on black with one or two bright heads, ~50 px at a time, walking routes through the traces at 100 ms per step across a 5.0 s loop that opens and closes on a bare grid. Measured, not inferred: lit area is flat at 26-73 px on every frame at four brightness floors, so nothing accumulates. A fixed lattice with a bright head crossing it at a stated period and no residue is the traffic mark, and that is what this file is evidence for. It is not Tron, and it is not a trace.",
+  "superseded": {
+   "contentVerified": true,
+   "eyeballedBy": "agent-eye(qwen/dot-backbone)",
+   "shows": "QUOTE FOR trace and strands: a magenta circuit grid on black where a bright segment travels a path and the trail it leaves stays drawn, 5.0s loop. The grid is furniture, one ink carries the travel, and the history of the path is the picture — which is what a trace is for."
+  }
  },
  "raw/tron-disc--blob.gifcities.org_gifcities_2BPQ3WZLWCZPZXYBVM2SFYGAK5KV5B4U.gif": {
   "contentVerified": false,
   "eyeballedBy": "agent-eye(qwen/dot-backbone)",
   "framesViewed": "8 frames sampled across the file's own timeline",
-  "sheet": "/tmp/eye-next/all/sheet-01.png",
-  "shows": "A man materialising inside a yellow perspective grid — a digitisation visual effect on a person, wireframe resolving to flesh. The grid is scenery, not an instrument: no label, no readout, nothing that reports."
+  "sheet": "/tmp/eye-ledger/all/sheet-25.png",
+  "shows": "no=A yellow grid on black, and in front of it a bust assembles: first a fan of radial strokes, then a coarse scan of a head, then a legible halftone face, over 10 frames, measured loop 3.4s. A subject resolving out of a scan against a fixed grid, in ten steps — a real progressive reveal with a real period, and the second stealable mechanic on this sheet. Still a Geocities gif, still not Tron."
+ },
+ "raw/tron-disc--blob.gifcities.org_gifcities_2OLGWGF5BUXAOXTGVA6VZ5LKESABHTRE.gif": {
+  "contentVerified": false,
+  "eyeballedBy": "agent-eye(qwen/dot-backbone)",
+  "framesViewed": "8 frames sampled across the file's own timeline",
+  "sheet": "/tmp/eye-ledger/all/sheet-25.png",
+  "shows": "no=A narrow vertical widget that swaps a different flower photograph into the same slot — peach daisy with bees, red daisy, pale chrysanthemum, magenta, yellow, pink — then settles on a blue mesh. 13 frames, measured loop 23.2s. A photo rotator. Nothing about a light cycle or a disc is in it."
+ },
+ "raw/tron-grid--media.tenor.com_1UAP9GJcLFIAAAA1_ocbc-ocbc-cycle.webp.webp": {
+  "contentVerified": false,
+  "eyeballedBy": "agent-eye(qwen/dot-backbone)",
+  "framesViewed": "8 frames sampled across the file's own timeline",
+  "sheet": "/tmp/eye-ledger/all/sheet-25.png",
+  "shows": "no=A cartoon sun with a face riding a pink bicycle, under the words BRIGHT AND SUNNY, LETS GO CYCLE, wobbling in place across 180 frames. The classifier has already called it drift and the pun is the entire reason it entered the vault."
+ },
+ "raw/tron-grid--media.tenor.com_1UAP9GJcLFIAAAAM_ocbc-ocbc-cycle.gif.gif": {
+  "contentVerified": false,
+  "eyeballedBy": "agent-eye(qwen/dot-backbone)",
+  "framesViewed": "8 frames sampled across the file's own timeline",
+  "sheet": "/tmp/eye-ledger/all/sheet-26.png",
+  "shows": "no=The sun-faced clown on the pink bicycle again, 60 frames, measured loop 6.0s. Duplicate of a row refused two sheets back."
+ },
+ "raw/tron-grid--media.tenor.com_ohSJUuqiZkcAAAA1_jagyasini-singh-happy-new-year.webp.webp": {
+  "contentVerified": false,
+  "eyeballedBy": "agent-eye(qwen/dot-backbone)",
+  "framesViewed": "8 frames sampled across the file's own timeline",
+  "sheet": "/tmp/eye-ledger/all/sheet-26.png",
+  "shows": "no=A boy in a red shirt in front of a building under a HAPPY NEW YEAR title in white on a black rule, 66 frames of him singing and tilting his head. A New Year greeting card with a person in it."
+ },
+ "raw/tron-grid--media.tenor.com_ohSJUuqiZkcAAAAM_jagyasini-singh-happy-new-year.gif.gif": {
+  "contentVerified": false,
+  "eyeballedBy": "agent-eye(qwen/dot-backbone)",
+  "framesViewed": "8 frames sampled across the file's own timeline",
+  "sheet": "/tmp/eye-ledger/all/sheet-27.png",
+  "shows": "no=The HAPPY NEW YEAR boy again, 30 frames, measured loop 3.0s. Duplicate."
+ },
+ "raw/tron-grid--media.tenor.com_wea_Tz9mf08AAAA1_omori-neutral.webp.webp": {
+  "contentVerified": false,
+  "eyeballedBy": "agent-eye(qwen/dot-backbone)",
+  "framesViewed": "8 frames sampled across the file's own timeline",
+  "sheet": "/tmp/eye-ledger/all/sheet-27.png",
+  "shows": "no=The NEUTRAL halftone face with drifting confetti again, 23 frames. Duplicate of the row above, and the last row in the moving queue."
+ },
+ "raw/tron-grid--media.tenor.com_wea_Tz9mf08AAAAM_omori-neutral.gif.gif": {
+  "contentVerified": false,
+  "eyeballedBy": "agent-eye(qwen/dot-backbone)",
+  "framesViewed": "8 frames sampled across the file's own timeline",
+  "sheet": "/tmp/eye-ledger/all/sheet-26.png",
+  "shows": "no=A black-and-white manga face in halftone under the word NEUTRAL boxed in a bracket rule, with small coloured confetti marks drifting across the frame and the whole cell jittering a pixel, 60 frames, measured loop 6.0s. The face and the wordmark hold; only the confetti moves. That is an ambient drift laid over a still drawing, which is precisely the kind of motion this library refuses to make without a measurement behind it."
+ },
+ "raw/tron-grid--media.tenor.com_yLPMiKOnm08AAAA1_stopiee-bike-trick.webp.webp": {
+  "contentVerified": false,
+  "eyeballedBy": "agent-eye(qwen/dot-backbone)",
+  "framesViewed": "8 frames sampled across the file's own timeline",
+  "sheet": "/tmp/eye-ledger/all/sheet-26.png",
+  "shows": "no=A public plaza shot mostly in greyscale with only the riders shirt left in colour: a man throws a BMX into a manual and rolls it toward camera while other cyclists and pedestrians move behind him, 85 frames. The selective-colour grade is an edit, the motion is a person on a bicycle, and the grid this seed is named for is only in the filename."
+ },
+ "raw/tron-grid--media.tenor.com_yLPMiKOnm08AAAAM_stopiee-bike-trick.gif.gif": {
+  "contentVerified": false,
+  "eyeballedBy": "agent-eye(qwen/dot-backbone)",
+  "framesViewed": "8 frames sampled across the file's own timeline",
+  "sheet": "/tmp/eye-ledger/all/sheet-26.png",
+  "shows": "no=The same BMX manual in the same plaza, 35 frames, measured loop 3.5s. Duplicate."
  }
 }
