@@ -138,3 +138,42 @@ here is text-derived, and nothing text-derived is trustworthy about a picture.
 | tron-grid | `raw/tron-grid--media.tenor.com_yLPMiKOnm08AAAAM_stopiee-bike-trick.gif.gif` | 35 | 3.5s | drift | no | no=The same BMX manual in the same plaza, 35 frames, measured loop 3.5 |
 | tron-grid | `raw/tron-grid--media.tenor.com_ohSJUuqiZkcAAAAM_jagyasini-singh-happy-new-year.gif.gif` | 30 | 3.0s | drift | no | no=The HAPPY NEW YEAR boy again, 30 frames, measured loop 3.0s. Duplic |
 | tron-grid | `raw/tron-grid--media.tenor.com_wea_Tz9mf08AAAA1_omori-neutral.webp.webp` | 23 | — | drift | no | no=The NEUTRAL halftone face with drifting confetti again, 23 frames.  |
+
+## Per seed
+
+| seed | files read | survived an eye |
+| --- | --- | --- |
+| `akira-capsule` | 5 | 0 **nothing** |
+| `cyberpunk-hud` | 8 | 2  |
+| `direct-clips` | 7 | 6  |
+| `fake-os-loaders` | 12 | 4  |
+| `generic-hud` | 5 | 0 **nothing** |
+| `gits-optic` | 8 | 0 **nothing** |
+| `hologlobe` | 4 | 4  |
+| `insertion-sync` | 12 | 0 **nothing** |
+| `lumon` | 9 | 0 **nothing** |
+| `magi` | 20 | 0 **nothing** |
+| `motion-tracker` | 9 | 1  |
+| `rig` | 12 | 1  |
+| `spinner` | 8 | 0 **nothing** |
+| `spinner-console` | 4 | 1  |
+| `star-citizen` | 4 | 0 **nothing** |
+| `tron-disc` | 4 | 0 **nothing** |
+| `tron-grid` | 8 | 0 **nothing** |
+| `youtube` | 1 | 0 **nothing** |
+
+11 of 18 seeds hold no verified reference at all: `akira-capsule`, `generic-hud`, `gits-optic`, `insertion-sync`, `lumon`, `magi`, `spinner`, `star-citizen`, `tron-disc`, `tron-grid`, `youtube`.
+
+These counts run over every file an eye has read, which is wider than the table above:
+`direct-clips, youtube` carry no classifier status
+in the manifest, so they have reads and no rows. Counted off the table alone the figure is
+different, and the difference is the scope, not the eye.
+
+An empty seed is not an unfinished read — every file under it has been opened. It is
+what Tenor and GifCities return when asked for a word: fan content, a cutscene, a meme
+card with a caption, a webring badge. Screens of these systems exist, and they live in
+screencap archives and game-UI wikis, which is where the next round goes.
+
+8 further marks in `EYEBALL.json` sit on files this table does not carry
+(their manifest status is `unmarked`), so the ledger holds more reads than rows
+

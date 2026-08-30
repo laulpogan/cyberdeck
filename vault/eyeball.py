@@ -237,6 +237,43 @@ def main():
         lines.append(f"| {record['seed']} | `{rel}` | {record['frames']} "
                      f"| {loop} | {record['status']} | {verified} "
                      f"| {(mark.get('shows') or '_awaiting eyes_')[:70]} |")
+    # Per-seed totals, counted off the rows above rather than remembered. The pass that finished
+    # this queue described itself in a commit body as leaving "six" seeds with no reference; the
+    # ledger says eleven. A number that only exists in prose is a number nobody can check, so the
+    # table counts itself here and the seeds that came back empty are named, because an empty seed
+    # is a finding about the acquisition source and not about the eye.
+    read_by, got_by = {}, {}
+    for record in manifest.values():
+        rel = record["file"]
+        if rel not in marks:
+            continue
+        seed = record["seed"]
+        read_by[seed] = read_by.get(seed, 0) + 1
+        if marks[rel].get("contentVerified"):
+            got_by[seed] = got_by.get(seed, 0) + 1
+    in_table = {r["seed"] for r in moving}
+    empty = sorted(s for s in read_by if not got_by.get(s))
+    lines += ["", "## Per seed", "",
+              "| seed | files read | survived an eye |", "| --- | --- | --- |"]
+    for seed in sorted(read_by):
+        lines.append(f"| `{seed}` | {read_by[seed]} | {got_by.get(seed, 0)} "
+                     f"{'**nothing**' if not got_by.get(seed) else ''} |")
+    lines += ["", f"{len(empty)} of {len(read_by)} seeds hold no verified reference at all: "
+              + ", ".join(f"`{s}`" for s in empty) + ".",
+              "",
+              "These counts run over every file an eye has read, which is wider than the table above:",
+              f"`{', '.join(sorted(s for s in read_by if s not in in_table))}` carry no classifier status",
+              "in the manifest, so they have reads and no rows. Counted off the table alone the figure is",
+              "different, and the difference is the scope, not the eye.", "",
+              "An empty seed is not an unfinished read — every file under it has been opened. It is",
+              "what Tenor and GifCities return when asked for a word: fan content, a cutscene, a meme",
+              "card with a caption, a webring badge. Screens of these systems exist, and they live in",
+              "screencap archives and game-UI wikis, which is where the next round goes.", ""]
+    outside = len([k for k in marks if k not in {r["file"] for r in moving}])
+    if outside:
+        lines += [f"{outside} further marks in `EYEBALL.json` sit on files this table does not carry",
+                  "(their manifest status is `unmarked`), so the ledger holds more reads than rows", ""]
+
     open(os.path.join(HERE, "EYEBALL.md"), "w").write("\n".join(lines) + "\n")
 
     print(f"{len(moving)} moving files; {checked} carry an eye's judgement, "
