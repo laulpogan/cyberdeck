@@ -1,0 +1,169 @@
+{
+ "_about": [
+  "What the eye extracted from the frames of each verified reference, in the terms step 3 asks",
+  "for: what enters first, the period and duration in the file's own time, what holds still, and",
+  "what a dead or refused state looks like when the file shows one.",
+  "",
+  "Frame order, holds and dead states are read off `vault/sheet.py VERIFIED=1 FRAMES=8` output --",
+  "eight samples across each file's own timeline, which is what was in front of the eye. Durations,",
+  "travel fractions and periods are measured by `vault/spec.py` into `vault/SPECS.md` and are named",
+  "as measured here. Where a file shows no dead state, `dead` says so rather than inventing one;",
+  "an invented refusal is the same lie as an invented measurement, wearing a different hat.",
+  "",
+  "One reading per file, not per component: a reference is one picture and several specimens quote",
+  "it. `vault/map.py` prints these under each component that quotes them and refuses to write",
+  "MAPPING.md if a quoted file has no reading."
+ ],
+ "barcode-scan-receipt.gif": {
+  "asks": "an arrival is a thing appearing where nothing was, with its content already correct. The wait before it is allowed to be long and inert, and the confirmation is a state on a card, not a transition.",
+  "dead": "the card leaves and the frame is the camera again. An unfound scan is shown by the card never arriving, not by a failure animation.",
+  "enters": "the physical world first: a hand, a phone, a barcode on a shelf edge. The app card is not present for the first third of the file.",
+  "holds": "the viewfinder framing and the reticle hold through the whole wait. Nothing pulses while the operator aims.",
+  "moves": "the reticle holds on the barcode while the hand drifts, then a white card arrives carrying a green confirmation band, then the card's content becomes a receipt with lines and a total.",
+  "period": "24 frames over 4s, no return to frame zero. The wait is roughly two thirds of it, which is the honest ratio of a scan: most of the time is the person, not the software."
+ },
+ "cyberpunk-hud--media.tenor.com_gdhPO38XjlUAAAA1_urith-set.webp.webp": {
+  "asks": "nothing new. Held as the container twin so the vault says plainly that it has one reference here and two files.",
+  "dead": "as the gif.",
+  "enters": "identical to the gif below it — same asset, second container.",
+  "holds": "identical.",
+  "moves": "identical: 153 frames of the same footage with no delay recorded in the file.",
+  "period": "no delay in the file, so the period belongs to the player. This is why the gif carries the timing and this row carries the same picture."
+ },
+ "cyberpunk-hud--media.tenor.com_gdhPO38XjlUAAAAM_urith-set.gif.gif": {
+  "asks": "identity furniture holds while one entity is chosen, and a panel arrives as an event with a place to arrive at. Both readings come off this one file: dossier takes the identity ring, the rules page takes the plate that stays put.",
+  "dead": "a unit with no data still gets a plate. The panel is either open or absent — there is no half-open state.",
+  "enters": "a full-frame isometric battlefield with a squad already under control: nameplate bars over every figure and a green selection ring under the chosen one.",
+  "holds": "the ground, the ring, the nameplates and the panel's frame.",
+  "moves": "the party panel at the right opens late — present in the last two of eight samples across 53 frames, so it arrives at roughly three quarters of the way through — as a grid of portrait cells. The ring stays on its unit and the plates stay over their heads.",
+  "period": "53 frames over 5.3s."
+ },
+ "f16-hud-gcas.gif": {
+  "asks": "a limit that acts is drawn in the same ink and at the same place as the thing it limits, held exactly as long as the violation lasts, and the reading surface keeps its geometry while its values move.",
+  "dead": "FLYUP appears in green when measured closure violates the limit and is gone the moment the violation ends. The warning is a state, not an animation: it has no entrance and no exit, which is what makes it legible as a limit rather than as decoration.",
+  "enters": "nothing enters. The whole instrument is drawn on frame zero: airspeed tape left, altitude tape right, heading tape along the bottom, waterline and boresight in the middle. What changes is the ink inside the frame, not the frame.",
+  "holds": "the symbology frame: pointers, waterline, boresight, gun cross, and the labels under each tape hold in place across all 96 frames.",
+  "moves": "the three tapes scroll continuously under fixed pointers, so a value is read where the tape passes the pointer, never where the tape is. The numbers beside the pointers step as the tape index advances.",
+  "period": "measured 96 frames over 16s, no return to frame zero. The tapes are the only continuous thing in it."
+ },
+ "fake-os-loaders--blob.gifcities.org_gifcities_252EX5GXJE6BCNT4RSSDONF7UBPCE2BI.gif": {
+  "asks": "the counter-example, quoted so the rule has a picture next to it: an ellipsis counting to three and back measures nothing, and a load that swaps its content instead of finishing is exactly what the chrome rule forbids.",
+  "dead": "there is no failure state: the loader never reports a measurement and never completes — it is replaced. That is the idiom. It pretends to work by changing the subject.",
+  "enters": "an empty black well inside a bevelled grey window. The chrome is there before the promise is.",
+  "holds": "the window chrome and its bevels. Nothing about the container responds to the load.",
+  "moves": "the well types LOADING, then LOADING.., then LOADING... over four samples, and then the whole well is replaced by a page of small monospace text welcoming the visitor to the new and improved site and asking for message-board feedback.",
+  "period": "11 frames over 4.3s, and the text page holds on the last four samples unchanged."
+ },
+ "fake-os-loaders--blob.gifcities.org_gifcities_2S4N3JQ6GIQGIKRNQ6CX4AAHKS6DQHE6.gif": {
+  "asks": "counter-example. Everything moving on a display with one quantity, and that quantity is the dot count, is the idiom this library refuses.",
+  "dead": "none visible: nothing in this file ever stops, which is the defect. A display with nothing to say has no way to say it here.",
+  "enters": "the word LOADING in blue with a yellow disc above it on white. Nothing else ever enters.",
+  "holds": "the white field. There is no ground, no axis, no value.",
+  "moves": "the word rotates through a full turn while the disc orbits it, and the word's hue walks blue to violet to magenta on the cycle.",
+  "period": "30 frames over 2.4s, a clean loop."
+ },
+ "fake-os-loaders--blob.gifcities.org_gifcities_34C5WYILX3AL74KKP36H6JB75QTVKCUD.gif": {
+  "asks": "counter-example, and the sharpest one: three glyphs cycling is the entire motion vocabulary of an era that had nothing to measure, quoted beside the rule that says motion is a measurement.",
+  "dead": "none visible. The dots are the whole output.",
+  "enters": "the word loading in a blackletter face on black. Present on frame zero.",
+  "holds": "the wordmark and its position, completely, for every frame.",
+  "moves": "an ellipsis after the word grows to one dot, two, three, then shrinks back. The word itself never moves.",
+  "period": "6 frames over 0.24s of file delay — the fastest loop in the vault, and the shortest thing anyone thought worth animating."
+ },
+ "fake-os-loaders--blob.gifcities.org_gifcities_36SZVJ74JXC6QPNLGBGDNMW26HNU7TFW.gif": {
+  "asks": "extent is the measurement and the ground is furniture: a bar reads as a quantity because the ends and the track never move while the head does, at a rate a viewer can check against the distance.",
+  "dead": "an empty lane is the lane with no ink in it. The track is drawn before there is anything on it, which is what a zero and an unknown must not be allowed to share.",
+  "enters": "a named lane with a machine icon at each end and the bar empty between them. Both ends are present on frame zero.",
+  "holds": "both end icons and the lane itself. Four of twelve sampled grid cells never move at all.",
+  "moves": "a green head crosses the lane at a constant rate — measured 0.70 of the frame travelled, 0.46 of the way at half duration, so the rate is even and the head does not ease — and the filled region behind it is the same green, same thickness.",
+  "period": "49 frames, no delay recorded in the file, so the period is the player's, not the artist's."
+ },
+ "hologlobe--blob.gifcities.org_gifcities_2442E47OQDW3JQT5LC2S3S2O6QNUVCEW.gif": {
+  "asks": "the caution held for the globe: measured travel is nil, so all of this file's apparent liveliness is a hue cycle. A distinction carried only by colour is gone in monochrome, and it was never a measurement either.",
+  "dead": "none visible in the file: it never stops turning and never empties, because the only thing that varies is the page colour behind it. There is no state in which this display has nothing to say, which is the whole reason it is held as a caution rather than as a model.",
+  "enters": "a pixel globe, complete, on a coloured page.",
+  "holds": "the globe's silhouette and its continent pattern, effectively entirely.",
+  "moves": "the page colour behind the globe changes every sample — cream, lavender, green, cyan, blue, pink, orange — while the globe's own rotation is barely measurable.",
+  "period": "131 frames over 8s."
+ },
+ "hologlobe--blob.gifcities.org_gifcities_2BDK66BWLK42ADEG52TMSEUEDO6IZDTX.gif": {
+  "asks": "the rate is the whole spec. A hologlobe that accelerates is a graphic; one that holds a constant rate is an instrument, and the library's 4.00s per turn has to survive being measured the same way.",
+  "dead": "none visible: a globe that stops is a different object and this file never shows one.",
+  "enters": "a rendered Earth, already turning, already lit.",
+  "holds": "the sphere's edge, the terminator's shape and the blue field.",
+  "moves": "the surface advances across the disc — measured travel 0.367 of the frame crossed, 0.43 of the way along at half the duration, which is what the tool records as a constant rate: no acceleration into the turn and no easing out of it. The measurement also calls it not monotone (\"it comes back\"), and on a rotating sphere that is read as the surface wrapping round the limb and returning to the estimator's brightest region, not as the spin reversing — an interpretation, written here as one.",
+  "period": "measured 21 frames over 4.2s at a median delay of 200.0ms, no return to frame zero inside the window."
+ },
+ "hologlobe--blob.gifcities.org_gifcities_2CW2JW7CEZP4FXCUBBNI2EPWDDLXQQOI.gif": {
+  "asks": "the rotation carries the entire claim here, with no plotted furniture to share the work — which is the argument for why the app's pin painting has to keep working on its own meridian when the runtime is switched off.",
+  "dead": "none visible: the mesh turns for all twelve samples with no state where the rotation stops or the ground goes empty. A stopped globe is a different object and nobody has filmed one, which is why the library's own refusal has to be legible as stillness rather than as a paused frame.",
+  "enters": "a monochrome wireframe globe with a graticule over landmass shapes. No pins, no labels, no callouts.",
+  "holds": "the outer circle and the projection's outline.",
+  "moves": "constant rotation. The mesh and the land under it turn together.",
+  "period": "12 frames over 3s, no return to frame zero in the sampled window."
+ },
+ "hologlobe--blob.gifcities.org_gifcities_2G7G3GP4GP3RV32POQJ44BXNGQF2HQE5.gif": {
+  "asks": "the difference between a hue cycle and a hue that is attached to measured ground: here the colour field turns with the globe, so it survives being read as a value map instead of as decoration.",
+  "dead": "none visible.",
+  "enters": "a globe already wearing a false-colour field — banded rainbow over the spheres, land outlines drawn on top.",
+  "holds": "the sphere's edge and the coastlines.",
+  "moves": "rotation carries the colour bands around with the surface, so the pattern moves as data attached to geometry rather than as a paint cycle.",
+  "period": "16 frames over 2.56s."
+ },
+ "hurricane-irma-radar-loop.gif": {
+  "asks": "a rolling loop: the newest step is drawn, the oldest leaves, and the frame never returns to its first image. Observed ground versus ground nobody looked at must be two different inks over the same fixed map.",
+  "dead": "ground with no return is simply pale and empty. Absence is drawn as the base map showing through, not as a placeholder pattern.",
+  "enters": "everything except the weather. The coastline, state borders, the colour legend column at the right and the timestamp are all present on frame zero.",
+  "holds": "the map furniture and the legend hold absolutely. Only field data and the clock change.",
+  "moves": "the storm complex advances west to east and its cells change intensity through the legend's colours; the timestamp advances with it; the last sample is denser than the first in a way that is not the same pixels shifted.",
+  "period": "measured 25 frames over 4.17s with no return to frame zero: the window rolls forward and the wrap back to the oldest step is where the loop is, not a rewind of the frame."
+ },
+ "motion-tracker--blob.gifcities.org_gifcities_25G2DJC3DOO6R72EAGURMGNK5YW7FRZC.gif": {
+  "asks": "admission draws exactly this: a limit line reached fast and then held. It must not ease in, because the interesting half of a tilt is that it stops.",
+  "dead": "none visible: the beam does not fall and does not reset.",
+  "enters": "a figure standing on a plank, both present on frame zero.",
+  "holds": "the figure's body and the plank's material; the correction is the only event.",
+  "moves": "the plank tips and the figure corrects — arms out, one leg lifting off — front-loaded: measured 0.93 of the way by half duration, and after that it holds.",
+  "period": "8 frames over 8s — one second per sample, so the file is a held pose with an approach."
+ },
+ "rig--blob.gifcities.org_gifcities_2RO5SN3IFIDBUAFOOVBDCFJ7J6V4DRXR.gif": {
+  "asks": "the furniture-versus-contact split, stated once and for all: exactly one thing changes, it changes because a measurement changed, and everything that only tells the operator where they are holds perfectly still.",
+  "dead": "absent ground is the grid with nothing on it. The furniture stays, and that is what makes the one contact legible as a contact.",
+  "enters": "the survey grid: an orange cross-hatch grid with coordinate readouts pinned in the corners and a scattered starfield.",
+  "holds": "the grid lines, the grid's intersection markers, the corner labels' boxes and every star that is not the contact.",
+  "moves": "one magenta contact — a block of lit cells — changes position across the field, and the two corner readouts change with it.",
+  "period": "15 frames over 3s."
+ },
+ "scope-envelope-violin.gif": {
+  "asks": "the measurement is already drawn across the full axis and motion is a position reading over it. A chart that redraws itself is lying about having been recorded.",
+  "dead": "silence is a flat centre line with no thickness, and the region ahead of the head is the same nothing a specimen draws for an unread span.",
+  "enters": "an empty lane with a playhead at the left edge. The axis, the lane boundary and the ruler are drawn before any signal exists.",
+  "holds": "the ruler, the lane geometry and the horizontal scale hold. The grey unrendered region ahead of the head is not a spinner: it is a statement that nothing has been read there yet.",
+  "moves": "the playhead travels left to right at a constant rate and the waveform is inked behind it, so the past is drawn and the future is blank. Two lanes decay at different rates; the peak above the centre line mirrors the one below.",
+  "period": "48 frames over 8s, no return to frame zero. The head covers the frame once, so the file has a duration, not a loop."
+ },
+ "solari-departure-flap.gif": {
+  "asks": "a change arrives by flipping to one of a fixed set of faces, one cell at a time, and everything not involved in the change holds completely.",
+  "dead": "a row nobody has dispatched still shows a value. A flap board has no blank state to hide behind, which is the argument this board settles: an unchanged row holds rather than shimmering.",
+  "enters": "a board already full. Every row of destinations and times is present on frame zero; the board is not waiting to be populated.",
+  "holds": "the board's frame, the header, the airline roundels and every row not being updated.",
+  "moves": "the right-hand column cycles digits one cell at a time — a half-second later the same row shows a different time — and the flap lands with no easing. Rows that are not changing show their faces and hold.",
+  "period": "32 frames over 4s. The change is discrete events on a few cells, not a continuous property of the picture."
+ },
+ "spinner-console--blob.gifcities.org_gifcities_2EABIEZLK7C7RZMCFOOHZKIPRAPVWALH.gif": {
+  "asks": "a trace that reaches its far end early and then holds is a thing that arrived. One that keeps moving has not, and what stays after the head is gone is the evidence — which is why the drawn route, not the moving head, is the part the eye keeps.",
+  "dead": "the last sample is a burst on black: the event that arrived, reduced to its residue.",
+  "enters": "a ship on black at the left, already present.",
+  "holds": "the black field. Nothing else is in the frame to hold.",
+  "moves": "a white streak grows behind the ship as it crosses — measured 1.0 of the way by half duration, so the crossing is over early — and once the ship is gone the streak remains, then a small red and blue burst is all that is left.",
+  "period": "14 frames over 5.22s."
+ },
+ "sweep-hearing-range.gif": {
+  "asks": "a rate may change because a measured frequency changed, and the amplitude may follow it. Nothing else may move, and the end of the range is a flat line rather than a fade.",
+  "dead": "the last sample is a flat line at the centre with the oscillation gone. A sweep that has run out of range is drawn as a line, not as an error.",
+  "enters": "a slow single hump on a black field. No axis, no labels, no furniture at all.",
+  "holds": "nothing. This is the only verified file in the vault with no fixed ink in it at all, which is why it is quoted for exactly one claim.",
+  "moves": "frequency climbs monotonically — cycles per width rise step by step across the file — while amplitude ramps up behind it, so the picture gets both denser and taller.",
+  "period": "50 frames over 10s, no return to frame zero."
+ }
+}

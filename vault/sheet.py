@@ -18,6 +18,12 @@ told about.
     python3 vault/sheet.py                    # every seed, one sheet each
     python3 vault/sheet.py SEED=hologlobe     # one seed
     python3 vault/sheet.py OUT=/tmp/vsheets   # where to write
+    python3 vault/sheet.py VERIFIED=1 FRAMES=8 PER_SHEET=4   # only files an eye passed
+
+`VERIFIED=1` is the mode the motion reading is done in. The seed sheets answer "what did the
+search bring back"; this answers "what did an eye actually pass", which is the only question a
+frame reading may be written against — the seed sheets still carry the meme cards, and a reading
+written off one of those is a reading of a meme.
 """
 import json
 import os
@@ -37,7 +43,9 @@ INCLUDE_LOOKALIKE = "look-alike" in INCLUDE
 ROW_H = 132
 LABEL_W = 460
 CELL_W = 150
-FRAMES = 4
+FRAMES = int(os.environ.get("FRAMES", "4"))
+VERIFIED = os.environ.get("VERIFIED") == "1"
+PER_SHEET = int(os.environ.get("PER_SHEET", "4"))
 
 FONT_CANDIDATES = [
     "/System/Library/Fonts/Menlo.ttc",
@@ -116,10 +124,14 @@ def row(draw_path, label_font, small_font, record):
         record["kind"], timing,
         record.get("statusNote") or record.get("relevanceBasis") or "basis unrecorded",
     ])
+    if VERIFIED:
+        # The verified mode groups files across seeds, so the seed tag on the title line says
+        # nothing about this row. The basename is what lets a reading name its evidence.
+        second = os.path.basename(record["file"])[:58] + "\n" + second
     return strip, caption, second
 
 
-def build(seed, records):
+def build(seed, records, name=None):
     os.makedirs(OUT, exist_ok=True)
     big, small = font(15), font(12)
     probe = ImageDraw.Draw(Image.new("RGB", (10, 10)))
@@ -144,7 +156,7 @@ def build(seed, records):
         sheet.paste(strip, (LABEL_W + 8, y))
         draw.rectangle([LABEL_W + 6, y - 2, LABEL_W + CELL_W * FRAMES + 10, y + ROW_H - 34], outline=(60, 60, 60))
         y += ROW_H
-    out = os.path.join(OUT, f"{seed}-references.png")
+    out = os.path.join(OUT, name or f"{seed}-references.png")
     sheet.save(out)
     return out
 
@@ -165,6 +177,22 @@ def main():
     if skipped:
         print("excluded from sheets (set INCLUDE=drift,look-alike to see them): "
               + ", ".join(f"{n} {k}" for k, n in sorted(skipped.items())))
+    if VERIFIED:
+        eye = json.load(open(os.path.join(HERE, "EYEBALL.json")))
+        passed = [r for r in manifest.values() if eye.get(r["file"], {}).get("contentVerified")]
+        passed.sort(key=lambda r: (r["seed"], r["file"]))
+        os.makedirs(OUT, exist_ok=True)
+        written = []
+        for start in range(0, len(passed), PER_SHEET):
+            group = passed[start:start + PER_SHEET]
+            out = build(f"verified {start // PER_SHEET + 1}", group,
+                        f"verified-{start // PER_SHEET + 1:02d}.png")
+            if out:
+                written.append(out)
+        print(f"{len(passed)} files an eye passed, in sheets of {PER_SHEET} at {FRAMES} frames")
+        print("\n".join(written))
+        return
+
     written = []
     for seed, records in sorted(seeds.items()):
         if SEED and seed != SEED:
