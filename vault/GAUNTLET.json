@@ -1,500 +1,500 @@
 {
-  "_about": [
-    "The gaps the gauntlet asserts. Each row is one component, the verified vault file it is held",
-    "against, the figure read off that file's frames in vault/SPECS.md, and a measurement of the",
-    "app's own specimen that has to come out the same way.",
-    "A row without `assert` is honest about being a caution or a counter-example: the sheet shows",
-    "it, the run prints it, and nobody is allowed to call it a pass.",
-    "test/gauntlet.test.mjs refuses a row naming a file the eye never verified, a component that",
-    "is not in the registry, or a figure that is not the one SPECS.md measured.",
-    "A row carries `referenceRelation`. `informs` means the record is in this component's own for-list in",
-    "vault/SPECS-FOR.json -- the picture informs the drawing -- and `test/gauntlet.test.mjs` refuses the",
-    "row otherwise. `origin` means the picture is where the DEMAND was first measured, and makes no claim",
-    "that it informs this drawing; such a row carries `originClaim` saying how it entered, and it is never",
-    "coverage for the component. The distinction exists because de-quoting a component from a record has to",
-    "be allowed to coexist with a row that was honestly born from reading that record."
-  ],
-  "gaps": [
-    {
-      "id": "admission-front-loaded",
-      "component": "admission",
-      "reference": "motion-tracker--blob.gifcities.org_gifcities_25G2DJC3DOO6R72EAGURMGNK5YW7FRZC.gif",
-      "referenceRelation": "informs",
-      "referenceFigure": "0.93 of the way along at half the duration",
-      "heldAs": "model",
-      "gap": "the beam must arrive front-loaded, not ease in",
-      "assert": {
-        "kind": "front_loaded",
-        "selector": "[data-level-axis='tilt']",
-        "property": "angle",
-        "atHalfMin": 0.7
-      }
-    },
-    {
-      "id": "admission-holds",
-      "component": "admission",
-      "reference": "motion-tracker--blob.gifcities.org_gifcities_25G2DJC3DOO6R72EAGURMGNK5YW7FRZC.gif",
-      "referenceRelation": "informs",
-      "referenceFigure": "0.93 of the way along at half the duration, then it holds",
-      "heldAs": "model",
-      "gap": "a balance that keeps swinging has not balanced; the beam must come to rest",
-      "assert": {
-        "kind": "no_residual_motion",
-        "selector": "[data-level-axis='tilt']",
-        "afterMs": 1500
-      }
-    },
-    {
-      "id": "chipBudget-constant-rate",
-      "component": "chipBudget",
-      "reference": "fake-os-loaders--blob.gifcities.org_gifcities_36SZVJ74JXC6QPNLGBGDNMW26HNU7TFW.gif",
-      "referenceRelation": "origin",
-      "originClaim": "The constant-rate demand was measured off OS install bars, where the fill travels evenly and the label row never moves. chipBudget is not in this record's for-list -- the file is quoted for the `level` and `trace` marks -- so this row borrows the measurement rather than claiming the file drew this component.",
-      "referenceFigure": "0.701 of the frame crossed, 0.46 of the way along at half the duration",
-      "heldAs": "model",
-      "gap": "an extent crossing a named lane reads at a constant rate, not a slow-out",
-      "assert": {
-        "kind": "constant_rate",
-        "selector": "[data-motion='level']",
-        "property": "rightEdge",
-        "atHalfMin": 0.3,
-        "atHalfMax": 0.7
-      }
-    },
-    {
-      "id": "chipBudget-furniture-still",
-      "component": "chipBudget",
-      "reference": "fake-os-loaders--blob.gifcities.org_gifcities_36SZVJ74JXC6QPNLGBGDNMW26HNU7TFW.gif",
-      "referenceRelation": "origin",
-      "originClaim": "Same measurement as the constant-rate row: on these bars the text and legend hold while the fill moves. chipBudget is not in this record's for-list, so the citation is the origin of the demand, not a claim that this picture informs the drawing.",
-      "referenceFigure": "cells that never move: 4 of 12",
-      "heldAs": "model",
-      "gap": "the track, the rule and the labels are furniture: part of the drawing must never move",
-      "assert": {
-        "kind": "dead_cells",
-        "deadCellsMin": 4
-      }
-    },
-    {
-      "id": "radar-furniture-still",
-      "component": "radar",
-      "reference": "rig--blob.gifcities.org_gifcities_2RO5SN3IFIDBUAFOOVBDCFJ7J6V4DRXR.gif",
-      "referenceRelation": "informs",
-      "referenceFigure": "a magenta region lighting up somewhere inside it on a 3.0s loop, The furniture-versus-contact split the library keeps relearning is the whole of this reference",
-      "heldAs": "model",
-      "gap": "a survey grid whose rings and labels wobble is a graphic, not a survey",
-      "assert": {
-        "kind": "furniture_still",
-        "furniture": [
-          "text"
-        ],
-        "contacts": [
-          "[data-motion='cycle']",
-          "[data-motion='count']"
-        ],
-        "tolerancePx": 0.75
-      }
-    },
-    {
-      "id": "globe-constant-rate",
-      "component": "globe",
-      "reference": "hologlobe--blob.gifcities.org_gifcities_2BDK66BWLK42ADEG52TMSEUEDO6IZDTX.gif",
-      "referenceRelation": "informs",
-      "referenceFigure": "0.367 of the frame crossed, 0.43 of the way along at half the duration",
-      "heldAs": "model",
-      "gap": "the turn rate is the reading: time the pin's turns against the period the mark declares (this was advancing a fixed increment per animation frame, which made a 4s turn take 1.1s on a compositor with no vsync lock)",
-      "assert": {
-        "kind": "turn_period",
-        "selector": ".cd-globe-pin",
-        "periodAttribute": "data-period",
-        "windowMs": 9000,
-        "tolerance": 0.12
-      }
-    },
-    {
-      "id": "glassCell-trace-holds",
-      "component": "glassCell",
-      "reference": "spinner-console--blob.gifcities.org_gifcities_2EABIEZLK7C7RZMCFOOHZKIPRAPVWALH.gif",
-      "referenceRelation": "origin",
-      "originClaim": "The spinner's panel is where `a trace that ends stays ended` was measured: furniture holds, one element travels. glassCell is not in this record's for-list (the file is quoted for `trace` and `arrive`), so the row cites the measurement, not a drawing relation.",
-      "referenceFigure": "0.766 of the frame crossed, 1.0 of the way along at half the duration",
-      "heldAs": "model",
-      "gap": "a trace that eases out and holds is a thing that arrived; one that keeps moving has not",
-      "assert": {
-        "kind": "no_residual_motion",
-        "selector": "[data-motion='trace']",
-        "afterMs": 1500
-      }
-    },
-    {
-      "id": "esperDive-no-furniture-trace",
-      "component": "esperDive",
-      "reference": "rig--blob.gifcities.org_gifcities_2RO5SN3IFIDBUAFOOVBDCFJ7J6V4DRXR.gif",
-      "referenceRelation": "origin",
-      "originClaim": "The furniture/contact split -- only the contacts carry a mark -- was measured on this record's frames. esperDive is quoted for the Solari board in this vault, not for this file, so the row borrows the furniture claim from the rig measurement.",
-      "referenceFigure": "split the library keeps relearning is the whole of this reference",
-      "heldAs": "model",
-      "gap": "no mark may claim to travel a decoy frame, a sightline, a track or a label",
-      "assert": {
-        "kind": "furniture_audit_clean"
-      }
-    },
-    {
-      "id": "globe-hue-caution",
-      "component": "globe",
-      "reference": "hologlobe--blob.gifcities.org_gifcities_2442E47OQDW3JQT5LC2S3S2O6QNUVCEW.gif",
-      "referenceRelation": "informs",
-      "referenceFigure": "`N/A` \u2014 no bright marker crosses the frame, motion amplitude (max difference from frame zero): 31.15",
-      "heldAs": "caution",
-      "gap": "a motion carried only in hue vanishes in monochrome \u2014 shown on the sheet, asserted by test/affordance.test.mjs and the shape rule, not by a frame count"
-    },
-    {
-      "id": "rules-forbidden-idioms",
-      "component": null,
-      "route": "#/rules",
-      "reference": "fake-os-loaders--blob.gifcities.org_gifcities_2S4N3JQ6GIQGIKRNQ6CX4AAHKS6DQHE6.gif",
-      "referenceRelation": "informs",
-      "referenceFigure": "0.355 of the frame crossed, the ink does not grow, cells that never move: 0 of 12",
-      "heldAs": "counter-example",
-      "gap": "the page must print the figures rather than re-enact the idiom",
-      "assert": {
-        "kind": "text_contains",
-        "values": [
-          "0.36 of a frame",
-          "0.04 of a frame"
-        ]
-      }
-    },
-    {
-      "id": "rules-chrome-still",
-      "component": null,
-      "route": "#/rules",
-      "reference": "fake-os-loaders--blob.gifcities.org_gifcities_34C5WYILX3AL74KKP36H6JB75QTVKCUD.gif",
-      "referenceRelation": "informs",
-      "referenceFigure": "0.043 of the frame crossed, the only quantity on screen is the dot count",
-      "heldAs": "counter-example",
-      "gap": "the argument against unmeasured motion must not itself move",
-      "assert": {
-        "kind": "chrome_still",
-        "route": "#/rules"
-      }
-    },
-    {
-      "id": "dossier-does-not-breathe",
-      "component": "dossier",
-      "reference": "cyberpunk-hud--media.tenor.com_gdhPO38XjlUAAAAM_urith-set.gif.gif",
-      "referenceRelation": "informs",
-      "referenceFigure": "0.756 of the frame crossed, 0.6 of the way along at half the duration, not monotone (it comes back), cells that never move: 1 of 12",
-      "heldAs": "model",
-      "gap": "the verified panel arrives over a field that keeps running \u2014 11 of its 12 cells change and a contact crosses the frame. `dossier` answers \"which exact thing am I about to command\" from facts already true at read time, so it has no running field and must hold perfectly still: the reference is what makes the stated reason visible rather than merely stated",
-      "assert": {
-        "kind": "no_motion"
-      }
-    },
-    {
-      "id": "envelope-limit-holds",
-      "component": "envelope",
-      "reference": "f16-hud-gcas.gif",
-      "referenceRelation": "informs",
-      "referenceFigure": "80 frames over 13.33s, cells that never move: 0 of 12, travel of the bright head: 0.605 of the frame crossed",
-      "heldAs": "model",
-      "gap": "FLYUP arrives when the measured closure violates the limit, holds exactly as long as the violation lasts, and is gone by 10.7s \u2014 a limit cue that pulses would be an animation, not a state. The library's envelope extent must arrive and HOLD, and the limit it is measured against has to be named beside it, the way AL 500 sits under the live value (finding #12's homeless 0.62).",
-      "assert": {
-        "kind": "no_residual_motion",
-        "selector": "[data-motion='level']",
-        "afterMs": 1500
-      }
-    },
-    {
-      "id": "envelope-limit-named",
-      "component": "envelope",
-      "reference": "f16-hud-gcas.gif",
-      "referenceRelation": "informs",
-      "referenceFigure": "motion amplitude (max difference from frame zero): 40.69, travel of the bright head: 0.605 of the frame crossed",
-      "heldAs": "model",
-      "gap": "Finding #12's homeless fraction. On the HUD the live value (`R 7.630`, read off the sheet at 0.605 of the frame crossed) sits directly above the limit it is read against (`AL 500`), so a fraction is never drawn without the number it is a fraction of. The gauge may not either: the position is placed by used/ceiling and prints both, and an unmeasured position is not drawn at the centre of the space at all.",
-      "assert": {
-        "kind": "text_contains",
-        "route": "#/component/envelope",
-        "values": [
-          "12.4 OF A 20 CEILING",
-          "The position sits at 12.4 of a 20 ceiling."
-        ]
-      }
-    },
-    {
-      "id": "stripchart-series-is-drawn-ink",
-      "component": "stripChart",
-      "reference": "scope-envelope-violin.gif",
-      "referenceRelation": "informs",
-      "referenceFigure": "measured: 48 frames over 8.0s, no bright marker crosses the frame",
-      "heldAs": "model",
-      "gap": "In the audio editor the waveform exists as ink along a named lane and the ONLY thing that moves is a marker crossing an axis already fully drawn \u2014 ruler, labels and selection block hold still. A component that grows its own series into being is animating the data instead of reading it, so the library's series must arrive and then hold.",
-      "assert": {
-        "kind": "no_residual_motion",
-        "selector": "[data-motion='trace']",
-        "afterMs": 1500
-      }
-    },
-    {
-      "id": "tape-sweeps-a-drawn-strip",
-      "component": "tape",
-      "reference": "scope-envelope-violin.gif",
-      "referenceRelation": "informs",
-      "referenceFigure": "measured: 48 frames over 8.0s, motion amplitude (max difference from frame zero): 5.4",
-      "heldAs": "model",
-      "gap": "The audio editor's whole idiom is a marker crossing a strip that is ALREADY ink: the waveform, the ruler, the track labels and the selection block hold still and one hairline travels. `tape` has no such marker \u2014 it stamps `count`, `elapsed`, `still` and one refusal, and nothing translates along its axis. The five mark kinds that exist cannot express it: `trace` reveals a shape, `count` reveals by index, `cycle` addresses a clock, `level` is an extent from an anchor. Building it means a kind that moves a marker along an axis, which is a library change, not a showcase change.",
-      "notHeld": "Two facts, read out of the source rather than the name. `tape` is the DECISION tape -- a queue of waits with an `elapsed` clock on each row and no axis to cross, so there is no position for a marker to have. And the component that DOES draw time, `river`, scales every lane to its own first-and-last event (px(t) normalises by that lane's span), so there is no shared present anywhere in the drawing to put a line on; a now-line clamped to each lane's right edge would say 'now is where this lane stopped', which is the falsest sentence a time chart can make. The idiom needs a shared absolute axis, which the library does not draw."
-    },
-    {
-      "id": "dispatch-unchanged-rows-hold",
-      "component": "dispatch",
-      "reference": "solari-departure-flap.gif",
-      "referenceRelation": "origin",
-      "originClaim": "The slot-geometry invariant was measured across 22 observations of this board: the left edge never moves and nothing re-sorts. dispatch came OUT of this record's for-list because its only relation to the board was the word `dispatch`, and that name-resemblance is on record as rejected -- so this row is the borrowed geometry claim, and the row is NOT coverage for dispatch.",
-      "referenceFigure": "measured: 32 frames over 4.01s, motion amplitude (max difference from frame zero): 15.82",
-      "heldAs": "model",
-      "gap": "On the Solari board only the cells whose value changed flip; the destination labels and the column heads never stir, so the movement is the report and everything else is ink. A dispatch panel that animates its own furniture on every refresh says 'everything changed' when one row did, so the furniture must hold still over a change.",
-      "assert": {
-        "kind": "furniture_still",
-        "furniture": [
-          ".cd-ag-link"
-        ],
-        "contacts": [
-          "[data-motion='count']"
-        ],
-        "tolerancePx": 0.75
-      }
-    },
-    {
-      "id": "hardcut-has-no-in-between-state",
-      "component": "hardCut",
-      "reference": "solari-departure-flap.gif",
-      "referenceRelation": "informs",
-      "referenceFigure": "travel of the bright head: 0.163 of the frame crossed",
-      "heldAs": "model",
-      "gap": "A flap has a fixed set of faces and no in-between state to render: it goes from one character to the next, and the low measured centroid travel (0.163, most of it the handheld camera) is the number that says so \u2014 a change in place, not a change arriving across the screen. `hardCut` must therefore never be an eased crossfade of the old value into the new.",
-      "assert": {
-        "kind": "no_blend_on_change",
-        "route": "#/component/hardCut",
-        "fieldIncludes": "changed"
-      }
-    },
-    {
-      "id": "radar-loop-wraps-without-a-tween",
-      "reference": "hurricane-irma-radar-loop.gif",
-      "referenceRelation": "informs",
-      "component": "radar",
-      "gap": "the loop returns toward its oldest step through a fade or an eased position reset, where the reference wraps in a jump",
-      "referenceFigure": "25 frames over 4.17s, median delay 170.0ms, loop no return to frame zero",
-      "assertKind": "a position trace at frame resolution across two periods, checked for a discontinuity at the wrap",
-      "assert": {
-        "kind": "loop_wraps_in_a_jump",
-        "route": "#/component/radar",
-        "selector": "[data-specimen-view=\"radar\"] [data-motion=\"cycle\"][data-cycle-axis=\"rotate\"]"
-      },
-      "observed": "the wedge turns on the dial centre and crosses its seam forward: the seam is a jump with real travel after it, and nothing fades at the turnover. Before this row was asserted the sweep carried no cycle geometry at all and the runtime animated it as a bar \u2014 one non-repeating transform, angle 0 throughout.",
-      "watch": "the needle or coverage mass easing back toward zero instead of stepping, or an opacity fade at the wrap"
-    },
-    {
-      "id": "in-flight-wait-draws-no-progress-bar",
-      "reference": "barcode-scan-receipt.gif",
-      "referenceRelation": "origin",
-      "originClaim": "This record's display is where `a wait with no terminus gets no bar` was measured. Its for-list names killmail, hardCut and tape; collar is not among them -- collar refuses a countdown on an absent deadline, which is the same argument these frames make about a different component.",
-      "component": "collar",
-      "gap": "a wait with no deadline drawn as a measured extent, a percentage, or a remaining-time figure \u2014 the claim \"this much is left\" made from no measurement. The reference states an unknown wait in words and draws nothing measurable.",
-      "referenceFigure": "24 frames over 4.0s, median delay 170.0ms, loop no return to frame zero",
-      "assertKind": "no_bar_where_no_terminus",
-      "assert": {
-        "kind": "no_bar_where_no_terminus",
-        "route": "#/component/collar",
-        "selector": "[data-specimen-view=\"collar\"]"
-      },
-      "observed": "asserted against `collar`, which has no deadline parameter at all and so draws a hatched area reading NO DEADLINE SET under REMAINING. The row was first filed against `dispatch`, which draws a fitted-parts chain and has no wait in it \u2014 named by resemblance instead of by drawing, the error class `scanOverlay` and `twoState` taught in the same week. Recorded here rather than quietly retargeted.",
-      "watch": "a level/extent mark or a percentage or ETA appearing in the REMAINING region; a blank area replacing the hatched one"
-    },
-    {
-      "id": "river-lanes-share-one-now",
-      "reference": "scope-envelope-violin.gif",
-      "referenceRelation": "informs",
-      "component": "river",
-      "gap": "lanes are stacked with each lane mapping time by its own normalised position, so a single 'now' has no single x and a playhead or a cross-lane event cannot be drawn",
-      "referenceFigure": "48 frames over 8.0s, median delay 170.0ms, loop no return to frame zero",
-      "assertKind": "a geometry read across lanes: for one timestamp, the x of a per-lane marker must be identical in every lane",
-      "assert": {
-        "kind": "lane_axis_shared",
-        "route": "#/component/river",
-        "selector": "[data-specimen-view]"
-      },
-      "observed": "the deck now draws one ruler across the plate and one now-line for every lane; the runs end at different x because the lanes' real last events differ, which the old per-lane normalisation made impossible",
-      "watch": "every run ending at the same x again (per-lane normalisation restored), the ruler losing its printed stamps, or more than one now-line appearing"
-    },
-    {
-      "id": "atfield-unread-scope-keeps-its-row",
-      "reference": "solari-departure-flap.gif",
-      "referenceRelation": "informs",
-      "component": "atField",
-      "gap": "a scope whose count was never computed prints the word `undefined`, or leaves the readout, where the board holds a blank flap in its cell with its own timing",
-      "referenceFigure": "32 frames over 4.01s, median delay 130.0ms, loop no return to frame zero",
-      "assertKind": "text_contains",
-      "assert": {
-        "kind": "text_contains",
-        "route": "#/component/atField",
-        "values": [
-          "FLEET",
-          "UNMEASURED"
-        ]
-      },
-      "observed": "asserted from the fixture, whose FLEET scope carries no count because hosts that are dark cannot be enumerated",
-      "watch": "the word `undefined` reappearing in the readout, or an unread scope dropping out of the row instead of holding its cell"
-    },
-    {
-      "id": "solari-rows-occupy-fixed-slots",
-      "reference": "solari-departure-flap.gif",
-      "referenceRelation": "informs",
-      "component": "stockFlow",
-      "gap": "a list whose rows move with their content \u2014 a row that grows, re-sorts, or fills to its value \u2014 makes the operator compare geometry instead of reading figures, and turns a standing quantity into an extent.",
-      "referenceFigure": "Only the cells whose value changed move",
-      "assertKind": "slots_do_not_move",
-      "assert": {
-        "kind": "slots_do_not_move",
-        "route": "#/component/stockFlow",
-        "selector": "[data-specimen-view=\"stockFlow\"]",
-        "rows": ".cd-og-level, .cd-og-rate",
-        "tolerancePx": 1.5
-      },
-      "observed": "22 observations across 67s of the board: identical left edge and width on every row, no re-sorting, no row grew with its number, two rows changed at all. stockFlow draws each level and rate in its own row with the value as text and refuses extents on rates; asserted at 1280 and 390.",
-      "watch": "a row whose width or left edge tracks its value; a level/extent mark in a stock list; rows re-sorting"
-    },
-    {
-      "id": "coverage-dark-ground-holds",
-      "reference": "hurricane-irma-radar-loop.gif",
-      "referenceRelation": "informs",
-      "component": "coverage",
-      "gap": "the unmeasured ground shifting under the survey that never covered it. On the reference the plate's furniture is untouched by the animation while the return moves; a gap that shifts reads as a quantity, and a gap drawn from an absence must sit exactly where the survey says it sits.",
-      "referenceFigure": "the plate and its legend are untouched by the animation",
-      "assertKind": "furniture_still",
-      "assert": {
-        "kind": "furniture_still",
-        "furniture": [
-          ".cd-fd-dark"
-        ],
-        "contacts": [
-          ".cd-fd-contour",
-          ".cd-fd-post"
-        ],
-        "tolerancePx": 0.75
-      },
-      "observed": "asserted against the hatched ground rather than a legend: `coverage` draws no graticule and no colour key, so the reading's demand lands on the one element that exists to hold an absence \u2014 the dashed, hatched `UNMEASURED / terrain unrendered` block, which is `still`-stamped and must not translate while the contours arrive. Correcting the reading matters here: demanding an untouched legend from a component with no legend would be the `mfd` mistake in a new costume.",
-      "watch": "the dark ground translating or scaling while contours sweep; a mark appearing on the hatch; contours drawing over the hatched area instead of stopping at it"
-    },
-    {
-      "id": "killmail-two-cascades-arrive-in-claimed-order",
-      "component": "killmail",
-      "reference": null,
-      "referenceRelation": "self",
-      "selfClaim": "No reference is implicated: `data-index` is the library's OWN claim about sequence \u2014 this is the third thing to arrive out of four \u2014 and the row watches whether the drawing keeps it. A picture cannot inform the arithmetic of one's own stagger; only the plate can contradict it. It also carries the other half of the claim: the `no canonical charge record is supplied` refusal holds no slot, so it may not fade in as part of the cascade.",
-      "heldAs": "model",
-      "gap": "killmail got its first motion at 3204181: two populations (0-3 of 4 attributes, 0-2 of 3 proof rows) cascading at once. If the slots land out of order the numbers are still true and the plate still lies about what was read first. The UNPRICED cost line declares itself still and must not move at all while its neighbours arrive.",
-      "assert": {
-        "kind": "arrival_order"
-      }
-    },
-    {
-      "id": "oracle-fragments-arrive-in-claimed-order",
-      "component": "oracle",
-      "reference": null,
-      "referenceRelation": "self",
-      "selfClaim": "No reference is implicated: `data-index` is the library's OWN claim about sequence \u2014 this is the third thing to arrive out of four \u2014 and the row watches whether the drawing keeps it. A picture cannot inform the arithmetic of one's own stagger; only the plate can contradict it.",
-      "heldAs": "model",
-      "gap": "closed at 3204181 (the fix that handed this plate its first motion): Three fragments arrive 0, 1, 2 while the stated population says four \u2014 the missing fragment is drawn and declared absent, and the population still counts it. A cascade that arrives out of order would make the missing one look like the last thing to be read rather than the one that never came.",
-      "assert": {
-        "kind": "arrival_order"
-      }
-    },
-    {
-      "id": "joioverlay-canon-arrives-and-projections-hold",
-      "component": "joiOverlay",
-      "reference": null,
-      "referenceRelation": "self",
-      "selfClaim": "No reference is implicated: `data-index` is the library's OWN claim about sequence \u2014 this is the third thing to arrive out of four \u2014 and the row watches whether the drawing keeps it. A picture cannot inform the arithmetic of one's own stagger; only the plate can contradict it. This row is the frame-side half of the invariant the reveal-order test holds in markup.",
-      "heldAs": "model",
-      "gap": "closed at 3204181 (the fix that handed this plate its first motion): The canon rows arrive 0, 1 over two slots; three projections are declared still because a projection is not a reading. If the projections moved with the cascade, the plate would be animating a forecast \u2014 motion for something nobody measured.",
-      "assert": {
-        "kind": "arrival_order"
-      }
-    },
-    {
-      "id": "scanoverlay-trace-and-label-share-a-slot",
-      "component": "scanOverlay",
-      "reference": null,
-      "referenceRelation": "self",
-      "selfClaim": "No reference is implicated: `data-index` is the library's OWN claim about sequence \u2014 this is the third thing to arrive out of four \u2014 and the row watches whether the drawing keeps it. A picture cannot inform the arithmetic of one's own stagger; only the plate can contradict it.",
-      "heldAs": "model",
-      "gap": "closed at 4e48b20: the scan reveals in the order it claims. Each trace and its label carry the SAME slot (0,0,1,1,2,2), so a label arriving before its trace \u2014 or a later trace before an earlier one \u2014 makes the reading arrive before the evidence for it.",
-      "assert": {
-        "kind": "arrival_order"
-      }
-    },
-    {
-      "id": "dispatch-three-cascades-in-claimed-order",
-      "component": "dispatch",
-      "reference": null,
-      "referenceRelation": "self",
-      "selfClaim": "No reference is implicated: `data-index` is the library's OWN claim about sequence \u2014 this is the third thing to arrive out of four \u2014 and the row watches whether the drawing keeps it. A picture cannot inform the arithmetic of one's own stagger; only the plate can contradict it.",
-      "heldAs": "model",
-      "gap": "closed at 4cb3e9b: premises, then conclusion. dispatch runs three cascades (0-3, 0-2, 0-1) in one plate; the derived figure is the last slot of its own population. Two cascades in one neighbourhood must be read as two claims, which is why grouping is by parent and restart, not by class.",
-      "assert": {
-        "kind": "arrival_order"
-      }
-    },
-    {
-      "id": "glasscell-conclusion-arrives-after-its-premises",
-      "component": "glassCell",
-      "reference": null,
-      "referenceRelation": "self",
-      "selfClaim": "No reference is implicated: `data-index` is the library's OWN claim about sequence \u2014 this is the third thing to arrive out of four \u2014 and the row watches whether the drawing keeps it. A picture cannot inform the arithmetic of one's own stagger; only the plate can contradict it. The order here is a claim about derivation, not about taste in entrances.",
-      "heldAs": "model",
-      "gap": "closed at 4cb3e9b: three traces occupy slots 0, 1, 2 and the derived count sits at slot 3. The drawing says the figure is computed FROM the traces; if it appears first, the plate presents a conclusion before its evidence.",
-      "assert": {
-        "kind": "arrival_order"
-      }
-    },
-    {
-      "id": "ice-conclusion-arrives-after-its-premises",
-      "component": "ice",
-      "reference": null,
-      "referenceRelation": "self",
-      "selfClaim": "No reference is implicated: `data-index` is the library's OWN claim about sequence \u2014 this is the third thing to arrive out of four \u2014 and the row watches whether the drawing keeps it. A picture cannot inform the arithmetic of one's own stagger; only the plate can contradict it.",
-      "heldAs": "model",
-      "gap": "closed at 4cb3e9b: traces 0-2 then the derived count at slot 5. The gap in slot numbering is the library spending its own order budget on the traces; the assertion is only that the higher slot never arrives first.",
-      "assert": {
-        "kind": "arrival_order"
-      }
-    },
-    {
-      "id": "keycard-conclusion-arrives-after-its-premises",
-      "component": "keycard",
-      "reference": null,
-      "referenceRelation": "self",
-      "selfClaim": "No reference is implicated: `data-index` is the library's OWN claim about sequence \u2014 this is the third thing to arrive out of four \u2014 and the row watches whether the drawing keeps it. A picture cannot inform the arithmetic of one's own stagger; only the plate can contradict it.",
-      "heldAs": "model",
-      "gap": "closed at 4cb3e9b: four traces 0-3 then the derived count at slot 6. A keycard that shows its verdict before its four checks have been drawn is a decision with the evidence filed afterwards.",
-      "assert": {
-        "kind": "arrival_order"
-      }
-    },
-    {
-      "id": "magi-conclusion-arrives-after-its-premises",
-      "component": "magi",
-      "reference": null,
-      "referenceRelation": "self",
-      "selfClaim": "No reference is implicated: `data-index` is the library's OWN claim about sequence \u2014 this is the third thing to arrive out of four \u2014 and the row watches whether the drawing keeps it. A picture cannot inform the arithmetic of one's own stagger; only the plate can contradict it.",
-      "heldAs": "model",
-      "gap": "closed at 4cb3e9b: two traces at 0 and 1, the derived count at slot 3. MAGI's whole grammar is three systems consulted before a judgement, so the order is the content on this plate.",
-      "assert": {
-        "kind": "arrival_order"
-      }
-    }
-  ]
+ "_about": [
+  "The gaps the gauntlet asserts. Each row is one component, the verified vault file it is held",
+  "against, the figure read off that file's frames in vault/SPECS.md, and a measurement of the",
+  "app's own specimen that has to come out the same way.",
+  "A row without `assert` is honest about being a caution or a counter-example: the sheet shows",
+  "it, the run prints it, and nobody is allowed to call it a pass.",
+  "test/gauntlet.test.mjs refuses a row naming a file the eye never verified, a component that",
+  "is not in the registry, or a figure that is not the one SPECS.md measured.",
+  "A row carries `referenceRelation`. `informs` means the record is in this component's own for-list in",
+  "vault/SPECS-FOR.json -- the picture informs the drawing -- and `test/gauntlet.test.mjs` refuses the",
+  "row otherwise. `origin` means the picture is where the DEMAND was first measured, and makes no claim",
+  "that it informs this drawing; such a row carries `originClaim` saying how it entered, and it is never",
+  "coverage for the component. The distinction exists because de-quoting a component from a record has to",
+  "be allowed to coexist with a row that was honestly born from reading that record."
+ ],
+ "gaps": [
+  {
+   "id": "admission-front-loaded",
+   "component": "admission",
+   "reference": "motion-tracker--blob.gifcities.org_gifcities_25G2DJC3DOO6R72EAGURMGNK5YW7FRZC.gif",
+   "referenceRelation": "informs",
+   "referenceFigure": "0.93 of the way along at half the duration",
+   "heldAs": "model",
+   "gap": "the beam must arrive front-loaded, not ease in",
+   "assert": {
+    "kind": "front_loaded",
+    "selector": "[data-level-axis='tilt']",
+    "property": "angle",
+    "atHalfMin": 0.7
+   }
+  },
+  {
+   "id": "admission-holds",
+   "component": "admission",
+   "reference": "motion-tracker--blob.gifcities.org_gifcities_25G2DJC3DOO6R72EAGURMGNK5YW7FRZC.gif",
+   "referenceRelation": "informs",
+   "referenceFigure": "0.93 of the way along at half the duration, then it holds",
+   "heldAs": "model",
+   "gap": "a balance that keeps swinging has not balanced; the beam must come to rest",
+   "assert": {
+    "kind": "no_residual_motion",
+    "selector": "[data-level-axis='tilt']",
+    "afterMs": 1500
+   }
+  },
+  {
+   "id": "chipBudget-constant-rate",
+   "component": "chipBudget",
+   "reference": "fake-os-loaders--blob.gifcities.org_gifcities_36SZVJ74JXC6QPNLGBGDNMW26HNU7TFW.gif",
+   "referenceRelation": "origin",
+   "originClaim": "The constant-rate demand was measured off OS install bars, where the fill travels evenly and the label row never moves. chipBudget is not in this record's for-list -- the file is quoted for the `level` and `trace` marks -- so this row borrows the measurement rather than claiming the file drew this component.",
+   "referenceFigure": "0.701 of the frame crossed, 0.46 of the way along at half the duration",
+   "heldAs": "model",
+   "gap": "an extent crossing a named lane reads at a constant rate, not a slow-out",
+   "assert": {
+    "kind": "constant_rate",
+    "selector": "[data-motion='level']",
+    "property": "rightEdge",
+    "atHalfMin": 0.3,
+    "atHalfMax": 0.7
+   }
+  },
+  {
+   "id": "chipBudget-furniture-still",
+   "component": "chipBudget",
+   "reference": "fake-os-loaders--blob.gifcities.org_gifcities_36SZVJ74JXC6QPNLGBGDNMW26HNU7TFW.gif",
+   "referenceRelation": "origin",
+   "originClaim": "Same measurement as the constant-rate row: on these bars the text and legend hold while the fill moves. chipBudget is not in this record's for-list, so the citation is the origin of the demand, not a claim that this picture informs the drawing.",
+   "referenceFigure": "cells that never move: 4 of 12",
+   "heldAs": "model",
+   "gap": "the track, the rule and the labels are furniture: part of the drawing must never move",
+   "assert": {
+    "kind": "dead_cells",
+    "deadCellsMin": 4
+   }
+  },
+  {
+   "id": "radar-furniture-still",
+   "component": "radar",
+   "reference": "rig--blob.gifcities.org_gifcities_2RO5SN3IFIDBUAFOOVBDCFJ7J6V4DRXR.gif",
+   "referenceRelation": "informs",
+   "referenceFigure": "a magenta region lighting up somewhere inside it on a 3.0s loop, The furniture-versus-contact split the library keeps relearning is the whole of this reference",
+   "heldAs": "model",
+   "gap": "a survey grid whose rings and labels wobble is a graphic, not a survey",
+   "assert": {
+    "kind": "furniture_still",
+    "furniture": [
+     "text"
+    ],
+    "contacts": [
+     "[data-motion='cycle']",
+     "[data-motion='count']"
+    ],
+    "tolerancePx": 0.75
+   }
+  },
+  {
+   "id": "globe-constant-rate",
+   "component": "globe",
+   "reference": "hologlobe--blob.gifcities.org_gifcities_2BDK66BWLK42ADEG52TMSEUEDO6IZDTX.gif",
+   "referenceRelation": "informs",
+   "referenceFigure": "0.367 of the frame crossed, 0.43 of the way along at half the duration",
+   "heldAs": "model",
+   "gap": "the turn rate is the reading: time the pin's turns against the period the mark declares (this was advancing a fixed increment per animation frame, which made a 4s turn take 1.1s on a compositor with no vsync lock)",
+   "assert": {
+    "kind": "turn_period",
+    "selector": ".cd-globe-pin",
+    "periodAttribute": "data-period",
+    "windowMs": 9000,
+    "tolerance": 0.12
+   }
+  },
+  {
+   "id": "glassCell-trace-holds",
+   "component": "glassCell",
+   "reference": "spinner-console--blob.gifcities.org_gifcities_2EABIEZLK7C7RZMCFOOHZKIPRAPVWALH.gif",
+   "referenceRelation": "origin",
+   "originClaim": "The spinner's panel is where `a trace that ends stays ended` was measured: furniture holds, one element travels. glassCell is not in this record's for-list (the file is quoted for `trace` and `arrive`), so the row cites the measurement, not a drawing relation.",
+   "referenceFigure": "0.766 of the frame crossed, 1.0 of the way along at half the duration",
+   "heldAs": "model",
+   "gap": "a trace that eases out and holds is a thing that arrived; one that keeps moving has not",
+   "assert": {
+    "kind": "no_residual_motion",
+    "selector": "[data-motion='trace']",
+    "afterMs": 1500
+   }
+  },
+  {
+   "id": "esperDive-no-furniture-trace",
+   "component": "esperDive",
+   "reference": "rig--blob.gifcities.org_gifcities_2RO5SN3IFIDBUAFOOVBDCFJ7J6V4DRXR.gif",
+   "referenceRelation": "origin",
+   "originClaim": "The furniture/contact split -- only the contacts carry a mark -- was measured on this record's frames. esperDive is quoted for the Solari board in this vault, not for this file, so the row borrows the furniture claim from the rig measurement.",
+   "referenceFigure": "split the library keeps relearning is the whole of this reference",
+   "heldAs": "model",
+   "gap": "no mark may claim to travel a decoy frame, a sightline, a track or a label",
+   "assert": {
+    "kind": "furniture_audit_clean"
+   }
+  },
+  {
+   "id": "globe-hue-caution",
+   "component": "globe",
+   "reference": "hologlobe--blob.gifcities.org_gifcities_2442E47OQDW3JQT5LC2S3S2O6QNUVCEW.gif",
+   "referenceRelation": "informs",
+   "referenceFigure": "`N/A` — no bright marker crosses the frame, motion amplitude (max difference from frame zero): 31.15",
+   "heldAs": "caution",
+   "gap": "a motion carried only in hue vanishes in monochrome — shown on the sheet, asserted by test/affordance.test.mjs and the shape rule, not by a frame count"
+  },
+  {
+   "id": "rules-forbidden-idioms",
+   "component": null,
+   "route": "#/rules",
+   "reference": "fake-os-loaders--blob.gifcities.org_gifcities_2S4N3JQ6GIQGIKRNQ6CX4AAHKS6DQHE6.gif",
+   "referenceRelation": "informs",
+   "referenceFigure": "0.355 of the frame crossed, the ink does not grow, cells that never move: 0 of 12",
+   "heldAs": "counter-example",
+   "gap": "the page must print the figures rather than re-enact the idiom",
+   "assert": {
+    "kind": "text_contains",
+    "values": [
+     "0.36 of a frame",
+     "0.04 of a frame"
+    ]
+   }
+  },
+  {
+   "id": "rules-chrome-still",
+   "component": null,
+   "route": "#/rules",
+   "reference": "fake-os-loaders--blob.gifcities.org_gifcities_34C5WYILX3AL74KKP36H6JB75QTVKCUD.gif",
+   "referenceRelation": "informs",
+   "referenceFigure": "0.043 of the frame crossed, the only quantity on screen is the dot count",
+   "heldAs": "counter-example",
+   "gap": "the argument against unmeasured motion must not itself move",
+   "assert": {
+    "kind": "chrome_still",
+    "route": "#/rules"
+   }
+  },
+  {
+   "id": "dossier-does-not-breathe",
+   "component": "dossier",
+   "reference": "cyberpunk-hud--media.tenor.com_gdhPO38XjlUAAAAM_urith-set.gif.gif",
+   "referenceRelation": "informs",
+   "referenceFigure": "0.756 of the frame crossed, 0.6 of the way along at half the duration, not monotone (it comes back), cells that never move: 1 of 12",
+   "heldAs": "model",
+   "gap": "the verified panel arrives over a field that keeps running — 11 of its 12 cells change and a contact crosses the frame. `dossier` answers \"which exact thing am I about to command\" from facts already true at read time, so it has no running field and must hold perfectly still: the reference is what makes the stated reason visible rather than merely stated",
+   "assert": {
+    "kind": "no_motion"
+   }
+  },
+  {
+   "id": "envelope-limit-holds",
+   "component": "envelope",
+   "reference": "f16-hud-gcas.gif",
+   "referenceRelation": "informs",
+   "referenceFigure": "80 frames over 13.33s, cells that never move: 0 of 12, travel of the bright head: 0.605 of the frame crossed",
+   "heldAs": "model",
+   "gap": "FLYUP arrives when the measured closure violates the limit, holds exactly as long as the violation lasts, and is gone by 10.7s — a limit cue that pulses would be an animation, not a state. The library's envelope extent must arrive and HOLD, and the limit it is measured against has to be named beside it, the way AL 500 sits under the live value (finding #12's homeless 0.62).",
+   "assert": {
+    "kind": "no_residual_motion",
+    "selector": "[data-motion='level']",
+    "afterMs": 1500
+   }
+  },
+  {
+   "id": "envelope-limit-named",
+   "component": "envelope",
+   "reference": "f16-hud-gcas.gif",
+   "referenceRelation": "informs",
+   "referenceFigure": "motion amplitude (max difference from frame zero): 40.69, travel of the bright head: 0.605 of the frame crossed",
+   "heldAs": "model",
+   "gap": "Finding #12's homeless fraction. On the HUD the live value (`R 7.630`, read off the sheet at 0.605 of the frame crossed) sits directly above the limit it is read against (`AL 500`), so a fraction is never drawn without the number it is a fraction of. The gauge may not either: the position is placed by used/ceiling and prints both, and an unmeasured position is not drawn at the centre of the space at all.",
+   "assert": {
+    "kind": "text_contains",
+    "route": "#/component/envelope",
+    "values": [
+     "12.4 OF A 20 CEILING",
+     "The position sits at 12.4 of a 20 ceiling."
+    ]
+   }
+  },
+  {
+   "id": "stripchart-series-is-drawn-ink",
+   "component": "stripChart",
+   "reference": "scope-envelope-violin.gif",
+   "referenceRelation": "informs",
+   "referenceFigure": "measured: 48 frames over 8.0s, no bright marker crosses the frame",
+   "heldAs": "model",
+   "gap": "In the audio editor the waveform exists as ink along a named lane and the ONLY thing that moves is a marker crossing an axis already fully drawn — ruler, labels and selection block hold still. A component that grows its own series into being is animating the data instead of reading it, so the library's series must arrive and then hold.",
+   "assert": {
+    "kind": "no_residual_motion",
+    "selector": "[data-motion='trace']",
+    "afterMs": 1500
+   }
+  },
+  {
+   "id": "playhead-does-not-sweep-on-a-shared-axis",
+   "component": "river",
+   "reference": "scope-envelope-violin.gif",
+   "referenceRelation": "informs",
+   "referenceFigure": "measured: 48 frames over 8.0s, motion amplitude (max difference from frame zero): 5.4",
+   "heldAs": "caution",
+   "gap": "The audio editor's idiom is a marker crossing a strip that is ALREADY ink. The library now draws the strip on one shared axis and refuses the travelling marker, which is a decision this row records rather than a gap it closes.",
+   "notHeld": "Two facts, and one of them changed since this row was written. `tape` is the DECISION tape — a queue of waits with an `elapsed` clock per row and no axis to cross, so it was never the place for a marker. The axis objection used to run against `river` too: every lane normalised its own first and last stamp across the plate, so no two lanes agreed on where now is. That is gone — `river` now derives one span from every lane's events, draws one ruler and one now-line with a clamped x and its stamp beside it (src/components/river.js, test/river-axis.test.mjs). What still stops the sweep is not geometry but honesty, and the component says so in its own comment: the ruler and the now-line are furniture, furniture carries no mark, and a playhead translating left to right across a deck would move on nothing — there is no sample clock in the fixture, so a sweeping line would be the exact motion the honesty rack exists to catch. The audio editor gets away with it because playback position is a measured quantity against a real clock. Until a source declares one, the reference is quoted for the idiom it does support — named tracks, one ruler across the whole plate, ground before the first event drawn as ground — and the sweep stays unbuilt."
+  },
+  {
+   "id": "dispatch-unchanged-rows-hold",
+   "component": "dispatch",
+   "reference": "solari-departure-flap.gif",
+   "referenceRelation": "origin",
+   "originClaim": "The slot-geometry invariant was measured across 22 observations of this board: the left edge never moves and nothing re-sorts. dispatch came OUT of this record's for-list because its only relation to the board was the word `dispatch`, and that name-resemblance is on record as rejected -- so this row is the borrowed geometry claim, and the row is NOT coverage for dispatch.",
+   "referenceFigure": "measured: 32 frames over 4.01s, motion amplitude (max difference from frame zero): 15.82",
+   "heldAs": "model",
+   "gap": "On the Solari board only the cells whose value changed flip; the destination labels and the column heads never stir, so the movement is the report and everything else is ink. A dispatch panel that animates its own furniture on every refresh says 'everything changed' when one row did, so the furniture must hold still over a change.",
+   "assert": {
+    "kind": "furniture_still",
+    "furniture": [
+     ".cd-ag-link"
+    ],
+    "contacts": [
+     "[data-motion='count']"
+    ],
+    "tolerancePx": 0.75
+   }
+  },
+  {
+   "id": "hardcut-has-no-in-between-state",
+   "component": "hardCut",
+   "reference": "solari-departure-flap.gif",
+   "referenceRelation": "informs",
+   "referenceFigure": "travel of the bright head: 0.163 of the frame crossed",
+   "heldAs": "model",
+   "gap": "A flap has a fixed set of faces and no in-between state to render: it goes from one character to the next, and the low measured centroid travel (0.163, most of it the handheld camera) is the number that says so — a change in place, not a change arriving across the screen. `hardCut` must therefore never be an eased crossfade of the old value into the new.",
+   "assert": {
+    "kind": "no_blend_on_change",
+    "route": "#/component/hardCut",
+    "fieldIncludes": "changed"
+   }
+  },
+  {
+   "id": "radar-loop-wraps-without-a-tween",
+   "reference": "hurricane-irma-radar-loop.gif",
+   "referenceRelation": "informs",
+   "component": "radar",
+   "gap": "the loop returns toward its oldest step through a fade or an eased position reset, where the reference wraps in a jump",
+   "referenceFigure": "25 frames over 4.17s, median delay 170.0ms, loop no return to frame zero",
+   "assertKind": "a position trace at frame resolution across two periods, checked for a discontinuity at the wrap",
+   "assert": {
+    "kind": "loop_wraps_in_a_jump",
+    "route": "#/component/radar",
+    "selector": "[data-specimen-view=\"radar\"] [data-motion=\"cycle\"][data-cycle-axis=\"rotate\"]"
+   },
+   "observed": "the wedge turns on the dial centre and crosses its seam forward: the seam is a jump with real travel after it, and nothing fades at the turnover. Before this row was asserted the sweep carried no cycle geometry at all and the runtime animated it as a bar — one non-repeating transform, angle 0 throughout.",
+   "watch": "the needle or coverage mass easing back toward zero instead of stepping, or an opacity fade at the wrap"
+  },
+  {
+   "id": "in-flight-wait-draws-no-progress-bar",
+   "reference": "barcode-scan-receipt.gif",
+   "referenceRelation": "origin",
+   "originClaim": "This record's display is where `a wait with no terminus gets no bar` was measured. Its for-list names killmail, hardCut and tape; collar is not among them -- collar refuses a countdown on an absent deadline, which is the same argument these frames make about a different component.",
+   "component": "collar",
+   "gap": "a wait with no deadline drawn as a measured extent, a percentage, or a remaining-time figure — the claim \"this much is left\" made from no measurement. The reference states an unknown wait in words and draws nothing measurable.",
+   "referenceFigure": "24 frames over 4.0s, median delay 170.0ms, loop no return to frame zero",
+   "assertKind": "no_bar_where_no_terminus",
+   "assert": {
+    "kind": "no_bar_where_no_terminus",
+    "route": "#/component/collar",
+    "selector": "[data-specimen-view=\"collar\"]"
+   },
+   "observed": "asserted against `collar`, which has no deadline parameter at all and so draws a hatched area reading NO DEADLINE SET under REMAINING. The row was first filed against `dispatch`, which draws a fitted-parts chain and has no wait in it — named by resemblance instead of by drawing, the error class `scanOverlay` and `twoState` taught in the same week. Recorded here rather than quietly retargeted.",
+   "watch": "a level/extent mark or a percentage or ETA appearing in the REMAINING region; a blank area replacing the hatched one"
+  },
+  {
+   "id": "river-lanes-share-one-now",
+   "reference": "scope-envelope-violin.gif",
+   "referenceRelation": "informs",
+   "component": "river",
+   "gap": "lanes are stacked with each lane mapping time by its own normalised position, so a single 'now' has no single x and a playhead or a cross-lane event cannot be drawn",
+   "referenceFigure": "48 frames over 8.0s, median delay 170.0ms, loop no return to frame zero",
+   "assertKind": "a geometry read across lanes: for one timestamp, the x of a per-lane marker must be identical in every lane",
+   "assert": {
+    "kind": "lane_axis_shared",
+    "route": "#/component/river",
+    "selector": "[data-specimen-view]"
+   },
+   "observed": "the deck now draws one ruler across the plate and one now-line for every lane; the runs end at different x because the lanes' real last events differ, which the old per-lane normalisation made impossible",
+   "watch": "every run ending at the same x again (per-lane normalisation restored), the ruler losing its printed stamps, or more than one now-line appearing"
+  },
+  {
+   "id": "atfield-unread-scope-keeps-its-row",
+   "reference": "solari-departure-flap.gif",
+   "referenceRelation": "informs",
+   "component": "atField",
+   "gap": "a scope whose count was never computed prints the word `undefined`, or leaves the readout, where the board holds a blank flap in its cell with its own timing",
+   "referenceFigure": "32 frames over 4.01s, median delay 130.0ms, loop no return to frame zero",
+   "assertKind": "text_contains",
+   "assert": {
+    "kind": "text_contains",
+    "route": "#/component/atField",
+    "values": [
+     "FLEET",
+     "UNMEASURED"
+    ]
+   },
+   "observed": "asserted from the fixture, whose FLEET scope carries no count because hosts that are dark cannot be enumerated",
+   "watch": "the word `undefined` reappearing in the readout, or an unread scope dropping out of the row instead of holding its cell"
+  },
+  {
+   "id": "solari-rows-occupy-fixed-slots",
+   "reference": "solari-departure-flap.gif",
+   "referenceRelation": "informs",
+   "component": "stockFlow",
+   "gap": "a list whose rows move with their content — a row that grows, re-sorts, or fills to its value — makes the operator compare geometry instead of reading figures, and turns a standing quantity into an extent.",
+   "referenceFigure": "Only the cells whose value changed move",
+   "assertKind": "slots_do_not_move",
+   "assert": {
+    "kind": "slots_do_not_move",
+    "route": "#/component/stockFlow",
+    "selector": "[data-specimen-view=\"stockFlow\"]",
+    "rows": ".cd-og-level, .cd-og-rate",
+    "tolerancePx": 1.5
+   },
+   "observed": "22 observations across 67s of the board: identical left edge and width on every row, no re-sorting, no row grew with its number, two rows changed at all. stockFlow draws each level and rate in its own row with the value as text and refuses extents on rates; asserted at 1280 and 390.",
+   "watch": "a row whose width or left edge tracks its value; a level/extent mark in a stock list; rows re-sorting"
+  },
+  {
+   "id": "coverage-dark-ground-holds",
+   "reference": "hurricane-irma-radar-loop.gif",
+   "referenceRelation": "informs",
+   "component": "coverage",
+   "gap": "the unmeasured ground shifting under the survey that never covered it. On the reference the plate's furniture is untouched by the animation while the return moves; a gap that shifts reads as a quantity, and a gap drawn from an absence must sit exactly where the survey says it sits.",
+   "referenceFigure": "the plate and its legend are untouched by the animation",
+   "assertKind": "furniture_still",
+   "assert": {
+    "kind": "furniture_still",
+    "furniture": [
+     ".cd-fd-dark"
+    ],
+    "contacts": [
+     ".cd-fd-contour",
+     ".cd-fd-post"
+    ],
+    "tolerancePx": 0.75
+   },
+   "observed": "asserted against the hatched ground rather than a legend: `coverage` draws no graticule and no colour key, so the reading's demand lands on the one element that exists to hold an absence — the dashed, hatched `UNMEASURED / terrain unrendered` block, which is `still`-stamped and must not translate while the contours arrive. Correcting the reading matters here: demanding an untouched legend from a component with no legend would be the `mfd` mistake in a new costume.",
+   "watch": "the dark ground translating or scaling while contours sweep; a mark appearing on the hatch; contours drawing over the hatched area instead of stopping at it"
+  },
+  {
+   "id": "killmail-two-cascades-arrive-in-claimed-order",
+   "component": "killmail",
+   "reference": null,
+   "referenceRelation": "self",
+   "selfClaim": "No reference is implicated: `data-index` is the library's OWN claim about sequence — this is the third thing to arrive out of four — and the row watches whether the drawing keeps it. A picture cannot inform the arithmetic of one's own stagger; only the plate can contradict it. It also carries the other half of the claim: the `no canonical charge record is supplied` refusal holds no slot, so it may not fade in as part of the cascade.",
+   "heldAs": "model",
+   "gap": "killmail got its first motion at 3204181: two populations (0-3 of 4 attributes, 0-2 of 3 proof rows) cascading at once. If the slots land out of order the numbers are still true and the plate still lies about what was read first. The UNPRICED cost line declares itself still and must not move at all while its neighbours arrive.",
+   "assert": {
+    "kind": "arrival_order"
+   }
+  },
+  {
+   "id": "oracle-fragments-arrive-in-claimed-order",
+   "component": "oracle",
+   "reference": null,
+   "referenceRelation": "self",
+   "selfClaim": "No reference is implicated: `data-index` is the library's OWN claim about sequence — this is the third thing to arrive out of four — and the row watches whether the drawing keeps it. A picture cannot inform the arithmetic of one's own stagger; only the plate can contradict it.",
+   "heldAs": "model",
+   "gap": "closed at 3204181 (the fix that handed this plate its first motion): Three fragments arrive 0, 1, 2 while the stated population says four — the missing fragment is drawn and declared absent, and the population still counts it. A cascade that arrives out of order would make the missing one look like the last thing to be read rather than the one that never came.",
+   "assert": {
+    "kind": "arrival_order"
+   }
+  },
+  {
+   "id": "joioverlay-canon-arrives-and-projections-hold",
+   "component": "joiOverlay",
+   "reference": null,
+   "referenceRelation": "self",
+   "selfClaim": "No reference is implicated: `data-index` is the library's OWN claim about sequence — this is the third thing to arrive out of four — and the row watches whether the drawing keeps it. A picture cannot inform the arithmetic of one's own stagger; only the plate can contradict it. This row is the frame-side half of the invariant the reveal-order test holds in markup.",
+   "heldAs": "model",
+   "gap": "closed at 3204181 (the fix that handed this plate its first motion): The canon rows arrive 0, 1 over two slots; three projections are declared still because a projection is not a reading. If the projections moved with the cascade, the plate would be animating a forecast — motion for something nobody measured.",
+   "assert": {
+    "kind": "arrival_order"
+   }
+  },
+  {
+   "id": "scanoverlay-trace-and-label-share-a-slot",
+   "component": "scanOverlay",
+   "reference": null,
+   "referenceRelation": "self",
+   "selfClaim": "No reference is implicated: `data-index` is the library's OWN claim about sequence — this is the third thing to arrive out of four — and the row watches whether the drawing keeps it. A picture cannot inform the arithmetic of one's own stagger; only the plate can contradict it.",
+   "heldAs": "model",
+   "gap": "closed at 4e48b20: the scan reveals in the order it claims. Each trace and its label carry the SAME slot (0,0,1,1,2,2), so a label arriving before its trace — or a later trace before an earlier one — makes the reading arrive before the evidence for it.",
+   "assert": {
+    "kind": "arrival_order"
+   }
+  },
+  {
+   "id": "dispatch-three-cascades-in-claimed-order",
+   "component": "dispatch",
+   "reference": null,
+   "referenceRelation": "self",
+   "selfClaim": "No reference is implicated: `data-index` is the library's OWN claim about sequence — this is the third thing to arrive out of four — and the row watches whether the drawing keeps it. A picture cannot inform the arithmetic of one's own stagger; only the plate can contradict it.",
+   "heldAs": "model",
+   "gap": "closed at 4cb3e9b: premises, then conclusion. dispatch runs three cascades (0-3, 0-2, 0-1) in one plate; the derived figure is the last slot of its own population. Two cascades in one neighbourhood must be read as two claims, which is why grouping is by parent and restart, not by class.",
+   "assert": {
+    "kind": "arrival_order"
+   }
+  },
+  {
+   "id": "glasscell-conclusion-arrives-after-its-premises",
+   "component": "glassCell",
+   "reference": null,
+   "referenceRelation": "self",
+   "selfClaim": "No reference is implicated: `data-index` is the library's OWN claim about sequence — this is the third thing to arrive out of four — and the row watches whether the drawing keeps it. A picture cannot inform the arithmetic of one's own stagger; only the plate can contradict it. The order here is a claim about derivation, not about taste in entrances.",
+   "heldAs": "model",
+   "gap": "closed at 4cb3e9b: three traces occupy slots 0, 1, 2 and the derived count sits at slot 3. The drawing says the figure is computed FROM the traces; if it appears first, the plate presents a conclusion before its evidence.",
+   "assert": {
+    "kind": "arrival_order"
+   }
+  },
+  {
+   "id": "ice-conclusion-arrives-after-its-premises",
+   "component": "ice",
+   "reference": null,
+   "referenceRelation": "self",
+   "selfClaim": "No reference is implicated: `data-index` is the library's OWN claim about sequence — this is the third thing to arrive out of four — and the row watches whether the drawing keeps it. A picture cannot inform the arithmetic of one's own stagger; only the plate can contradict it.",
+   "heldAs": "model",
+   "gap": "closed at 4cb3e9b: traces 0-2 then the derived count at slot 5. The gap in slot numbering is the library spending its own order budget on the traces; the assertion is only that the higher slot never arrives first.",
+   "assert": {
+    "kind": "arrival_order"
+   }
+  },
+  {
+   "id": "keycard-conclusion-arrives-after-its-premises",
+   "component": "keycard",
+   "reference": null,
+   "referenceRelation": "self",
+   "selfClaim": "No reference is implicated: `data-index` is the library's OWN claim about sequence — this is the third thing to arrive out of four — and the row watches whether the drawing keeps it. A picture cannot inform the arithmetic of one's own stagger; only the plate can contradict it.",
+   "heldAs": "model",
+   "gap": "closed at 4cb3e9b: four traces 0-3 then the derived count at slot 6. A keycard that shows its verdict before its four checks have been drawn is a decision with the evidence filed afterwards.",
+   "assert": {
+    "kind": "arrival_order"
+   }
+  },
+  {
+   "id": "magi-conclusion-arrives-after-its-premises",
+   "component": "magi",
+   "reference": null,
+   "referenceRelation": "self",
+   "selfClaim": "No reference is implicated: `data-index` is the library's OWN claim about sequence — this is the third thing to arrive out of four — and the row watches whether the drawing keeps it. A picture cannot inform the arithmetic of one's own stagger; only the plate can contradict it.",
+   "heldAs": "model",
+   "gap": "closed at 4cb3e9b: two traces at 0 and 1, the derived count at slot 3. MAGI's whole grammar is three systems consulted before a judgement, so the order is the content on this plate.",
+   "assert": {
+    "kind": "arrival_order"
+   }
+  }
+ ]
 }
